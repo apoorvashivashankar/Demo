@@ -1,0 +1,9 @@
+<!--
+ - Created by 7Summits on 5/14/18.
+ -->
+
+<design:component label="Dal Shipment Search">
+    <design:attribute name="hasPagination" label="Enable Pagination" />
+    <design:attribute name="paginationItemsPerPage" label="Number of Items Per Page" />
+    <design:attribute name="listMaximum" label="Maximum number of records retrieved" />
+</design:component>

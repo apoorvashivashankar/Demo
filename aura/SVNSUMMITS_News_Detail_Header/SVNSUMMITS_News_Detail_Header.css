@@ -1,0 +1,33 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .topic{
+    display: inline-block;
+    padding-right:7px;
+    margin-right:7px;
+    margin-bottom:7px;
+    border-right:token(borderWidthThin) solid;
+    line-height:1;
+}
+
+.THIS .topic a{
+    font-weight:bold;
+    text-transform: uppercase;
+    color: token(colorTextLabel);
+}
+
+.THIS .topics .topic:last-child{
+    border-right:0;
+}
+
+.THIS .title{
+    font-weight:400;
+    padding: 5px 0 20px 0
+}
+
+.THIS .controls{
+    float:right;
+}
+
+.THIS  .slds-modal__container {
+    width: 60%!important;
+    max-width: 60rem;
+}

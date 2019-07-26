@@ -1,0 +1,10 @@
+<!--
+ - Created by 7Summits on 4/23/18.
+ -->
+
+<aura:component description="Dal_Dist_ProductAvailability" extends="c:Dal_Dist_OrderBase" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="allorder" type="Boolean" default="true"/>
+    <c:Dal_Dist_OrderProcess_Sku store="{!v.store}" checkAvailability="true" addAllOrder="{!v.allorder}"/>
+
+</aura:component>

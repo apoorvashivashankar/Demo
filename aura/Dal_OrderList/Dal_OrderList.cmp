@@ -1,0 +1,61 @@
+<!--
+ - Created by 7Summits on 4/9/18.
+ -->
+
+<aura:component description="Dal_OrderList" extends="c:Dal_ListBase" controller="Dal_OrderSearchController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="userType" type="String" default="Distributor"/>
+    <aura:attribute name="orderListType" type="String" default="Orders List"/>
+    <aura:attribute name="allDataChecked" type="Boolean"/>
+    <aura:attribute name="orderDateStarts" type="Date" />
+    <aura:attribute name="orderDateEnds" type="Date" />
+    
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <!-- For Relating Opportunity -->
+    <aura:attribute name="listOfOppTORelate" type="List" default="[]" />
+    <aura:attribute name="listOfOrdersToRelate" type="List" default="[]" />
+    
+    
+    <aura:method name="searchOrderList" action="{!c.searchOrderList}" access="PUBLIC">
+        <aura:attribute name="userType" type="String" />
+        <aura:attribute name="orderListType" type="String" />
+        <aura:attribute name="orderNumber" type="String" />
+        <aura:attribute name="poNumber" type="String" />
+        <aura:attribute name="jobName" type="String" />
+        <aura:attribute name="orderDateStart" type="Date" />
+        <aura:attribute name="orderDateEnd" type="Date" />
+        <aura:attribute name="orderStatus" type="String" />
+    </aura:method>
+    
+    <aura:if isTrue="{!!(v.listOfOppTORelate.length > 0)}" >
+        <aura:if isTrue="{!and(v.userType == 'SSC', v.orderListType == 'Pickup Orders List')}">
+            <lightning:layout class="slds-p-top_small" multipleRows="true" verticalAlign="center">
+                <lightning:layoutItem class="slds-p-horizontal_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="10" largeDeviceSize="10">
+                    <input type="checkbox" class="slds-m-vertical_x-small" name="showAll" onclick="{!c.handleSelectAllOrders}" checked="{!v.allDataChecked}" /><span class="dal-list-showAll slds-p-horizontal_medium">Select all orders</span>
+                    <!--<button type="button" class="slds-button slds-button_neutral slds-m-vertical_x-small scheduleButton" name="scheduleSelectedOrders" onclick="{!c.handleScheduleSelectedOrders}">SCHEDULE SELECTED ORDERS</button>
+                    -->
+                    <button type="button" class="slds-button slds-button_neutral slds-m-vertical_x-small" name="scheduleSelectedOrders"
+                            onclick="{!c.handleScheduleSelectedOrders}">SCHEDULE SINGLE APPOINTMENT</button>
+                    <button type="button" class="slds-button slds-button_neutral dal-multiple-button slds-m-vertical_x-small" name="scheduleSelectedOrders"
+                            onclick="{!c.handleScheduleSelectedOrdersForMultiple}">SCHEDULE MULTIPLE APPOINTMENTS</button>
+
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:if>
+        <aura:set attribute="else">
+            <lightning:layout class="slds-p-top_small" multipleRows="true" verticalAlign="center">
+                <lightning:layoutItem class="slds-p-horizontal_x-small dal-relate-to-order" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="8">
+                    <button type="button" class="slds-button slds-button_neutral slds-m-vertical_x-small dal-relate-to-order-button" name="scheduleSelectedOrders"
+                            onclick="{!c.handleRelateToOrderSubmit}">
+                        Submit
+                    </button>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:set>
+    </aura:if>
+    
+</aura:component>

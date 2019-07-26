@@ -1,0 +1,18 @@
+<!--
+ - Created by 7Summits on 2/15/18.
+ -->
+
+<design:component label="DalTile Custom Button">
+    <design:attribute name="heading" label="Header Text" />
+    <design:attribute name="ButtonURL1" label="Button Link 1" />
+    <design:attribute name="ButtonText1" label="Button Label 1" />
+    <design:attribute name="ButtonURL2" label="Button Link 2" />
+    <design:attribute name="ButtonText2" label="Button Label 2" />
+    <design:attribute name="ButtonURL3" label="Button Link 3" />
+    <design:attribute name="ButtonText3" label="Button Label 3" />
+
+    <design:attribute name="OpenInNewTab" label="Open Button(s) in New Window" />
+    <design:attribute name="btnClass" label="Button Class" datasource="slds-button_neutral, slds-button_brand, slds-button_inverse" description="Select button Style"/>
+    <design:attribute name="className" label="Custom Class"  />
+
+</design:component>

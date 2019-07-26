@@ -1,0 +1,9 @@
+<!--
+ - Created by 7Summits on 4/12/18.
+ -->
+
+<aura:component description="Dal_SSC_Dashboard_OrderList" extends="c:Dal_ListBase" controller="Dal_OrderSearchController">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="listType" type="String" default="PickupsToSchedule"/>
+
+</aura:component>

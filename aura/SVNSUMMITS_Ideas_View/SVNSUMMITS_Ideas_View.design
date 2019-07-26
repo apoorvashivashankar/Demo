@@ -1,0 +1,12 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S Ideas Detail">
+    <design:attribute name="zoneName" label="Zone Name" description="Ideas Zone Name" />
+
+    <design:attribute name="displayMode"       label="Featured Image Display:" description="Select image display mode"
+                      dataSource="Full,Half,None" />
+    <!--<design:attribute name="displayMerged"     label="Display Merged Ideas Tab" description="Display merged ideas"/>-->
+    <design:attribute name="displaySupporters" label="Display Supporters" description="Display idea supporters"/>
+    <design:attribute name="displayComments"   label="Enable Idea Comments" description="Display idea comments" />
+
+    <design:attribute name="recordId" label="Record Id" description="record id" default="{!recordId}" />
+</design:component>

@@ -1,0 +1,6 @@
+<!--
+ - Created by 7Summits on 2/28/18.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_DataBlocksInnerComp">
+</aura:event>

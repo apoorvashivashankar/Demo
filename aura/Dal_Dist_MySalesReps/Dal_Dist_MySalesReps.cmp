@@ -1,0 +1,68 @@
+<!--
+ - Created by 7Summits on 2/12/18.
+ -->
+
+<aura:component description="Dal_Dist_MySalesReps" extends="c:Dal_Base" controller="Dal_MySalesRepController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <!-- design attributes -->
+    <aura:attribute name="title" type="string" default="My Team"/>
+    <aura:attribute name="type" type="string" default="Distributor"/>
+    
+    <!-- private attributes -->
+    <aura:attribute name="loading" type="Boolean" default="true" />
+    <aura:attribute name="myReps" type="List" default="{}" />
+
+    <section>
+        <h2>{!v.title}</h2>
+
+        <lightning:layout>
+
+            <aura:if isTrue="{!v.loading == false}">
+
+                <lightning:layoutItem size="12">
+
+                    <aura:iteration items="{!v.myReps}" var="salesRep">
+                        <lightning:layout class="slds-p-vertical_xx-small" verticalAlign="center" pullToBoundary="small">
+                            <lightning:layoutItem size="12" class="slds-p-horizontal_small contactInfo">
+                                <aura:if isTrue="{!and(salesRep.firstName != '', salesRep.lastName != '')}">
+                                    <h4 title="{!(salesRep.firstName + ' ' +  salesRep.lastName)}">{!(salesRep.firstName + ' ' +  salesRep.lastName)}</h4>
+                                </aura:if>
+
+                                <aura:if isTrue="{!salesRep.title != ''}">
+                                    <p class="slds-text-color_weak title">{!salesRep.title}</p>
+                                </aura:if>
+
+                                <aura:if isTrue="{!salesRep.phone != ''}">
+                                    <p class="slds-p-around_xxx-small">
+                                        <aura:if isTrue="{!salesRep.type == 'salesRep'}">
+                                            <lightning:icon iconName="utility:phone_portrait" />
+                                        	<aura:set attribute="else">
+                                                <lightning:icon iconName="utility:call" />
+                                        	</aura:set>
+                                        </aura:if>
+                                        {!salesRep.phone}
+                                    </p>
+                                </aura:if>
+                                
+                                <aura:if isTrue="{!salesRep.email != ''}">
+                                    <p class="slds-p-around_xxx-small email"><lightning:icon iconName="utility:identity" /><a href="{!'mailto:' + salesRep.email}">{!salesRep.email}</a></p>
+                                </aura:if>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </aura:iteration>
+
+                </lightning:layoutItem>
+
+            <aura:set attribute="else">
+                <lightning:layoutItem size="12" class="dal-minHeight_medium slds-is-relative">
+                    <lightning:spinner variant="brand" size="medium" />
+                </lightning:layoutItem>
+            </aura:set>
+            </aura:if>
+
+        </lightning:layout>
+
+    </section>
+
+</aura:component>

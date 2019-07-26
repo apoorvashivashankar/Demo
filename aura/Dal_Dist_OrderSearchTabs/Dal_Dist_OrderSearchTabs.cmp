@@ -1,0 +1,23 @@
+<!--
+ - Created by 7Summits on 3/20/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderSearchTabs" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <aura:attribute name="tabOne" type="String" default="OPEN ORDERS" />
+    <aura:attribute name="tabTwo" type="String" default="ORDER HISTORY" />
+    <aura:attribute name="tabThree" type="String" default="SHIPMENTS" />
+
+    <lightning:tabset selectedTabId="tabOne">
+        <lightning:tab label="{!v.tabOne}" id="tabOne">
+           <c:Dal_Dist_OrderSearchOpen />
+        </lightning:tab>
+        <lightning:tab label="{!v.tabTwo}" id="tabTwo">
+
+        </lightning:tab>
+        <lightning:tab label="{!v.tabThree}" id="tabThree">
+
+        </lightning:tab>
+    </lightning:tabset>
+
+</aura:component>

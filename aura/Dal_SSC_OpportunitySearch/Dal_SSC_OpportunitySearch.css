@@ -1,0 +1,176 @@
+/**
+ * Created by presh on 22-11-2018.
+ */
+.THIS .orderDate > div {
+    display: flex;
+}
+.THIS .dateSeparator {
+    margin-top: 10px;
+    padding: 0 5px;
+}
+.THIS .dal-convert-margin-bottom {
+    margin-bottom: 2%;
+}
+.THIS .label-hidden .slds-form-element__label {
+    display : none;
+}
+.THIS .slds-form-element__label {
+    line-height: 1.5;
+    display: block;
+    margin-bottom: .25rem;
+}
+
+.THIS .uiInput--datetime .datePicker-openIcon{
+    bottom: 11px;
+}
+@media only screen and (max-width: 30rem){
+    .THIS .uiInput--datetime .datePicker-openIcon{
+        bottom: 0;
+        top: 0;
+    }
+}
+.THIS .option{
+    width :inherit;
+}
+
+
+.THIS .uiLabel span,
+.THIS .slds-form-element__label span {
+    font-size: .8125rem;
+}
+.THIS .orderStatus .slds-select_container {
+
+}
+.THIS .orderStatus .slds-select_container .slds-select {
+    height: 36px;
+}
+/*
+.THIS .orderStatus .slds-select_container:before {
+display: none;
+}
+.THIS .orderStatus .slds-select_container:after {
+bottom: 0.875rem;
+border-top: 8px solid #545b64;
+border-right: 5px solid transparent;
+border-left: 5px solid transparent;
+}
+*/
+.THIS .slds-button--neutral {
+    width: 240px;
+    margin-top: 1rem;
+    padding: .25rem 2.25rem;
+}
+.THIS .uiInputSelect .select {
+    padding: 17px 14px;
+}
+@media (min-width: 64.0625em) {
+    .THIS .slds-large-size--2-of-12 {
+        width: 15%;
+    }
+    .THIS .slds-large-size--2-of-12.orderDate {
+        width: 25%;
+    }
+    .THIS .searchButton .slds-button {
+        line-height: 1.75rem;
+        width: 100%;
+        padding: .2rem 1.2rem;
+    }
+}
+@media (max-width: 64.0625em) {
+    .THIS {
+        padding: 0 token(spacingLarge);
+    }
+}
+@media (min-width: 30em) and (max-width: 64.0625em) {
+
+    .THIS .slds-large-size_2-of-12,
+    .THIS .searchButton,
+    .THIS .orderStatus{
+        max-width: 125px;
+        font-size: .725rem;
+    }
+    .THIS .orderDate .uiInput--datetime{
+        max-height: 10px;
+        font-size: .725rem;
+        padding: 0 8px;
+    }
+
+    .THIS .uiLabel,
+    .THIS .slds-form-element__label {
+        line-height: 1.5;
+        display: block;
+        margin-bottom: .25rem;
+        font-size: .725rem;
+    }
+    .THIS .orderStatus .slds-select_container .slds-select{
+        height: 43px;
+    }
+}
+
+.THIS .slds-form-element__label {
+    padding-top: 0px !important;
+}
+/*
+.THIS .slds-select_container .slds-select {
+-webkit-appearance: menulist;
+-moz-appearance: menulist;
+appearance : menulist;
+}
+*/
+/*
+.THIS .slds-select_container:after {
+content: none;
+}
+.THIS .slds-select_container:before {
+content: none;
+}
+*/
+
+.THIS .slds-listbox__option-icon{
+    width : inherit !important;
+}
+
+.THIS .order-status-dropdown {
+    width: 15rem;
+    max-width: 15rem;
+    min-width: 5rem;
+    left: 7rem;
+}
+
+@media (min-width: 991px) {
+    .THIS .order-status-dropdown {
+        /*min-height: 17.5rem;*/
+        min-height: fit-content;
+    }
+}
+.THIS .order-status-dropdown .slds-listbox__option {
+    font-size: 0.8rem;
+    line-height:1.4;
+}
+
+.THIS .order-status-dropdown .slds-listbox__option a {
+    text-decoration: none;
+}
+
+.THIS .order-status-dropdown .slds-listbox__option a > span {
+    color: #222;
+}
+.THIS .order-status-dropdown .icon-check svg {
+    fill: #222;
+}
+
+.THIS .icon-check svg {
+    margin-right: 0.25rem;
+}
+
+.THIS .dropdown-overlay{
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index: 6999;
+}
+.THIS .box-shadow{
+    box-shadow: 0px 1px 0px 3px #EDEDED;
+}

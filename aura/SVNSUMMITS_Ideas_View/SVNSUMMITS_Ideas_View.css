@@ -1,0 +1,31 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .featured-image {
+    margin-bottom:20px;
+}
+
+.THIS .hidden {
+    display:none;
+}
+
+.THIS .uiOutputRichText ol {
+    list-style:decimal;
+    padding-left:20px;
+    margin:20px;
+}
+.THIS .uiOutputRichText ul {
+    list-style:disc;
+	padding-left:20px;
+    margin:20px;
+}
+
+.THIS .half-size {
+    max-height:250px;
+    overflow:hidden;
+}
+
+.THIS h3.compact-list-header {
+    font-size:16px;
+    text-transform:uppercase;
+    font-weight:700;
+    margin-bottom:10px;
+}

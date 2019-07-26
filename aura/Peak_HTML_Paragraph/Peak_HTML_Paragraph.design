@@ -1,0 +1,11 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ -->
+
+<design:component label="7S HTML Paragraph">
+    <design:attribute name="paragraphType" datasource="Lead Paragraph,Default Paragraph" default="Lead Paragraph" label="Choose Paragraph Option"/>
+    <design:attribute name="paragraphText" label="Paragraph Text"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

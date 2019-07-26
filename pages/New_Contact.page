@@ -1,0 +1,25 @@
+<apex:page standardController="Account" extensions="ContactFromAccount">
+
+<apex:form >
+<apex:pageBlock title="New Contact For: {!Account.Name}">
+<apex:pageBlockSection title="Contact Details" columns="4">
+First Name<apex:inputText value="{!FirstName}"/>
+Email<apex:inputText value="{!Email}" />
+Last Name<apex:inputText value="{!LastName}"/>
+Email Opt-Out<apex:inputCheckbox value="{!HasOptedOutOfEmail}"/>
+Title<apex:inputText value="{!Title}"/>
+Phone<apex:inputText value="{!Phone}"/>
+</apex:pageBlockSection>
+<apex:pageBlockButtons >
+<apex:commandButton action="{!save}" value="Save"/>
+</apex:pageBlockButtons>
+<apex:outputPanel id="refresh" rendered="true">
+ <apex:outputPanel id="refresh1" rendered="{!refreshPage}">
+  <script>
+   window.top.location='/{!Account.id}';
+  </script>
+ </apex:outputPanel>
+</apex:outputPanel>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

@@ -1,0 +1,56 @@
+<!--
+ - Created by presh on 05-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_OpportunityOrderSearchList" extends="c:Dal_ListBase" controller="Dal_OpportunityOrderSearch" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId">
+
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="userType" type="String" default="SSC"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="orderListType" type="String" default="Orders List"/>
+    <aura:attribute name="allDataChecked" type="Boolean"/>
+    <aura:attribute name="orderDateStarts" type="Date" />
+    <aura:attribute name="orderDateEnds" type="Date" />
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+<!--
+
+    &lt;!&ndash; For Relating Opportunity &ndash;&gt;
+    <aura:attribute name="listOfOppTORelate" type="List" default="[]" />
+    <aura:attribute name="listOfOrdersToRelate" type="List" default="[]" />
+-->
+
+
+    <aura:method name="searchOrderList" action="{!c.searchOrderList}" access="PUBLIC">
+        <aura:attribute name="userType" type="String" />
+        <aura:attribute name="orderListType" type="String" />
+        <aura:attribute name="orderNumber" type="String" />
+        <aura:attribute name="poNumber" type="String" />
+        <aura:attribute name="jobName" type="String" />
+        <aura:attribute name="orderDateStart" type="Date" />
+        <aura:attribute name="orderDateEnd" type="Date" />
+        <aura:attribute name="orderStatus" type="String" />
+    </aura:method>
+
+
+
+    <!--<aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <aura:attribute name="allDataChecked" type="Boolean"/>
+    <aura:attribute name="leadDateStarts" type="Date" />
+    <aura:attribute name="leadDateEnds" type="Date" />
+
+
+    <aura:method name="searchLeadList" action="{!c.searchLeadList}" access="PUBLIC">
+        <aura:attribute name="firstname" type="String" />
+        <aura:attribute name="lastname" type="String" />
+        <aura:attribute name="leadSource" type="String" />
+        <aura:attribute name="leadScore" type="String" />
+        <aura:attribute name="leadDateStart" type="Date" />
+        <aura:attribute name="leadDateEnd" type="Date" />
+        <aura:attribute name="leadStatus" type="String" />
+    </aura:method>-->
+
+</aura:component>

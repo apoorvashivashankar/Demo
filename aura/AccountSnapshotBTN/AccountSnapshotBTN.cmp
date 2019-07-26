@@ -1,0 +1,4 @@
+<aura:component implements="force:appHostable,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes,force:hasRecordId" access="global" >
+    <ltng:require styles="{!$Resource.popupCSS}" />
+    <iframe src="{! 'https://dal-tile--c.na93.visual.force.com/apex/AccountSnapshot?Id=' + v.recordId }" width="99%" height="595px;" frameBorder="0"/>
+</aura:component>

@@ -1,0 +1,4 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="true" id="thePage"
+           standardController="Related_Customer__c" extensions="CPQNewSamplePrepareController" applyHTmlTag="false">
+>
+</apex:page>

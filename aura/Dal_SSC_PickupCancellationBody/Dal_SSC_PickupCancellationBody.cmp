@@ -1,0 +1,73 @@
+<!--
+ - Created by ranja on 11-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_PickupCancellationBody">
+
+    <!-- Internal Attributes -->
+    <aura:attribute name="productName" type="String"/>
+    <aura:attribute name="sku" type="String"/>
+    <aura:attribute name="extendedPrice" type="String"/>
+    <aura:attribute name="pickupTime" type="DateTime"/>
+    <aura:attribute name="unitPrice" type="String"/>
+    <aura:attribute name="quantity" type="String"/>
+    <aura:attribute name="unitOfMeasure" type="String"/>
+    <aura:attribute name="isPickup" type="Boolean" default="true"/>
+
+    <!-- Product Details -->
+    <div class="sku-seperator slds-size_11-of-12">
+        <div class="slds-grid slds-grid_align-spread slds-size_12-of-12 slds-m-bottom_large">
+
+            <div class="slds-col">
+                <div class="dal-pickup-modal-product">
+                    <b> {!v.productName} </b>
+                </div>
+
+                <div class="dal-pickup-modal-sku">
+                    SKU : <b>{!v.sku}</b>
+                </div>
+            </div>
+
+            <div class="slds-col">
+                <div>
+                    EXTENDED PRICE
+                </div>
+                <div class="slds-align_absolute-center dal-cancel-expected-price">
+                    <lightning:formattedNumber value="{!v.extendedPrice}" style="currency" currencyCode="USD" />
+                </div>
+            </div>
+        </div>
+
+        <!-- PickUp Scheduled time -->
+        <div class="slds-size_12-of-12 slds-m-bottom_large">
+            <aura:if isTrue="{!v.isPickup}">
+                Pick Up Scheduled Time: &nbsp; <b>{!v.pickupTime}</b>
+
+                <aura:set attribute="else">
+                    Delivery Scheduled Time: &nbsp; <b>{!v.pickupTime}</b>
+                </aura:set>
+            </aura:if>
+        </div>
+
+        <!-- Pricing -->
+        <div class="slds-grid slds-size_12-of-12 slds-m-bottom_large">
+            <div class="slds-m-right_xx-large">
+                <div>
+                    UNIT PRICE
+                </div>
+                <div>
+                    <b><lightning:formattedNumber value="{!v.unitPrice}" style="currency" currencyCode="USD" /></b>
+                </div>
+            </div>
+            <div>
+                <div>
+                    QUANTITY
+                </div>
+                <div>
+                    <b><lightning:formattedNumber value="{!v.quantity}" />&nbsp; {!v.unitOfMeasure}</b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aura:component>

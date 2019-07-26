@@ -1,0 +1,176 @@
+<!--
+ - Created by 7Summits on 2/21/18.
+ -->
+
+<aura:component description="Dal_CallToAction" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <!-- Including Font Awesome -->
+    <ltng:require styles="{!$Resource.fontawesome4 + '/font-awesome-4.7.0/css/font-awesome.css'}" />
+
+    <aura:attribute name="type" type="String" default="3 Column" />
+
+    <aura:attribute name="title" type="String" default="" />
+    <aura:attribute name="subtitle" type="String" default="" />
+
+    <aura:attribute name="cta1Title" type="String" default="" />
+    <aura:attribute name="cta1Url" type="String" default="" />
+    <aura:attribute name="cta1OpenInNewWindow" type="Boolean" default="false" />
+    <aura:attribute name="cta1Icon" type="String" default="" />
+
+    <aura:attribute name="cta2Title" type="String" default="" />
+    <aura:attribute name="cta2Url" type="String" default="" />
+    <aura:attribute name="cta2OpenInNewWindow" type="Boolean" default="false" />
+    <aura:attribute name="cta2Icon" type="String" default="" />
+
+    <aura:attribute name="cta3Title" type="String" default="" />
+    <aura:attribute name="cta3Url" type="String" default="" />
+    <aura:attribute name="cta3OpenInNewWindow" type="Boolean" default="false" />
+    <aura:attribute name="cta3Icon" type="String" default="" />
+
+    <aura:attribute name="cta4Title" type="String" default="" />
+    <aura:attribute name="cta4Url" type="String" default="" />
+    <aura:attribute name="cta4OpenInNewWindow" type="Boolean" default="false" />
+    <aura:attribute name="cta4Icon" type="String" default="" />
+
+    <aura:attribute name="cta5Title" type="String" default="" />
+    <aura:attribute name="cta5Url" type="String" default="" />
+    <aura:attribute name="cta5OpenInNewWindow" type="Boolean" default="false" />
+    <aura:attribute name="cta5Icon" type="String" default="" />
+
+    <aura:attribute name="cta6Title" type="String" default="" />
+    <aura:attribute name="cta6Url" type="String" default="" />
+    <aura:attribute name="cta6OpenInNewWindow" type="Boolean" default="false" />
+    <aura:attribute name="cta6Icon" type="String" default="" />
+
+    <aura:attribute name="cta7Title" type="String" default="" />
+    <aura:attribute name="cta7Url" type="String" default="" />
+    <aura:attribute name="cta7OpenInNewWindow" type="Boolean" default="false" />
+    <aura:attribute name="cta7Icon" type="String" default="" />
+
+    <aura:attribute name="cta8Title" type="String" default="" />
+    <aura:attribute name="cta8Url" type="String" default="" />
+    <aura:attribute name="cta8OpenInNewWindow" type="Boolean" default="false" />
+    <aura:attribute name="cta8Icon" type="String" default="" />
+
+    <aura:attribute name="ctaBackgroundColor" type="String" default="#FFF" />
+    <aura:attribute name="ctaBorderColor" type="String" default="#00416A" />
+    <aura:attribute name="ctaIconColor" type="String" default="#00416A" />
+
+    <div>
+        <div class="slds-p-horizontal_small">
+            <aura:if isTrue="{!v.title != ''}">
+                <h2>{!v.title}</h2>
+            </aura:if>
+
+            <lightning:layout multipleRows="true" verticalAlign="stretch" pullToBoundary="medium" >
+
+                <aura:if isTrue="{!v.cta1Title != ''}">
+                    <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="6" mediumDeviceSize="4"
+                                          largeDeviceSize="{!v.type == '3 Column' ? '4' : ((v.type == '4 Column') ? '3' : ((v.type == '5 Column') ? '2' : '3')) }">
+                        <c:Dal_CTAItem title="{!v.cta1Title}"
+                                       url="{!v.cta1Url}"
+                                       openInNewWindow="{!v.cta1OpenInNewWindow}"
+                                       icon="{!v.cta1Icon}"
+                                       backgroundColor="{!v.ctaBackgroundColor}"
+                                       borderColor="{!v.ctaBorderColor}"
+                                       iconColor="{!v.ctaIconColor}"
+                        />
+                    </lightning:layoutItem>
+                </aura:if>
+
+                <aura:if isTrue="{!v.cta2Title != ''}">
+                    <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="6" mediumDeviceSize="4"
+                                          largeDeviceSize="{!v.type == '3 Column' ? '4' : ((v.type == '4 Column') ? '3' : ((v.type == '5 Column') ? '2' : '3')) }">
+                        <c:Dal_CTAItem title="{!v.cta2Title}"
+                                       url="{!v.cta2Url}"
+                                       openInNewWindow="{!v.cta2OpenInNewWindow}"
+                                       icon="{!v.cta2Icon}"
+                                       backgroundColor="{!v.ctaBackgroundColor}"
+                                       borderColor="{!v.ctaBorderColor}"
+                                       iconColor="{!v.ctaIconColor}"
+                        />
+                    </lightning:layoutItem>
+                </aura:if>
+
+                <aura:if isTrue="{!v.cta3Title != ''}">
+                    <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="6" mediumDeviceSize="4"
+                                          largeDeviceSize="{!v.type == '3 Column' ? '4' : ((v.type == '4 Column') ? '3' : ((v.type == '5 Column') ? '2' : '3')) }">
+                        <c:Dal_CTAItem title="{!v.cta3Title}"
+                                       url="{!v.cta3Url}"
+                                       openInNewWindow="{!v.cta3OpenInNewWindow}"
+                                       icon="{!v.cta3Icon}"
+                                       backgroundColor="{!v.ctaBackgroundColor}"
+                                       borderColor="{!v.ctaBorderColor}"
+                                       iconColor="{!v.ctaIconColor}"
+                        />
+                    </lightning:layoutItem>
+                </aura:if>
+                <aura:if isTrue="{!v.cta4Title != ''}">
+                    <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="6" mediumDeviceSize="4"
+                                          largeDeviceSize="{!v.type == '3 Column' ? '4' : ((v.type == '4 Column') ? '3' : ((v.type == '5 Column') ? '2' : '3')) }">
+                        <c:Dal_CTAItem title="{!v.cta4Title}"
+                                       url="{!v.cta4Url}"
+                                       openInNewWindow="{!v.cta4OpenInNewWindow}"
+                                       icon="{!v.cta4Icon}"
+                                       backgroundColor="{!v.ctaBackgroundColor}"
+                                       borderColor="{!v.ctaBorderColor}"
+                                       iconColor="{!v.ctaIconColor}"
+                        />
+                    </lightning:layoutItem>
+                </aura:if>
+                <aura:if isTrue="{!v.cta5Title != ''}">
+                    <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="6" mediumDeviceSize="4"
+                                          largeDeviceSize="{!v.type == '3 Column' ? '4' : ((v.type == '4 Column') ? '3' : ((v.type == '5 Column') ? '2' : '3')) }">
+                        <c:Dal_CTAItem title="{!v.cta5Title}"
+                                       url="{!v.cta5Url}"
+                                       openInNewWindow="{!v.cta5OpenInNewWindow}"
+                                       icon="{!v.cta5Icon}"
+                                       backgroundColor="{!v.ctaBackgroundColor}"
+                                       borderColor="{!v.ctaBorderColor}"
+                                       iconColor="{!v.ctaIconColor}"
+                        />
+                    </lightning:layoutItem>
+                </aura:if>
+                <aura:if isTrue="{!v.cta6Title != ''}">
+                    <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="6" mediumDeviceSize="4"
+                                          largeDeviceSize="{!v.type == '3 Column' ? '4' : ((v.type == '4 Column') ? '3' : ((v.type == '5 Column') ? '2' : '3')) }">
+                        <c:Dal_CTAItem title="{!v.cta6Title}"
+                                       url="{!v.cta6Url}"
+                                       openInNewWindow="{!v.cta6OpenInNewWindow}"
+                                       icon="{!v.cta6Icon}"
+                                       backgroundColor="{!v.ctaBackgroundColor}"
+                                       borderColor="{!v.ctaBorderColor}"
+                                       iconColor="{!v.ctaIconColor}"
+                        />
+                    </lightning:layoutItem>
+                </aura:if>
+                <aura:if isTrue="{!v.cta7Title != ''}">
+                    <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="6" mediumDeviceSize="4"
+                                          largeDeviceSize="{!v.type == '3 Column' ? '4' : ((v.type == '4 Column') ? '3' : ((v.type == '5 Column') ? '2' : '3')) }">
+                        <c:Dal_CTAItem title="{!v.cta7Title}"
+                                       url="{!v.cta7Url}"
+                                       openInNewWindow="{!v.cta7OpenInNewWindow}"
+                                       icon="{!v.cta7Icon}"
+                                       backgroundColor="{!v.ctaBackgroundColor}"
+                                       borderColor="{!v.ctaBorderColor}"
+                                       iconColor="{!v.ctaIconColor}"
+                        />
+                    </lightning:layoutItem>
+                </aura:if>
+                <aura:if isTrue="{!v.cta6Title != ''}">
+                    <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="6" mediumDeviceSize="4"
+                                          largeDeviceSize="{!v.type == '3 Column' ? '4' : ((v.type == '4 Column') ? '3' : ((v.type == '5 Column') ? '2' : '3')) }">
+                        <c:Dal_CTAItem title="{!v.cta8Title}"
+                                       url="{!v.cta8Url}"
+                                       openInNewWindow="{!v.cta8OpenInNewWindow}"
+                                       icon="{!v.cta8Icon}"
+                                       backgroundColor="{!v.ctaBackgroundColor}"
+                                       borderColor="{!v.ctaBorderColor}"
+                                       iconColor="{!v.ctaIconColor}"
+                        />
+                    </lightning:layoutItem>
+                </aura:if>
+            </lightning:layout>
+
+        </div>
+    </div>
+</aura:component>

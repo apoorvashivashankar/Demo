@@ -1,0 +1,41 @@
+<aura:component implements="forceCommunity:layout" description="7Summits Lead Banner, Banner 2:1, 1 column, 2:1 column">
+    <aura:attribute name="leadBanner" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="full" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="bannerLeftColumn" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="bannerRightColumn" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="leftColumn" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="rightColumn" type="Aura.Component[]" required="false"/>
+
+    <section>
+            {!v.leadBanner}
+    </section>
+
+    <section class="peak-banner-plain slds-m-bottom_xx-large">
+        <div class="slds-container_x-large  slds-container_center ">
+            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                <div class="slds-p-horizontal_small slds-size_1-of-1 slds-large-size_2-of-3 slds-p-vertical_xx-large">
+                        {!v.bannerLeftColumn}
+                </div>
+                <div class="slds-p-horizontal_small slds-size_1-of-1 slds-large-size_1-of-3 slds-p-vertical_xx-large">
+                        {!v.bannerRightColumn}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slds-container_x-large  slds-container_center slds-p-bottom_xx-large slds-p-horizontal_medium slds-grid_pull-padded  ">
+            {!v.full}
+    </section>
+
+    <section class="slds-container_x-large  slds-container_center">
+        <div class="slds-grid slds-wrap ">
+            <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_2-of-3  slds-p-bottom_x-large">
+                    {!v.leftColumn}
+            </div>
+            <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-3">
+                    {!v.rightColumn}
+            </div>
+        </div>
+    </section>
+
+</aura:component>

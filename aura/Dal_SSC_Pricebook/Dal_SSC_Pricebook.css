@@ -1,0 +1,15 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS > div {
+  text-align: center;
+}
+.THIS > div .slds-button {
+  min-width: 280px;
+  padding: .5rem 2.25rem;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+}

@@ -1,0 +1,153 @@
+<!--
+ - Created by 7Summits on 3/20/18.
+ -->
+<aura:component description="Dal_Dist_OrderSearchOpen" extends="c:Dal_Base" controller="Dal_OrderSearchController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="orderStatus" type="String" default=""/>
+    <aura:attribute name="orderNumber" type="String" default=""/>
+    <aura:attribute name="purchaseOrder" type="String" default=""/>
+    <aura:attribute name="jobName" type="String" default=""/>
+    <aura:attribute name="orderStartDate" type="Date" default=""/>
+    <aura:attribute name="orderEndDate" type="Date" default=""/>
+    <aura:attribute name="searchButton" type="String" default=""/>
+    <aura:attribute name="listType" type="String" default="Orders List" />
+    <aura:attribute name="filteredRows" type="String" />
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="noDataMsg" type="String" default="No data found" />
+    <aura:attribute name="showNoDataMsg" type="Boolean" default="true" />
+    <aura:attribute name="communityType" type="String" default="Distributor" />
+
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+    <lightning:layout pullToBoundary="small" multipleRows="true">
+        <lightning:layoutItem size="12" class="slds-p-vertical--large">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <lightning:input aura:id="orderNumber" label="Order Number" name="orderNumber"
+                                     class="slds-p-around_small input-xx-small dal-medium-inputThird dal-small-inputHalf"
+                                     value="{!v.orderNumber}"
+                                     required="false"
+                                     pattern="[0-9]*"
+                                     maxlength="7"
+                    />
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <lightning:input aura:id="purchaseOrder" label="Purchase Order" name="purchaseOrder"
+                                     class="slds-p-around_small input-xx-small dal-medium-inputThird dal-small-inputHalf"
+                                     value="{!v.purchaseOrder}"
+                                     required="false"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <lightning:input aura:id="jobName" label="Job Name" name="jobName"
+                                     class="slds-p-around_small input-xx-small dal-medium-inputThird dal-small-inputHalf"
+                                     value="{!v.jobName}"
+                                     required="false"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="orderDate slds-p-around_x-small" size="12" mediumDeviceSize="6"
+                                      largeDeviceSize="2">
+                    <label>Order Date Between</label>
+                    <div>
+                        <ui:inputDate aura:id="orderStartDate" displayDatePicker="true"
+                                      value="{!v.orderStartDate}"
+                                      format="MM/DD/YYYY"
+                                      required="true"/>
+                        <span class="dateSeparator">-</span>
+                        <ui:inputDate aura:id="orderEndDate" displayDatePicker="true"
+                                      value="{!v.orderEndDate}"
+                                      format="MM/DD/YYYY"
+                                      required="true"/>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="orderStatus" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <lightning:select aura:id="orderStatus" label="Line status" name="orderStatus"
+                                      class="slds-p-around_small input-x-small dal-medium-inputThird dal-small-inputHalf">
+                        <option value="1"></option>
+                    </lightning:select>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="searchButton slds-align-content-center" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <lightning:button variant="neutral" label="Search" />
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12">
+           <!-- <c:Dal_OpenOrdersList /> -->
+
+            <div class="dal-listBase">
+                <aura:if isTrue="{!v.data.length > 0}">
+                    <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-no-row-hover">
+                        <thead>
+                        <tr class="slds-text-title_caps">
+                            <aura:iteration items="{!v.columns}" var="column">
+                                <th>
+                                    <div class="slds-truncate" title="{!column.label}">
+                                    {!column.label}
+                                    </div>
+                                </th>
+                            </aura:iteration>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <aura:iteration items="{!v.data}" var="viewRow" indexVar="viewRowIndex">
+                            <tr class="slds-hint-parent">
+                                <aura:iteration items="{!viewRow.columns}" var="column">
+
+                                    <!-- date column -->
+                                    <aura:if isTrue="{!column.type == 'date'}">
+                                        <td class="slds-cell-wrap" data-label="{!column.label}">
+                                            <lightning:formattedDateTime value="{!column.value}" month="2-digit" day="2-digit" year="numeric" />
+                                        </td>
+                                    </aura:if>
+                                    <!-- end date column -->
+
+                                    <!-- date link column -->
+                                    <aura:if isTrue="{!column.type == 'dateLink'}">
+                                        <td class="slds-cell-wrap" data-label="{!column.label}">
+                                            <a href="javascript:void(0)" data-url="{!column.url}" onclick="{!c.gotoURL}">
+                                                <lightning:formattedDateTime value="{!column.value}" month="2-digit" day="2-digit" year="numeric" />
+                                            </a>
+                                        </td>
+                                    </aura:if>
+                                    <!-- end date link column -->
+
+                                    <!-- text column -->
+                                    <aura:if isTrue="{!column.type == 'text'}">
+                                        <td class="slds-cell-wrap" data-label="{!column.label}">
+                                                {!column.value}
+                                        </td>
+                                    </aura:if>
+                                    <!-- end text column -->
+
+                                    <!-- text Link column -->
+                                    <aura:if isTrue="{!column.type == 'textLink'}">
+                                        <td class="slds-cell-wrap" data-label="{!column.label}">
+                                            <a href="javascript:void(0)" data-url="{!column.url}" onclick="{!c.gotoURL}">{!column.value}</a>
+                                        </td>
+                                    </aura:if>
+                                    <!-- end text column -->
+
+                                    <!-- currency column -->
+                                    <aura:if isTrue="{!column.type == 'currency'}">
+                                        <td class="slds-cell-wrap" data-label="{!column.label}">
+                                            <lightning:formattedNumber value="{!column.value}" style="currency" currencyCode="USD" />
+                                        </td>
+                                    </aura:if>
+                                    <!-- end currency column -->
+
+                                </aura:iteration>
+                                <!-- end iterate each column of the row -->
+                            </tr>
+                        </aura:iteration>
+                        </tbody>
+                    </table>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!v.showNoDataMsg == true}">
+                            <ui:message title="" severity="info" closable="false">{!v.noDataMsg}</ui:message>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+            </div>
+
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

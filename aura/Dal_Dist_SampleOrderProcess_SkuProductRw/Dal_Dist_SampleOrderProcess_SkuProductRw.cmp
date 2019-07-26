@@ -1,0 +1,133 @@
+<!--
+ - Created by ranja on 08-08-2018.
+ -->
+
+<aura:component description="Dal_Dist_SampleOrderProcess_SkuProductRw" extends="c:Dal_Base"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes">
+
+    <aura:attribute name="wrapperData" type="Map" default="{}" />
+    <aura:attribute name="listForQuantity" type="List" default="1,2,3,4,5" description="Quantity of Product"/>
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:attribute name="today" type="Date" description="Today's date"/>
+    <aura:attribute name="isMore" type="boolean" default="false" />
+    
+    <!-- Attributes used to display product lines -->
+    <aura:attribute name="productName" type="String" />
+    <aura:attribute name="availableQuantity" type="Integer" />
+    <aura:attribute name="selectedUOM" type="String" description="Selected Unit Of Measure" />
+    <aura:attribute name="selectedQuantity" type="String" description="Selected Quantity" />
+    <aura:attribute name="productResponse" type="Object" description="Wrapper Data for product Searches" />
+    <aura:attribute name="productOrderLines" type="Object" description="Added products from modal" />
+    <aura:attribute name="listOfIdsOfOrderLine" type="List"/>
+    <aura:attribute name="cumulativeOrderWeight" type="Decimal" />
+    <aura:attribute name="extendedWeight" type="Decimal" default="0.00"/>
+    
+
+    <lightning:layoutItem size="12" class="section-border-bottom ">
+
+        <aura:iteration items="{!v.productOrderLines}" var="orderLine" indexVar="index">
+
+            <lightning:layout multipleRows="true" verticalAlign="center" horizontalAlign="center" class="show-different-color">
+
+                <!-- Display added products header -->
+                <lightning:layoutItem
+                        class="slds-grid slds-wrap slds-p-horizontal_small slds-p-top_small slds-is-relative" size="12">
+
+                    <div class="slds-size_8-of-12 slds-small-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_10-of-12 ">
+                        <div class="searchResult slds-p-top_small slds-p-right_small slds-p-left_small ">
+                            <h3><strong> {!orderLine.productName}</strong></h3>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12
+                        slds-large-size_9-of-12 searchResult slds-p-bottom_small slds-p-horizontal_small">
+                            <lightning:icon iconName="utility:event" size="x-small" class="slds-p-right--x-small"
+                                            alternativeText="Shipping Date"/>
+                            <b class="date-to-green shippingStatus">Estimated Availability Date: {!v.today}</b>
+                        </div>
+                    </div>
+                    <div class="slds-size_4-of-12 slds-small-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_2-of-12">
+                        <div class="searchResult slds-p-top_x-small slds-p-right_x-small slds-p-left_x-small slds-text-align--right">
+                            <h5> EXTENDED WEIGHT </h5>
+                        </div>
+                        <div class="searchResult slds-p-bottom_x-small slds-p-horizontal_x-small slds-text-align--right">
+                            <h4><b>
+                                    <lightning:formattedNumber value="{!orderLine.variableQuantity}" maximumFractionDigits="2"/>
+                                </b>
+                            </h4>
+                        </div>
+                    </div>
+
+                </lightning:layoutItem>
+
+
+                <!-- Display added products body -->
+                <lightning:layoutItem class="productInput slds-grid slds-wrap slds-p-left_small slds-p-right_medium slds-p-bottom_medium slds-is-relative"
+                        size="12">
+                    <div class="productSku slds-large-size_3-of-12 slds-medium-size_4-of-12 slds-size_8-of-12 slds-m-around_small ">
+                        <div>
+                            <b> PRODUCT / SKU # </b>
+                        </div>
+                        <div>
+                            {!orderLine.sku}
+                        </div>
+                    </div>
+
+
+                    <!-- ******************** -->
+                    <!-- Quantity -->
+                    <!-- ******************** -->
+                    <lightning:select class="slds-p-horizontal_small slds-size_4-of-12 slds-large-size_1-of-8 slds-medium-size_4-of-12 dal-small-inputHalf input-xx-small" name="{!index}" label="Quantity"
+                                      required="true" value="{!orderLine.selectedQuantity}" onchange="{!c.updateQuantity}">
+                        <aura:if isTrue="{!orderLine.availableQty >= 1}">
+                            <aura:iteration items="{!orderLine.availableQty > 5 ? v.listForQuantity : orderLine.quantityLst}" var="qt">
+                                <option value="{!qt}">{!qt}</option>
+                            </aura:iteration>
+                        </aura:if>
+                    </lightning:select>
+
+                    <!-- ******************** -->
+                    <!-- Unit of Measure -->
+                    <!-- ******************** -->
+                    <lightning:select aura:id="unitOfMeasure" label="Unit Of Measure" name="unitOfMeasure"
+                                      class="slds-p-horizontal_small slds-medium-size_3-of-12 slds-small-size_4-of-12 slds-size_6-of-12 slds-large-size_1-of-7 input-x-small"
+                                      value="{!orderLine.BaseUOM}">
+                        <option value="{!orderLine.BaseUOM}" >{!orderLine.BaseUOM}</option>
+
+                    </lightning:select>
+
+
+                    <!-- ******************** -->
+                    <!-- MAXIMUM QUANTITY -->
+                    <!-- ******************** -->
+
+                    <div class="productSku slds-size_2-of-10 slds-m-around_small">
+                        <div>
+                            <b> Maximum Quantity </b>
+                        </div>
+                        <div class="slds-p-top_xx-small slds-text-align--center" >
+                            <lightning:formattedNumber value="{!orderLine.availableQty > 5 ? 5 : orderLine.availableQty}" minimumIntegerDigits="1"
+                                                       maximumFractionDigits="0"/>
+                        </div>
+                    </div>
+
+
+                    <!-- ******************** -->
+                    <!-- Remove product record -->
+                    <!-- ******************** -->
+                    <button class="slds-button btn-product-clear" value="{!index}" onclick="{!c.clearSelectedValue}">
+                        <lightning:icon iconName="utility:clear" size="x-small" alternativeText="Clear"/>&nbsp;Clear
+                    </button>
+
+
+                </lightning:layoutItem>
+                <!-- ******************** -->
+                <!-- End Inputs -->
+                <!-- ******************** -->
+
+
+            </lightning:layout>
+        </aura:iteration>
+    </lightning:layoutItem>
+
+</aura:component>

@@ -1,0 +1,7 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S Ideas Status Tracker">
+
+    <design:attribute name="zoneName" label="Zone Name"     description="Ideas Zone Name"/>
+    <design:attribute name="recordId" label="Record Id"     description="record id" />
+
+</design:component>

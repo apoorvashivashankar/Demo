@@ -1,0 +1,102 @@
+<aura:component description="Dal_SSC_CreateOrderProductSearchCancelModal" extends="c:Dal_ModalBase" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" controller="Dal_MySalesRepController">
+    
+    
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <!--Labels-->
+    <aura:attribute name="notProcessedLabel" type="String" default="Sorry, your order cannot be processed."/>
+    <aura:attribute name="onHoldLabel" type="String"
+                    default="Your account is currently on hold. Please contact your credit representative."/>
+    
+    <!--Internal Attributes-->
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="loading" type="Boolean" default="true" />
+    <aura:attribute name="myReps" type="List" default="{}" />
+    
+    <!--Init Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    
+    
+    <!-- Body starts here -->
+    <lightning:layout class="dal-form dal-form-order slds-p-around_small slds-m-bottom_large" multipleRows="true">
+        <aura:if isTrue="{!!v.showSpinner}">
+            
+            <div>
+                <div>
+                    <!--
+                    <div class="slds-size_12-of-12">
+                        <a onclick="{!c.handleClose}">
+                            <lightning:icon iconName="utility:close" alternativeText="Close" size="small" title="Close"
+                                            class="header-close"/>
+                        </a>
+                    </div> -->
+                    
+                    <div class="slds-grid slds-size_9-of-12 slds-align_absolute-center">
+                        
+                        <div class="slds-size_12-of-12 slds-text-align_center slds-m-top_x-large">
+                            <div class="slds-size_12-of-12 slds-text-heading_medium heading slds-m-around_small">
+                                <div class="font-color error-label">
+                                    {!v.notProcessedLabel}
+                                </div>
+                                <!--<center>-->
+                                <div class="error-hold slds-align_absolute-center slds-size_8-of-12">
+                                    {!v.onHoldLabel}
+                                </div>
+                                <!--</center>-->
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="slds-align_absolute-center">
+                    <div class="slds-m-bottom_small slds-align_absolute-center slds-size_6-of-12">
+                        
+                        <aura:iteration items="{!v.myReps}" var="salesRep">
+                            <div class="{!and((salesRep.firstName != ''),(salesRep.lastName != '')) ? 'slds-size_1-of-1 slds-m-around_medium' : 'slds-hide' }">
+                                <div class="slds-p-vertical_xx-small slds-size_12-of-12">
+                                    
+                                    <h4>{!(salesRep.firstName + ' ' +  salesRep.lastName)}</h4>
+                                    
+                                    <p class="slds-text-color_weak title">{!salesRep.title}</p>
+                                    {!salesRep.phone}
+                                    <p class="slds-p-horizontal_x-small slds-p-around_xxx-small">
+                                        <lightning:icon iconName="utility:identity" class="dal-phone-icon" size="x-small" /> &nbsp;
+                                        <a href="{!'mailto:' + salesRep.email}">{!salesRep.email}</a>
+                                    </p>
+                                </div>
+                                
+                            </div>
+                        </aura:iteration>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <lightning:layout class="slds-align_absolute-center">
+                <div class=" slds-p-horizontal_x-small slds-m-top_large">
+                    <lightning:button label="OK" class="order-button-custom" title="OK" variant="destructive"
+                                      onclick="{!c.handleClose}"/>
+                </div>
+            </lightning:layout>
+        </aura:if>
+        
+        
+        <aura:if isTrue="{!v.showSpinner}">
+            <lightning:layoutItem size="12" class="slds-is-relative slds-p-around_xx-large">
+                <lightning:spinner class="bkg-transparent" variant="brand"/>
+            </lightning:layoutItem>
+        </aura:if>
+        
+    </lightning:layout>
+    
+    
+    
+    
+</aura:component>

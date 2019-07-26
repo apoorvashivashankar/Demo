@@ -1,0 +1,7 @@
+<!--
+ - Created by Yadav on 11/1/2018.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_InventoryCollectionEvent">
+    <aura:attribute name="colorList" type="String[]"/>
+</aura:event>

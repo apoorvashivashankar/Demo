@@ -1,0 +1,49 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="MobileHamburger" type="Boolean" default="false" />
+
+    <aura:attribute name="Link1" type="String" default="" />
+    <aura:attribute name="Link1Text" type="String" default="" />
+    <aura:attribute name="Link1IsButton" type="Boolean" default="false" />
+    <aura:attribute name="Link1OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="Link2" type="String" default="" />
+    <aura:attribute name="Link2Text" type="String" default="" />
+    <aura:attribute name="Link2IsButton" type="Boolean" default="false" />
+    <aura:attribute name="Link2OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="Link3" type="String" default="" />
+    <aura:attribute name="Link3Text" type="String" default="" />
+    <aura:attribute name="Link3IsButton" type="Boolean" default="false" />
+    <aura:attribute name="Link3OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="Link4" type="String" default="" />
+    <aura:attribute name="Link4Text" type="String" default="" />
+    <aura:attribute name="Link4IsButton" type="Boolean" default="false" />
+    <aura:attribute name="Link4OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="Link5" type="String" default="" />
+    <aura:attribute name="Link5Text" type="String" default="" />
+    <aura:attribute name="Link5IsButton" type="Boolean" default="false" />
+    <aura:attribute name="Link5OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="Link6" type="String" default="" />
+    <aura:attribute name="Link6Text" type="String" default="" />
+    <aura:attribute name="Link6IsButton" type="Boolean" default="false" />
+    <aura:attribute name="Link6OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <div class="slds-container_x-large slds-container_center slds-p-vertical_large slds-clearfix">
+            <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-float_left">
+                <c:Peak_NavigationList MobileHamburger="{!v.MobileHamburger}" Link1Text="{!v.Link1Text}" Link1="{!v.Link1}" Link1IsButton="{!v.Link1IsButton}"
+                                       Link2Text="{!v.Link2Text}" Link2="{!v.Link2}" Link2IsButton="{!v.Link2IsButton}"
+                                       Link3Text="{!v.Link3Text}" Link3="{!v.Link3}" Link3IsButton="{!v.Link3IsButton}"
+                                       Link4Text="{!v.Link4Text}" Link4="{!v.Link4}" Link4IsButton="{!v.Link4IsButton}"
+                                       Link5Text="{!v.Link5Text}" Link5="{!v.Link5}" Link5IsButton="{!v.Link5IsButton}"
+                                       Link6Text="{!v.Link6Text}" Link6="{!v.Link6}" Link6IsButton="{!v.Link6IsButton}"/>
+            </div>
+        </div>
+    </section>
+</aura:component>

@@ -1,0 +1,181 @@
+<!--
+ - Created by ajith on 16/08/18.
+ -->
+
+<aura:component description="OrderDetailsOnCase" controller="SearchOrderExtension" implements="lightning:isUrlAddressable,flexipage:availableForAllPageTypes,force:hasRecordId">
+
+    <!-- custom styles for elements outside the theme ie. Modals -->
+    <ltng:require styles="{!$Resource.dalTileLightning + '/styles/overridesStatic.css'}" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:attribute name="caseId" type="String" />
+    <aura:attribute name="orderInfo" type="DT_SYS_OrderHeader__x" />
+
+    <aura:attribute name="labelOrderTotal" type="String" default="Order Sub-Total"/>
+    <aura:attribute name="labelShippingInfo" type="String" default="Shipping Info"/>
+    <aura:attribute name="labelShipTo" type="String" default="Ship-To Address"/>
+    <aura:attribute name="labelShipFrom" type="String" default="Ship-From"/>
+    <aura:attribute name="labelFreight" type="String" default="Freight Terms"/>
+    <aura:attribute name="labelShipComplete" type="String" default="Ship Complete?"/>
+    <aura:attribute name="labelTotalOrderWeight" type="String" default="Cumulative Order Weight"/>
+    <aura:attribute name="labelExtendedWeightUnitOfMeasure" type="String" default="lbs"/>
+    <aura:attribute name="labelOrderInfo" type="String" default="Order Info"/>
+    <aura:attribute name="labelOrderNumber" type="String" default="Order #"/>
+    <aura:attribute name="labelPoNumber" type="String" default="PO #"/>
+    <aura:attribute name="labelJobName" type="String" default="Job Name"/>
+    <aura:attribute name="labelContactName" type="String" default="Contact Name"/>
+    <aura:attribute name="labelContactNumber" type="String" default="Contact Number"/>
+    <aura:attribute name="labelShipDateUnavailable" type="String" default="Will Advise"/>
+
+    <aura:if isTrue="{!!empty(v.orderInfo)}">
+   <div class="slds-scrollable_y" style="height: 20rem;">
+    <lightning:layout class="dal-form-order orderContainer slds-m-vertical_x-large"  horizontalAlign="center" verticalAlign="center">
+        <lightning:layoutItem size="12">
+            <!-- ******************** -->
+            <!-- Shipping Info -->
+            <!-- ******************** -->
+            <lightning:layout class="slds-p-horizontal_medium slds-scrollable_y" multipleRows="true" horizontalAlign="center" verticalAlign="start">
+
+                <lightning:layoutItem class="slds-p-top_medium slds-p-bottom_small slds-medium-order_4 slds-large-order_4" size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4">
+                    <lightning:layout class="slds-large-grid_align-end" multipleRows="true" verticalAlign="center">
+                        <aura:if isTrue="{!!empty(v.orderInfo.Total_SubTotal__c)}">
+                            <lightning:layoutItem class="slds-large-text-align_right orderOutputDataLabel" size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="5">
+                                {!v.labelOrderTotal}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem class="slds-text-align_right highlight" size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="7">
+                                <lightning:formattedNumber value="{!v.orderInfo.Total_SubTotal__c}" style="currency" currencyCode="USD" />
+                            </lightning:layoutItem>
+                        </aura:if>
+                    </lightning:layout>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem class="slds-p-vertical_medium slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2">
+                    <h4 class="bold">{!v.labelShippingInfo}</h4>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="3">
+                    <div class="orderOutputData orderOutputData-stacked slds-p-vertical_x-small orderOutputData-inline_mobile">
+                        <label >{!v.labelShipTo}</label>
+                        <span class='bold'>
+                                <aura:if isTrue="{!!empty(v.orderInfo.Account_Address_Name)}">{!v.orderInfo.Account_Address_Name}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.orderInfo.Account_Address_CareOf)}">{!v.orderInfo.Account_Address_CareOf}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.orderInfo.Account_Address_Name2)}">{!v.orderInfo.Account_Address_Name2}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.orderInfo.Account_Address_Line1)}">{!v.orderInfo.Account_Address_Line1}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.orderInfo.Account_Address_Line2)}"><p>{!v.orderInfo.Account_Address_Line2}</p></aura:if>
+                            {!v.orderInfo.Account_Address_City},&nbsp;{!v.orderInfo.Account_Address_StateProvince}&nbsp;{!v.orderInfo.Account_Address_PostalCode}&nbsp;{!v.orderInfo.Account_Address_Country}
+                            </span>
+                    </div>
+
+                    <aura:if isTrue="{!and(!empty(v.orderInfo.Account_From_Address_Line1), and(!empty(v.orderInfo.Account_Address_City), !empty(v.orderInfo.Account_Address_StateProvince)))}">
+                        <div class="orderOutputData orderOutputData-stacked slds-p-vertical_x-small orderOutputData-inline_mobile">
+                            <label>{!v.labelShipFrom}</label>
+                            <span class='bold'>
+                                    <aura:if isTrue="{!!empty(v.orderInfo.Account_Address_Name)}">
+                                        {!v.orderInfo.Account_Address_Name}<br/>
+                                    </aura:if>
+                                {!v.orderInfo.Account_From_Address_City}<br/>
+                                    <aura:if isTrue="{!!empty(v.orderInfo.Account_From_Address_Line2)}"><p>{!v.orderInfo.Account_From_Address_Line2}</p></aura:if>
+                                {!v.orderInfo.Account_Address_City},&nbsp;{!v.orderInfo.Account_Address_StateProvince}&nbsp;{!v.orderInfo.Account_Address_PostalCode}
+                                </span>
+                        </div>
+                    </aura:if>
+
+                </lightning:layoutItem>
+
+                <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="3">
+                    <aura:if isTrue="{!!empty(v.orderInfo.Fulfilment_FreightTerms__c)}">
+                        <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                            <label>{!v.labelFreight}</label>
+                            <span class='bold'>{!v.orderInfo.Fulfilment_FreightTerms__c}</span>
+                        </div>
+                    </aura:if>
+
+                    <aura:if isTrue="{!!empty(v.orderInfo.Ship_Complete__c)}">
+                        <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                            <label>{!v.labelShipComplete}</label>
+
+                            <aura:if isTrue="{!or(v.orderInfo.Ship_Complete__c == 'Yes', v.orderInfo.Ship_Complete__c == true)}">
+                                <span class='bold'>Yes</span>
+                                <aura:set attribute="else">
+                                    <span class='bold'>No</span>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </aura:if>
+
+                    <aura:if isTrue="{!!empty(v.orderInfo.Total_Weight__c)}">
+                        <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                            <label>{!v.labelTotalOrderWeight}</label><br/>
+                            <span class='bold'><lightning:formattedNumber value="{!v.orderInfo.Total_Weight__c}" maximumFractionDigits="2" />&nbsp;{!v.labelExtendedWeightUnitOfMeasure}</span>
+                        </div>
+                    </aura:if>
+                </lightning:layoutItem>
+
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- End Shipping Info -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- Order Info -->
+            <!-- ******************** -->
+            <lightning:layout class="slds-p-horizontal_medium slds-border_top" multipleRows="true" verticalAlign="start">
+
+                <lightning:layoutItem class="slds-p-vertical_medium slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2">
+                    <h4 class="bold">{!v.labelOrderInfo}</h4>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="3">
+
+                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                        <label>{!v.labelOrderNumber}</label>
+                        <span class='bold'>{!v.orderInfo.SalesOrder__c}</span>
+                    </div>
+
+
+                    <aura:if isTrue="{!!empty(v.orderInfo.CustomerPONo__c)}">
+                        <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                            <label>{!v.labelPoNumber}</label>
+                            <span class='bold ForWrap' >{!v.orderInfo.CustomerPONo__c}</span>
+                        </div>
+                    </aura:if>
+
+                    <aura:if isTrue="{!!empty(v.orderInfo.JobName__c)}">
+                        <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                            <label>{!v.labelJobName}</label>
+                            <span class='bold'>{!v.orderInfo.JobName__c}</span>
+                        </div>
+                    </aura:if>
+
+                </lightning:layoutItem>
+
+                <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="3">
+                    <aura:if isTrue="{!!empty(v.orderInfo.Account_Contact_Name__c)}">
+                        <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                            <label>{!v.labelContactName}</label>
+                            <span class='bold'>{!v.orderInfo.Account_Contact_Name__c}</span>
+                        </div>
+                    </aura:if>
+
+                    <aura:if isTrue="{!!empty(v.orderInfo.Account_Contact_Phone__c)}">
+                        <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                            <label>{!v.labelContactNumber}</label>
+                            <span class='bold'><lightning:formattedPhone value="{!v.orderInfo.Account_Contact_Phone__c}"/></span>
+                        </div>
+                    </aura:if>
+
+                </lightning:layoutItem>
+
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- End order Info -->
+            <!-- ******************** -->
+
+        </lightning:layoutItem>
+
+    </lightning:layout>
+        </div>
+    </aura:if>
+
+</aura:component>

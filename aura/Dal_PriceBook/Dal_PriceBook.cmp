@@ -1,0 +1,4 @@
+<aura:component >
+	<aura:attribute name="activeTab" type="String" default=""/>
+    <c:Dal_PriceBooksDownload />
+</aura:component>

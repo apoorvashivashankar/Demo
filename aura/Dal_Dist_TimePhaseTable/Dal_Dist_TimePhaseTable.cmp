@@ -1,0 +1,93 @@
+<!--
+ - Created by 7Summits on 4/20/18.
+ -->
+
+<aura:component description="Dal_Dist_TimePhaseTable">
+    <aura:attribute name="store" type="Map" default=""/>
+    <aura:attribute name="cartId" type="String" default=""/>
+    <aura:attribute name="sku" type="String" default=""/>
+    <aura:attribute name="showProductSupply" type="Boolean" default="false"/>
+    <aura:attribute name="isProductSupplyLoading" type="Boolean" default="false"/>
+    <aura:attribute name="sourceOfSupplySelectedName" type="String" default=""/>
+    <aura:attribute name="futureProductSupply" type="List" default="[]"/>
+    <aura:attribute name="msgProductSupplyEmpty" type="String" default="No inventory data found."/>
+    <aura:attribute name="customClasses" type="String" default=""/>
+
+    <!-- needed for modal -->
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:attribute name="baseModal" type="Map" />
+
+    <aura:if isTrue="{!v.showProductSupply == true}">
+        <!-- check if we are getting product supply data -->
+        <aura:if isTrue="{!v.isProductSupplyLoading == false}">
+
+            <lightning:layoutItem class="{!'productSupply ' + v.customClasses}" size="12">
+                <lightning:layout multipleRows="true" verticalAlign="center">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8">
+                        <h3>Showing Available to Promise (ATP) for {!v.sourceOfSupplySelectedName}</h3>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="slds-large-text-align_right slds-medium-text-align_right" size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4">
+                        <lightning:button class="btn-light btn-small" label="View Shade" variant="neutral" onclick="{!c.handleViewShade}" />
+                    </lightning:layoutItem>
+                </lightning:layout>
+
+                <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-no-row-hover slds-p-top_medium">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate" title="ATP Date">ATP Date</div>
+                        </th>
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate" title="ATP QTY">ATP QTY</div>
+                        </th>
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate" title="Cumulative QTY">Cumulative QTY</div>
+                        </th>
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate" title="In-Stock">In-Stock</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- check if future product supply list has at least 1 entry -->
+                    <aura:if isTrue="{!v.futureProductSupply.length > 0}">
+                        <aura:iteration items="{!v.futureProductSupply}" var="futureProduct">
+                            <tr>
+                                <td data-label="ATP Date">
+                                    <div class="slds-truncate"><ui:outputDate value="{!futureProduct.dateValue}" format="MM/DD/YY" /></div>
+                                </td>
+                                <td data-label="ATP QTY">
+                                    <div class="slds-truncate"><lightning:formattedNumber value="{!futureProduct.atpQTY}" maximumFractionDigits="3" /></div>
+                                </td>
+                                <td data-label="Cumulative QTY">
+                                    <div class="slds-truncate"><lightning:formattedNumber value="{!futureProduct.cumulativeQTY}" maximumFractionDigits="3" /></div>
+                                </td>
+                                <td data-label="In-Stock">
+                                    <div class="slds-truncate">{!futureProduct.instock}</div>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                        <aura:set attribute="else">
+                            <tr>
+                                <td colspan="3">
+                                    <ui:message severity="info" closable="false">{!v.msgProductSupplyEmpty}</ui:message>
+                                </td>
+                            </tr>
+                        </aura:set>
+                    </aura:if>
+                    </tbody>
+                </table>
+
+            </lightning:layoutItem>
+
+            <!-- show loader for getting product supply info -->
+            <aura:set attribute="else">
+                <lightning:layoutItem size="12" class="slds-is-relative slds-p-around_xx-large">
+                    <lightning:spinner class="bkg-transparent" variant="brand" size="small" />
+                </lightning:layoutItem>
+            </aura:set>
+        </aura:if>
+        <!-- end getting product supply check -->
+
+    </aura:if>
+</aura:component>

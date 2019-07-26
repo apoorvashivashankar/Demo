@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 2/28/18.
+ -->
+
+<design:component label="Daltile SSC - My Dashboard">
+    <design:attribute name="title" label="Title" />
+</design:component>

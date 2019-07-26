@@ -1,0 +1,60 @@
+<design:component label="7S Navigation List">
+	<design:attribute name="Link1" label="Link1 URL" description=""/>
+	<design:attribute name="Link1Text" label="Link1 Text" description=""/>
+	<design:attribute name="Link1IsButton" label="Is Link1 Button?" description=""/>
+    <design:attribute name="Link1OpenInNewPage" label="Open Link 1 in new page?" description=""/>
+    <design:attribute name="Link1IsFormModal" label="Will Link1 open a form modal?" description=""/>
+    <design:attribute name="Link1FormModalContent" label="Link1 form modal component name" description="The lightning component name that will appear in the modal ex:(c:Dal_Dist_RequestUser)"/>
+
+    <design:attribute name="Link2" label="Link2 URL" description=""/>
+    <design:attribute name="Link2Text" label="Link2 Text" description=""/>
+    <design:attribute name="Link2IsButton" label="Is Link2 Button?" description=""/>
+    <design:attribute name="Link2OpenInNewPage" label="Open Link 2 in new page?" description=""/>
+    <design:attribute name="Link2IsFormModal" label="Will Link2 open a form modal?" description=""/>
+    <design:attribute name="Link2FormModalContent" label="Link2 form modal component name" description="The lightning component name that will appear in the modal ex:(c:Dal_Dist_RequestUser)"/>
+
+    <design:attribute name="Link3" label="Link3 URL" description=""/>
+    <design:attribute name="Link3Text" label="Link3 Text" description=""/>
+    <design:attribute name="Link3IsButton" label="Is Link3 Button?" description=""/>
+    <design:attribute name="Link3OpenInNewPage" label="Open Link 3 in new page?" description=""/>
+    <design:attribute name="Link3IsFormModal" label="Will Link3 open a form modal?" description=""/>
+    <design:attribute name="Link3FormModalContent" label="Link3 form modal component name" description="The lightning component name that will appear in the modal ex:(c:Dal_Dist_RequestUser)"/>
+
+    <design:attribute name="Link4" label="Link4 URL" description=""/>
+    <design:attribute name="Link4Text" label="Link4 Text" description=""/>
+    <design:attribute name="Link4IsButton" label="Is Link4 Button?" description=""/>
+    <design:attribute name="Link4OpenInNewPage" label="Open Link 4 in new page?" description=""/>
+    <design:attribute name="Link4IsFormModal" label="Will Link4 open a form modal?" description=""/>
+    <design:attribute name="Link4FormModalContent" label="Link4 form modal component name" description="The lightning component name that will appear in the modal ex:(c:Dal_Dist_RequestUser)"/>
+
+    <design:attribute name="Link5" label="Link5 URL" description=""/>
+    <design:attribute name="Link5Text" label="Link5 Text" description=""/>
+    <design:attribute name="Link5IsButton" label="Is Link5 Button?" description=""/>
+    <design:attribute name="Link5OpenInNewPage" label="Open Link 5 in new page?" description=""/>
+    <design:attribute name="Link5IsFormModal" label="Will Link5 open a form modal?" description=""/>
+    <design:attribute name="Link5FormModalContent" label="Link5 form modal component name" description="The lightning component name that will appear in the modal ex:(c:Dal_Dist_RequestUser)"/>
+
+    <design:attribute name="Link6" label="Link6 URL" description=""/>
+    <design:attribute name="Link6Text" label="Link6 Text" description=""/>
+    <design:attribute name="Link6IsButton" label="Is Link6 Button?" description=""/>
+    <design:attribute name="Link6OpenInNewPage" label="Open Link 6 in new page?" description=""/>
+    <design:attribute name="Link6IsFormModal" label="Will Link6 open a form modal?" description=""/>
+    <design:attribute name="Link6FormModalContent" label="Link6 form modal component name" description="The lightning component name that will appear in the modal ex:(c:Dal_Dist_RequestUser)"/>
+
+    <design:attribute name="Link7" label="Link7 URL" description=""/>
+    <design:attribute name="Link7Text" label="Link7 Text" description=""/>
+    <design:attribute name="Link7IsButton" label="Is Link7 Button?" description=""/>
+    <design:attribute name="Link7OpenInNewPage" label="Open Link 7 in new page?" description=""/>
+    <design:attribute name="Link7IsFormModal" label="Will Link7 open a form modal?" description=""/>
+    <design:attribute name="Link7FormModalContent" label="Link7 form modal component name" description="The lightning component name that will appear in the modal ex:(c:Dal_Dist_RequestUser)"/>
+
+    <design:attribute name="Link8" label="Link8 URL" description=""/>
+    <design:attribute name="Link8Text" label="Link8 Text" description=""/>
+    <design:attribute name="Link8IsButton" label="Is Link8 Button?" description=""/>
+    <design:attribute name="Link8OpenInNewPage" label="Open Link 8 in new page?" description=""/>
+    <design:attribute name="Link8IsFormModal" label="Will Link8 open a form modal?" description=""/>
+    <design:attribute name="Link8FormModalContent" label="Link8 form modal component name" description="The lightning component name that will appear in the modal ex:(c:Dal_Dist_RequestUser)"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

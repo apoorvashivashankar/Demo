@@ -1,0 +1,48 @@
+.THIS .video-wrap {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.THIS .video-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.THIS .description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.THIS article[data-hasborder='true'] {
+    border: 1px solid t(colorBorderSeparatorAlt);
+    border-radius: 0.25rem;
+    padding: 20px;
+    height: 100%;
+}
+
+.THIS div#attr a,
+.THIS div#attr {
+    display: inline-block !important;
+    opacity: 1 !important;
+    color: #fff !important;
+    background: #1291C4 !important;
+}
+
+.THIS div#attr {
+    padding: 7px 10px !important;
+    margin: 5px 0px !important;
+    float: right !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+.THIS div#attr a {
+    font-weight: bold !important;
+}

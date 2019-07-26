@@ -1,0 +1,15 @@
+/**
+ * Created by ranja on 09-01-2019.
+ */
+.THIS {
+}
+
+.THIS .spinner-fixed {
+    position: fixed;
+    bottom : 0;
+    top : 0;
+}
+
+.THIS .dal-spinner-body-parent {
+    position: relative;
+}

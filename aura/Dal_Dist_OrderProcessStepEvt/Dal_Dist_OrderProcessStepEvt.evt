@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 3/14/18.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_Dist_OrderProcessStepEvt">
+    <aura:attribute name="currentPos" type="Integer"/>
+</aura:event>

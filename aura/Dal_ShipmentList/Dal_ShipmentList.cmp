@@ -1,0 +1,25 @@
+<!--
+ - Created by 7Summits on 5/14/18.
+ -->
+
+<aura:component description="Dal_ShipmentList" extends="c:Dal_ListBase" controller="Dal_ShipmentManager" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="shipmentDateStarts" type="Date" />
+    <aura:attribute name="shipmentDateEnds" type="Date" />
+
+    <aura:method name="searchShipmentList" action="{!c.searchShipmentList}" access="PUBLIC">
+        <aura:attribute name="shipmentNumber" type="String" />
+        <aura:attribute name="shipFromLoc" type="String" />
+        <aura:attribute name="shipFrom" type="Date" />
+        <aura:attribute name="shipTo" type="Date" />
+    </aura:method>
+
+   <!-- <aura:if isTrue="{!and(v.userType == 'SSC', v.orderListType == 'Pickup Orders List')}">
+        <lightning:layout class="slds-p-top_small" multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem class="slds-p-horizontal_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                <input type="checkbox" class="slds-m-vertical_x-small" name="showAll" onclick="{!c.handleSelectAllOrders}" checked="{!v.allDataChecked}" /><span class="dal-list-showAll slds-p-horizontal_medium">Select all orders</span>
+                <button type="button" class="slds-button slds-button_neutral slds-m-vertical_x-small" name="scheduleSelectedOrders" onclick="{!c.handleScheduleSelectedOrders}">Schedule Selected Orders</button>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>-->
+</aura:component>

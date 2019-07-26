@@ -1,0 +1,35 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francois korb on 9/12/16.
+ -->
+
+<design:component label="7S Ideas List Compact View">
+	<design:attribute name="zoneName" label="Zone Name:"
+	                  description="Ideas Zone Name"/>
+	<design:attribute name="title" label="Title"
+	                  description="Component title"/>
+	<design:attribute name="listSize" label="Number of Results:" default="5"
+	                  description="Number of ideas to show in list"/>
+	<design:attribute name="displayViewMore" label='Display "View More" button' default="true"
+	                  description="Display the View More button"/>
+	<design:attribute name="sortBy" label="Sort Ideas By"
+	                  datasource="Popular Ideas, Recent Ideas, Top All-Time, Recent Comments"
+	                  description="Sort By"/>
+	<design:attribute name="searchString" label="Filter by Search String:"
+	                  description="Enter the name of the search string to filter on. To inherit search from the page use {!searchString}"/>
+	<design:attribute name="searchByTopics" label="Filter by Topic:"
+	                  description="Filter ideas by topic"/>
+	<design:attribute name="searchByTheme" label="Filter by Theme:"
+	                  description="Filter ideas by theme"/>
+	<design:attribute name="searchByStatus" label="Filter by Status:"
+	                  description="Filter ideas by status"/>
+	<design:attribute name="searchByCategories" label="Filter by Category:"
+	                  description="Filter ideas by category"/>
+	<design:attribute name="searchMyIdeas" label="Filter for My Ideas"
+	                  dataSource="No,Display My Ideas Only,Display My Voted Ideas Only"
+	                  description="Filter for my ideas"/>
+	<design:attribute name="ideasListURL" label="Ideas List URL"
+	                  description="URL for Ideas List page"/>
+	<design:attribute name="ideaDetailURL" label="Idea Detail URL"
+	                  description="URL for Idea detail page"/>
+</design:component>

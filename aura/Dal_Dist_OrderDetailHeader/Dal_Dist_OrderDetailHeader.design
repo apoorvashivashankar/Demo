@@ -1,0 +1,17 @@
+<!--
+ - Created by 7Summits on 4/17/18.
+ -->
+
+<design:component label="DalTile Order Detail Header">
+    <design:attribute name="orderLabel" label="Order Number Label" />
+    <design:attribute name="button1Link" label="Button 1 Link" />
+    <design:attribute name="button1label" label="Button 1 Label"/>
+    <design:attribute name="button1Icon" label="Button 1 Icon" />
+    <design:attribute name="quickOrderLink" label="Quick Order Page Link"/>
+    <design:attribute name="button2Link" label="Button 2 Link" />
+    <design:attribute name="button2label" label="Button 2 Label"/>
+    <design:attribute name="button2Icon" label="Button 2 Icon" />
+    <design:attribute name="button3Link" label="Button 3 Link" />
+    <design:attribute name="button3label" label="Button 3 Label"/>
+    <design:attribute name="button3Icon" label="Button 3 Icon" />
+</design:component>

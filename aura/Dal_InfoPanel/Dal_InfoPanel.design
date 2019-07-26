@@ -1,0 +1,46 @@
+<!--
+ - Created by 7Summits on 2/21/18.
+ -->
+<design:component label="DalTile Info Panel">
+
+    <design:attribute name="type" label="Number of Items per row" dataSource="Single, 2 Column, 3 Column" />
+    <design:attribute name="heading" label="Panel Heading"  />
+    <design:attribute name="position" label="Position" dataSource="Left, Right" />
+
+    <design:attribute name="showTile1" label="Show Info Panel 1"  />
+    <design:attribute name="iconBG1" label="Icon Background Color" dataSource="#00A9CE, #808285, #CF0A2C, #696057, #2E2925, #7F3823, #DFC9A2, #1F355E, #555759, #A79C94, #7C97AB, #00416A, #231F20" />
+    <design:attribute name="icon1" label="Select Icon" dataSource="utility:call, utility:help, utility:questions_and_answers" />
+    <design:attribute name="size1" label="Panel Size" dataSource="small, large" />
+    <design:attribute name="subText1" label="Sub Text"  />
+    <design:attribute name="mainText1" label="Main Text"  />
+    <design:attribute name="panelURL1" label="URL"  />
+    <design:attribute name="OpenInNewTab1" label="Open in New Tab"  />
+    <design:attribute name="rightLink1" label="Right Link URL"  />
+    <design:attribute name="rightLinkLabel1" label="Right Link Label"  />
+
+    <design:attribute name="showTile2" label="Show Info Panel 2"  />
+    <design:attribute name="iconBG2" label="Icon Background Color" dataSource="#00A9CE, #808285, #CF0A2C, #696057, #2E2925, #7F3823, #DFC9A2, #1F355E, #555759, #A79C94, #7C97AB, #00416A, #231F20" />
+    <design:attribute name="icon2" label="Select Icon" dataSource="utility:call, utility:help, utility:questions_and_answers" />
+    <design:attribute name="size2" label="Panel Size" dataSource="small, large" />
+    <design:attribute name="subText2" label="Sub Text"  />
+    <design:attribute name="mainText2" label="Main Text"  />
+    <design:attribute name="panelURL2" label="URL"  />
+    <design:attribute name="OpenInNewTab2" label="Open in New Tab"  />
+    <design:attribute name="rightLink2" label="Right Link URL"  />
+    <design:attribute name="rightLinkLabel2" label="Right Link Label"  />
+
+
+    <design:attribute name="showTile3" label="Show Info Panel 3"  />
+    <design:attribute name="iconBG3" label="Icon Background Color" dataSource="#00A9CE, #808285, #CF0A2C, #696057, #2E2925, #7F3823, #DFC9A2, #1F355E, #555759, #A79C94, #7C97AB, #00416A, #231F20" />
+    <design:attribute name="icon3" label="Select Icon" dataSource="utility:call, utility:help, utility:questions_and_answers" />
+    <design:attribute name="size3" label="Panel Size" dataSource="small, large" />
+    <design:attribute name="subText3" label="Sub Text"  />
+    <design:attribute name="mainText3" label="Main Text"  />
+    <design:attribute name="panelURL3" label="URL"  />
+    <design:attribute name="OpenInNewTab3" label="Open in New Tab"  />
+    <design:attribute name="rightLink3" label="Right Link URL"  />
+    <design:attribute name="rightLinkLabel3" label="Right Link Label"  />
+
+
+    <design:attribute name="className" label="Custom Class"  />
+</design:component>

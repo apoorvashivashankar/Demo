@@ -1,0 +1,620 @@
+<!--
+ - Created by 7Summits on 4/17/18.
+ -->
+
+<aura:component description="Dal_SSC_Order" extends="c:Dal_Base">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="store" type="Map" required="true" />
+    <aura:attribute name="editable" type="Boolean" default="false" />
+    <aura:attribute name="isDetailView" type="Boolean" default="false" />
+    <aura:attribute name="isSSC" type="Boolean" default="false" />
+
+    <!-- internal attributes -->
+    <aura:attribute name="shippingInfo" type="Map" default="{}" />
+    <aura:attribute name="orderInfo" type="Map" default="{}" />
+    <aura:attribute name="products" type="List" default="[]" />
+    <aura:attribute name="showLineDetail" type="Boolean" default="true" />
+    <aura:attribute name="msgProductsEmpty" type="String" default="No Products in your cart."/>
+    <aura:attribute name="scheduledForPickup" type="String" default="Scheduled for Pick Up" />
+    <aura:attribute name="scheduledForDelivery" type="String" default="Scheduled for Delivery" />
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+
+	
+    <aura:if isTrue="{!!empty(v.orderInfo.orderId)}">
+        <lightning:layout class="dal-form-order orderContainer slds-m-vertical_x-large" horizontalAlign="center" multipleRows="true">
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" >
+				
+                <!-- ******************** -->
+                <!-- Form Header -->
+                <!-- ******************** -->
+                <aura:if isTrue="{!v.isDetailView == false}">
+                    <lightning:layout class="slds-p-horizontal_small section-border-bottom slds-show_medium" multipleRows="true" horizontalAlign="center" verticalAlign="center">
+
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" class="slds-grid slds-p-horizontal_small slds-grid_align-center slds-large-grid_align-end slds-p-vertical_medium">
+                            <div id="btnSaveContinue" class="btnSaveContinue slds-grid slds-wrap slds-grid_align-center">
+                                
+                                <lightning:button variant="neutral" label="Edit Order Details" class="dal-small-fullWidth dal-medium-fullWidth" onclick="{!c.handleBack}" />
+                                <lightning:button variant="brand" label="Submit Order" class="dal-small-fullWidth dal-medium-fullWidth" onclick="{!c.submitOrder}" disabled="{!v.products.length == 0}"/>
+                            </div>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </aura:if>
+                <lightning:layout class="slds-border--bottom orderheader">
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-horizontal_small slds-grid_align-left slds-large-grid_align-start slds-p-vertical_medium">
+                        <div class="slds-p-horizontal_x-small">
+                            <span class="slds-text-color_weak slds-text-title_caps ">CUMULATIVE ORDER WEIGHT</span>
+                            <h4><lightning:formattedNumber value="{!v.shippingInfo.cumulativeOrderWeight}" />&nbsp;lbs</h4>
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-horizontal_small slds-grid_align-right slds-large-grid_align-end slds-p-vertical_medium">
+                        <div class="slds-p-horizontal_x-small slds-text-align--right">
+                            <span class="slds-text-color_weak slds-text-title_caps">ORDER STATUS</span>
+                            <h4 class="highlight" style="font-size: 1rem">{!v.orderInfo.status}</h4>
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" >
+                <!-- ******************** -->
+                <!-- Fulfillment Info -->
+                <!-- ******************** -->
+                <lightning:layout class="slds-p-horizontal_medium" multipleRows="true" verticalAlign="start">
+                    <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="3">
+                        <h4 class="bold">Fulfillment</h4>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4">
+                        <aura:if isTrue="{!!empty(v.shippingInfo.fulfilmentMethod)}">
+                            <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-top_small">
+                                <label>Fulfillment Method</label>
+                                <span>{!v.shippingInfo.fulfilmentMethod}</span>
+                                
+                            </div>
+                        </aura:if>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small slds-text-align--left" size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="5">
+                        <aura:if isTrue="{!and(!empty(v.shippingInfo.fulfilmentMethod), v.shippingInfo.fulfilmentMethod != 'PICK')}">
+                            <aura:if isTrue="{!and(!empty(v.shippingInfo.shipToStreet1), and(!empty(v.shippingInfo.shipToCity), !empty(v.shippingInfo.shipToState)))}">
+                                <div class="orderOutputData orderOutputData-stacked slds-p-vertical_x-small orderOutputData-inline_mobile">
+                                    <label>Ship-To Address</label>
+                                    <span>{!v.shippingInfo.shipToName}<br/>
+                                        <aura:if isTrue="{!!empty(v.shippingInfo.shipToName2)}">{!v.shippingInfo.shipToName2}<br/></aura:if>
+                                        <aura:if isTrue="{!!empty(v.shippingInfo.shipToCareOf)}"><p>{!v.shippingInfo.shipToCareOf}</p></aura:if>
+                                        {!v.shippingInfo.shipToStreet1}<br/>
+                                        <aura:if isTrue="{!!empty(v.shippingInfo.shipToStreet2)}"><p>{!v.shippingInfo.shipToStreet2}</p></aura:if>
+                                        {!v.shippingInfo.shipToCity},&nbsp;{!v.shippingInfo.shipToState}&nbsp;{!v.shippingInfo.shipToZipcode}&nbsp;{!v.shippingInfo.shipToCountry}
+                                    </span>
+                                </div>
+                            </aura:if>
+                        </aura:if>
+                        <aura:if isTrue="{!and(!empty(v.shippingInfo.fulfilmentMethod), v.shippingInfo.fulfilmentMethod == 'PICK')}">
+                            <aura:if isTrue="{!and(!empty(v.shippingInfo.shipFromStreet), and(!empty(v.shippingInfo.shipFromCity), !empty(v.shippingInfo.shipFromState)))}">
+                                <div class="orderOutputData orderOutputData-stacked slds-p-vertical_x-small orderOutputData-inline_mobile">
+                                    <label>Pickup From</label>
+                                    <span>{!v.shippingInfo.shipFromName}<br/>
+                                        {!v.shippingInfo.shipFromStreet}<br/>
+                                        <aura:if isTrue="{!!empty(v.shippingInfo.shipFromStreet2)}"><p>{!v.shippingInfo.shipFromStreet2}</p></aura:if>
+                                        {!v.shippingInfo.shipFromCity},&nbsp;{!v.shippingInfo.shipFromState}&nbsp;{!v.shippingInfo.shipFromZipcode}&nbsp;{!v.shippingInfo.shipFromCountry}
+									</span>
+                                </div>
+                            </aura:if>
+                        </aura:if>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                <!-- ******************** -->
+                <!-- Order Info -->
+                <!-- ******************** -->
+                <lightning:layout class="slds-p-horizontal_medium slds-border_top" multipleRows="true" verticalAlign="start">
+                    <lightning:layoutItem class="slds-p-vertical_medium slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="3">
+                        <h4 class="bold">Order Info</h4>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="slds-p-vertical_medium slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="9" largeDeviceSize="9">
+                        <lightning:layout multipleRows="true">
+                            <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                                <aura:if isTrue="{!and(v.isDetailView == true, !empty(v.orderInfo.orderNumber))}">
+                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                        <label>Order #</label>
+                                        <span>{!v.orderInfo.orderNumber}</span>
+                                    </div>
+                                </aura:if>
+
+                                <aura:if isTrue="{!!empty(v.orderInfo.poNumber)}">
+                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                        <label>PO #</label>
+                                        <span>{!v.orderInfo.poNumber}</span>
+                                    </div>
+                                </aura:if>
+
+                                <aura:if isTrue="{!!empty(v.orderInfo.jobName)}">
+                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                        <label>Job Name</label>
+                                        <span>{!v.orderInfo.jobName}</span>
+                                    </div>
+                                </aura:if>
+                                <aura:if isTrue="{!!empty(v.orderInfo.taxStatus)}">
+                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                        <label>Tax Status</label>
+                                        <span>{!v.orderInfo.taxStatus}</span>
+                                    </div>
+                                </aura:if>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                                <aura:if isTrue="{!!empty(v.orderInfo.contactName)}">
+                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                        <label>Contact Name</label>
+                                        <span>{!v.orderInfo.contactName}</span>
+                                    </div>
+                                </aura:if>
+                                <aura:if isTrue="{!!empty(v.orderInfo.contactNumber)}">
+                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                        <label>Contact Number</label>
+                                        <span><lightning:formattedPhone value="{!v.orderInfo.contactNumber}"/></span>
+                                    </div>
+                                </aura:if>
+                                <aura:if isTrue="{!!empty(v.orderInfo.contactNumber)}">
+                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                        <label>Cash On Delivery</label>
+                                        <span>{!v.orderInfo.cashPayment}</span>
+                                    </div>
+                                </aura:if>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small" size="12">
+                                <aura:if isTrue="{!!empty(v.orderInfo.specialInstructions)}">
+                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                        <label>Special Instructions</label>
+                                        <span>{!v.orderInfo.specialInstructions}</span>
+                                    </div>
+                                </aura:if>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+
+            <!-- Item Totals -->
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" >
+                <lightning:layout class="slds-large-grid_align-end slds-p-around_medium" multipleRows="true">
+                    <lightning:layoutItem class="slds-border--bottom slds-p-vertical--xx-small" size="12">
+                        <div class="orderOutputData slds-text-align--left">
+                            <label>Order Sub-Total</label>
+                            <p class="slds-float--right orderTotal">
+                                <lightning:formattedNumber value="{!v.orderInfo.orderSubTotal}" style="currency" currencyCode="USD" />
+                            </p>
+                        </div>
+                    </lightning:layoutItem>
+                    <aura:if isTrue="{!!empty(v.orderInfo.taxes)}">
+                        <lightning:layoutItem size="12">
+                            <div class="orderOutputData">
+                                <label>Taxes</label>
+                                <p class="slds-float--right orderTotal">
+                                    <lightning:formattedNumber value="{!v.orderInfo.taxes}" style="currency" currencyCode="USD" />
+                                </p>
+                            </div>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <aura:if isTrue="{!!empty(v.orderInfo.energySurcharge)}">
+                        <lightning:layoutItem size="12">
+                            <div class="orderOutputData">
+                                <label>Energy Surcharge</label>
+                                <p class="slds-float--right orderTotal">
+                                    <lightning:formattedNumber value="{!v.orderInfo.energySurcharge}" style="currency" currencyCode="USD" />
+                                </p>
+                            </div>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <aura:if isTrue="{!!empty(v.orderInfo.shippingAndHandling)}">
+                        <lightning:layoutItem class="slds-border--bottom" size="12">
+                            <div class="orderOutputData">
+                                <label>Shipping &amp; Handling</label>
+                                <p class="slds-float--right orderTotal">
+                                    <lightning:formattedNumber value="{!v.orderInfo.shippingAndHandling}" style="currency" currencyCode="USD" />
+                                </p>
+                            </div>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <lightning:layoutItem class="slds-border--bottom" size="12">
+                        <div class="orderOutputData highlight slds-text-align--left slds-p-vertical--xx-small">
+                            <label>Order Total</label>
+                            <p class="slds-float--right">
+                                <lightning:formattedNumber value="{!v.orderInfo.orderTotal}" style="currency" currencyCode="USD" />
+                            </p>
+                        </div>
+                    </lightning:layoutItem>
+                    
+                    <aura:if isTrue="false">
+                        <lightning:layoutItem class="slds-border&#45;&#45;bottom" size="12">
+                            <div class="orderOutputData slds-text-align&#45;&#45;left">
+                                <label class="slds-text-align&#45;&#45;left">Payment received</label>
+                                <p class="slds-float&#45;&#45;right orderTotal">
+                                    <lightning:formattedNumber value="{!v.orderInfo.totalpayment}" style="currency" currencyCode="USD" />
+                                </p>
+                            </div>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <aura:if isTrue="false">
+                        <lightning:layoutItem class="slds-border--bottom" size="12">
+                            <div class="orderOutputData highlight slds-text-align--left">
+                                <label class="">Outstanding Total</label>
+                                <p class="slds-float--right">
+                                    <lightning:formattedNumber value="{!v.orderInfo.outstandingTotal}" style="currency" currencyCode="USD" />
+                                </p>
+                            </div>
+                        </lightning:layoutItem>
+                    </aura:if>
+                </lightning:layout>
+            </lightning:layoutItem>
+        </lightning:layout>
+
+        <!-- ******************** -->
+        <!-- Order products -->
+        <!-- ******************** -->
+        <lightning:layout class="slds-p-bottom_small" multipleRows="true" verticalAlign="center">
+
+            <lightning:layoutItem size="12">
+                <lightning:layout multipleRows="true" verticalAlign="center">
+                    <lightning:layoutItem class="slds-p-vertical_xx-small" size="12" smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="7">
+                        <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="Ordered Products" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="slds-p-vertical_xx-small" size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="5">
+                        <lightning:input class="slds-col slds-medium-text-align_right slds-large-text-align_right" type="checkbox"
+                                         label="Show Line Item Details" name="showLineItemDetails" checked="{!v.showLineDetail}" onchange="{!v.handleLineItemDetailChange}" />
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <!-- ******************** -->
+        <!-- Products    -->
+        <!-- ******************** -->
+        <lightning:layout class="dal-form-order orderContainer slds-p-around_medium" horizontalAlign="center" verticalAlign="center" multipleRows="true">
+            <aura:if isTrue="{!v.products.length > 0}">
+                <lightning:layoutItem class="{!(v.isDetailView == false) ? 'section-border-bottom' : ''}" size="12">
+                    <aura:iteration items="{!v.products}" var="product" indexVar="index">
+                        <lightning:layout class="{!index > 0 ? 'slds-p-top_small slds-border_top' : ''}" multipleRows="true" verticalAlign="start">
+                            <!-- left column -->
+                            <lightning:layoutItem class="slds-show_medium" size="2">
+                                <h3>{!index + 1}</h3>
+                                <aura:if isTrue="{!v.isDetailView == false}">
+                                    <a href="javascript:void(0)" onclick="{!c.handleBackToSku}">Edit</a> | <a href="javascript:void(0)" onclick="{!c.handleRemoveProduct}">Remove</a>
+                                </aura:if>
+                            </lightning:layoutItem>
+                            <!-- end left column -->
+
+                            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="10" largeDeviceSize="10">
+                                <lightning:layout multipleRows="true" verticalAlign="start">
+
+                                    <lightning:layoutItem class="rowInfo slds-grid slds-wrap slds-grid_align-spread" size="12">
+                                        <!-- SKU title column -->
+                                        <div class="slds-p-bottom_small dal-medium-inputFull dal-small-inputFull dal-title-col">
+                                            <h3 class="bold"><span class="slds-p-right_large slds-hide_medium">{!index + 1}</span> {!product.productName} <!--<a href="javascript:void(0)" class="newWindow"><lightning:icon iconName="utility:new_window" size="small" alternativeText="Detail"/></a>--></h3>
+
+                                            <aura:if isTrue="{!!empty(product.sku)}">
+                                                <div class="orderOutputData slds-p-top_xx-small">
+                                                    <label>SKU:</label>
+                                                    <span>{!product.sku}</span>
+                                                </div>
+                                            </aura:if>
+
+                                            <!-- delivery shipping information -->
+                                            <aura:if isTrue="{!product.fulfillmentMethod == 'SHP'}">
+                                                <aura:if isTrue="{!!empty(product.shippedDate)}">
+                                                    <p class="shippingStatus slds-p-top_x-small">
+                                                        <lightning:icon iconName="utility:event" size="small" alternativeText="Shipping Date"/>
+                                                        Ship Date: <ui:outputDate value="{!product.shippedDate}" format="MM/DD/YY" />
+                                                        <aura:if isTrue="{!!empty(product.trackingNumber)}">
+                                                            <span class="shippingStatus-info slds-m-left_x-small">(tracking # {!product.trackingNumber})</span>
+                                                        </aura:if>
+                                                    </p>
+                                                </aura:if>
+
+                                                <!--  aura:if isTrue="{!!empty(product.estimatedShipDate)}">
+                                                    <p class="shippingStatus slds-p-top_x-small">
+                                                        <lightning:icon iconName="utility:event" size="small" alternativeText="Estimated Shipping Date"/>
+                                                        Estimated Ship Date: <ui:outputDate value="{!product.estimatedShipDate}" format="MM/DD/YY" />
+                                                    </p>
+                                                </aura:if-->
+                                            </aura:if>
+                                            <!-- end delivery shipping information -->
+
+                                            <!-- pickup information -->
+                                            <aura:if isTrue="{!product.fulfillmentMethod == 'PICK'}">
+                                                <aura:if isTrue="{!!empty(product.shippedDate)}">
+                                                    <p class="shippingStatus slds-p-top_x-small">
+                                                        <lightning:icon iconName="utility:event" size="small" alternativeText="Picked Up Date"/>
+                                                        Picked Up Date: <ui:outputDate value="{!product.shippedDate}" format="MM/DD/YY" />
+                                                    </p>
+                                                </aura:if>
+                                            </aura:if>
+                                            <!-- end pickup information -->
+                                        </div>
+                                        <!-- End SKU title column -->
+
+                                        <!-- price column -->
+                                        <div class="slds-p-bottom_small orderStats dal-medium-inputFull dal-small-inputFull dal-price-col">
+                                            <aura:if isTrue="{!!empty(product.netPrice)}">
+                                                <dl>
+                                                    <dt>Unit Price</dt>
+                                                    <dd><lightning:formattedNumber value="{!product.sscunitprice}" style="currency" currencyCode="USD" /> / {!product.sscunitpriceuom}</dd>
+                                                </dl>
+                                            </aura:if>
+
+                                            <aura:if isTrue="{!!empty(product.quantity)}">
+                                                <dl class="slds-p-left_x-large">
+                                                    <dt>Quantity</dt>
+                                                    <dd><lightning:formattedNumber value="{!product.sscqty}" /> &nbsp; {!product.sscuom}</dd>
+                                                </dl>
+                                            </aura:if>
+
+                                            <aura:if isTrue="{!!empty(product.qtyPrice)}">
+                                                <dl class="slds-p-left_x-large">
+                                                    <dt>Extended Price</dt>
+                                                    <dd class="price"><lightning:formattedNumber value="{!product.qtyPrice}" style="currency" currencyCode="USD" /></dd>
+                                                </dl>
+                                            </aura:if>
+
+                                            <aura:if isTrue="{!!empty(product.lineItemStatus)}">
+                                                <dl class="slds-p-left_x-large">
+                                                    <dt>Status</dt>
+                                                    <dd>{!product.lineItemStatus}</dd>
+                                                </dl>
+                                            </aura:if>
+
+                                        </div>
+                                        <!-- end price column -->
+                                    </lightning:layoutItem>
+									
+                                    <!-- Reschedule pickup Buttons-->
+                                    <aura:if isTrue="{! or(v.orderInfo.profileName == 'SSC Customer Service',or(v.orderInfo.profileName == 'SSC Purchaser',
+                                            or(v.orderInfo.profileName == 'SSC Leadership/Principle',v.orderInfo.profileName == 'SSC Statement Dealer Leadership / Principle')))}">
+                                            
+                                    <lightning:layoutItem size="12" class="slds-grid slds-grid_align-spread slds-p-bottom_medium slds-p-top_medium">
+                                        <aura:if isTrue="{!and(product.fulfillmentMethod == 'PICK',and(greaterthanorequal(product.fulfillmentScheduleTime.length,15),
+                                                                    and((!empty(product.fulfillmentScheduleTime)),(v.scheduledForPickup == product.lineItemStatus))))}">
+                                                <div class="slds-col">
+
+                                                    <a href="" name="{!index}" onclick="{!c.handleRescheduleClick}">Reschedule Pickup</a>
+                                                </div>
+ 
+                                               <div class="slds-col">
+                                                    <a href="" name="{!index}"  onclick="{!c.handleCancelClick}" >Cancel Pickup</a>
+                                                </div>
+                                            </aura:if>
+                                            <aura:if isTrue="{!and(product.fulfillmentMethod == 'SHP',
+                                                        and((!empty(product.fulfillmentScheduleTime)),(v.scheduledForDelivery ==product.lineItemStatus )))}">
+                                                <div class="slds-col">
+
+                                                    <a href="" name="{!index}" onclick="{!c.handleRescheduleClick}">Reschedule Delivery</a>
+                                                </div>
+
+                                             <div class="slds-col">
+                                                    <a href="" name="{!index}"  onclick="{!c.handleCancelClick}" >Cancel Delivery</a>
+                                                </div>
+                                            </aura:if>
+                                    </lightning:layoutItem>
+                                    </aura:if>
+                                    <aura:if isTrue="{!product.isSlabOrder}">
+                                    <lightning:layoutItem size="12" class="slds-p-bottom_medium">
+                                        <lightning:layout multipleRows="true">
+                                            <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small " size="6" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="4">
+                                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                                        <label>Document #</label>
+                                                        <span>{!product.InventoryItem_DocumentNumber}</span>
+                                                    </div>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small"  size="3" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="1">
+                                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                                        <label>Length</label>
+                                                        <span>{!product.InventoryItem_Length}</span>
+                                                    </div>
+                                            </lightning:layoutItem>
+                                            <lightning:layoutItem class="slds-p-vertical_small slds-p-right_x-small"  size="3" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="1">
+                                                    <div class="orderOutputData orderOutputData-stacked orderOutputData-inline_mobile slds-p-vertical_x-small">
+                                                        <label>Width</label>
+                                                        <span>{!product.InventoryItem_Width}</span>
+                                                    </div>
+                                            </lightning:layoutItem>
+                                        </lightning:layout>
+                                    </lightning:layoutItem>
+                                    </aura:if>
+                                    <lightning:layoutItem size="12">
+                                        <lightning:layout multipleRows="true" verticalAlign="start">
+                                            <lightning:layoutItem class="slds-p-vertical_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="4">
+
+                                                <div class="orderOutputData slds-p-bottom_medium dal-orderDetailProductFocusAttr">
+
+                                                    <!-- delivery shipping information -->
+                                                    <aura:if isTrue="{!and(product.fulfillmentMethod == 'SHP',!empty(product.fulfillmentScheduleTime))}">
+                                                        <label>Ship Schedule Date:</label>
+                                                        <span>{!product.fulfillmentScheduleTime}</span>
+                                                    </aura:if>
+                                                    <!-- end delivery shipping information -->
+
+                                                    <!-- pickup information -->
+                                                    <aura:if isTrue="{!and(product.fulfillmentMethod == 'PICK',and(greaterthanorequal(product.fulfillmentScheduleTime.length,15),(!empty(product.fulfillmentScheduleTime))))}">
+                                                        <label>Pick Up Scheduled Time:</label>
+                                                        <span>{!product.fulfillmentScheduleTime}</span>
+                                                    </aura:if>
+                                                    <!-- end pickup information -->
+
+
+                                                </div>
+
+
+                                                <!-- line item details column one -->
+                                                <aura:if isTrue="{!v.showLineDetail}">
+                                                    <aura:if isTrue="{!!empty(product.size)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Size:</label> 
+                                                             <aura:if isTrue="{!and(product.size != 'SLAB',product.size != 'SLB')}">
+                                                              	<span>{!product.size}</span>
+                                                            </aura:if>
+                                                            
+                                                        </div>
+                                                    </aura:if>
+
+                                                    <aura:if isTrue="{!!empty(product.color)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Color:</label>
+                                                            <span>{!product.color}</span>
+                                                        </div>
+                                                    </aura:if>
+
+                                                    <aura:if isTrue="{!!empty(product.trim)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Trim:</label>
+                                                            <span>{!product.trim}</span>
+                                                        </div>
+                                                    </aura:if>
+
+                                                    <aura:if isTrue="{!!empty(product.shade)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Shade:</label>
+                                                            <span>{!product.shade}</span>
+                                                        </div>
+                                                    </aura:if>
+                                                </aura:if>
+                                            </lightning:layoutItem>
+
+
+
+                                            <lightning:layoutItem class="slds-p-vertical_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="4">
+
+                                                <div class="orderOutputData slds-p-bottom_medium dal-orderDetailProductFocusAttr">
+                                                    <aura:if isTrue="{!and(product.fulfillmentMethod == 'PICK', and(!empty(product.fulfillmentContactFirstName), !empty(product.fulfillmentContactLastName)))}">
+                                                        <label>Contact:</label>
+                                                        <span>{!product.fulfillmentContactFirstName}
+                                                            &nbsp;{!product.fulfillmentContactLastName}
+                                                            <aura:if isTrue="{!!empty(product.fulfillmentContactPhone)}">
+                                                                &nbsp;{!product.fulfillmentContactPhone}
+                                                            </aura:if>
+                                                        </span>
+                                                    </aura:if>
+
+                                                    <aura:if isTrue="{!and(product.fulfillmentMethod == 'SHP', !empty(product.carrier))}">
+                                                        <label>Carrier:</label>
+                                                        <span>{!product.carrier}</span>
+                                                    </aura:if>
+                                                </div>
+
+                                                <!-- line item details column one -->
+                                                <aura:if isTrue="{!v.showLineDetail}">
+                                                    <aura:if isTrue="{!!empty(product.quantityShippedInvoiced)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Quantity Shipped/Invoiced:</label>
+                                                            <span>{!product.quantityShippedInvoiced}&nbsp;{!product.unitOfMeasureSelected}</span>
+                                                        </div>
+                                                    </aura:if>
+
+                                                    <aura:if isTrue="{!!empty(product.quantityCancelled)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Quantity Cancelled:</label>
+                                                            <span>{!product.quantityCancelled}&nbsp;{!product.unitOfMeasureSelected}</span>
+                                                        </div>
+                                                    </aura:if>
+
+                                                    <aura:if isTrue="{!!empty(product.supplyPlant)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Source of Supply:</label>
+                                                            <span>{!product.supplyPlant}</span>
+                                                        </div>
+                                                    </aura:if>
+                                                </aura:if>
+                                            </lightning:layoutItem>
+
+
+                                            <lightning:layoutItem class="slds-p-vertical_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="4">
+
+                                                <div class="orderOutputData slds-p-bottom_medium dal-orderDetailProductFocusAttr">
+                                                    <aura:if isTrue="{!and(product.fulfillmentMethod == 'PICK', !empty(product.fulfillmentContactTextMsgInd))}">
+                                                        <label>Fulfilment Text Messages:</label>
+                                                        <span>{!product.fulfillmentContactTextMsgInd}</span>
+                                                    </aura:if>
+                                                </div>
+
+                                                <!-- line item details column one -->
+                                                <aura:if isTrue="{!v.showLineDetail}">
+                                                    <aura:if isTrue="{!!empty(product.priceRecordSelected)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Promotion:</label>
+                                                            <span>{!product.priceRecordSelected}</span>
+                                                        </div>
+                                                    </aura:if>
+
+                                                    <aura:if isTrue="{!!empty(product.extendedWeight)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Extended Weight:</label>
+                                                            <span><lightning:formattedNumber value="{!product.extendedWeight}" />&nbsp;{!v.labelExtendedWeightUnitOfMeasure}</span>
+                                                        </div>
+                                                    </aura:if>
+													<aura:if isTrue="{!!product.isSlabOrder}">	
+                                                    <aura:if isTrue="{!!empty(product.cartonCount)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Carton Count:</label>
+                                                            <span>{!product.cartonCount}</span>
+                                                        </div>
+                                                    </aura:if>
+
+                                                    <aura:if isTrue="{!!empty(product.pieceCount)}">
+                                                        <div class="orderOutputData">
+                                                            <label>Piece Count:</label>
+                                                            <span>{!product.pieceCount}</span>
+                                                        </div>
+                                                    </aura:if>
+                                                </aura:if>
+                                                </aura:if>
+                                            </lightning:layoutItem>
+                                        </lightning:layout>
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                            </lightning:layoutItem>
+
+                            <!-- edit buttons -->
+                            <aura:if isTrue="{!v.isDetailView == false}">
+                                <lightning:layoutItem class="slds-p-top_xx-small slds-p-bottom_medium slds-hide_medium" size="12">
+                                    <ul class="slds-list_horizontal slds-has-block-links_space">
+                                        <li><a href="javascript:void(0);">Edit</a></li>
+                                        <li><a href="javascript:void(0);">Remove</a></li>
+                                    </ul>
+                                </lightning:layoutItem>
+                            </aura:if>
+                            <!-- end edit buttons -->
+
+                        </lightning:layout>
+                    </aura:iteration>
+
+                </lightning:layoutItem>
+
+                <!-- no products message -->
+                <aura:set attribute="else">
+                    <lightning:layoutItem size="12">
+                        <ui:message severity="info" closable="false">{!v.msgProductsEmpty}</ui:message>
+                    </lightning:layoutItem>
+                </aura:set>
+                <!-- end no products message -->
+            </aura:if>
+
+
+            <!-- ******************** -->
+            <!-- End products    -->
+            <!-- ******************** -->
+
+            <aura:if isTrue="{!v.isDetailView == false}">
+                <lightning:layoutItem size="12" class="slds-grid slds-p-horizontal_small slds-grid_align-center slds-large-grid_align-end slds-p-top_large slds-show_medium">
+                    <div id="btnSaveContinue" class="btnSaveContinue slds-grid slds-wrap slds-grid_align-center">
+                        <lightning:button variant="brand" label="Submit Order" class="dal-small-fullWidth dal-medium-fullWidth" onclick="{!c.submitOrder}" disabled="{!v.products.length == 0}"/>
+                    </div>
+                </lightning:layoutItem>
+            </aura:if>
+
+        </lightning:layout>
+        <!-- ******************** -->
+        <!-- End order products   -->
+        <!-- ******************** -->
+        <aura:set attribute="else">
+            <c:Dal_PermissionMessage/>
+        </aura:set>
+    </aura:if>
+
+</aura:component>

@@ -1,0 +1,117 @@
+<design:component label="7S Calls To Action">
+
+    <design:attribute name="totalItems" datasource="1,2,3,4,5,6,7,8,9,10" label="Number of Actions" description="If using the base layout, only 8 items will be displayed to avoid spacing issues."/>
+
+    <design:attribute name="layout" label="Layout" description="Select which layout you would like to use. Base Layout will display up to 8 actions that will display side by side with text contained within the action. Icon Layout will display up to 10 actions with an icon, text or image above the link text." dataSource="Base Layout, Icon Layout"/>
+
+    <design:attribute name="title" label="Title" description="Title to display above actions. If left blank it will not display a title."/>
+    <design:attribute name="titleColor" label="Title Color" description="Color for the Title"/>
+
+    <design:attribute name="ctaText1" label="Item 1 Text" description="This will accept rich text or custom labels. To include labels use: $Label.namespace.labelName. "/>
+    <design:attribute name="ctaURL1" label="Item 1 Link Url"/>
+    <design:attribute name="ctaImage1" label="Item 1 Image, Icon or Text" description='If using the icon layout you can use a slds icon. To use an icon specify the category then the icon name separated by a ":". For example utility:add. If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC'/>
+    <design:attribute name="useText1" label="Did you enter text for the image instead?" description="Check this box if you entered text instead of an image."/>
+    <design:attribute name="ctaBackgroundSize1" label="Item 1 Background Size" dataSource="Cover, Contain" description="This will only take affect if you are using the base layout"/>
+    <design:attribute name="iconColor1" label="Item 1 Icon Color" description="This will only take effect if you are using the icon layout"/>
+    <design:attribute name="ctaBackgroundColor1" label="Item 1 Background Color"/>
+    <design:attribute name="ctaTextColor1" label="Item 1 Text Color" description="The color of the text inside of the dashboard item. The default is the community link text color"/>
+    <design:attribute name="ctaOverlay1" description="This overlay will only take effect when using the base layout" label="Display overlay for item 1?"/>
+
+    <design:attribute name="ctaText2" label="Item 2 Text" description="This will accept rich text or custom labels. To include labels use: $Label.namespace.labelName. "/>
+    <design:attribute name="ctaURL2" label="Item 2 Link Url"/>
+    <design:attribute name="ctaImage2" label="Item 2 Image, Icon or Text" description='If using the icon layout you can use a slds icon. To use an icon specify the category then the icon name separated by a ":". For example utility:add. If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC'/>
+    <design:attribute name="useText2" label="Did you enter text for the image instead?" description="Check this box if you entered text instead of an image."/>
+    <design:attribute name="ctaBackgroundSize2" label="Item 2 Background Size" dataSource="Cover, Contain" description="This will only take affect if you are using the base layout"/>
+    <design:attribute name="iconColor2" label="Item 2 Icon Color" description="This will only take effect if you are using the icon layout"/>
+    <design:attribute name="ctaBackgroundColor2" label="Item 2 Background Color"/>
+    <design:attribute name="ctaTextColor2" label="Item 2 Text Color" description="The color of the text inside of the dashboard item. The default is the community link text color"/>
+    <design:attribute name="ctaOverlay2" description="This overlay will only take effect when using the base layout" label="Display overlay for item 2?"/>
+
+    <design:attribute name="ctaText3" label="Item 3 Text" description="This will accept rich text or custom labels. To include labels use: $Label.namespace.labelName. "/>
+    <design:attribute name="ctaURL3" label="Item 3 Link Url"/>
+    <design:attribute name="ctaImage3" label="Item 3 Image, Icon or Text" description='If using the icon layout you can use a slds icon. To use an icon specify the category then the icon name separated by a ":". For example utility:add. If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC'/>
+    <design:attribute name="useText3" label="Did you enter text for the image instead?" description="Check this box if you entered text instead of an image."/>
+    <design:attribute name="ctaBackgroundSize3" label="Item 3 Background Size" dataSource="Cover, Contain" description="This will only take affect if you are using the base layout"/>
+    <design:attribute name="iconColor3" label="Item 3 Icon Color" description="This will only take effect if you are using the icon layout"/>
+    <design:attribute name="ctaBackgroundColor3" label="Item 3 Background Color"/>
+    <design:attribute name="ctaTextColor3" label="Item 3 Text Color" description="The color of the text inside of the dashboard item. The default is the community link text color"/>
+    <design:attribute name="ctaOverlay3" description="This overlay will only take effect when using the base layout" label="Display overlay for item 3?"/>
+
+    <design:attribute name="ctaText4" label="Item 4 Text" description="This will accept rich text or custom labels. To include labels use: $Label.namespace.labelName. "/>
+    <design:attribute name="ctaURL4" label="Item 4 Link Url"/>
+    <design:attribute name="ctaImage4" label="Item 4 Image, Icon or Text" description='If using the icon layout you can use a slds icon. To use an icon specify the category then the icon name separated by a ":". For example utility:add. If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC'/>
+    <design:attribute name="useText4" label="Did you enter text for the image instead?" description="Check this box if you entered text instead of an image."/>
+    <design:attribute name="ctaBackgroundSize4" label="Item 4 Background Size" dataSource="Cover, Contain" description="This will only take affect if you are using the base layout"/>
+    <design:attribute name="iconColor4" label="Item 4 Icon Color" description="This will only take effect if you are using the icon layout"/>
+    <design:attribute name="ctaBackgroundColor4" label="Item 4 Background Color"/>
+    <design:attribute name="ctaTextColor4" label="Item 4 Text Color" description="The color of the text inside of the dashboard item. The default is the community link text color"/>
+    <design:attribute name="ctaOverlay4" description="This overlay will only take effect when using the base layout" label="Display overlay for item 4?"/>
+
+    <design:attribute name="ctaText5" label="Item 5 Text" description="This will accept rich text or custom labels. To include labels use: $Label.namespace.labelName. "/>
+    <design:attribute name="ctaURL5" label="Item 5 Link Url"/>
+    <design:attribute name="ctaImage5" label="Item 5 Image, Icon or Text" description='If using the icon layout you can use a slds icon. To use an icon specify the category then the icon name separated by a ":". For example utility:add. If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC'/>
+    <design:attribute name="useText5" label="Did you enter text for the image instead?" description="Check this box if you entered text instead of an image."/>
+    <design:attribute name="ctaBackgroundSize5" label="Item 5 Background Size" dataSource="Cover, Contain" description="This will only take affect if you are using the base layout"/>
+    <design:attribute name="iconColor5" label="Item 5 Icon Color" description="This will only take effect if you are using the icon layout"/>
+    <design:attribute name="ctaBackgroundColor5" label="Item 5 Background Color"/>
+    <design:attribute name="ctaTextColor5" label="Item 5 Text Color" description="The color of the text inside of the dashboard item. The default is the community link text color"/>
+    <design:attribute name="ctaOverlay5" description="This overlay will only take effect when using the base layout" label="Display overlay item 5?"/>
+
+    <design:attribute name="ctaText6" label="Item 6 Text" description="This will accept rich text or custom labels. To include labels use: $Label.namespace.labelName. "/>
+    <design:attribute name="ctaURL6" label="Item 6 Link Url"/>
+    <design:attribute name="ctaImage6" label="Item 6 Image, Icon or Text" description='If using the icon layout you can use a slds icon. To use an icon specify the category then the icon name separated by a ":". For example utility:add. If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC'/>
+    <design:attribute name="useText6" label="Did you enter text for the image instead?" description="Check this box if you entered text instead of an image."/>
+    <design:attribute name="ctaBackgroundSize6" label="Item 6 Background Size" dataSource="Cover, Contain" description="This will only take affect if you are using the base layout"/>
+    <design:attribute name="iconColor6" label="Item 6 Icon Color" description="This will only take effect if you are using the icon layout"/>
+    <design:attribute name="ctaBackgroundColor6" label="Item 6 Background Color"/>
+    <design:attribute name="ctaTextColor6" label="Item 6 Text Color" description="The color of the text inside of the dashboard item. The default is the community link text color"/>
+    <design:attribute name="ctaOverlay6" description="This overlay will only take effect when using the base layout" label="Display overlay item 6?"/>
+
+    <design:attribute name="ctaText7" label="Item 7 Text" description="This will accept rich text or custom labels. To include labels use: $Label.namespace.labelName. "/>
+    <design:attribute name="ctaURL7" label="Item 7 Link Url"/>
+    <design:attribute name="ctaImage7" label="Item 7 Image, Icon or Text" description='If using the icon layout you can use a slds icon. To use an icon specify the category then the icon name separated by a ":". For example utility:add. If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC'/>
+    <design:attribute name="useText7" label="Did you enter text for the image instead?" description="Check this box if you entered text instead of an image."/>
+    <design:attribute name="ctaBackgroundSize7" label="Item 7 Background Size" dataSource="Cover, Contain" description="This will only take affect if you are using the base layout"/>
+    <design:attribute name="iconColor7" label="Item 7 Icon Color" description="This will only take effect if you are using the icon layout"/>
+    <design:attribute name="ctaBackgroundColor7" label="Item 7 Background Color"/>
+    <design:attribute name="ctaTextColor7" label="Item 7 Text Color" description="The color of the text inside of the dashboard item. The default is the community link text color"/>
+    <design:attribute name="ctaOverlay7" description="This overlay will only take effect when using the base layout" label="Display overlay item 7?"/>
+
+    <design:attribute name="ctaText8" label="Item 8 Text" description="This will accept rich text or custom labels. To include labels use: $Label.namespace.labelName. "/>
+    <design:attribute name="ctaURL8" label="Item 8 Link Url"/>
+    <design:attribute name="ctaImage8" label="Item 8 Image, Icon or Text" description='If using the icon layout you can use a slds icon. To use an icon specify the category then the icon name separated by a ":". For example utility:add. If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC'/>
+    <design:attribute name="useText8" label="Did you enter text for the image instead?" description="Check this box if you entered text instead of an image."/>
+    <design:attribute name="ctaBackgroundSize8" label="Item 8 Background Size" dataSource="Cover, Contain" description="This will only take affect if you are using the base layout"/>
+    <design:attribute name="iconColor8" label="Item 8 Icon Color" description="This will only take effect if you are using the icon layout"/>
+    <design:attribute name="ctaBackgroundColor8" label="Item 8 Background Color"/>
+    <design:attribute name="ctaTextColor8" label="Item 8 Text Color" description="The color of the text inside of the dashboard item. The default is the community link text color"/>
+    <design:attribute name="ctaOverlay8" description="This overlay will only take effect when using the base layout" label="Display overlay item 8?"/>
+
+    <design:attribute name="ctaText9" label="Item 9 Text" description="This will accept rich text or custom labels. To include labels use: $Label.namespace.labelName. "/>
+    <design:attribute name="ctaURL9" label="Item 9 Link Url"/>
+    <design:attribute name="ctaImage9" label="Item 9 Image, Icon or Text" description='If using the icon layout you can use a slds icon. To use an icon specify the category then the icon name separated by a ":". For example utility:add. If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC'/>
+    <design:attribute name="useText9" label="Did you enter text for the image instead?" description="Check this box if you entered text instead of an image."/>
+    <design:attribute name="iconColor9" label="Item 9 Icon Color" description="This will only take effect if you are using the icon layout"/>
+    <design:attribute name="ctaBackgroundColor9" label="Item 9 Background Color"/>
+    <design:attribute name="ctaTextColor9" label="Item 9 Text Color" description="The color of the text inside of the dashboard item. The default is the community link text color"/>
+
+    <design:attribute name="ctaText10" label="Item 10 Text" description="This will accept rich text or custom labels. To include labels use: $Label.namespace.labelName. "/>
+    <design:attribute name="ctaURL10" label="Item 10 Link Url"/>
+    <design:attribute name="ctaImage10" label="Item 10 Image, Icon or Text" description='If using the icon layout you can use a slds icon. To use an icon specify the category then the icon name separated by a ":". For example utility:add. If using the icon layout you may also enter text as well. This only should be done if using a  short acronym. For example ABC'/>
+    <design:attribute name="useText10" label="Did you enter text for the image instead?" description="Check this box if you entered text instead of an image."/>
+    <design:attribute name="iconColor10" label="Item 10 Icon Color" description="This will only take effect if you are using the icon layout"/>
+    <design:attribute name="ctaBackgroundColor10" label="Item 10 Background Color"/>
+    <design:attribute name="ctaTextColor10" label="Item 10 Text Color" description="The color of the text inside of the dashboard item. The default is the community link text color"/>
+
+    <design:attribute name="verticalAlign" label="Vertical alignment of text" dataSource="Top,Middle,Bottom"/>
+    <design:attribute name="textAlign" label="Text alignment of text" dataSource="Left,Center,Right"/>
+    <design:attribute name="textTransform" label="Capitalization of text" dataSource="None,Uppercase,Lowercase,Capitalize"/>
+    <design:attribute name="fontSize" label="Size of text"/>
+    <design:attribute name="ctaHeight" label="Height/Width of Actions" description="On base layout this will be the height of the calls to action. On the icon layout this will be the height and width of the circle that holds the icon."/>
+    <design:attribute name="ctaDefaultIconColor" label="Default Icon Color" description="This will only take effect if you are using the icon layout. This will accept any color format that is supported by browsers. If left blank the color will default to the community color brand"/>
+    <design:attribute name="ctaDefaultColor" label="Default Text Color" description="This will accept any color format that is supported by browsers. If left blank the color will default to the community color brand"/>
+    <design:attribute name="ctaDefaultBack" label="Default Background Color" description="This will accept any color format that is supported by browsers. If left blank the color will default to the community color brand"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

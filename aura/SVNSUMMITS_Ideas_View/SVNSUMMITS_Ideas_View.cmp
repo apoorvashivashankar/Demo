@@ -1,0 +1,114 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaViewController"
+                implements="force:appHostable,forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName"
+                access="global"
+                extends="c:SVNSUMMITS_Ideas_Base">
+
+    <aura:attribute name="debugMode" type="Boolean" default="false"       access="global" description="Enable for debugging" />
+
+    <!-- Property editor -->
+    <aura:attribute name="recordId"          type="String"  default="{!recordId}" access="global"
+                    description="Current idea record ID" />
+
+    <aura:attribute name="zoneName"          type="String"  default="" required="true" access="global" />
+    <aura:attribute name="displayMode"       type="String"  default="Full" access="global" />
+    <aura:attribute name="displayComments"   type="Boolean" default="true" access="global" />
+    <aura:attribute name="displayMerged"     type="Boolean" default="true" access="global" />
+    <aura:attribute name="displaySupporters" type="Boolean" default="true" access="global" />
+
+    <aura:attribute name="sObjectName"       type="String"  access="global" />
+    <aura:attribute name="zoneId"            type="String"  default="" access="global" />
+    <aura:attribute name="authenticatedOnly" type="Boolean" default="false" access="global" />
+    <aura:attribute name="commentsLikes"     type="String"  default="Likes" access="global" />
+    <aura:attribute name="ideaImageURL"      type="String"  default="/servlet/fileField?field=AttachmentBody" access="global" />
+    <aura:attribute name="userProfileURL"    type="String"  default="/profile/" access="global" />
+    <aura:attribute name="iconCategory"      type="String"  default="standard" access="global" />
+    <aura:attribute name="iconSize"          type="String"  default="large"    access="global" />
+    <aura:attribute name="iconName"          type="String"  default="solution" access="global" />
+
+    <aura:attribute name="idea"              type="Idea"    access="global" />
+    <aura:attribute name="mergedIdeas"       type="List"    access="global"/>
+
+    <aura:attribute name="isAuthenticated"   type="Boolean" default="true" access="global" />
+    <aura:attribute name="sitePath"          type="String"  access="global" />
+    <aura:attribute name="sitePrefix"        type="String"  access="global" />
+    <aura:attribute name="currentURL"        type="String"  access="global" />
+
+    <!-- UI Labels-->
+    <aura:attribute name="labelTheme"        type="String" default="{!$Label.c.ss_idea_label_Theme}"         access="global"/>
+    <aura:attribute name="labelOverView"     type="String" default="{!$Label.c.ss_idea_label_Overview}"      access="global"/>
+    <aura:attribute name="labelMergedIdeas"  type="String" default="{!$Label.c.ss_idea_label_MergedIdeas}"   access="global"/>
+
+    <aura:attribute name="baseModel"         type="String" access="global"/>
+    <aura:handler name="baseReady" event="c:SVNSUMMITS_BaseReady" action="{!c.doInit}" />
+
+    <div class="ss-container">
+	    <aura:if isTrue="{! and (v.idea.Id, v.zoneId != '')}">
+	        <div class="slds-grid slds-wrap">
+	            <div class="slds-size--1-of-1">
+	                <!-- Attachment -->
+	                <aura:if isTrue="{!v.idea.AttachmentName}">
+	                    <div class="{!v.displayMode == 'Half' ? 'half-size' : v.displayMode == 'Full' ? '' : v.displayMode == 'None' ? 'hidden' : ''}">
+	                        <img src="{!v.sitePrefix + v.ideaImageURL + '&amp;entityId=' + v.idea.Id}"
+	                             class="featured-image" />
+	                    </div>
+	                </aura:if>
+
+	                <!--<aura:if isTrue="{!v.displayMerged}">-->
+	                    <!--Merged Ideas({!v.mergedIdeas.count})-->
+	                <!--</aura:if>-->
+
+	                <!-- Body -->
+	                <ui:outputRichText value="{!v.idea.Body}" />
+	            </div>
+	        </div>
+
+	        <div class="slds-grid slds-wrap">
+	            <aura:if isTrue="{!v.idea.IdeaTheme.Title}">
+	                <div class="slds-size--1-of-3 slds-p-vertical--large">
+	                    <!-- Topic -->
+	                    <div class="slds-text-heading--medium">{!$Label.c.ss_idea_label_Theme}</div>
+	                    <span class="slds-text-heading--label topic-label">{!v.idea.IdeaTheme.Title}</span>
+	                </div>
+	            </aura:if>
+
+	            <aura:if isTrue="{!v.idea.Categories}">
+	                <div class="slds-size--1-of-3 slds-p-vertical--large">
+	                    <!-- Categories -->
+	                    <div class="slds-text-heading--medium">Category</div>
+	                    <aura:iteration items="{!v.idea.Categories}" var="category">
+	                        <span class="slds-text-heading--label topic-label">
+	                            <ui:outputText value="{!category}"/>
+	                        </span>
+	                    </aura:iteration>
+	                </div>
+	            </aura:if>
+	        </div>
+
+	        <!-- Supporters -->
+	        <aura:if isTrue="{!v.displaySupporters}">
+	            <div class="slds-size--1-of-1 slds-p-vertical--medium">
+	                <c:SVNSUMMITS_Ideas_Voters debugMode="{!v.debugMode}"
+	                                           zoneName="{!v.zoneName}"
+	                                           recordId="{!v.recordId}"
+	                                           userProfileURL="{!v.userProfileURL}">
+	                </c:SVNSUMMITS_Ideas_Voters>
+	            </div>
+	        </aura:if>
+
+	        <!-- Comments -->
+	        <aura:if isTrue="{!v.displayComments}">
+	            <div class="slds-size--1-of-1 slds-p-vertical--medium">
+	                <c:SVNSUMMITS_Ideas_Comments debugMode="{!v.debugMode}"
+	                                             zoneName="{!v.zoneName}"
+	                                             recordId="{!v.recordId}"
+	                                             userProfileURL="{!v.userProfileURL}"
+	                                             likesText="{!v.commentsLikes}"
+	                                             allowComment="{!v.displayComments}"
+	                                             allowHtml="{!v.idea.IsHtml}">
+	                </c:SVNSUMMITS_Ideas_Comments>
+	            </div>
+	        </aura:if>
+	    </aura:if>
+    </div>
+</aura:component>

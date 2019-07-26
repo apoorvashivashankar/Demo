@@ -1,0 +1,66 @@
+<apex:page controller="CreateContactAndCaseController" sidebar="true" id="createpage">
+    <style>
+        #filter
+        {
+            display: none;
+            position: fixed;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index:10;
+            opacity:0.6;
+            filter: alpha(opacity=50);
+        }
+    </style>
+
+    <script>
+        function startProcess()
+        {
+            document.getElementById('{!$Component.createpage.form.loadingdetail}').style.display = 'block';
+            document.getElementById('filter').style.display = 'block';
+        }
+    
+        function endProcess()
+        {
+            document.getElementById("{!$Component.createpage.form.loadingdetail}").style.display = 'none';
+            document.getElementById('filter').style.display = 'none';
+        }
+    </script>   
+    <apex:form id="form">
+    <div id="filter"></div>
+    <apex:actionStatus id="status" onStart="startProcess();" onStop="endProcess();"/>    
+    <apex:image url="{!URLFOR($Resource.spinner,'')}" id="loadingdetail" style="width:50px;height:50px;display:none;position:fixed;top:50%;left:50%;z-index:10;"/>        
+    <apex:pageMessages id="showmsg"></apex:pageMessages>
+        
+        <apex:pageBlock title="Create Contact">
+            <apex:pageBlockSection columns="2" collapsible="false" title="Contact Information">
+                <apex:inputField value="{!contactobj.FirstName}" taborderhint="1" />
+                <apex:inputField value="{!contactobj.Phone}" taborderhint="4"/>
+                <apex:inputField value="{!contactobj.LastName}" taborderhint="2" />
+                <apex:inputField value="{!contactobj.MobilePhone}" taborderhint="5"/>
+                <!--<apex:inputField value="{!contactobj.AccountId}" taborderhint="3"/>-->
+                <apex:outputField value="{!contactobj.AccountId}" id="theAccount" />
+                <apex:inputField value="{!contactobj.OtherPhone}" taborderhint="6"/>
+                <apex:inputField value="{!contactobj.Title}" taborderhint="3"/>
+                <apex:inputField value="{!contactobj.Email}" taborderhint="7"/>
+                <apex:outputField value="{!contactobj.Originated_from_SSC__c}" id="theSSC" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="2" collapsible="false" title="Description Information">
+                <apex:inputField value="{!contactobj.Description}" taborderhint="8"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" collapsible="false" title="Address Information">
+                <apex:inputField value="{!contactobj.MailingStreet}" taborderhint="9" />
+                <apex:inputField value="{!contactobj.MailingCity}" taborderhint="10"/>
+                <apex:inputField value="{!contactobj.MailingState}" taborderhint="11"/>
+                <apex:inputField value="{!contactobj.MailingPostalCode}" taborderhint="12"/>
+                <apex:inputField value="{!contactobj.MailingCountry}" taborderhint="13"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Create Case" action="{!createCaseContact}" rerender="showmsg" status="status" />
+                <apex:commandButton value="Cancel" action="{!redirect}" immediate="true" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>    
+    </apex:form>    
+</apex:page>

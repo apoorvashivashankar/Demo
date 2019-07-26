@@ -1,0 +1,3 @@
+<apex:page sidebar="false">
+<h1>News Feed</h1>
+</apex:page>

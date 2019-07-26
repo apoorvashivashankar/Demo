@@ -1,0 +1,41 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ - Edited by Joe Callin on 8/12/2017.
+ -->
+
+<aura:component description="Peak_HTML_Lists" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="listType" type="String"/>
+    <aura:attribute name="listItem1" type="String"/>
+    <aura:attribute name="listItem2" type="String"/>
+    <aura:attribute name="listItem3" type="String"/>
+    <aura:attribute name="listItem4" type="String"/>
+    <aura:attribute name="listItem5" type="String"/>
+    <aura:attribute name="listItem6" type="String"/>
+    <aura:attribute name="listItem7" type="String"/>
+    <aura:attribute name="listItem8" type="String"/>
+    <aura:attribute name="listItem9" type="String"/>
+    <aura:attribute name="listItem10" type="String"/>
+    <aura:attribute name="itemList" type="String"/>
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <aura:if isTrue="{!v.listType == 'ordered'}">
+            <ol>
+                <aura:iteration items="{!v.itemList}" var="item" indexVar="index">
+                    <li><c:Peak_Base labelText="{!item}"/></li>
+                </aura:iteration>
+            </ol>
+            <aura:set attribute="else">
+                <ul>
+                    <aura:iteration items="{!v.itemList}" var="item" indexVar="index">
+                        <li><c:Peak_Base labelText="{!item}"/></li>
+                    </aura:iteration>
+                </ul>
+            </aura:set>
+        </aura:if>
+    </section>
+</aura:component>

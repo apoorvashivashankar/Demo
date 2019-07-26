@@ -1,0 +1,165 @@
+<!--
+ - Created by presh on 02-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_Inventory_madalCalculator" extends="c:Dal_ModalBase" controller="Dal_InventorySearchController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes">
+
+    <!-- Opening and Closing modal -->
+    <aura:attribute name="isOpen" type="boolean" default="true"/>
+
+    <!-- Init Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!-- Spinner attributes -->
+    <aura:attribute name="isInventoryBaseLoading" type="Boolean" description="Inventory Loading Spinner"
+                    default="false"/>
+    <aura:attribute name="isPageLoading" type="boolean" default="false"  />
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!-- Internal attributes -->
+    <aura:attribute name="listOfUOM" type="List" />
+    <aura:attribute name="selectedUOM" type="String" />
+    <aura:attribute name="selectedQuantity" type="String"/>
+    <aura:attribute name="responseCalculation" type="List" />
+    <aura:attribute name="materialId" type="String" />
+
+    <!-- Values calculated from response -->
+    <aura:attribute name="cartonCount" type="Decimal" />
+    <aura:attribute name="eachCount" type="Decimal" />
+    <aura:attribute name="pieceCount" type="Decimal"/>
+    <aura:attribute name="palletCount" type="Decimal"/>
+    <aura:attribute name="linearCount" type="Decimal"/>
+    <aura:attribute name="sqFtCount" type="Decimal" />
+    <aura:attribute name="sqMtCount" type="Decimal" />
+    <aura:attribute name="shCount" type="Decimal"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+
+
+    <!-- Labels -->
+    <aura:attribute name="searchProductModalTitle" type="String" default="Conversion Calculator"
+                    description="Title for the modal to inventory calculator"/>
+
+
+    <!-- Body starts here -->
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.searchProductModalTitle}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+
+
+    <aura:if isTrue="{!not(v.showSpinner)}">
+        <lightning:layout class="dal-form dal-form-order slds-p-around_small slds-m-bottom_large" multipleRows="true">
+            <div class="slds-grid slds-size_12-of-12">
+
+                <div class="slds-size_8-of-12">
+
+                    <div class="slds-grid slds-size_12-of-12">
+
+                        <lightning:input class="input-qty slds-m-right_large" label="Qty" value="{!v.selectedQuantity}" />
+
+                        <lightning:select name="uom" label="UOM" value="{!v.selectedUOM}" class="input-uom">
+                            <aura:iteration items="{!v.listOfUOM}" var="uom">
+                                <option value="{!uom}">{!uom}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+
+                    <div class=" slds-p-horizontal_x-small slds-m-top_x-large">
+                        <lightning:button label="CALCULATE" class="calculate-button-custom" title="CALCULATE"
+                                          onclick="{!c.handleCalculate}"/>
+                    </div>
+
+                </div>
+
+                <!--DATA-->
+                <div class=" slds-size_4-of-12">
+                    <table>
+                        <!--<aura:iteration items="{!v.responseCalculation}" var="vals">-->
+
+                        <tr class="{!empty(v.cartonCount) ? 'slds-hide' : '' }">
+                            <td class="font-size">Carton</td>
+                            <td class="extra-Padding">
+                                <lightning:formattedNumber value="{!v.cartonCount}" maximumFractionDigits="2"/>
+                            </td>
+                        </tr>
+                        <tr class="{!empty(v.eachCount) ? 'slds-hide' : '' }">
+                            <td class="font-size">Each</td>
+                            <td class="extra-Padding">
+                                <lightning:formattedNumber value="{!v.eachCount}" maximumFractionDigits="2"/>
+                            </td>
+                        </tr>
+                        <tr class="{!empty(v.pieceCount) ? 'slds-hide' : '' }">
+                            <td class="font-size">Piece</td>
+                            <td class="extra-Padding">
+                                <lightning:formattedNumber value="{!v.pieceCount}" maximumFractionDigits="2"/>
+                            </td>
+                        </tr>
+                        <tr class="{!empty(v.palletCount) ? 'slds-hide' : '' }">
+                            <td class="font-size">Pallet</td>
+                            <td class="extra-Padding">
+                                <lightning:formattedNumber value="{!v.palletCount}" maximumFractionDigits="2"/>
+                            </td>
+                        </tr>
+                        <tr class="{!empty(v.sqFtCount) ? 'slds-hide' : '' }">
+                            <td class="font-size">Sq. Ft.</td>
+                            <td class="extra-Padding">
+                                <lightning:formattedNumber value="{!v.sqFtCount}" maximumFractionDigits="2"/>
+                            </td>
+                        </tr>
+                        <tr class="{!empty(v.sqMtCount) ? 'slds-hide' : '' }">
+                            <td class="font-size">Sq. M.</td>
+                            <td class="extra-Padding">
+                                <lightning:formattedNumber value="{!v.sqMtCount}" maximumFractionDigits="2"/>
+                            </td>
+                        </tr>
+                        <tr class="{!empty(v.linearCount) ? 'slds-hide' : '' }">
+                            <td class="font-size">LF</td>
+                            <td class="extra-Padding">
+                                <lightning:formattedNumber value="{!v.linearCount}" maximumFractionDigits="2"/>
+                            </td>
+                        </tr>
+                        <tr class="{!empty(v.shCount) ? 'slds-hide' : '' }">
+                            <td class="font-size">Sheet</td>
+                            <td class="extra-Padding">
+                                <lightning:formattedNumber value="{!v.shCount}" maximumFractionDigits="2"/>
+                            </td>
+                        </tr>
+                        <!-- </aura:iteration> -->
+                    </table>
+                </div>
+            </div>
+        </lightning:layout>
+    </aura:if>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:layoutItem size="12" class="slds-is-relative slds-p-around_xx-large">
+            <lightning:spinner class="bkg-transparent" variant="brand"/>
+        </lightning:layoutItem>
+    </aura:if>
+
+    <lightning:layout class="footer-action-bar slds-m-top_small slds-border_top slds-p-top_small" multipleRows="true">
+
+        <lightning:layoutItem class="button-bold slds-p-around_small"
+                              size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="4">
+
+        </lightning:layoutItem>
+
+        <lightning:layoutItem class="button-bold dal-small-inputFull slds-p-around_small" size="12"
+                              smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="8">
+            <lightning:layout horizontalAlign="end">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="3">
+                    <lightning:button variant="neutral" class="modal-footer-close" label="CLOSE" onclick="{!c.handleCloseModal}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+</aura:component>

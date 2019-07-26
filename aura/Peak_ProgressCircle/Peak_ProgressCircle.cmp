@@ -1,0 +1,95 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+    <aura:attribute name="resultFormat" type="String" default="Percentage" description="Format of result to be displayed inside Circular Progress Bar. Allowed values are Percentage, Actual Number, Mix and Percentage Mix." />
+    <aura:attribute name="Legend" type="String" description="Legend to display" />
+    <aura:attribute name="headerAtTop" type="Boolean" default="false"/>
+    <aura:attribute name="stat" type="Peak_Stat" default=""/>
+
+    <aura:attribute name="perText" type="String" default="0%" description="Text to display inside circle. It is auto calculated field and used internally." />
+    <aura:attribute name="cirDeg" type="String" default="0" description="Degree of Progress to show. It is auto calculated field and used internally." />
+
+    <aura:attribute name="totalProgress" type="String" default="100" description="Total progress. It can be number OR API name of field." />
+    <aura:attribute name="actualProgress" type="String" default="50" description="Actual progress. It can be number OR API name of field." />
+
+    <aura:attribute name="moreLink" type="string"/>
+    <aura:attribute name="moreText" type="string"/>
+
+    <aura:attribute name="themeBeforeThreshold" type="String" default="100"/>
+    <aura:attribute name="themeAfterThreshold" type="String"/>
+    <aura:attribute name="remainingColor" type="String" default="null"/>
+    <aura:attribute name="backgroundColor" type="String" default="transparent"  description="Background color of inside the circle"/>
+    <aura:attribute name="theme" type="String" description="Internally used attribute to decide final theme on basis of threshold value"/>
+
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="title" type="String" default=""/>
+    <aura:attribute name="nubbinLocation" type="String" default="top-right"/>
+    <aura:attribute name="cssPosition" type="String" default="absolute; top: 0; right: 0;"/>
+
+    <aura:attribute name="size" type="String" default="medium" description="Size of Circular Progress Bar. Possible values are small, medium, big." />
+    <aura:attribute name="threshold" type="String" default="50" description="This field can be used to support multiple theme after threshold value" />
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+    <aura:attribute name="statContainerId" type="String" default=""/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:method name="statReturned" action="{!c.statReturned}">
+        <aura:attribute name="result1" type="String"/>
+        <aura:attribute name="result2" type="String"/>
+    </aura:method>
+
+    <section class="{!'peak-component ' + v.CustomClassName + ' ' + v.statContainerId}" id="{!v.CustomIdName}">
+        <aura:if isTrue="{!v.message != ''}">
+            <c:Peak_Tooltip title="{!v.title}" message="{!v.message}" cssPosition="{!v.cssPosition}" />
+        </aura:if>
+        <aura:if isTrue="{!v.headerAtTop}">
+            <aura:if isTrue="{!and(v.Legend != '', v.Legend != null)}">
+                <div class="{!v.size + ' slds-p-around_small clearFloats slds-align_absolute-center legend '}">
+                        {!v.Legend} <br/>
+                    {!v.actualProgress} / {!v.totalProgress}
+                </div>
+            </aura:if>
+        </aura:if>
+        <div class="clearFloats slds-align_absolute-center">
+            <div class="{! ( v.cirDeg >
+                    179 ) ? 'container p50plus '+v.size : 'container '+v.size }" style="{!v.remainingColor != 'null' ? 'background-color: ' + v.backgroundColor + '; border-color: ' + v.remainingColor : 'background-color: ' + v.backgroundColor}">
+                <div class="slds-align_absolute-center circle-holder">
+                    <div>
+                        <aura:if isTrue="{! v.resultFormat == 'Percentage' }">
+                        {!v.perText}<span>%</span>
+                        </aura:if>
+                        <aura:if isTrue="{! v.resultFormat == 'Actual Number' }">
+                                {!v.actualProgress}
+                        </aura:if>
+                        <aura:if isTrue="{! v.resultFormat == 'Mix' }">
+                        {!v.actualProgress}/{!v.totalProgress}
+                        </aura:if>
+                        <aura:if isTrue="{! v.resultFormat == 'Percentage Mix' }">
+                        {!v.perText}<span>%</span>
+                            <p>{!v.actualProgress} of {!v.totalProgress}</p>
+                        </aura:if>
+                    </div>
+                </div>
+                <div class="slice">
+
+                    <div class="bar" style="{!'-webkit-transform: rotate('+v.cirDeg+'deg); -moz-transform: rotate('+v.cirDeg+'deg); -ms-transform: rotate('+v.cirDeg+'deg); -o-transform: rotate('+v.cirDeg+'deg); transform: rotate('+v.cirDeg+'deg); -ms-transform: rotate('+v.cirDeg+'deg);border-color:'+ v.theme}"></div>
+                    <div class="fill" style="{!'border-color:'+ v.theme}"></div>
+                </div>
+            </div>
+        </div>
+        <aura:if isTrue="{!v.headerAtTop == false}">
+            <aura:if isTrue="{!and(v.Legend != '', v.Legend != null)}">
+                <div class="{!v.size + ' slds-p-around_small clearFloats slds-align_absolute-center legend '}">
+                    <c:Peak_Base labelText="{!v.Legend}"/>
+                </div>
+            </aura:if>
+        </aura:if>
+        <div class="slds-p-around_xxx-small slds-grid_vertical-align-end slds-text-align_center slds-size_1-of-1 slds-medium-size_1-of-1 ">
+            <aura:if isTrue="{!v.moreLink != ''}">
+                <a href="{!v.moreLink}" class="slds-text-link"><c:Peak_Base labelText="{!v.moreText}"/></a>
+            </aura:if>
+            <aura:if isTrue="{!and(v.moreLink == '', !v.moreText != '')}">
+                <c:Peak_Base labelText="{!v.moreText}"/>
+            </aura:if>
+        </div>
+    </section>
+
+</aura:component>

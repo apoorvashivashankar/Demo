@@ -1,0 +1,274 @@
+<!--
+ - Created by 7Summits on 3/8/18.
+ -->
+
+<aura:component extends="c:Dal_Base" description="Dal_Dist_OrderProcess_Details">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="store" type="Map" required="true" />
+
+    <!-- shipping info -->
+    <aura:attribute name="shipToName" type="String" default=""/>
+    <aura:attribute name="shipToCareOf" type="String" default=""/>
+    <aura:attribute name="shipToStreet1" type="String" default=""/>
+    <aura:attribute name="shipToStreet2" type="String" default=""/>
+    <aura:attribute name="shipToCity" type="String" default=""/>
+    <aura:attribute name="shipToState" type="String" default=""/>
+    <aura:attribute name="shipToZipcode" type="String" default=""/>
+    <aura:attribute name="shipToCountry" type="String" default=""/>
+    
+
+    <aura:attribute name="freightTerms" type="String" default="1A1"/>
+    <aura:attribute name="carrier" type="String" default="UPS Ground"/>
+    <aura:attribute name="isShipComplete" type="String" default=""/>
+    <aura:attribute name="isSmallPackage" type="String" default="" />
+    <aura:attribute name="canShipSmallPackage" type="Boolean" default="false" />
+
+    <!-- order info -->
+    <aura:attribute name="poNumber" type="String" default=""/>
+    <aura:attribute name="jobName" type="String" default=""/>
+    <aura:attribute name="contactName" type="String" default=""/>
+    <aura:attribute name="contactNumber" type="String" default=""/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="baseModal" type="Map" />
+    <aura:attribute name="isSaving" type="Boolean" default="false" />
+    <aura:attribute name="isFormValid" type="Boolean" default="false"/>
+    <aura:attribute name="savedOrdersUrl" type="String" default="{!$Label.c.Dal_Dist_OrderProcess_Details_SavedOrder_Label}"/>
+
+    <!-- labels -->
+    <aura:attribute name="labelHeader" type="String" default="Enter Order Details"/>
+    <aura:attribute name="labelHeaderInfo" type="String" default="Instructions for this page would appear here."/>
+    <aura:attribute name="labelBack" type="String" default="Back to skus"/>
+    <aura:attribute name="labelSave" type="String" default="Save Draft"/>
+    <aura:attribute name="labelSaveContinue" type="String" default="Save and Continue"/>
+    <aura:attribute name="labelShippingInfo" type="String" default="Shipping Info"/>
+    <aura:attribute name="labelShipTo" type="String" default="Ship-To Address:"/>
+    <aura:attribute name="labelChange" type="String" default="Change"/>
+    <aura:attribute name="labelFreight" type="String" default="Freight Terms"/>
+    <aura:attribute name="labelCarrier" type="String" default="Carrier"/>
+    <aura:attribute name="labelSmallPackage" type="String" default="Ship as Small package?"/>
+    <aura:attribute name="labelShipComplete" type="String" default="Ship Complete Order?"/>
+    <aura:attribute name="labelOrderInfo" type="String" default="Order Info"/>
+    <aura:attribute name="labelPoNumber" type="String" default="P.O. #"/>
+    <aura:attribute name="labelJobName" type="String" default="Job Name"/>
+    <aura:attribute name="labelContactName" type="String" default="Contact Name"/>
+    <aura:attribute name="labelContactNumber" type="String" default="Contact Number"/>
+    <aura:attribute name="labelCanShipSmallPackage" type="String" default="Small package shipping available for this order."/>
+
+    <!-- events -->
+    <aura:registerEvent name="orderProcessEvt" type="c:Dal_Dist_OrderProcessStepEvt"/>
+    <aura:handler event="c:Dal_ChooseShippingAddressEvt" action="{!c.handleChooseShippingAddressEvent}"/>
+    <aura:handler event="c:Dal_Dist_OrderSaveEvt" action="{!c.handleSaveOrderEvent}"/>
+
+    <!-- ******************** -->
+    <!-- Header -->
+    <!-- ******************** -->
+    <lightning:layout verticalAlign="center" multipleRows="true" horizontalAlign="center" pullToBoundary="small">
+        <lightning:layoutItem padding="around-small" size="12">
+            <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.labelHeader}" />
+        </lightning:layoutItem>
+    </lightning:layout>
+
+    <p>{!v.labelHeaderInfo}</p>
+    <!-- ******************** -->
+    <!-- End Header -->
+    <!-- ******************** -->
+
+    <!-- ******************** -->
+    <!-- Shipping/Order info -->
+    <!-- ******************** -->
+    <lightning:layout class="orderContainer dal-form-order slds-m-vertical_x-large" verticalAlign="center" multipleRows="true" horizontalAlign="center">
+
+        <!-- ******************** -->
+        <!-- Form Header -->
+        <!-- ******************** -->
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+            <lightning:layout class="saveFooter slds-p-vertical_medium section-border-bottom" multipleRows="true" horizontalAlign="center" verticalAlign="center">
+
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" padding="horizontal-large">
+                    <button class="slds-button dal-button-color_darkGray slds-text-heading_small" onclick="{!c.handleBack}"><lightning:icon size="x-small" iconName="utility:chevronleft" /> {!v.labelBack}</button>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" class="slds-grid slds-grid_align-center slds-large-grid_align-end slds-medium-grid_align-end slds-order_1 slds-large-order_2 slds-p-top_large slds-p-bottom_small">
+                    <div id="btnSaveContinue" class="saveAndContinueButtons">
+                        <lightning:button variant="neutral" label="{!v.labelSave}" class="slds-m-horizontal_small" onclick="{!c.handleSaveOrderClick}" />
+                        <lightning:button variant="brand" label="{!v.labelSaveContinue}" class="slds-m-horizontal_small" onclick="{!c.saveContinue}"  />
+                    </div>
+                </lightning:layoutItem>
+
+            </lightning:layout>
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- End Form Header -->
+        <!-- ******************** -->
+
+        <!-- ******************** -->
+        <!-- Shipping info -->
+        <!-- ******************** -->
+        <lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+
+            <lightning:layout multipleRows="true" pullToBoundary="small" class="slds-m-horizontal_small shippingInfo-border-bottom">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="2"  flexibility="auto">
+                    <h4 class="bold">{!v.labelShippingInfo}</h4>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="10" class="slds-grid slds-wrap slds-p-top_xx-small">
+                    <lightning:layout multipleRows="true" pullToBoundary="small">
+
+                        <lightning:layoutItem size="12" class="slds-grid">
+                            <div class="orderOutputData orderOutputData-stacked">
+                                <label>{!v.labelShipTo}</label>
+                                <span>{!v.shipToName}<br/>
+                                    <aura:if isTrue="{!!empty(v.shipToCareOf)}">{!v.shipToCareOf}<br/></aura:if>
+                                    <aura:if isTrue="{!!empty(v.shipToStreet1)}">{!v.shipToStreet1}<br/></aura:if>
+                                    <aura:if isTrue="{!!empty(v.shipToStreet2)}">{!v.shipToStreet2}<br/></aura:if>
+                                    {!v.shipToCity},&nbsp;{!v.shipToState}&nbsp;{!v.shipToZipcode}&nbsp;{!v.shipToCountry}
+                                </span>
+                            </div>
+                            <div class="slds-p-horizontal_large">
+                                <ul class="slds-list_horizontal slds-has-block-links_space">
+                                    <li><a href="javascript:void(0);" onclick="{!c.changeShippingAddress}">{!v.labelChange}</a></li>
+                                </ul>
+                            </div>
+                        </lightning:layoutItem>
+
+                        <lightning:layoutItem size="12" class="{!'slds-grid slds-wrap slds-p-top_large' + ((v.canShipSmallPackage == false) ? ' slds-p-bottom_large' : '')}">
+                            <div>
+                                <lightning:select name="freightInput" label="{!v.labelFreight}" class="slds-p-around_x-small input-large" value="{!v.freightTerms}" onchange="{!c.handleChange}">
+                                    <option value="1A1">Prepaid</option>
+                                    <option value="1A2">Prepaid &#38; Add</option>
+                                    <option value="1A3">Collect</option>
+                                </lightning:select>
+                            </div>
+                            <div>
+                                <lightning:select aura:id="shipCompleteInput" name="shipCompleteInput" label="{!v.labelShipComplete}" class="slds-p-around_x-small input-large" value="{!v.isShipComplete}"
+                                      required="true" messageWhenValueMissing="Required" onchange="{!c.handleChange}">
+                                    <option value=""></option>
+                                    <option value="no">No, ship as tile becomes available</option>
+                                    <option value="yes">Yes, ship when all tile is available</option>
+                                </lightning:select>
+                            </div>
+                        </lightning:layoutItem>
+
+                        <!-- can ship via a small package carrier for this order -->
+                        <aura:if isTrue="{!v.canShipSmallPackage == true}">
+                            <lightning:layoutItem size="12" class="slds-grid slds-wrap slds-p-horizontal_x-small slds-p-top_small slds-p-bottom_xx-small">
+                                <p>{!v.labelCanShipSmallPackage}</p>
+                            </lightning:layoutItem>
+
+                            <lightning:layoutItem size="12" class="slds-grid slds-wrap slds-p-bottom_large">
+                                <div>
+                                    <lightning:select aura:id="shipSmallPackageInput" name="shipSmallPackageInput" label="{!v.labelSmallPackage}" class="slds-p-around_x-small input-large" value="{!v.isSmallPackage}" onchange="{!c.handleSmallPackageShipChange}"
+                                        required="true" messageWhenValueMissing="Required" >
+                                        <option value=""></option>
+                                        <option value="no">No - Ship via standard freight</option>
+                                        <option value="yes">Yes - Ship via Small Package Carrier</option>
+                                    </lightning:select>
+                                </div>
+
+                                <aura:if isTrue="{!v.isSmallPackage == 'yes'}">
+                                    <div>
+                                        <lightning:select aura:id="smallPackageSelect" name="carrierInput" label="{!v.labelCarrier}" class="slds-p-around_x-small input-large" value="{!v.carrier}" onchange="{!c.handleChange}">
+                                            <option value="UPS Ground">UPS Ground</option>
+                                            <option value="UPS Residential Ground">UPS Residential Ground</option>
+                                            <option value="UPS Next Day Air 3PM">UPS Next Day Air 3PM</option>
+											<option value="UPS 2nd Day Air">UPS 2nd Day Air</option>
+                                            <option value="UPS 3rd Day Air">UPS 3rd Day Air</option>
+                                            <option value="UPS Next Day Air 10AM">UPS Next Day Air 10AM</option>
+                                            <option value="UPS Thursday for Saturday Delivery">UPS Thursday for Saturday Delivery</option>
+                                            <option value="UPS Friday for Saturday Delivery">UPS Friday for Saturday Delivery</option>
+                                        </lightning:select>
+                                    </div>
+                                </aura:if>
+                            </lightning:layoutItem>
+                        </aura:if>
+
+                    </lightning:layout>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- End shipping info -->
+        <!-- ******************** -->
+
+        <!-- ******************** -->
+        <!-- Order info -->
+        <!-- ******************** -->
+        <lightning:layoutItem class="section-border-bottom" padding="around-small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+
+            <lightning:layout multipleRows="true" pullToBoundary="small" class="slds-m-horizontal_small">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="2"  flexibility="auto">
+                    <div class="slds-p-vertical_small">
+                        <h4 class="sectionHeader slds-p-around_x-small">{!v.labelOrderInfo}</h4>
+                    </div>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="10" class="slds-grid slds-wrap">
+                    <lightning:layout multipleRows="true" pullToBoundary="small">
+                        <lightning:layoutItem size="12" class="slds-grid slds-wrap">
+                            <div class="slds-is-relative">
+                                <lightning:input aura:id="poNumberInput" label="{!v.labelPoNumber}" name="poNumberInput" class="slds-p-around_small input-large" value="{!v.poNumber}"
+                                     required="true" messageWhenValueMissing="Required" pattern="[0-9a-zA-Z]+[0-9a-zA-Z ]+" messageWhenPatternMismatch="Special characters not allowed" maxlength="35" onchange="{!c.handleChange}"/>
+                            </div>
+                            <div class="slds-is-relative">
+                                <lightning:input label="{!v.labelContactName}" name="contactNameInput" class="slds-p-around_small input-large" value="{!v.contactName}"
+                                     pattern="[0-9a-zA-Z]+[0-9a-zA-Z ]+" messageWhenPatternMismatch="Special characters not allowed" maxlength="35" onchange="{!c.handleChange}"/>
+                                <span class="topOptionalText">(Optional)</span>
+                            </div>
+                        </lightning:layoutItem>
+
+                        <lightning:layoutItem size="12" class="slds-grid slds-wrap slds-p-bottom_large">
+                            <div class="slds-is-relative">
+                                <lightning:input label="{!v.labelJobName}" name="quantityInput" class="slds-p-around_small input-large" value="{!v.jobName}" maxlength="40" onchange="{!c.handleChange}"/>
+                                <span class="topOptionalText">(Optional)</span>
+                            </div>
+                            <div class="slds-is-relative">
+                                <lightning:input aura:id="contactNumberInput" label="{!v.labelContactNumber}" name="contactNumberInput" class="slds-p-around_small input-large" value="{!v.contactNumber}"
+                                 pattern="[0-9]{10}" messageWhenPatternMismatch="Enter 10 digit phone number, no special characters" maxlength="10" onchange="{!c.handleChange}"/>
+                                <span class="topOptionalText">(Optional)</span>
+                            </div>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </lightning:layoutItem>
+
+            </lightning:layout>
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- End order info -->
+        <!-- ******************** -->
+
+        <!-- ******************** -->
+        <!-- Save/Continue -->
+        <!-- ******************** -->
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+            <lightning:layout class="saveFooter slds-p-vertical_medium" multipleRows="true" horizontalAlign="center" verticalAlign="center">
+                <lightning:layoutItem size="12" class="slds-grid sslds-grid_align-center slds-large-grid_align-end slds-medium-grid_align-end slds-order_1 slds-large-order_2 slds-p-top_large slds-p-bottom_small">
+                    <div id="btnSaveContinue" class="saveAndContinueButtons">
+                        <lightning:button variant="neutral" label="{!v.labelSave}" class="slds-m-horizontal_small" onclick="{!c.handleSaveOrderClick}" />
+                        <lightning:button variant="brand" label="{!v.labelSaveContinue}" class="slds-m-horizontal_small" onclick="{!c.saveContinue}" />
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- End save/Continue -->
+        <!-- ******************** -->
+
+    </lightning:layout>
+    <!-- ******************** -->
+    <!-- End shipping/Order info -->
+    <!-- ******************** -->
+
+    <!-- ******************** -->
+    <!-- Saving -->
+    <!-- ******************** -->
+    <aura:if isTrue="{!v.isSaving == true}">
+        <lightning:spinner variant="brand" size="medium" class="slds-is-fixed" />
+    </aura:if>
+    <!-- ******************** -->
+    <!-- End Saving -->
+    <!-- ******************** -->
+
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+</aura:component>

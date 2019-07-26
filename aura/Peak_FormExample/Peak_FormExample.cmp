@@ -1,0 +1,18 @@
+<aura:component description="Peak_FormExample" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" controller="Peak_FormExampleController">
+    <aura:attribute name="isLoading" type="Boolean" default="false"  access="global"/>
+    <aura:attribute name="peakResponse" type="Peak_Response" default="" access="global" />
+    <aura:attribute name="hasErrors" type="Boolean" default="false"  access="global"/>
+    <aura:attribute name="inputText" type="String" default=""  access="global"/>
+
+    <!-- Load script so this works with Locker service -->
+    <ltng:require scripts="{!join(',',$Resource.peakLightning + '/scripts/peakLightning.js')}"/>
+
+    <section>
+        <c:Peak_FormLoadingAndMessages peakResponse="{!v.peakResponse}" isLoading="{!v.isLoading}" hasErrors="{!v.hasErrors}"/>
+
+        <lightning:input label="Type Hello" type="text" required="true" aura:id="SayHello" name="SayHello" class="slds-m-bottom_large" value="{!v.inputText}"/>
+
+        <lightning:button label="Submit" type="submit" onclick="{!c.submitForm}" />
+    </section>
+
+</aura:component>

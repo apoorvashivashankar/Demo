@@ -1,0 +1,56 @@
+<!--
+ - Created by 7Summits on 4/25/18.
+ -->
+
+<aura:component description="Dal_SSC_SchedulePickupDeliveryLocation">
+    <aura:attribute name="title" type="String" default="" />
+    <aura:attribute name="location" type="Map" default="{}"/>
+
+    <lightning:layout verticalAlign="center" multipleRows="true">
+        <lightning:layoutItem size="12" padding="around-large">
+            <h4 class="slds-p-bottom_medium bold">{!v.title}</h4>
+
+            <lightning:layout verticalAlign="center" horizontalAlign="center">
+                <lightning:layoutItem size="9">
+                    <aura:if isTrue="{!v.location.name}">
+                        <h4 class="slds-p-around_xxx-small bold">{!v.location.name}</h4>
+                    </aura:if>
+                    <aura:if isTrue="{!v.location.streetAddress1}">
+                        <p class="address slds-p-around_xxx-small">{!v.location.streetAddress1}</p>
+                    </aura:if>
+                    <aura:if isTrue="{!v.location.streetAddress2}">
+                        <p class="address slds-p-around_xxx-small">{!v.location.streetAddress2}</p>
+                    </aura:if>
+                    <aura:if isTrue="{!v.location.streetAddress3}">
+                        <p class="address slds-p-around_xxx-small">{!v.location.streetAddress3}</p>
+                    </aura:if>
+                    <aura:if isTrue="{!and(v.location.city, v.location.state)}">
+                        <p class="address slds-p-around_xxx-small">{!v.location.city}, {!v.location.state}&nbsp;{!v.location.zipCode}</p>
+                    </aura:if>
+                    <div class="contactInfo slds-p-top_medium">
+                        <aura:if isTrue="{!v.location.phoneNumber}">
+                            <p class="slds-p-around_xxx-small"><lightning:icon iconName="utility:call" /><lightning:formattedPhone value="{!v.location.phoneNumber}" /></p>
+                        </aura:if>
+                        <aura:if isTrue="{!v.location.faxNumber}">
+                            <p class="slds-p-around_xxx-small"><lightning:icon iconName="utility:log_a_call" />FAX: <lightning:formattedPhone value="{!v.location.faxNumber}" /></p>
+                        </aura:if>
+                        <p class="slds-p-around_xxx-small slds-text-color_weak">
+                            <lightning:icon iconName="utility:inbox" />
+                            <aura:if isTrue="{!and(!empty(v.location.mfStartHour), !empty(!v.location.mfEndHour))}">
+                                M-F: {!v.location.mfStartHour}-{!v.location.mfEndHour}
+                            </aura:if>
+                            <aura:if isTrue="{!and(!empty(v.location.satStartHour), !empty(!v.location.satEndHour))}">
+                                ,&nbsp;Sat: {!v.location.satStartHour}-{!v.location.satEndHour}
+                            </aura:if>
+                            <aura:if isTrue="{!and(!empty(v.location.sunStartHour), !empty(!v.location.sunEndHour))}">
+                                ,&nbsp;Sun: {!v.location.sunStartHour}-{!v.location.sunEndHour}
+                            </aura:if>
+                        </p>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+
+        </lightning:layoutItem>
+
+    </lightning:layout>
+</aura:component>

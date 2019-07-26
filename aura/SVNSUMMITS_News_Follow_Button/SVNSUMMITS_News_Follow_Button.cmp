@@ -1,0 +1,26 @@
+<!--
+ - Created by francoiskorb on 9/21/17.
+ -->
+
+<aura:component description="SVNSUMMITS_News_Follow_Button"
+                access="global"
+                controller="SVNSUMMITS_NewsController"
+                extends="c:SVNSUMMITS_News_Base"
+                implements="force:hasRecordId">
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_News_BaseReady" action="{!c.doInit}" />
+
+	<aura:attribute name="recordId" type="String" access="global" default="{!recordId}"/>
+	<aura:attribute name="isFollowing" type="Boolean" default="false" access="private"/>
+
+	<lightning:buttonStateful labelWhenOff="{!$Label.c.ss_nws_button_Follow}"
+			labelWhenOn="{!$Label.c.ss_nws_button_Following}"
+			labelWhenHover="{!$Label.c.ss_nws_button_Unfollow}"
+			iconNameWhenOff="utility:add"
+			iconNameWhenOn="utility:check"
+			iconNameWhenHover="utility:close"
+			state="{!v.isFollowing}"
+			onclick="{!c.handleFollowClick}"/>
+
+</aura:component>

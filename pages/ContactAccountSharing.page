@@ -1,0 +1,24 @@
+<apex:page standardController="Contact" extensions="ContactSharingController" standardStylesheets="true" lightningStylesheets="true" id="thePage">
+    <apex:pageBlock title="Current User To Location" id="theBlockU2L">
+        <apex:outputPanel id="panelUserToLocation">
+            <apex:pageBlockTable value="{!listUserToLocation}" var="a" id="theBlockTableU2L">
+                <apex:column >
+                    <apex:facet name="header">Account Name</apex:facet>
+                    <apex:outputText value="{!a.Account__r.Name}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Account Number</apex:facet>
+                    <apex:outputText value="{!a.Account__r.DW_ID__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Account Division</apex:facet>
+                    <apex:outputText value="{!a.Account__r.Division_Name__r.Code__c} - {!a.Account__r.Division_Name__r.Name}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Account GroupKey</apex:facet>
+                    <apex:outputText value="{!a.Account__r.GroupKey__c}" />
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:outputPanel>
+    </apex:pageBlock>
+</apex:page>

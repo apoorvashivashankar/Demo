@@ -1,0 +1,20 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ -->
+
+<design:component label="7S HTML Lists">
+    <design:attribute name="listType" datasource="Unordered List (Bulleted),Ordered List (Numbered)" default="Unordered List (Bulleted)" label="Choose List Type"/>
+    <design:attribute name="listItem1" label="List Item 1"/>
+    <design:attribute name="listItem2" label="List Item 2"/>
+    <design:attribute name="listItem3" label="List Item 3"/>
+    <design:attribute name="listItem4" label="List Item 4"/>
+    <design:attribute name="listItem5" label="List Item 5"/>
+    <design:attribute name="listItem6" label="List Item 6"/>
+    <design:attribute name="listItem7" label="List Item 7"/>
+    <design:attribute name="listItem8" label="List Item 8"/>
+    <design:attribute name="listItem9" label="List Item 9"/>
+    <design:attribute name="listItem10" label="List Item 10"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

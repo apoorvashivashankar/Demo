@@ -1,0 +1,97 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_NewsController"
+                access="global"
+                extends="c:SVNSUMMITS_News_Base"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+	<ltng:require scripts="{!join(',',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/fullcalendar-2.6.1/moment.min.js'
+			)}"
+	/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_News_BaseReady" action="{!c.doInit}" />
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="newsListWrapper" type="SVNSUMMITS_WrapperNews" access="global"/>
+	<aura:attribute name="showNickName" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="showMemberSince" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="recordId" type="String" access="global"/>
+	<aura:attribute name="strDate" type="string" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="profileURL" type="String" default="/profile/" access="global"/>
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" access="global"/>
+
+	<aura:if isTrue="{!v.newsListWrapper.newsList[0].Show_Author__c}">
+		<div class="postedByDiv">
+			<div class="slds-text-heading--small slds-m-bottom--small">Author</div>
+			<div class="slds-grid slds-grid--align-center">
+				<aura:if isTrue="{!v.newsListWrapper.newsList[0].Author__c.length > 0}">
+					<img src="{!v.newsListWrapper.newsList[0].Author__r.FullPhotoUrl}" class="userImg"/>
+					<aura:set attribute="else">
+						<img src="{!v.newsListWrapper.newsList[0].CreatedBy.FullPhotoUrl}" class="userImg"/>
+					</aura:set>
+				</aura:if>
+			</div>
+
+			<div class="slds-grid slds-grid--align-center">
+            <span class="userText">
+                <aura:if isTrue="{!v.newsListWrapper.newsList[0].Show_Author__c}">
+
+                    <aura:if isTrue="{!v.newsListWrapper.newsList[0].Author__c.length > 0}">
+                        <aura:if isTrue="{!v.isNicknameDisplayEnabled}">
+                            <aura:if isTrue="{!v.showNickName}">
+                                <a href="{!v.sitePath+v.profileURL+v.newsListWrapper.newsList[0].Author__c}">{!v.newsListWrapper.newsList[0].Author__r.CommunityNickname}</a>
+                                <aura:set attribute="else">
+                                    <a href="{!v.sitePath+v.profileURL+v.newsListWrapper.newsList[0].Author__c}">{!v.newsListWrapper.newsList[0].Author__r.Name}</a>
+                                </aura:set>
+                            </aura:if>
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!v.showNickName}">
+                                    <a href="{!v.sitePath+v.profileURL+v.newsListWrapper.newsList[0].Author__c}">{!v.newsListWrapper.newsList[0].Author__r.CommunityNickname}</a>
+                                    <aura:set attribute="else">
+                                        <a href="{!v.sitePath+v.profileURL+v.newsListWrapper.newsList[0].Author__c}">{!v.newsListWrapper.newsList[0].Author__r.Name}</a>
+                                    </aura:set>
+                                </aura:if>
+                            </aura:set>
+                        </aura:if>
+
+                        <aura:set attribute="else">
+                            <aura:if isTrue="{!v.isNicknameDisplayEnabled}">
+                                <aura:if isTrue="{!v.showNickName}">
+                                    <a href="{!v.sitePath+v.profileURL+v.newsListWrapper.newsList[0].CreatedBy.Id}">{!v.newsListWrapper.newsList[0].CreatedBy.CommunityNickname}</a>
+                                    <aura:set attribute="else">
+                                        <a href="{!v.sitePath+v.profileURL+v.newsListWrapper.newsList[0].CreatedBy.Id}">{!v.newsListWrapper.newsList[0].CreatedBy.Name}</a>
+                                    </aura:set>
+                                </aura:if>
+                                <aura:set attribute="else">
+                                    <aura:if isTrue="{!v.showNickName}">
+                                        <a href="{!v.sitePath+v.profileURL+v.newsListWrapper.newsList[0].CreatedBy.Id}">{!v.newsListWrapper.newsList[0].CreatedBy.CommunityNickname}</a>
+                                        <aura:set attribute="else">
+                                            <a href="{!v.sitePath+v.profileURL+v.newsListWrapper.newsList[0].CreatedBy.Id}">{!v.newsListWrapper.newsList[0].CreatedBy.Name}</a>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:set>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if>
+                </aura:if>
+            </span>
+			</div>
+			<div class="blankDiv"></div>
+			<div class="slds-grid slds-wrap slds-grid--pull-padded memberSince">
+				<aura:if isTrue="{!v.strDate.length > 0}">
+					<aura:if isTrue="{!v.showMemberSince}">
+						<div class="slds-col--padded slds-size--1-of-1">
+							<span class="commText">COMMUNITY MEMBER SINCE: </span>
+						</div>
+						<div class="slds-col--padded slds-size--1-of-1">
+								{!v.strDate}
+						</div>
+					</aura:if>
+				</aura:if>
+			</div>
+		</div>
+	</aura:if>
+</aura:component>

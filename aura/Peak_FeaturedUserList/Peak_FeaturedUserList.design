@@ -1,0 +1,8 @@
+<design:component label="7S Featured User List">
+    <design:attribute name="title" label="Title"/>
+    <design:attribute name="userIdsInput" label="Featured User IDs (comma-separated)"/>
+    <design:attribute name="isNarrow" label="Displayed in a narrow column?"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

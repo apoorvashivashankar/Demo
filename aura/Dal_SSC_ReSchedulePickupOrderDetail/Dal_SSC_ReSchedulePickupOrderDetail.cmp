@@ -1,0 +1,52 @@
+<!--
+ - Created by ranja on 06-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_ReSchedulePickupOrderDetail" extends="c:Dal_ModalBase">
+
+    <!-- For Modal -->
+    <aura:attribute name="baseModal" type="Map" />
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+
+
+    <!-- Body -->
+    <lightning:layout verticalAlign="center" multipleRows="true">
+        <lightning:layoutItem size="12" class="slds-p-horizontal_large slds-p-top_large slds-p-bottom_medium">
+            <h5><b>Order 534958</b>  - 6 items </h5>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+    <lightning:layout class="slds-size_12-of-12" multipleRows="true">
+        <aura:iteration items="12" var="order" indexVar="index">
+            <div class="slds-grid_align-spread">
+                <div>
+                    <b>{!index}</b>
+                </div>
+                <div class="slds-col">
+                    3248238
+                </div>
+
+                <div class="slds-col">
+                    <b>300 SF </b>
+                </div>
+            </div>
+        </aura:iteration>
+    </lightning:layout>
+
+
+    <lightning:layout class="footer-action-bar slds-m-top_small slds-border_top slds-p-top_small" multipleRows="true">
+
+        <lightning:layoutItem class="button-bold  " size="12"
+                              smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="12">
+            <lightning:layout horizontalAlign="end">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="3">
+                    <lightning:button variant="neutral" class="modal-footer-close" label="CLOSE" onclick="{!c.handleCloseModal}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+</aura:component>

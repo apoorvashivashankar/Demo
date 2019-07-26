@@ -1,0 +1,86 @@
+<!-- Navigation List - just a list of links! -->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" description="Peak-NavigationList">
+    <aura:attribute name="MobileHamburger" type="Boolean" default="" />
+
+    <aura:attribute name="Link1" type="String" default="" />
+    <aura:attribute name="Link1Text" type="String" default="" />
+    <aura:attribute name="Link1IsButton" type="Boolean" default="" />
+    <aura:attribute name="Link1OpenInNewPage" type="Boolean" default=""/>
+    <aura:attribute name="Link1IsFormModal" type="Boolean" default=""/>
+    <aura:attribute name="Link1FormModalContent" type="String" default=""/>
+
+    <aura:attribute name="Link2" type="String" default="" />
+    <aura:attribute name="Link2Text" type="String" default="" />
+    <aura:attribute name="Link2IsButton" type="Boolean" default="" />
+    <aura:attribute name="Link2OpenInNewPage" type="Boolean" default=""/>
+    <aura:attribute name="Link2IsFormModal" type="Boolean" default=""/>
+    <aura:attribute name="Link2FormModalContent" type="String" default=""/>
+
+    <aura:attribute name="Link3" type="String" default="" />
+    <aura:attribute name="Link3Text" type="String" default="" />
+    <aura:attribute name="Link3IsButton" type="Boolean" default="" />
+    <aura:attribute name="Link3OpenInNewPage" type="Boolean" default=""/>
+    <aura:attribute name="Link3IsFormModal" type="Boolean" default=""/>
+    <aura:attribute name="Link3FormModalContent" type="String" default=""/>
+
+    <aura:attribute name="Link4" type="String" default="" />
+    <aura:attribute name="Link4Text" type="String" default="" />
+    <aura:attribute name="Link4IsButton" type="Boolean" default="" />
+    <aura:attribute name="Link4OpenInNewPage" type="Boolean" default=""/>
+    <aura:attribute name="Link4IsFormModal" type="Boolean" default=""/>
+    <aura:attribute name="Link4FormModalContent" type="String" default=""/>
+
+    <aura:attribute name="Link5" type="String" default="" />
+    <aura:attribute name="Link5Text" type="String" default="" />
+    <aura:attribute name="Link5IsButton" type="Boolean" default="" />
+    <aura:attribute name="Link5OpenInNewPage" type="Boolean" default=""/>
+    <aura:attribute name="Link5IsFormModal" type="Boolean" default=""/>
+    <aura:attribute name="Link5FormModalContent" type="String" default=""/>
+
+    <aura:attribute name="Link6" type="String" default="" />
+    <aura:attribute name="Link6Text" type="String" default="" />
+    <aura:attribute name="Link6IsButton" type="Boolean" default="" />
+    <aura:attribute name="Link6OpenInNewPage" type="Boolean" default=""/>
+    <aura:attribute name="Link6IsFormModal" type="Boolean" default=""/>
+    <aura:attribute name="Link6FormModalContent" type="String" default=""/>
+
+    <aura:attribute name="Link7" type="String" default="" />
+    <aura:attribute name="Link7Text" type="String" default="" />
+    <aura:attribute name="Link7IsButton" type="Boolean" default="" />
+    <aura:attribute name="Link7OpenInNewPage" type="Boolean" default=""/>
+    <aura:attribute name="Link7IsFormModal" type="Boolean" default=""/>
+    <aura:attribute name="Link7FormModalContent" type="String" default=""/>
+
+    <aura:attribute name="Link8" type="String" default="" />
+    <aura:attribute name="Link8Text" type="String" default="" />
+    <aura:attribute name="Link8IsButton" type="Boolean" default="" />
+    <aura:attribute name="Link8OpenInNewPage" type="Boolean" default=""/>
+    <aura:attribute name="Link8IsFormModal" type="Boolean" default=""/>
+    <aura:attribute name="Link8FormModalContent" type="String" default=""/>
+
+    <aura:attribute name="ButtonClass" type="String" default="" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <section class="{!'peak-component slds-grid slds-wrap slds-grid_vertical-align-center ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <!-- Build a navigation list using Peak_NavigationLink component -->
+        <aura:if isTrue="{!v.MobileHamburger}">
+            <div class="navHamburger slds-p-around_small slds-size_1-of-1">
+                <a href="javascript:void(0)" onclick="{!c.toggleMobileUtilNav}">
+                    <lightning:icon iconName="utility:rows" size="small" alternativeText="Open Utility Nav"/>
+                    <lightning:icon iconName="utility:close" size="small" alternativeText="Close Utility Nav"/>
+                </a>
+            </div>
+        </aura:if>
+
+        <c:Peak_NavigationLink Link="{!v.Link1}" Text="{!v.Link1Text}" IsButton="{!v.Link1IsButton}" ButtonClass="{!v.ButtonClass}" OpenInNewPage="{!v.Link1OpenInNewPage}" CustomClassName="peak-link1" IsFormModal="{!v.Link1IsFormModal}" FormModalContent="{!v.Link1FormModalContent}" />
+        <c:Peak_NavigationLink Link="{!v.Link2}" Text="{!v.Link2Text}" IsButton="{!v.Link2IsButton}" ButtonClass="{!v.ButtonClass}" OpenInNewPage="{!v.Link2OpenInNewPage}" CustomClassName="peak-link2" IsFormModal="{!v.Link2IsFormModal}" FormModalContent="{!v.Link2FormModalContent}" />
+        <c:Peak_NavigationLink Link="{!v.Link3}" Text="{!v.Link3Text}" IsButton="{!v.Link3IsButton}" ButtonClass="{!v.ButtonClass}" OpenInNewPage="{!v.Link3OpenInNewPage}" CustomClassName="peak-link3" IsFormModal="{!v.Link3IsFormModal}" FormModalContent="{!v.Link3FormModalContent}" />
+        <c:Peak_NavigationLink Link="{!v.Link4}" Text="{!v.Link4Text}" IsButton="{!v.Link4IsButton}" ButtonClass="{!v.ButtonClass}" OpenInNewPage="{!v.Link4OpenInNewPage}" CustomClassName="peak-link4" IsFormModal="{!v.Link4IsFormModal}" FormModalContent="{!v.Link4FormModalContent}" />
+        <c:Peak_NavigationLink Link="{!v.Link5}" Text="{!v.Link5Text}" IsButton="{!v.Link5IsButton}" ButtonClass="{!v.ButtonClass}" OpenInNewPage="{!v.Link5OpenInNewPage}" CustomClassName="peak-link5" IsFormModal="{!v.Link5IsFormModal}" FormModalContent="{!v.Link5FormModalContent}" />
+        <c:Peak_NavigationLink Link="{!v.Link6}" Text="{!v.Link6Text}" IsButton="{!v.Link6IsButton}" ButtonClass="{!v.ButtonClass}" OpenInNewPage="{!v.Link6OpenInNewPage}" CustomClassName="peak-link6" IsFormModal="{!v.Link6IsFormModal}" FormModalContent="{!v.Link6FormModalContent}" />
+        <c:Peak_NavigationLink Link="{!v.Link7}" Text="{!v.Link7Text}" IsButton="{!v.Link7IsButton}" ButtonClass="{!v.ButtonClass}" OpenInNewPage="{!v.Link7OpenInNewPage}" CustomClassName="peak-link7" IsFormModal="{!v.Link7IsFormModal}" FormModalContent="{!v.Link7FormModalContent}" />
+        <c:Peak_NavigationLink Link="{!v.Link8}" Text="{!v.Link8Text}" IsButton="{!v.Link8IsButton}" ButtonClass="{!v.ButtonClass}" OpenInNewPage="{!v.Link8OpenInNewPage}" CustomClassName="peak-link8" IsFormModal="{!v.Link8IsFormModal}" FormModalContent="{!v.Link8FormModalContent}" />
+    </section>
+</aura:component>

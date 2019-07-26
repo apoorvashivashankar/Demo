@@ -1,0 +1,5 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:event type="APPLICATION">
+    <aura:attribute name="fromDate" type="Date"/>
+    <aura:attribute name="toDate" type="Date"/>
+</aura:event>

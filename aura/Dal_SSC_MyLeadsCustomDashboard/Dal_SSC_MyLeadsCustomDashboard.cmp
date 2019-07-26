@@ -1,0 +1,104 @@
+<!--
+ - Created by ranja on 26-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_MyLeadsCustomDashboard" extends="c:Dal_SSC_LeadManagementBase" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" controller="Dal_LeadManager">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <ltng:require scripts="{!$Resource.ChartJs}" afterScriptsLoaded="{!c.afterScriptsLoaded}"/>
+    <aura:attribute name="percentage" type="Integer" default="[" />
+    <aura:attribute name="converted" type="Integer" default="" />
+    <aura:attribute name="notConverted" type="Integer" default="" />
+    <aura:attribute name="leadsCount" type="String" default="" />
+    <aura:attribute name="leadConversion" type="String" default="" />
+    <aura:attribute name="leadStatus" type="String" default="" />
+    <aura:attribute name="leadOpen" type="String" default="" />
+    <aura:attribute name="conversionId" type="String" default="" />
+    <aura:attribute name="statusId" type="String" default="" />
+    <aura:attribute name="openId" type="String" default="" />
+
+    <!--   <div class="slds-box">
+       <canvas class="canvasbox" aura:id="piechart" height="100" width="75"></canvas>
+       </div>
+
+       <canvas class="canvasdoghnutbox" aura:id="donutchart" height="100px" width="75"></canvas>-->
+
+    <div class="slds-grid slds-wrap slds-gutters">
+        <div class="slds-col slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1">
+            <lightning:card>
+                <aura:set attribute="title">
+                    <h3 class="slds-border_bottom">Total Numbers of Open Leads</h3>
+                </aura:set>
+                <lightning:select name="select1" label="" value="{!v.leadOpen}" onchange="{!c.changeOpenLeadData}">
+                    <option value="1 Month">1 Month</option>
+                    <option value="3 Month">3 Month</option>
+                    <option value="6 Month">6 Month</option>
+                    <option value="9 Month">9 Month</option>
+                    <option value="1 Year">1 Year</option>
+                    <option value="All Leads">All Leads</option>
+                </lightning:select>
+                <p class="dal-lead-dashboard-lead-Count">{!v.leadsCount}</p>
+                <div class="slds-align_absolute-center dal-lead-dashboard-openLeads">
+                    <lightning:button variant="base"  label="View Report" value="OpenLeadReport" title="View Report"
+                                      onclick="{!c.navigateToReportDetailPage}"/>
+                </div>
+
+            </lightning:card>
+        </div>
+
+        <div class="slds-col slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1">
+            <lightning:card>
+                <aura:set attribute="title">
+                    <h3 class="slds-border_bottom">Lead Conversion Rate</h3>
+                </aura:set>
+                <lightning:select name="select1" label="" value="{!v.leadConversion}" onchange="{!c.changeDonutData}">
+                    <option value="1 Month">1 Month</option>
+                    <option value="3 Month">3 Month</option>
+                    <option value="6 Month">6 Month</option>
+                    <option value="9 Month">9 Month</option>
+                    <option value="1 Year">1 Year</option>
+                    <option value="All Leads">All Leads</option>
+                </lightning:select>
+                <canvas  aura:id="donutchart" ></canvas>
+
+                <div class="slds-align_absolute-center dal-lead-dashboard-piecharts">
+                    <lightning:button variant="base" label="View Report" value="ConversionLeadReport" title="View Report"
+                                      onclick="{!c.navigateToReportDetailPage}"/>
+                </div>
+
+            </lightning:card>
+            <!-- <div class="slds-box">
+             <canvas  aura:id="donutchart" ></canvas>
+         </div>-->
+        </div>
+
+        <div class="slds-col slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1">
+            <lightning:card>
+                <aura:set attribute="title">
+                    <h3 class="slds-border_bottom">Lead Status Report</h3>
+                </aura:set>
+                <lightning:select name="select1" label="" value="{!v.leadStatus}" onchange="{!c.changePieChartData}">
+                    <option value="1 Month">1 Month</option>
+                    <option value="3 Month">3 Month</option>
+                    <option value="6 Month">6 Month</option>
+                    <option value="9 Month">9 Month</option>
+                    <option value="1 Year">1 Year</option>
+                    <option value="All Leads">All Leads</option>
+                </lightning:select>
+                <canvas aura:id="piechart" class="piechart" ></canvas>
+
+                <div class="slds-align_absolute-center dal-lead-dashboard-piecharts">
+                    <lightning:button variant="base" label="View Report" value="StatusLeadReport" title="View Report"
+                                      onclick="{!c.navigateToReportDetailPage}"/>
+                </div>
+
+            </lightning:card>
+
+
+            <!-- <div class="slds-box">
+                 <canvas aura:id="piechart" ></canvas>
+             </div>-->
+        </div>
+    </div>
+
+</aura:component>

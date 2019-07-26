@@ -1,0 +1,118 @@
+<!--
+ - Created by Yadav on 2/11/2019.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderProductCheck" extends="c:Dal_ModalBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" controller="Dal_BaseController">
+    
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <!--Internal Attributes-->
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="isMultple" type="Boolean" default="false"/>
+    <aura:attribute name="isSingle" type="Boolean" default="false"/>
+    <aura:attribute name="loading" type="Boolean" default="true" />
+    <aura:attribute name="itemMessage" type="String" default="You have selected a product which is already in your cart."/>
+    <aura:attribute name="itemListMessage" type="String" default="You have selected products which are already in your cart."/>
+    <aura:attribute name="productNotMessage" type="String" default="You have reached the maximum number of store locations permitted per cart(2) with the locations listed below."/>
+    <aura:attribute name="productItemListMessage" type="String" default="You have reached the maximum number of store locations permitted per cart(2) with the locations listed below."/>
+    <aura:attribute name="itemMessagePart" type="String" default="Please modify your location selections to continue with your order." />
+    <aura:attribute name="itemMessagePartSingle" type="String" default="Return to 'My Product List' to remove the item listed below. The product quantity and unit of measure can be edited when reviewing your cart." />
+    <aura:attribute name="itemMessagePartMultiple" type="String" default="Return to 'My Product List' to remove the items listed below. The products quantity and unit of measure can be edited when reviewing your cart." />
+    <aura:attribute name="productNotEntered" type="List" />
+    <aura:attribute name="isAddingCart" type="Boolean" default="false" />
+    <aura:attribute name="isMultipleCart" type="Boolean" default="false" />
+    <aura:attribute name="isNoCartItem" type="Boolean" default="false" />
+    <aura:attribute name="itemMessageNoProductCart" type="String" default="You have reached the maximum number of store locations permitted within a cart (2)." />
+    <aura:attribute name="itemMessageNoProduct" type="String" default="Please modify your location selections to continue with your order." />
+    <!--<aura:registerEvent name="LocationSwitcherCartEvent" type="c:Dal_SSC_LocationSwitcherCartEvent"/>-->
+    
+    <!--BODY-->
+    <div>
+        <a onclick="{!c.closeModal}">
+            <lightning:icon class="slds-float_right" iconName="utility:close" alternativeText="Close"/>
+        </a><br/>
+        
+        <lightning:layout class="dal-form dal-form-order slds-p-around_small slds-m-bottom_large" multipleRows="true">
+            <div class="slds-grid slds-size_12-of-12">
+                
+                <div class="slds-size_10-of-12 slds-align_absolute-center">
+                    <div>
+                        <div class="slds-size_12-of-12 slds-text-heading_medium heading slds-m-bottom_medium slds-m-around_small ">
+                            <div class="slds-size_1-of-1 slds-align_absolute-center">
+                                <div class="dal-message-font-color">ALERT</div>
+                            </div>
+                            
+                            <aura:if isTrue="{! v.isMultple}">
+                                <div class="slds-size_10-of-12 slds-align_absolute-center  slds-m-top_xx-large">
+                                    <div class="dal-message">
+                                        <center>{!v.itemListMessage}</center><br/>
+                                        <center>{!v.itemMessagePartMultiple}</center>
+                                    </div>
+                                </div>
+                            </aura:if>
+                            <aura:if isTrue="{! v.isSingle}">
+                                <div class="slds-size_10-of-12 slds-align_absolute-center  slds-m-top_xx-large">
+                                    <div class="dal-message">
+                                        <center>{!v.itemMessage}</center><br/>
+                                        <center>{!v.itemMessagePartSingle}</center>
+                                    </div>
+                                </div>
+                            </aura:if>
+                            <aura:if isTrue="{! v.isAddingCart}">
+                                <div class="slds-size_10-of-12 slds-align_absolute-center  slds-m-top_xx-large">
+                                    <div class="dal-message">
+                                        <aura:if isTrue="{! v.isNoCartItem}">
+                                            <center>{!v.itemMessageNoProductCart}</center><br/>
+                                            <center>{!v.itemMessageNoProduct}</center>
+                                            <aura:set attribute="else">
+                                                <center>{!v.productNotMessage}</center><br/>
+                                                <center>{!v.itemMessagePart}</center>
+                                            </aura:set>
+                                        </aura:if>
+                                        <aura:iteration items="{!v.productNotEntered}" var="item">
+                                            <br/><center>{!item}</center>
+                                        </aura:iteration>
+                                    </div>
+                                </div>
+                            </aura:if>
+                            <aura:if isTrue="{! v.isMultipleCart}">
+                                <div class="slds-size_10-of-12 slds-align_absolute-center  slds-m-top_xx-large">
+                                    <div class="dal-message">
+                                        <center>{!v.productItemListMessage}</center><br/>
+                                        <center>{!v.itemMessagePart}</center>
+                                    </div>
+                                </div>
+                            </aura:if>
+                            
+                            <aura:if isTrue="{!v.isAddingCart}">
+                                
+                                <aura:set attribute="else">
+                                    <aura:iteration items="{!v.productNotEntered}" var="item">
+                                        <br/><center>{!item}</center>
+                                    </aura:iteration>
+                                </aura:set>
+                            </aura:if>
+                            
+                            
+                        </div>
+                        
+                        <div class=" slds-p-horizontal_x-small slds-m-top_xx-large">
+                            <div class="slds-align_absolute-center slds-m-bottom_medium">
+                                <lightning:button label="Return to My Product List" class="background-color"
+                                                  title="Return to My Product List" onclick="{!c.closeModal}"/>
+                            </div>
+                            <!--<div class="slds-align_absolute-center">
+                                    <a class="font-color-return-message" onclick="{!c.closeModal}"><u>No, return to "Same Account"</u></a>
+                                </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </lightning:layout>
+    </div>
+    
+</aura:component>

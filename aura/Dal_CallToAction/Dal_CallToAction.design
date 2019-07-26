@@ -1,0 +1,55 @@
+<!--
+ - Created by abdoundure on 2/21/18.
+ -->
+
+<design:component label="DalTile CTA">
+
+    <design:attribute name="type" label="Number of Items per row" dataSource="3 Column, 4 Column, 5 Column" />
+
+    <design:attribute name="title" label="Component Title" />
+
+    <design:attribute name="cta1Title" label="CTA Title 1" />
+    <design:attribute name="cta1Url" label="CTA URL 1" />
+    <design:attribute name="cta1OpenInNewWindow" label="CTA Open In New Window 1 (Full URL path is required for this to work" />
+    <design:attribute name="cta1Icon" dataSource="building, users, credit-card, wrench , archive, question, book, university" label="CTA Icon 1 (FontAwesome Icon Class)" />
+
+    <design:attribute name="cta2Title" label="CTA Title 2" />
+    <design:attribute name="cta2Url" label="CTA URL 2" />
+    <design:attribute name="cta2OpenInNewWindow" label="CTA Open In New Window 2 (Full URL path is required for this to work" />
+    <design:attribute name="cta2Icon" dataSource="building, users, credit-card, wrench , archive, question, book, university" label="CTA Icon 2 (FontAwesome Icon Class)" />
+
+    <design:attribute name="cta3Title" label="CTA Title 3" />
+    <design:attribute name="cta3Url" label="CTA URL 3" />
+    <design:attribute name="cta3OpenInNewWindow" label="CTA Open In New Window 3 (Full URL path is required for this to work" />
+    <design:attribute name="cta3Icon" dataSource="building, users, credit-card, wrench , archive, question, book, university" label="CTA Icon 3 (FontAwesome Icon Class)" />
+
+    <design:attribute name="cta4Title" label="CTA Title 4" />
+    <design:attribute name="cta4Url" label="CTA URL 4" />
+    <design:attribute name="cta4OpenInNewWindow" label="CTA Open In New Window 4 (Full URL path is required for this to work" />
+    <design:attribute name="cta4Icon" dataSource="building, users, credit-card, wrench , archive, question, book, university" label="CTA Icon 4 (FontAwesome Icon Class)" />
+
+    <design:attribute name="cta5Title" label="CTA Title 5" />
+    <design:attribute name="cta5Url" label="CTA URL 5" />
+    <design:attribute name="cta5OpenInNewWindow" label="CTA Open In New Window 5 (Full URL path is required for this to work" />
+    <design:attribute name="cta5Icon" dataSource="building, users, credit-card, wrench , archive, question, book, university" label="CTA Icon 5 (FontAwesome Icon Class)" />
+
+    <design:attribute name="cta6Title" label="CTA Title 6" /> 
+    <design:attribute name="cta6Url" label="CTA URL 6" />
+    <design:attribute name="cta6OpenInNewWindow" label="CTA Open In New Window 6 (Full URL path is required for this to work" />
+    <design:attribute name="cta6Icon" dataSource="building, users, credit-card, wrench , archive, question, book, university" label="CTA Icon 6 (FontAwesome Icon Class)" />
+
+    <design:attribute name="cta7Title" label="CTA Title 7" />
+    <design:attribute name="cta7Url" label="CTA URL 7" />
+    <design:attribute name="cta7OpenInNewWindow" label="CTA Open In New Window 7 (Full URL path is required for this to work" />
+    <design:attribute name="cta7Icon" dataSource="building, users, credit-card, wrench , archive, question, book, university" label="CTA Icon 7 (FontAwesome Icon Class)" />
+
+    <design:attribute name="cta8Title" label="CTA Title 8" />
+    <design:attribute name="cta8Url" label="CTA URL 8" />
+    <design:attribute name="cta8OpenInNewWindow" label="CTA Open In New Window 8 (Full URL path is required for this to work" />
+    <design:attribute name="cta8Icon" dataSource="building, users, credit-card, wrench , archive, question, book, university" label="CTA Icon 8 (FontAwesome Icon Class)" />
+
+    <design:attribute name="ctaBackgroundColor" label="CTA Background Color" dataSource="#FFF, #F1F2F3" />
+    <design:attribute name="ctaBorderColor" label="CTA Border Color" dataSource="#00A9CE, #808285, #CF0A2C, #696057, #2E2925, #7F3823, #DFC9A2, #1F355E, #555759, #A79C94, #7C97AB, #00416A, #231F20" />
+    <design:attribute name="ctaIconColor" label="CTA Icon Color" dataSource="#00A9CE, #808285, #CF0A2C, #696057, #2E2925, #7F3823, #DFC9A2, #1F355E, #555759, #A79C94, #7C97AB, #00416A, #231F20" />
+
+</design:component>

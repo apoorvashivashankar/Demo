@@ -1,0 +1,9 @@
+<!--
+ - Created by ranja on 26-11-2018.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_UpdatedValuesForLead" >
+
+    <aura:attribute name="leadParams" type="String" />
+
+</aura:event>

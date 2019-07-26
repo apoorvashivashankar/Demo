@@ -1,0 +1,21 @@
+<!--Copyright © 2016-2018 7Summits, Inc. All rights reserved.-->
+<design:component label="7S Social Share">
+    <design:attribute name="titletext" label="Heading Label"/>
+	<design:attribute name="Email" label="Display Email"/>
+    <design:attribute name="Print" label="Display Print"/>
+    <design:attribute name="Facebook" label="Display Facebook"/>
+    <design:attribute name="Twitter" label="Display Twitter"/>
+    <design:attribute name="LinkedIn" label="Display LinkedIn"/>
+    <design:attribute name="Pinterest" label="Display Pinterest"/>
+    <design:attribute name="Tumblr" label="Display Tumblr"/>
+    <design:attribute name="GooglePlus" label="Display Google Plus"/>
+    <design:attribute name="Reddit" label="Display Reddit"/>
+    <design:attribute name="Pocket" label="Display Pocket"/>
+    <design:attribute name="WhatsApp" label="Display WhatsApp"/>
+    <design:attribute name="VK" label="Display VK"/>
+    <design:attribute name="align" label="Button Alignment" datasource="center,left,right"/>
+    <design:attribute name="isbranded" label="Use community branding?"/>
+    <design:attribute name="hasborder" label="Add border?"/>
+    <design:attribute name="headeralign" label="Header Alignment" datasource="center,left,right"/>
+    <design:attribute name="headerposition" label="Header Positon" datasource="top,left"/>
+</design:component>

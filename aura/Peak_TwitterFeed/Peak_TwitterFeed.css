@@ -1,0 +1,30 @@
+/*Copyright © 2016-2018 7Summits, Inc. All rights reserved.*/
+/*TODO: This CSS needs to be added to the gulp structure. */
+
+.THIS .twitter-wrap iframe{
+    margin:20px 0;
+    width: 100%;
+}
+
+.THIS [data-border="true"]{
+    border:1px solid t(colorBorderSeparatorAlt);
+    border-radius: 0.25rem;
+}
+
+.THIS div.twitter-wrap div#attr{
+	padding:5px 10px !important;
+    height:auto !important;
+    width:auto !important;
+}
+
+.THIS div.twitter-wrap div#attr a, .THIS div.twitter-wrap div#attr{
+	display:block !important;
+    float:right !important;
+    opacity:1 !important;
+    color:#fff !important;
+    background:#1291C4 !important;
+}
+
+.THIS div.twitter-wrap div#attr a{
+    font-weight:bold !important;
+}

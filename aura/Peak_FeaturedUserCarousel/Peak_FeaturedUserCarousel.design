@@ -1,0 +1,12 @@
+<!--
+ - Created by brianpoulsen on 3/16/17.
+ -->
+
+<design:component label="7S Featured User Carousel">
+    <design:attribute name="title" label="Title"/>
+    <design:attribute name="userIdsInput" label="Featured User IDs (comma-separated)"/>
+    <design:attribute name="showDots" label="Show Dots?"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

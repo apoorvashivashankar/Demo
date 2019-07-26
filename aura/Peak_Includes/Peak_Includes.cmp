@@ -1,0 +1,5 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">>
+    <ltng:require scripts="{!$Resource.lpiLightning + '/scripts/lpiLightning.js'}"
+    styles="{!join(',',
+    $Resource.lpiLightning + '/styles/overrides.css')}" />
+</aura:component>

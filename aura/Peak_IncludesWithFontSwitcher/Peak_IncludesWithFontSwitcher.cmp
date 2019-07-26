@@ -1,0 +1,13 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <aura:attribute name="specializedFont" type="String" default="" />
+    <aura:attribute name="specialTitleFont" type="String" default="" />
+
+    <ltng:require scripts="{!$Resource.lpiLightning + '/scripts/lpiLightning.js'}"
+
+                  styles="{!join(',',
+                          $Resource.lpiLightning + '/styles/overrides.css',
+                          $Resource.lpiLightning + '/styles/fonts/'+v.specializedFont+'.css',
+                          $Resource.lpiLightning + '/styles/fonts/'+v.specialTitleFont+'.css')}" />
+
+</aura:component>

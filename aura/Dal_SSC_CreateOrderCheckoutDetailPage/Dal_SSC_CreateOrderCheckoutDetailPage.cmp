@@ -1,0 +1,113 @@
+<!--
+ - Created by ranja on 02-01-2019.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderCheckoutDetailPage" extends="c:Dal_SSC_CreateOrderBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" controller="Dal_InventorySearchController">
+
+    <!--Internal Attributes-->
+    <aura:attribute name="myCartPageNumber" type="Integer" default="1"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:attribute name="isShowSpecial" type="Boolean" default="false" />
+
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+
+    <!--BODY-->
+    <lightning:layout class="c-container">
+        <div class="slds-size_12-of-12">
+            <div class="slds-grid background-color slds-m-bottom_large slds-p-around_small">
+                <div class="slds-col slds-m-left_small">
+                    <span class="my-cart-checkout-color">Contact Details</span>
+                </div>
+            </div>
+
+            <div class="row slds-m-left_xx-large">
+                <lightning:layoutItem flexibility="auto" size="12">
+                    <lightning:input aura:id="po_pagetwo" name="P.O. #" label="P.O. #" class="{!v.showPOError ? 'input-width slds-form-element dal-field-custom-error'  : 'input-width slds-m-bottom_x-large' }"
+                                     value="{!v.myCartResponsePageTwo.po}" required="false" messageWhenValueMissing="Required"
+                                     onchange="{!c.handleChangePO}" maxlength="35"
+                                     pattern="^[A-Za-z0-9- .,?:;!@#$%*(){}\[\]_+=]+$" messageWhenPatternMismatch="No special characters are allowed." />
+                    <aura:if isTrue="{!and(v.showPOError,!v.isShowSpecial)}">
+                        <p class="field-required slds-form-element__help  slds-m-bottom_x-large"> Required</p>
+                    </aura:if>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem flexibility="auto" size="12">
+                    <label class="slds-form-element__label ">Job Name</label>
+
+                    <lightning:input
+                            class="left-margin slds-p-right_none size slds-checkbox_faux font-label slds-form-element__label"
+                            type="checkbox" value="{!v.myCartResponsePageTwo.taxExempt}" onchange="{!c.handleTaxExemptChange}"
+                            label="Job Exempt?" name="taxExempt" checked="{!v.myCartResponsePageTwo.taxExempt}"/>
+					 <lightning:helptext
+                            content="Select for a list of Job Exemptions"
+                     />
+                </lightning:layoutItem>
+
+                <lightning:layoutItem flexibility="auto" size="12">
+                    <lightning:input name="Job Name" value="{!v.myCartResponsePageTwo.jobName}"
+                                     required="false" messageWhenValueMissing="Required"
+                                     class="{!v.showJobNameError ? 'input-width label-hidden slds-form-element dal-field-custom-error'  : 'input-width slds-m-bottom_x-large label-hidden slds-form-element__label'}"
+                                     onchange="{!c.handleChangeJobName}" pattern="^[A-Za-z0-9- .,?:;!@#$%*(){}\[\]_+=]+$" messageWhenPatternMismatch="No special characters are allowed."
+                                     disabled="{!v.myCartResponsePageTwo.taxExempt}"/>
+
+                    <aura:if isTrue="{!v.showJobNameError}">
+                        <p class="field-required slds-form-element__help  slds-m-bottom_x-large"> Required</p>
+                    </aura:if>
+                </lightning:layoutItem>
+
+                <aura:if isTrue="{!v.showSpinner}">
+                    <lightning:layoutItem size="12" class="">
+                        <lightning:spinner class="bkg-transparent" variant="brand"/>
+                    </lightning:layoutItem>
+                </aura:if>
+
+                <lightning:layoutItem flexibility="auto" size="12" class="slds-m-bottom_large">
+                    <!--<lightning:recordEditForm objectApiName="DT_Cart__c" onload="{!c.handleLoad}">
+                        <label class="custom-label">National Account Field (Optional)</label><br/>
+                        <lightning:inputField fieldName="National_Account__c" class="label-hidden" aura:id="selectedAccount"
+                                              disabled="false" onchange="{!c.handleAccountChange}"/>
+                    </lightning:recordEditForm>-->
+                    <div class="label-hidden">
+                        <label class="custom-label">National Account Field (Optional)</label><br/>
+                        <c:Dal_CustomLookup objectName="Account"
+                                            field_API_text="Name"
+                                            field_API_val="Id"
+                                            limit="5"
+                                            field_API_search="Name"
+                                            lookupIcon="standard:account"
+                                            recordId="{!v.myCartResponsePageTwo.nationalAccountIdNew}"
+                                            recordName="{!v.myCartResponsePageTwo.nationalAccountName}"
+                                            field_API_recordType = "National Account"
+                                            placeholder="Search Account...."/>
+                    </div>
+
+                </lightning:layoutItem>
+                <lightning:layoutItem flexibility="auto" size="12">
+                    <lightning:input name="Contact Name" label="Contact Name (Optional)"
+                                     class="input-width slds-m-bottom_x-large"
+                                     value="{!v.myCartResponsePageTwo.contactName}"/>
+                </lightning:layoutItem>
+
+
+                <lightning:layoutItem flexibility="auto" size="12">
+                    <lightning:input name="Contact Number" label="Contact Number (Optional)"
+                                     class="input-width slds-m-bottom_x-large" maxlength="10"
+                                     value="{!v.myCartResponsePageTwo.contactNumber}"/>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem flexibility="auto" size="12">
+                    <lightning:textarea class="textarea-width slds-m-bottom_x-large" name="Special Instruction"
+                                        label="Special Instruction (Optional)"
+                                        value="{!v.myCartResponsePageTwo.specialInstruction}"/>
+                  
+                </lightning:layoutItem>
+            </div>
+        </div>
+    </lightning:layout>
+</aura:component>

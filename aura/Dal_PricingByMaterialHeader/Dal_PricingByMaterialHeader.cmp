@@ -1,0 +1,80 @@
+<!--
+ - Created by 7Summits on 4/26/18.
+ -->
+
+<aura:component description="Dal_PricingByMaterialHeader" controller="Dal_PricingListController" extends="c:Dal_Base">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <!-- passed in variables -->
+    <aura:attribute name="effectiveDate" type="String" default="" required="true" />
+    <aura:attribute name="appliedPromotion" type="String" default=""/>
+
+    <aura:attribute name="isPromotionSelectorLoading" type="Boolean" default="true"/>
+    <aura:attribute name="inputValuePromotionSelected" type="String" default=""/>
+    <aura:attribute name="promotions" type="List" default="[]"/>
+    <aura:attribute name="selectedPromotionObject" type="Object" default=""/>
+    <aura:attribute name="errorsEffectiveDate" type="List" default="[]"/>
+
+    <aura:attribute name="labelBack" type="String" default="ALL SPECIAL PRICING" />
+    <aura:attribute name="labelAppliedPromo" type="String" default="Applied Special Pricing"/>
+
+    <!-- events -->
+    <aura:registerEvent name="pricingByMaterialDatePromoChangeEvt" type="c:Dal_PricingByMaterialDatePromoChangeEvt"/>
+
+    <!--<aura:method name="searchPriceRecordList" action="{!c.handleDateChange}" access="PUBLIC">-->
+        <!--<aura:attribute name="effectiveDate" type="DateTime" />-->
+    <!--</aura:method>-->
+
+    <lightning:layout class="slds-border--bottom slds-m-vertical_large" pullToBoundary="small" multipleRows="true">
+        <lightning:layoutItem size="12">
+            <lightning:layout class="searchWrapper" multipleRows="true">
+                <lightning:layoutItem class="pricingHeader slds-p-around_x-small slds-wrap slds-grid" size="12" mediumDeviceSize="6" largeDeviceSize="8">
+                    <div class="slds-p-around_small slds-has-error slds-size_1-of-1 slds-medium-size_9-of-12 slds-large-size_6-of-12">
+                        <ui:inputDate label="Effective Date:" aura:id="effectiveDatePicker" displayDatePicker="true"
+                          value="{!v.effectiveDate}"
+                          change="{!c.handleDateChange}"
+                          format="MM/DD/YYYY"
+                          disabled="{!v.isPromotionSelectorLoading == true}"
+                          errors="{!v.errorsEffectiveDate}"
+                        />
+                    </div>
+
+                    <div>
+                        <lightning:select aura:id="appliedPromotion" label="{!v.labelAppliedPromo}" name="appliedPromotion" class="slds-p-around_small input-medium slds-size_1-of-1 slds-large-size_12-of-12"
+                              disabled="{!v.isPromotionSelectorLoading == true}"
+                              onchange="{!c.handleAppliedPromotionChange}"
+                              messageWhenValueMissing="Required"
+                              value="{!v.appliedPromotion}">
+                            <aura:iteration items="{!v.promotions}" var="option">
+                                <option value="{!option.PriceRecordCode__c}" selected="{!option.selected}" >{!option.PriceRecordDescription__c}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="searchButton slds-m-top_large slds-text-align--right" size="12" mediumDeviceSize="6" largeDeviceSize="4">
+                   <a href="javascript:void(0)" title="All Promotions" data-url="/pricing" onclick="{!c.gotoURL}">
+                       <span class="slds-button dal-button-color_darkGray slds-text-heading_small"><lightning:icon size="x-small" iconName="utility:chevronleft" /> {!v.labelBack}</span>
+                   </a>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" class="headerBottom slds-grid slds-wrap slds-p-around_medium">
+            <div class="pricingOutputData slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_1-of-1">
+                <label>Special Pricing</label>
+                <span>{!v.selectedPromotionObject.PriceRecordCode__c}</span>
+            </div>
+            <div class="pricingOutputData slds-large-size_6-of-12 slds-medium-size_6-of-12 slds-size_1-of-1">
+                <label>Customer Info</label>
+                <span>{!v.selectedPromotionObject.PriceRecordDescription__c}</span>
+            </div>
+            <div class="pricingOutputData slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_1-of-1">
+                <label>Start Date</label>
+                <lightning:formattedDateTime value="{!v.selectedPromotionObject.ValidFrom__c}" month="2-digit" day="2-digit" year="numeric" timeZone="UTC"/>
+            </div>
+            <div class="pricingOutputData slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_1-of-1">
+                <label>End Date</label>
+                <lightning:formattedDateTime value="{!v.selectedPromotionObject.ValidTo__c}" month="2-digit" day="2-digit" year="numeric" timeZone="UTC"/>
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

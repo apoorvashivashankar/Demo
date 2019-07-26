@@ -1,0 +1,145 @@
+<!--
+ - Created by 7Summits on 5/10/18.
+ -->
+
+<aura:component description="Dal_SSC_ScheduleByLineItemSchedDel">
+    <!-- passed in attributes -->
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="currentOrder" type="Map" default="{}"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="deliveryId" type="String" default=""/>
+    <aura:attribute name="deliveryPos" type="String" default=""/>
+    <aura:attribute name="skus" type="List" default="[]"/>
+    <aura:attribute name="skusSelected" type="List" default="[]"/>
+
+    <aura:attribute name="deliveryDate" type="String" default="" />
+    <aura:attribute name="deliveryDateFormatted" type="Object" default="Monday, January 12" />
+    <aura:attribute name="deliveryDateErrors" type="List" default="[]" />
+
+    <aura:attribute name="shipToName" type="String" default=""/>
+    <aura:attribute name="shipToName2" type="String" default=""/>
+    <aura:attribute name="shipToCareOf" type="String" default=""/>
+    <aura:attribute name="shipToStreet1" type="String" default=""/>
+    <aura:attribute name="shipToStreet2" type="String" default=""/>
+    <aura:attribute name="shipToCity" type="String" default=""/>
+    <aura:attribute name="shipToState" type="String" default=""/>
+    <aura:attribute name="shipToZipcode" type="String" default=""/>
+    <aura:attribute name="shipToCountry" type="String" default=""/>
+    <aura:attribute name="baseModal" type="Map" />
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+    <!-- labels -->
+    <aura:attribute name="labelSelectDay" type="String" default="1. Request ship date - sales center will call you to confirm shipping availability"/>
+    <aura:attribute name="labelDeliveryLocation" type="String" default="2. Where should these items be delivered?"/>
+    <aura:attribute name="labelChange" type="String" default="Change"/>
+
+    <!-- events -->
+    <aura:handler event="c:Dal_ChooseShippingAddressEvt" action="{!c.handleChooseDeliveryAddressEvent}"/>
+
+    <!-- ******************** -->
+    <!-- Delivery -->
+    <!-- ******************** -->
+    <lightning:layout multipleRows="true">
+
+        <!-- ******************** -->
+        <!-- header data -->
+        <!-- ******************** -->
+        <lightning:layoutItem class="slds-p-bottom_x-large" size="12">
+            <h4 class="bold">Delivery #{!v.deliveryPos} <span>– {!v.skusSelected.length} items</span></h4>
+            <p class="slds-form-element__label slds-p-top_xx-small">SKU #s:
+                <aura:iteration items="{!v.skusSelected}" var="sku" indexVar="index">
+                    {!sku.sku}<aura:if isTrue="{!((v.skusSelected.length - 1) gt index)}">, </aura:if>
+                </aura:iteration>
+            </p>
+            <a href="javascript:void(0)" onclick="{!c.gotoSelectItems}">Select Items</a>
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- end header data -->
+        <!-- ******************** -->
+
+        <lightning:layoutItem class="dal-form dal-form-order" size="12" >
+
+            <!-- ******************** -->
+            <!-- select date -->
+            <!-- ******************** -->
+            <lightning:layout >
+                <lightning:layoutItem size="12">
+                    <h4 class="bold">{!v.labelSelectDay}</h4>
+
+                    <lightning:layout class="dal-selectDate slds-m-top_small slds-m-left_small slds-p-around_medium" verticalAlign="center">
+                        <lightning:layoutItem size="12">
+                            <!--<lightning:input class="dal-datePicker" label="Change" id="dal-pickerDate" aura:id="requestPickupDate" type="date" onchange="{!c.handleDeliveryDateChange}" />-->
+                            <ui:inputDate aura:id="requestPickupDate" value="{!v.deliveryDate}" label="Change" displayDatePicker="true" class="dal-date-picker"
+                                          change="{!c.handleDeliveryDateChange}" />
+                            <h4 class="bold date-format">{!v.deliveryDateFormatted}</h4>
+                            <aura:if isTrue="{!v.deliveryDateErrors.length > 0}">
+                                <div class="slds-has-error">
+                                    <div class="slds-form-element__help">{!v.deliveryDateErrors[0].message}</div>
+                                </div>
+                            </aura:if>
+                            <!-- <ui:inputDate aura:id="requestPickupDate" label="" displayDatePicker="true" class="dal-date-picker"
+                                          value="{!v.deliveryDate}" change="{!c.handleDeliveryDateChange}" /> -->
+                        </lightning:layoutItem>
+                    </lightning:layout>
+ 
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- end select date -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- delivery location -->
+            <!-- ******************** -->
+            <lightning:layout class="slds-p-top_x-large">
+                <lightning:layoutItem size="12">
+                    <h4 class="bold">{!v.labelDeliveryLocation}</h4>
+
+                    <lightning:layout class="dal-shipTo slds-m-top_small slds-m-left_small slds-p-around_medium" verticalAlign="center">
+                        <div class="orderOutputData orderOutputData-stacked">
+                            <label class="bold">Ship-To Address:</label>
+                            <span>
+                                <aura:if isTrue="{!!empty(v.shipToName)}">{!v.shipToName}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.shipToName2)}">{! v.shipToName2}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.shipToCareOf)}">{!v.shipToCareOf}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.shipToStreet1)}">{!v.shipToStreet1}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.shipToStreet2)}">{!v.shipToStreet2}<br/></aura:if>
+                                <aura:if isTrue="{!and(v.shipToCity, v.shipToState)}">
+                                    {!v.shipToCity},&nbsp;{!v.shipToState}&nbsp;{!v.shipToZipcode}&nbsp;{!v.shipToCountry}
+                                </aura:if>
+                            </span>
+                        </div>
+                        <a href="javascript:void(0);" onclick="{!c.changeShippingAddress}">{!v.labelChange}</a>
+                    </lightning:layout>
+
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- end delivery location -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- save/cancel -->
+            <!-- ******************** -->
+            <lightning:layout class="slds-m-top_x-large slds-p-top_medium slds-border_top" multipleRows="true">
+                <lightning:layoutItem size="12">
+                    <lightning:layout multipleRows="true" pullToBoundary="small" horizontalAlign="end" verticalAlign="center">
+                        <lightning:layoutItem class="slds-p-around_small dal-small-inputFull">
+                            <lightning:button label="Save Delivery" variant="brand" onclick="{!c.handleSaveDelivery}" disabled="{!v.deliveryDateErrors[0].message}"/>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- end save/cancel -->
+            <!-- ******************** -->
+
+        </lightning:layoutItem>
+
+    </lightning:layout>
+    <!-- ******************** -->
+    <!-- End Delivery -->
+    <!-- ******************** -->
+
+</aura:component>

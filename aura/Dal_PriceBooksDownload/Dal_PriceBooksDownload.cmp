@@ -1,0 +1,49 @@
+<!--
+ - Created by 7Summits on 4/26/18.
+ -->
+
+<aura:component description="Dal_PricingByMaterialHeader" controller="Dal_PricingListController" extends="c:Dal_Base">
+     <aura:attribute name="divisionCode" type="String" /> 
+     <aura:attribute name="selectedBrand" type="String" />
+     <aura:handler name="init" action="{!c.doinit}" value="{!this}" />
+<!--<lightning:select aura:id="appliedPromotion" label="{!v.labelAppliedPromo}" name="appliedPromotion" class="slds-p-around_small input-medium slds-size_1-of-1 slds-large-size_12-of-12"
+                              disabled="{!v.isPromotionSelectorLoading == true}"
+                              onchange="{!c.handleAppliedPromotionChange}"
+                              messageWhenValueMissing="Required"
+                              value="{!v.appliedPromotion}">
+                            <aura:iteration items="{!v.promotions}" var="option">
+                                <option value="{!option.PriceRecordCode__c}" selected="{!option.selected}" >{!option.PriceRecordDescription__c}</option>
+                            </aura:iteration>
+                        </lightning:select>-->
+    <lightning:select aura:id="selectedBrand" class="slds-size_1-of-3" name="select1" label="Brand" required="true" value="{!v.selectedBrand}">
+		<aura:if isTrue="{!v.divisionCode == '40'}">
+             <option value="Daltile" >Daltile</option>
+        </aura:if>
+        <aura:if isTrue="{!v.divisionCode == '41'}">
+             <option value="American Olean" >American Olean</option>
+             <option value="Marazzi">Marazzi</option>
+        </aura:if>
+    </lightning:select>
+    <br />
+    <div style="border-bottom: 10px solid #ccc;"></div>
+    <br />
+    
+    <div class="slds-box" style="background-color:#eeeeee;">
+      <lightning:layout multipleRows="true">
+        <lightning:layoutItem size="12" smallDeviceSize="5" mediumDeviceSize="4" largeDeviceSize ="3"  flexibility="auto">
+			<p class="slds-text-heading_medium slds-p-top_small slds-p-bottom_small slds-p-left_large downloadHeading" style="white-space:nowrap;"><b>Download Price Book</b></p>
+            <div style="white-space:nowrap;" class="slds-text-align_center slds-text-title_bold slds-text-heading_medium">
+                <p>PDF version of the price</p>   
+                <p>book is available by clicking</p>
+                <p>the logo.</p>
+            </div>            
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" class="slds-text-align_center slds-p-around_large" mediumDeviceSize="3" largeDeviceSize ="2" smallDeviceSize="1" flexibility="auto">
+        		<!-- lightning:icon iconName="doctype:pdf" size="large" alternativeText="Pdf" class="myUniqueClass slds-p-around_large" onclick="{!c.downloadPDF}"/ -->
+                <lightning:button variant="base" title="Pdf" onclick="{!c.downloadPDF}" >
+                    <lightning:icon iconName="doctype:pdf" size="large" alternativeText="Pdf"  />
+                </lightning:button>
+        </lightning:layoutItem>
+    </lightning:layout>
+    </div>
+</aura:component>

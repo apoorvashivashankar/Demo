@@ -1,0 +1,34 @@
+<!--
+ - Created by abdoundure on 2/21/18.
+ -->
+
+<aura:component description="Dal_CTAItem" extends="c:Dal_Base">
+
+    <aura:attribute name="title" type="String" default="" />
+    <aura:attribute name="subTitle" type="String" default="" />
+    <aura:attribute name="url" type="String" default="" />
+    <aura:attribute name="openInNewWindow" type="Boolean" default="false" />
+    <aura:attribute name="icon" type="String" default="" />
+
+    <aura:attribute name="backgroundColor" type="String" default="" />
+    <aura:attribute name="borderColor" type="String" default=""/>
+    <aura:attribute name="iconColor" type="String" default=""/>
+
+    <a href="javascript:void(0)" class="item slds-grid slds-grid--vertical-align-center slds-wrap"
+       data-url="{!v.url}"
+       onclick="{!c.gotoURL}"
+       style="{!'background-color:' + v.backgroundColor + ';border-bottom:10px solid ' + v.borderColor }"
+       target="{!v.openInNewWindow == true ? '_blank' : '_self'}">
+
+        <aura:if isTrue="{!v.icon != ''}">
+            <lightning:layoutItem class="slds-p-vertical_x-small" size="12">
+                <i aura:id="icon" style="{!'color:' + v.iconColor}" class="{!'icon fa fa-' + v.icon}" aria-hidden="true"></i>
+            </lightning:layoutItem>
+        </aura:if>
+
+        <lightning:layoutItem class="slds-p-vertical_x-small slds-p-horizontal_medium" size="12">
+            <h4>{!v.title}</h4>
+        </lightning:layoutItem>
+
+    </a>
+</aura:component>

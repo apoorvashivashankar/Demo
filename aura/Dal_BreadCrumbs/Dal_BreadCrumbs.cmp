@@ -1,0 +1,106 @@
+<!--
+ - Created by abdoundure on 3/5/18.
+ -->
+
+<aura:component description="Dal_BreadCrumbs" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" extends="c:Dal_Base">
+
+    <aura:attribute name="link1URL" type="String" default="/" />
+    <aura:attribute name="link1Label" type="String" default="Home" />
+    <aura:attribute name="link1IsLink" type="Boolean" default="true" />
+
+    <aura:attribute name="link2URL" type="String" default="" />
+    <aura:attribute name="link2Label" type="String" default="" />
+    <aura:attribute name="link2IsLink" type="Boolean" default="false" />
+
+    <aura:attribute name="link3URL" type="String" default="" />
+    <aura:attribute name="link3Label" type="String" default="" />
+    <aura:attribute name="link3IsLink" type="Boolean" default="false" />
+
+    <aura:attribute name="link4URL" type="String" default="" />
+    <aura:attribute name="link4Label" type="String" default="" />
+    <aura:attribute name="link4IsLink" type="Boolean" default="false" />
+
+    <aura:attribute name="link5URL" type="String" default="" />
+    <aura:attribute name="link5Label" type="String" default="" />
+    <aura:attribute name="link5IsLink" type="Boolean" default="false" />
+
+    <aura:attribute name="className" type="String" />
+
+    <!-- Handling Event -->
+    <aura:handler event="c:Dal_SSC_InventorySearchCurrentPage" action="{!c.handlePositionEvent}"/>
+    <aura:handler event="c:Dal_SSC_LeadManagement_BreadCrumbEvent" action="{!c.handlePageChange}"/>
+    <aura:handler event="c:Dal_SSC_LeadMgmtOpp_BreadCrumbEvent" action="{!c.handleOppPageChange}"/>
+    <aura:handler event="c:Dal_SSC_CreateOrderProductPageChange" action="{!c.handleCreateOrderMyProductList}"/>
+
+    <aura:attribute name="sizeOfSelectedProducts" type="Integer" default="0" />
+    <aura:attribute name="profileName" type="String" default="" />
+    <aura:attribute name="flag" type="Boolean" default="true" />
+    <aura:handler event="c:Dal_SSC_CreateOrderProdListCaptureEvt" action="{!c.updateProductList}"/>
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+
+    <!-- Body -->
+    <div class="slds-grid">
+
+        <lightning:layout>
+
+            <lightning:layoutItem class="breadcrumbWrapper" size="12" flexibility="grow">
+
+               <aura:if isTrue="{!v.link1IsLink}">
+                  <a href="javascript:void(0)" data-url="{!v.link1URL}" onclick="{!c.gotoURL}" >{!v.link1Label}</a>
+               </aura:if>
+
+                <aura:if isTrue="{!v.link2IsLink}">
+                    <span class="slds-p-horizontal_xx-small"> / </span>
+                    <a href="javascript:void(0)" data-url="{!v.link2URL}" onclick="{!c.gotoURL}">{!v.link2Label} </a>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!and(!empty(v.link2Label))}">
+                            <span class="slds-p-horizontal_xx-small"> / </span>
+                            <span>{!v.link2Label}</span>
+                        </aura:if>
+
+                    </aura:set>
+                </aura:if>
+
+                <aura:if isTrue="{!v.link3IsLink}">
+                    <span class="slds-p-horizontal_xx-small"> / </span>
+                    <a href="javascript:void(0)" data-url="{!v.link3URL}" onclick="{!c.gotoURL}">{!v.link3Label} </a>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!and(!empty(v.link3Label))}">
+                            <span class="slds-p-horizontal_xx-small"> / </span>
+                            <span>{!v.link3Label}</span>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+                <aura:if isTrue="{!v.link4IsLink}">
+                    <span class="slds-p-horizontal_xx-small"> / </span>
+                    <a href="javascript:void(0)" data-url="{!v.link4URL}" onclick="{!c.gotoURL}">{!v.link4Label} </a>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!and(!empty(v.link4Label))}">
+                            <span class="slds-p-horizontal_xx-small"> / </span>
+                            <span>{!v.link4Label}</span>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+                <aura:if isTrue="{!v.link5IsLink}">
+                    <span class="slds-p-horizontal_xx-small"> / </span>
+                    <a href="javascript:void(0)" data-url="{!v.link5URL}" onclick="{!c.gotoURL}">{!v.link5Label} </a>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!and(!empty(v.link5Label))}">
+                            <span class="slds-p-horizontal_xx-small"> / </span>
+                            <span>{!v.link5Label}</span>
+                        </aura:if>
+
+                    </aura:set>
+                </aura:if>
+
+            </lightning:layoutItem>
+
+        </lightning:layout>
+
+    </div>
+
+</aura:component>

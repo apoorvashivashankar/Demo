@@ -1,0 +1,16 @@
+<apex:page lightningStylesheets="true"  standardStylesheets="true"> 
+        <apex:sectionHeader title="Account" subtitle="Choose to setup a new Person Account or request the approval of a new Customer Account" />
+	<apex:outputPanel >        
+        <apex:form >
+            <apex:pageBlock title="Select Account Type">
+                <apex:pageBlockSection title="Person Account">
+                    <apex:outputLink value="{!$Page.newPersonAccount}" rendered="{!$User.UIThemeDisplayed == 'Theme3'}">New Person Account</apex:outputLink>
+                    <apex:outputLink value="{!$Page.newPersonAccountLightning}" rendered="{!$User.UIThemeDisplayed != 'Theme3'}">New Person Account</apex:outputLink>	
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="New Customer Account">
+                    <apex:outputLink value="{!$Page.CustomerRequestNew}" >New Customer Account Request</apex:outputLink>    
+                </apex:pageBlockSection>       
+            </apex:pageBlock>
+        </apex:form>    
+    </apex:outputPanel>
+</apex:page>

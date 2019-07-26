@@ -1,0 +1,88 @@
+<!--
+ - Created by brianpoulsen on 11/8/17.
+ -->
+
+<aura:component description="Peak_Accordion"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+                access="global">
+
+
+    <ul class="slds-accordion">
+        <li class="slds-accordion__list-item">
+            <section class="slds-accordion__section">
+                <div class="slds-accordion__summary">
+                    <h3 class="slds-text-heading_small slds-accordion__summary-heading">
+                        <a href="javascript:void(0)" onclick="{!c.handleClick}" id="accordion-details-01"
+                           class="slds-button_reset slds-accordion__summary-action">
+                            <lightning:icon size="x-small" aura:id="accordion-details-01"
+                                            iconName="utility:chevronright" class="slds-show slds-button__icon--left"/>
+                            <lightning:icon size="x-small" aura:id="accordion-details-01" iconName="utility:chevrondown"
+                                            class="slds-hide slds-button__icon--left"/>
+                            Accordion summary ONE
+                        </a>
+                    </h3>
+                </div>
+                <div class="slds-accordion__content slds-hide" aura:id="accordion-details-01">Accordion summary ONE Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit. Sed pretium interdum commodo. In nec consequat enim. Integer ut
+                    viverra odio, id ultricies lorem. Phasellus tincidunt gravida sapien, quis luctus lacus viverra
+                    vitae. Curabitur tortor nisi, consequat et nunc ac, laoreet tempor massa. Quisque sagittis placerat
+                    elementum. Nullam blandit interdum mauris rhoncus condimentum. Quisque tincidunt mattis faucibus.
+                    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean
+                    suscipit sed mauris eu bibendum.
+                </div>
+            </section>
+        </li>
+
+        <li class="slds-accordion__list-item">
+            <section class="slds-accordion__section">
+                <div class="slds-accordion__summary">
+                    <h3 class="slds-text-heading_small slds-accordion__summary-heading">
+                        <a href="javascript:void(0)" onclick="{!c.handleClick}" id="accordion-details-02"
+                           class="slds-button_reset slds-accordion__summary-action">
+                            <lightning:icon size="x-small" aura:id="accordion-details-02"
+                                            iconName="utility:chevronright" class="slds-show slds-button__icon--left"/>
+                            <lightning:icon size="x-small" aura:id="accordion-details-02" iconName="utility:chevrondown"
+                                            class="slds-hide slds-button__icon--left"/>
+                            Accordion summary TWO
+                        </a>
+                    </h3>
+                </div>
+                <div class="slds-accordion__content slds-hide" aura:id="accordion-details-02">Accordion summary TWO Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit. Sed pretium interdum commodo. In nec consequat enim. Integer ut
+                    viverra odio, id ultricies lorem. Phasellus tincidunt gravida sapien, quis luctus lacus viverra
+                    vitae. Curabitur tortor nisi, consequat et nunc ac, laoreet tempor massa. Quisque sagittis placerat
+                    elementum. Nullam blandit interdum mauris rhoncus condimentum. Quisque tincidunt mattis faucibus.
+                    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean
+                    suscipit sed mauris eu bibendum.
+                </div>
+            </section>
+        </li>
+
+        <li class="slds-accordion__list-item">
+            <section class="slds-accordion__section">
+                <div class="slds-accordion__summary">
+                    <h3 class="slds-text-heading_small slds-accordion__summary-heading">
+                        <a href="javascript:void(0)" onclick="{!c.handleClick}" id="accordion-details-03"
+                           class="slds-button_reset slds-accordion__summary-action">
+                            <lightning:icon size="x-small" aura:id="accordion-details-03"
+                                            iconName="utility:chevronright" class="slds-show slds-button__icon--left"/>
+                            <lightning:icon size="x-small" aura:id="accordion-details-03" iconName="utility:chevrondown"
+                                            class="slds-hide slds-button__icon--left"/>
+                            Accordion summary THREE
+                        </a>
+                    </h3>
+                </div>
+                <div class="slds-accordion__content slds-hide" aura:id="accordion-details-03">Accordion summary THREE Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit. Sed pretium interdum commodo. In nec consequat enim. Integer ut
+                    viverra odio, id ultricies lorem. Phasellus tincidunt gravida sapien, quis luctus lacus viverra
+                    vitae. Curabitur tortor nisi, consequat et nunc ac, laoreet tempor massa. Quisque sagittis placerat
+                    elementum. Nullam blandit interdum mauris rhoncus condimentum. Quisque tincidunt mattis faucibus.
+                    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean
+                    suscipit sed mauris eu bibendum.
+                </div>
+            </section>
+        </li>
+
+    </ul>
+
+</aura:component>

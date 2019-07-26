@@ -1,0 +1,86 @@
+/**
+ * Created by ranja on 01-11-2018.
+ */
+.THIS {
+}
+
+.THIS.inventory-table-custom {
+    max-width : 400px;
+}
+
+.THIS.table-padding-custom {
+    border-top : none;
+    border-bottom : none;
+    background : transparent;
+    margin-left : 25px;
+    border-top: none!important;
+    border-bottom: none;
+}
+
+.THIS .color-green {
+    color : green;
+}
+
+.THIS td {
+    padding : 15px !important;
+}
+
+.THIS th {
+    padding : 15px !important;
+}
+
+.THIS .table-cell-border-bottom {
+    border-bottom: 1px solid black;
+}
+
+.THIS .slds-wrap-cell-text {
+    width: 11rem !important;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.THIS .modal-footer-close {
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 100%;
+    padding-top : 2px;
+    padding-bottom : 2px;
+}
+
+.THIS .distance-from-home .slds-form-element__label{
+    display: none;
+}
+
+.THIS .dal-view-cart-navigational-keys {
+    font-size: 0.9rem;
+}
+
+.THIS .dal-createorder-cancel-button {
+    color : rgb(166, 26, 20) !important;
+}
+
+.THIS .navigational-button-label {
+    padding-top : 2px;
+}
+
+.THIS .dal-page-number {
+    padding-left : 13px;
+    padding-right : 13px;
+    border : 1px solid black;
+    margin-right : 2px;
+    margin-left : 2px;
+    border : inherit;
+    background-color : #FCFBFB;
+}
+
+.THIS .bkg-transparent {
+  background: transparent none;
+}
+
+.THIS .change-miles-spinner {
+
+}
+
+.THIS .dal-hide-label label{
+    display: none;
+}

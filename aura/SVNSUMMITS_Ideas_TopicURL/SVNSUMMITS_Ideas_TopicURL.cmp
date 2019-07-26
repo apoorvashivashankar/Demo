@@ -1,0 +1,12 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component access="global">
+	<aura:attribute name="topicName" type="String" access="global"/>
+    <aura:attribute name="sitePath" type="String" access="global"/>
+    <aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="topicNameToId" type="Map" access="global"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <ui:outputURL aura:id="topicLink" class="slds-truncate topic-link" title="{!v.topicName}"/>
+
+</aura:component>

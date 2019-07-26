@@ -1,0 +1,92 @@
+<apex:page standardstylesheets="false" showheader="false">
+    <apex:stylesheet value="/resources/htdocs/css/basic.css"/>
+    
+    <form action="https://www.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8" method="POST">
+        
+        <input type="hidden" name="orgid" value="00DA0000000IxJY"/>
+        <input type="hidden" name="retURL" value="https://dal-tile--dttest--c.cs45.visual.force.com/apex/CreateACase"/>
+        
+        <!--  ----------------------------------------------------------------------  -->
+        <!--  NOTE: These fields are optional debugging elements. Please uncomment    -->
+        <!--  these lines if you wish to test in debug mode.                          -->
+        <!--  <input type="hidden" name="debug" value=1>                              -->
+        <!--  <input type="hidden" name="debugEmail" value="jon.rust@daltile.com">    -->
+        <!--  ----------------------------------------------------------------------  -->
+        
+        <label for="name">Contact Name: </label><input  id="name" maxlength="80" name="name" size="20" type="text" /><br>
+        <br></br>
+    <label for="type">Type: </label><select  id="type" name="type">
+    <option value="">--None--</option>
+    <option value="1- Data / Layouts / Pages">1- Data / Layouts / Pages</option>
+    <option value="1- Data loading">1- Data loading</option>
+    <option value="1- Gallery process">1- Gallery process</option>
+    <option value="1- Quote / Order">1- Quote / Order</option>
+    <option value="1- Reporting /Dashboard">1- Reporting /Dashboard</option>
+    <option value="1- User / Roles / Profiles">1- User / Roles / Profiles</option>
+    <option value="1- Workflow Changes">1- Workflow Changes</option>
+    <option value="Chatter - user/group/post/changes">Chatter - user/group/post/changes</option>
+    <option value="Customer Workflow">Customer Workflow</option>
+    <option value="Data Changes/Issues/Load">Data Changes/Issues/Load</option>
+    <option value="Emails - Questions / Template">Emails - Questions / Template</option>
+    <option value="Feature Request">Feature Request</option>
+    <option value="Gallery Visitation">Gallery Visitation</option>
+    <option value="General Question">General Question</option>
+    <option value="ISR set up / help">ISR set up / help</option>
+    <option value="Lead Support">Lead Support</option>
+    <option value="Mobile Issue / Instructions">Mobile Issue / Instructions</option>
+    <option value="New SPN user/ User Changes">New SPN user/ User Changes</option>
+    <option value="Opp Team Set Up/ Questions">Opp Team Set Up/ Questions</option>
+    <option value="Other">Other</option>
+    <option value="Partner Portal Support">Partner Portal Support</option>
+    <option value="Project">Project</option>
+    <option value="Reporting / Dashboard">Reporting / Dashboard</option>
+    <option value="Reset Password">Reset Password</option>
+    <option value="Support">Support</option>
+    <option value="Training / Documentation">Training / Documentation</option>
+    <option value="Other Reporting">Other Reporting</option>
+    <option value="Empower Support">Empower Support</option>
+    <option value="Meeting">Meeting</option>
+    <option value="Project Mgmt">Project Mgmt</option>
+    <option value="lightning configuration">lightning configuration</option>
+    </select><br></br>
+
+<br><label for="subject">Subject: </label>
+<input  id="subject" maxlength="80" name="subject" size="20" type="text" /></br>
+
+<br></br>
+
+<label for="description">Description: </label>
+<textarea name="description" rows="20" cols="50">
+</textarea></br>
+
+<br></br>
+
+<label for="status">Status: </label>
+<select  id="status" name="status">
+    <option value="">--None--</option>
+    <option value="Closed">Closed</option>
+    <option value="In Progress">In Progress</option>
+    <option value="New">New</option>
+    <option value="On Hold">On Hold</option>
+</select><br></br>
+
+<br></br>
+
+<label for="reason">Case Reason</label>
+<select id="reason" name="reason">
+    <option value="">-- Assign To Jon --</option>
+</select><br></br>
+
+<br></br>
+
+Minutes: <input  id="00NF000000846Q3" name="00NF000000846Q3" size="20" type="text" />
+<br></br>
+<br></br>
+
+<input type="hidden"  id="external" name="external" value="1" />
+
+<br></br>                  
+
+<input type="submit" name="submit"/>
+</form>
+</apex:page>

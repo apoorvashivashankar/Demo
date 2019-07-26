@@ -1,0 +1,62 @@
+<!--
+ - Created by 7Summits on 5/7/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderSave" extends="c:Dal_ModalBase" controller="Dal_OrderProcessController">
+    <aura:attribute name="title" type="String" default="Save Order"/>
+    <aura:attribute name="poNumber" type="String" default=""/>
+    <aura:attribute name="jobName" type="String" default=""/>
+
+    <!-- internal attribute -->
+    <aura:attribute name="labelPoNumber" type="String" default="Purchase Order #" />
+    <aura:attribute name="labelJobName" type="String" default="Job Name" />
+    <aura:attribute name="labelClose" type="String" default="Cancel" />
+    <aura:attribute name="labelSave" type="String" default="Save Order" />
+
+    <!-- events -->
+    <aura:registerEvent name="dalDistOrderSaveEvt" type="c:Dal_Dist_OrderSaveEvt"/>
+
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.title}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+
+    <lightning:layout class="dal-form dal-form-order slds-p-vertical_small" multipleRows="true">
+
+        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12">
+            <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="warning" closable="false">
+                Please enter a Purchase Order # and an optional Job Name to save this order. Saved orders can
+                be resumed from the <a href="javascript:void(0)" onclick="{!c.handleGoToSavedOrders}" tabindex="-1">Orders screen</a>.
+            </ui:message>
+        </lightning:layoutItem>
+
+        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+            <lightning:input aura:id="poNumber" label="{!v.labelPoNumber}" name="poNumber" class="slds-p-around_small input-large" value="{!v.poNumber}"
+                 required="true" messageWhenValueMissing="Required" pattern="[0-9a-zA-Z ]+" messageWhenPatternMismatch="Special characters not allowed" maxlength="35"  />
+        </lightning:layoutItem>
+
+        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+            <div class="slds-is-relative">
+                <lightning:input aura:id="jobName" name="jobName" label="{!v.labelJobName}" class="slds-p-around_small input-large" value="{!v.jobName}" maxlength="40" />
+                <span class="jobNameOptionalText">(Optional)</span>
+            </div>
+        </lightning:layoutItem>
+
+        <lightning:layoutItem size="12">
+            <lightning:layout class="footer-bar slds-m-top_medium slds-border_top slds-p-top_small slds-p-horizontal_large" horizontalAlign="end" multipleRows="true">
+                <lightning:layoutItem class="slds-p-horizontal_x-small slds-p-vertical_small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                    <lightning:button class="dal-small-fullWidth" variant="neutral" label="{!v.labelClose}" onclick="{!c.handleClose}" />
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-horizontal_x-small slds-p-vertical_small slds-medium-text-align_right slds-large-text-align_right" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                    <lightning:button class="dal-small-fullWidth" variant="brand" label="{!v.labelSave}" onclick="{!c.handleSave}" />
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+</aura:component>

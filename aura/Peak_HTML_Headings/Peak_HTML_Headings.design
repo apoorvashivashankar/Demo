@@ -1,0 +1,12 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ -->
+
+<design:component label="7S HTML Headings">
+    <design:attribute name="headingTag" datasource="H1 - Page Heading, H2 - Section Heading, H3 - Subsection Heading, H4 - Paragraph Heading, H5 - Small Heading" label="Choose Heading Option"/>
+    <design:attribute name="headingText" label="Heading Text"/>
+    <design:attribute name="headingAlignment" datasource="left, center, right" default="left" label="Alignment"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

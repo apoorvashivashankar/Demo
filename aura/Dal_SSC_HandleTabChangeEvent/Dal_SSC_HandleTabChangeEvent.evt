@@ -1,0 +1,7 @@
+<!--
+ - Created by ranja on 19-12-2018.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_HandleTabChangeEvent">
+
+</aura:event>

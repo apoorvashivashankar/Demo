@@ -1,0 +1,11 @@
+<!--
+ - Created by 7Summits on 4/11/18.
+ -->
+<aura:component description="Dal_SSC_Pricebook" extends="c:Dal_Base" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="ButtonLabel" type="String" default="Download Pricebook" />
+    <lightning:layout >
+       <lightning:layoutItem size="12" padding="around-medium">
+           <lightning:button class="bold slds-button--neutral" type="button" label="{!v.ButtonLabel}" onclick="{!c.getPriceBook}" />
+       </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

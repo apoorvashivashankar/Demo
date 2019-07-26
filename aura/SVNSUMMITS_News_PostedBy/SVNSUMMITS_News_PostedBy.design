@@ -1,0 +1,8 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S News Posted By">
+    <design:attribute name="debugMode" label="Debug Mode" description="Enable or disable debug mode, enabling debug mode will write messages to the browser console for debugging errors" />
+	<design:attribute name="showNickName" label="Nick Name" description=""/>
+    <design:attribute name="showMemberSince" label="Member Since" description=""/>
+	<design:attribute name="profileURL" label="User Profile URL" description="Enter the page name for User Detail page" default="/profile/"/>
+    <design:attribute name="recordId" default="{!recordId}" label="Record Id" description="Set to {!recordId} to pass the page's record Id." required="true"/>
+</design:component>

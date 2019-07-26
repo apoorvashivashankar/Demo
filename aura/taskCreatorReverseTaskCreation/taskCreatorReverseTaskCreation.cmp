@@ -1,0 +1,12 @@
+<aura:component controller="TaskCreator" implements ="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction">
+    <!--<aura:handler name="init" value="{!this}" action="{!c.doInit}"/> -->
+        <div>
+            <center>
+        You are about to delete all tasks that have not been started.
+
+           <br></br>
+           <lightning:button variant="brand" label="Delete Tasks" onclick="{! c.doInit }" />    
+                
+            </center>
+    </div>
+</aura:component>

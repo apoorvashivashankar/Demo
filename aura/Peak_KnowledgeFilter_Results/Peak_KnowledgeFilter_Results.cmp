@@ -1,0 +1,103 @@
+<!--
+ - Created by 7Summits on 7/20/17.
+ -->
+<aura:component description="Peak_KnowledgeFilter_Results">
+
+    <!-- Passed in attributes -->
+    <aura:attribute name="communityBaseUrl" type="String" default="" />
+    <aura:attribute name="results" type="List" default="[]" />
+    <aura:attribute name="isSearching" type="Boolean" default="true" />
+    <aura:attribute name="searchString" type="String" default="" />
+    <aura:attribute name="createdDateFormat" type="String" default="DD-MMM-YYYY" />
+    <aura:attribute name="articleUrlPrefix" type="String" default="/s/article" />
+
+    <!-- Labels -->
+    <aura:attribute name="peak_knowledgeFilter_articleLabel" type="String" default="{!$Label.c.peak_knowledgeFilter_articleLabel}" access="private" />
+    <aura:attribute name="peak_knowledgeFilter_viewsLabel" type="String" default="{!$Label.c.peak_knowledgeFilter_viewsLabel}" access="private" />
+    <aura:attribute name="peak_knowledgeFilter_dateCreatedLabel" type="String" default="{!$Label.c.peak_knowledgeFilter_dateCreatedLabel}" access="private" />
+    <aura:attribute name="peak_knowledgeFilter_noResultsLabel" type="String" default="{!$Label.c.peak_knowledgeFilter_noResultsLabel}" access="private" />
+    <!--<aura:attribute name="peak_knowledgeFilter_attachmentsLabel" type="String" default="Attachments" />-->
+
+    <!-- Make sure we have result, if not display no results message -->
+    <aura:if isTrue="{!or(v.isSearching eq true, v.results.length gt 0)}">
+
+            <aura:if isTrue="{!v.isSearching == false}">
+
+                <table class="slds-table slds-no-row-hover slds-table_bordered">
+
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th scope="col" class="slds-cell-wrap slds-cell-buffer_right">
+                                <div title="{!v.peak_knowledgeFilter_articleLabel}">{!v.peak_knowledgeFilter_articleLabel}</div>
+                            </th>
+                            <th scope="col" class="slds-cell-wrap slds-cell-buffer_right">
+                                <div title="{!v.peak_knowledgeFilter_viewsLabel}">{!v.peak_knowledgeFilter_viewsLabel}</div>
+                            </th>
+                            <th scope="col" class="slds-cell-wrap slds-cell-buffer_right">
+                                <div title="{!v.peak_knowledgeFilter_dateCreatedLabel}">{!v.peak_knowledgeFilter_dateCreatedLabel}</div>
+                            </th>
+                            <!--<th scope="col" class="slds-cell-wrap slds-cell-buffer_right">-->
+                            <!--<div title="{!v.peak_knowledgeFilter_attachmentsLabel}">{!v.peak_knowledgeFilter_attachmentsLabel}</div>-->
+                            <!--</th>-->
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <aura:iteration items="{!v.results}" var="result" indexVar="index">
+                            <tr>
+                                <th scope="row" data-label="{!v.peak_knowledgeFilter_articleLabel}" class="slds-cell-wrap slds-cell-buffer_right">
+                                    <div><a href="javascript:void(0)" data-id="{!result.id}" onclick="{!c.recordClick}">{!result.title}</a></div>
+                                    <ul class="slds-list_horizontal slds-has-block-links slds-m-top_x-small peak_knowledgeFilter_topicsList">
+                                        <aura:iteration items="{!result.topics}" var="topic" indexVar="index">
+                                            <li>
+                                                <a class="slds-text-color_weak" href="javascript:void(0)" data-id="{!topic.id}" onclick="{!c.recordClick}">{!(index > 0) ? (', ' + topic.name) : topic.name}</a>
+                                            </li>
+                                        </aura:iteration>
+                                    </ul>
+                                </th>
+                                <td data-label="{!v.peak_knowledgeFilter_viewsLabel}" class="slds-cell-wrap slds-cell-buffer_right">
+                                    <div>{!result.viewCount}</div>
+                                </td>
+                                <td data-label="{!v.peak_knowledgeFilter_dateCreatedLabel}" class="slds-cell-wrap slds-cell-buffer_right">
+                                    <div><ui:outputDateTime value="{!result.lastModifiedDate}" format="{!v.createdDateFormat}"/> </div>
+                                </td>
+                                <!--<td data-label="{!v.peak_knowledgeFilter_attachmentsLabel}" class="slds-cell-wrap slds-cell-buffer_right">-->
+                                <!--<div>1</div>-->
+                                <!--</td>-->
+                            </tr>
+                        </aura:iteration>
+
+                    </tbody>
+
+                </table>
+
+                <aura:set attribute="else">
+                    <div>
+                        <div class="slds-p-vertical_xx-large">
+                            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                <span class="slds-assistive-text">Loading</span>
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                    </div>
+                </aura:set>
+
+            </aura:if>
+
+        <aura:set attribute="else">
+            <div class="forceSearchNoResults slds-text-body_regular forceSearchResultsMultiScope forceCommunityAllResults">
+                <div class="noResults slds-m-vertical_large slds-m-top_large slds-align_absolute-center slds-grid_vertical">
+                    <figure class="slds-p-bottom_x-large">
+                        <img data-aura-rendered-by="6:1022;a" src="/img/search/no-results.png" alt="No results found" />
+                    </figure>
+                    <div class="noResultsTitle slds-text-align_center slds-text-heading_large slds-text-color_weak slds-p-bottom_large">
+                        {!v.peak_knowledgeFilter_noResultsLabel} "{!v.searchString}"
+                    </div>
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>
+
+</aura:component>

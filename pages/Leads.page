@@ -1,0 +1,3 @@
+<apex:page showHeader="true" tabstyle="Lead"> 
+    <apex:ListViews type="Lead" /> 
+</apex:page>

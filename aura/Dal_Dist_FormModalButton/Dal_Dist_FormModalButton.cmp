@@ -1,0 +1,29 @@
+<!--
+ - Created by 7Summits on 2/14/18.
+ -->
+
+<aura:component description="Dal_Dist_FormModalButton" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="linkText" type="String" default="Create New User" required="true"/>
+    <aura:attribute name="linkType" type="String" default="button" required="true"/>
+    <aura:attribute name="content" type="String" default="c:Dal_Dist_RequestUser" required="true"/>
+    <aura:attribute name="customButtonClasses" type="String" default="" />
+    <aura:attribute name="customOverlayClasses" type="String" default="" />
+
+    <!-- private variables -->
+    <aura:attribute name="showCloseButton" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="overlay" type="map" access="private"/>
+
+    <!-- events -->
+    <aura:handler event="c:Dal_Dist_FormModalButton_CloseEvt" action="{!c.handleCloseModal}"/>
+
+    <!-- overlay -->
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+    <aura:if isTrue="{!v.linkType == 'button'}">
+        <lightning:button class="{!v.customButtonClasses}" name="modal" label="{!v.linkText}" onclick="{!c.handleShowModal}" />
+    <aura:set attribute="else">
+        <a href="javascript:void(0)" class="{!v.customButtonClasses}" onclick="{!c.handleShowModal}">{!v.linkText}</a>
+    </aura:set>
+    </aura:if>
+
+</aura:component>

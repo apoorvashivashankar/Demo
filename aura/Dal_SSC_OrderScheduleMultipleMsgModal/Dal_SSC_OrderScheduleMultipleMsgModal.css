@@ -1,0 +1,26 @@
+.THIS {
+}
+
+.THIS .dal-success-message {
+    font-size: large;
+}
+
+.THIS .modal-footer-close {
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 100%;
+    padding-top : 2px;
+    padding-bottom : 2px;
+}
+
+.THIS .button-bold {
+    font-weight: bold;
+}
+
+.THIS .spinner-fixed {
+    position : fixed;
+}
+
+.THIS .dal-modal-schedule-header{
+    float : left;
+}

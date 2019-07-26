@@ -1,0 +1,4 @@
+<design:component label="7S YouTube Embed"> 
+
+    <design:attribute name="VideoID" label="Video ID" />
+</design:component>

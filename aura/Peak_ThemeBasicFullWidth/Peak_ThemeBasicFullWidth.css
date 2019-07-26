@@ -1,0 +1,257 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS .slds-button_brand,
+.THIS .slds-button_neutral,
+.THIS .slds-button_inverse {
+  /*
+	slds-button--neutral
+	slds-button--brand
+	slds-button--inverse
+	*/
+  font-size: 100%;
+  padding: .75rem 2.25rem;
+  transition: all .25s;
+  border-radius: 0;
+}
+.THIS .slds-button_brand {
+  border: none;
+}
+.THIS .slds-button_inverse:link,
+.THIS .slds-button_inverse:visited {
+  color: token(colorTextInverse);
+}
+.THIS .slds-button_inverse:hover,
+.THIS .slds-button_inverse:active {
+  color: token(colorTextInverse);
+}
+.THIS .CCEVENTSLCSVNSUMMITS_Events_Header .slds-button,
+.THIS .CCEVENTSLCSVNSUMMITS_Event_Filter .slds-button,
+.THIS .CCNEWSLCSVNSUMMITS_News_DisplayMode .slds-button {
+  line-height: 2rem;
+  padding: 4px 16px;
+}
+.THIS h1 {
+  font-size: 2rem;
+}
+.THIS h2 {
+  font-size: 1.5rem;
+}
+.THIS h3 {
+  font-size: 1.25rem;
+}
+.THIS h4 {
+  font-size: 1.125rem;
+}
+.THIS h1,
+.THIS h2,
+.THIS h3,
+.THIS h4,
+.THIS h5,
+.THIS h6 {
+  font-weight: 700;
+}
+.THIS a:link,
+.THIS a:visited {
+  transition: all .33s;
+}
+.THIS a:link svg,
+.THIS a:visited svg {
+  fill: token(colorTextLink);
+}
+.THIS .CCEVENTSLCSVNSUMMITS_Event_Filter,
+.THIS .CCNEWSLCSVNSUMMITS_News_Filter {
+  margin-top: 0;
+}
+.THIS .cHeaderPanel {
+  background-color: #eee;
+  background-image: t('url(' + headerImageUrl + ')'); 
+}
+.THIS .cBrandingLogo {
+  background-image: t('url(' + brandLogoImage + ')');
+}
+.THIS .slds-container--x-large {
+  max-width: 1140px;
+}
+.THIS .cPeak_UtilityNavigation a svg {
+  fill: #fff;
+}
+.THIS .siteforceServiceBody {
+  position: relative;
+  z-index: 1;
+}
+.THIS .siteforceServiceBody .siteforceContentArea {
+  background: #ffffff;
+}
+.THIS .siteforceServiceBody .cCurtainContainer {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none;
+  opacity: 0;
+}
+.THIS .siteforceServiceBody .cHeaderPanel {
+  position: relative;
+  width: 100%;
+  -webkit-transition: background .8s ease;
+  transition: background .8s ease;
+  /* 7S replace and use token background-image: url();*/
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.THIS .siteforceServiceBody .cHeaderOverlay {
+  height: inherit;
+  background: rgba(0, 0, 0, 0.2);
+}
+.THIS .siteforceServiceBody .cHeaderLine {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 1rem .5rem 1rem .5rem;
+}
+.THIS .siteforceServiceBody .cCenterPanel {
+  max-width: 1140px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.THIS .siteforceServiceBody .cCenterPanel:focus {
+  outline: none;
+}
+.THIS .siteforceServiceBody .cFooterPanel .forceCommunityLanguagePicker .languagePickerMenu {
+  bottom: 30px;
+}
+.THIS .siteforceServiceBody .cAltToggleNav {
+  display: none;
+}
+.THIS .siteforceServiceBody .cAltToggleNav .slds-icon {
+  fill: rgba(250, 250, 250, 0.9);
+}
+.THIS .siteforceServiceBody .cTopLeftCon {
+  line-height: 3rem;
+  min-width: 2rem;
+  text-align: center;
+}
+.THIS .siteforceServiceBody .cNavBarCon {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.THIS .siteforceServiceBody .cBrandingProfile {
+  width: 25%;
+  text-align: center;
+}
+.THIS .siteforceServiceBody .cBrandingLogo {
+  position: relative;
+  display: block;
+  width: 80%;
+  height: 3rem;
+  outline: 0;
+  /* 7S Remove and replace with token background-image: url();*/
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.THIS .siteforceServiceBody .cBrandingLogo:focus {
+  box-shadow: 0 0 0 1px #2574a9;
+}
+.THIS .siteforceServiceBody .cSearchPublisher {
+  min-width: 2rem;
+}
+.THIS .siteforceServiceBody .cSearchPublisher .mobile-search-icon {
+  line-height: 3rem;
+  color: rgba(250, 250, 250, 0.9);
+}
+.THIS .siteforceServiceBody .cNotifications {
+  line-height: 3rem;
+  position: relative;
+  text-align: center;
+}
+.THIS .siteforceServiceBody .cNotifications .unsNotificationsCounter {
+  color: rgba(250, 250, 250, 0.9);
+}
+.THIS .siteforceServiceBody .cProfileCon {
+  line-height: 3rem;
+  height: 3rem;
+}
+.THIS .siteforceServiceBody.bodyMenuMobile {
+  position: absolute;
+  left: 0;
+}
+@media only screen and (min-width: 48em) {
+  .THIS .siteforceServiceBody .cTopLeftCon {
+    min-width: 0;
+  }
+  .THIS .siteforceServiceBody .search-wrapper,
+  .THIS .siteforceServiceBody .post-container {
+    margin: 0 auto;
+  }
+  .THIS .siteforceServiceBody .cBrandingProfile {
+    width: 15%;
+  }
+  .THIS .siteforceServiceBody .cProfileCon {
+    width: 10%;
+  }
+  .THIS .siteforceServiceBody .cSearchPublisher {
+    z-index: 10;
+    overflow: visible;
+    width: 70%;
+    height: 3rem;
+  }
+  .THIS .siteforceServiceBody .cNotifications {
+    width: 5%;
+    text-align: right;
+  }
+  .THIS .siteforceServiceBody .cHeaderLine {
+    padding: 2rem 1rem 4rem 1rem;
+  }
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .siteforceServiceBody .cNotifications {
+    width: 5%;
+  }
+  .THIS .siteforceServiceBody .cProfileCon {
+    width: 15%;
+  }
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .siteforceServiceBody .cProfileCon {
+    min-width: 2rem;
+    max-width: 25%;
+    margin: 0 .25rem;
+  }
+  .THIS .siteforceServiceBody .cBrandingLogo {
+    margin-left: .5rem;
+    background-position-x: left;
+  }
+  .THIS .siteforceServiceBody .cAltToggleNav {
+    display: block;
+  }
+  .THIS .siteforceServiceBody .forceCommunityGlobalNavigation {
+    overflow: hidden;
+    height: 0;
+    min-height: 0;
+  }
+  .THIS .siteforceServiceBody.bodyMenuMobile {
+    position: fixed;
+    top: 0;
+    left: 80%;
+    overflow: visible;
+    width: 100%;
+    -webkit-transition: -webkit-transform ease 0.35s, left ease 0.35s, top ease 0.35s, box-shadow ease 0.35s, right ease 0.35s;
+    transition: transform ease 0.35s, left ease 0.35s, top ease 0.35s, box-shadow ease 0.35s, right ease 0.35s;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+.THIS .siteforceServiceBody .forceRelatedListCardDesktop .card-header .card-header-right .small.oneActionsRibbon a,
+.THIS .siteforceServiceBody .forceRelatedListCardDesktop .card-body a.textUnderline.forceOutputLookup,
+.THIS .siteforceServiceBody .forceRelatedListCardDesktop .card-footer a {
+  color: #2574a9;
+}

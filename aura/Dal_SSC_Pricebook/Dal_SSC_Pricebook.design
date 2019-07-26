@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 4/11/18.
+ -->
+
+<design:component label="Dal SSC Pricebook">
+    <design:attribute label="Button Label" name="ButtonLabel" />
+</design:component>

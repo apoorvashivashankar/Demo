@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 4/23/18.
+ -->
+
+<design:component label="Dal Dist Product Availability">
+    <design:attribute name="allorder" label="All Order Button" />
+</design:component>

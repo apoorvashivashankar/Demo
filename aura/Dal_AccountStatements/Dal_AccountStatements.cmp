@@ -1,0 +1,15 @@
+<!--
+ - Created by 7Summits on 2/28/18.
+ -->
+
+<aura:component description="Dal_AccountStatements" extends="c:Dal_ListBase" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" controller="Dal_StatementListController">
+    <ltng:require scripts="{!$Resource.MomentJs_2_21_0}" afterScriptsLoaded="{!c.init}" />
+
+    <!-- design attributes -->
+    <!--<aura:set attribute="hasPagination" type="Boolean" />-->
+    <!--<aura:set attribute="paginationItemsPerPage" type="String" />-->
+    <!-- end design attributes -->
+
+    <aura:set attribute="noDataMsg" value="No Statements Found" />
+
+</aura:component>

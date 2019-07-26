@@ -1,0 +1,68 @@
+/**
+ * Created by presh on 02-11-2018.
+ */
+.THIS .input-qty{
+    max-width: 150px;
+    float: left;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.THIS .input-uom {
+    width : 150px;
+
+}
+
+.THIS .margin-left{
+    margin-left: 12%;
+}
+
+.THIS .button-box .slds-button{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16) !important;
+    border-color: #e6e6e6 !important;
+}
+
+.THIS .text-color{
+    color: #d93d58;
+    font-weight:400;
+}
+
+.THIS .font-size{
+    font-weight: bold;
+    font-size: 15px;
+    /*max-width: 20px;*/
+    padding-top : 3px;
+    padding-bottom : 3px;
+}
+
+.THIS .extra-Padding {
+    padding-top : 3px;
+    padding-bottom : 3px;
+}
+
+.THIS button {
+    color : #67696a;
+}
+
+.THIS .calculate-button-custom {
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.THIS .modal-footer-close {
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 100%;
+    padding-top : 2px;
+    padding-bottom : 2px;
+}
+
+.THIS .button-bold {
+    font-weight : bold;
+}
+
+.THIS .bkg-transparent {
+  background: transparent none;
+}

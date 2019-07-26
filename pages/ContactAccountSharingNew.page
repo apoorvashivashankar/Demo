@@ -1,0 +1,73 @@
+<apex:page standardController="Contact" extensions="ContactSharingController" standardStylesheets="true" lightningStylesheets="true" id="thePage">
+
+    <script>
+        function linkDelete () {
+           return window.confirm('Are you sure?');
+        //   window.top.location.href = '{!redirectUrl}';
+        window.setTimeout(redirectToContact,2000);
+        }
+        
+        function redirectToContact() {
+            window.top.location.href = '{!redirectUrl}';
+        }
+        
+    </script>
+
+    <apex:form >
+
+        <apex:pageBlock >
+            <apex:pageMessages id="msgId"></apex:pageMessages>
+            <apex:pageBlockSection title="Add Sharing" columns="2">
+                <apex:inputField value="{!theUserToLocation.Account__c}"/>
+                <apex:commandButton action="{!saveAccountShare}" value="Save" rerender="msgId,theBlockU2L,theBlockTableU2L" oncomplete="redirectToContact();"/>
+            </apex:pageBlockSection>            
+        </apex:pageBlock>    
+    
+        <apex:pageBlock title="Current User To Location" id="theBlockU2L">
+            <apex:outputPanel id="panelUserToLocation" rendered="{!showUserToLocation}">
+                <apex:pageBlockTable value="{!listUserToLocation}" var="a" id="theBlockTableU2L">
+                    <apex:column >
+                        <apex:facet name="header">Edit Sharing</apex:facet>
+                        <apex:outputLink value="{!URLFOR($Action.User_to_Location__c.Delete, a.id, [retURL='/apex/ContactAccountSharingNew?scontrolCaching=1&id='+Contact.Id])}" onclick="linkDelete();" >Delete</apex:outputLink>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Account Name</apex:facet>
+                        <apex:outputText value="{!a.Account__r.Name}" />
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Account Number</apex:facet>
+                        <apex:outputText value="{!a.Account__r.DW_ID__c}" />
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Account Division</apex:facet>
+                        <apex:outputText value="{!a.Account__r.Division_Name__r.Code__c} - {!a.Account__r.Division_Name__r.Name}" />
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Account GroupKey</apex:facet>
+                        <apex:outputText value="{!a.Account__r.GroupKey__c}" />
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:outputPanel>
+        </apex:pageBlock>
+        <apex:pageBlock title="Current AccountShare" id="theBlockAccountShare">
+            <apex:outputPanel id="panelUserToLocation" rendered="{!showAccountShare}">
+                <apex:pageBlockTable value="{!listAccountShare}" var="a">
+                    <apex:column >
+                        <apex:facet name="header">Account Name</apex:facet>
+                        <apex:outputText value="{!a.Account.Name}" />
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Account Number</apex:facet>
+                        <apex:outputText value="{!a.Account.DW_ID__c}" />
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Account GroupKey</apex:facet>
+                        <apex:outputText value="{!a.Account.GroupKey__c}" />
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:outputPanel>
+        </apex:pageBlock>
+
+    </apex:form>
+    
+</apex:page>

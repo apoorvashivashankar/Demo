@@ -1,0 +1,54 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+}
+.THIS .searchWrapper {
+  display: flex;
+  border-bottom: 10px solid #c7c8ca;
+}
+.THIS .uiLabel,
+.THIS .slds-form-element__label {
+  line-height: 1.5;
+  display: block;
+  margin-bottom: .25rem;
+}
+.THIS .uiLabel span,
+.THIS .slds-form-element__label span {
+  font-size: .8125rem;
+}
+.THIS .slds-button_neutral {
+  padding: 1px 30px;
+}
+.THIS .uiInputSelect .select {
+  padding: 17px 14px;
+}
+.THIS .input-description {
+  min-width: 280px;
+}
+@media (min-width: 64.0625em) {
+  .THIS .slds-large-size--2-of-12 {
+    width: 15%;
+  }
+  .THIS .slds-large-size--2-of-12.orderDate {
+    width: 25%;
+  }
+  .THIS .input-description {
+    min-width: 360px;
+  }
+  .THIS .searchButton .slds-button {
+    line-height: 1.75rem;
+    width: 100%;
+    padding: 1px 30px;
+  }
+}
+@media (max-width: 64.0625em) {
+  .THIS {
+    padding: 0 token(spacingLarge);
+  }
+}

@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 2/27/18.
+ -->
+
+<design:component label="Daltile Dist - My Dashboard">
+    <design:attribute name="title" label="Title" />
+</design:component>

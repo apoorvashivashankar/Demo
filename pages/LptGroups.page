@@ -1,0 +1,3 @@
+<apex:page showHeader="true" sidebar="true">
+    <apex:enhancedList type="Group__c" height="600" rowsPerPage="50" ListId="00B0G000008rUc2" customizable="false" />
+</apex:page>

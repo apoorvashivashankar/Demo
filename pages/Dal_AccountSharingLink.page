@@ -1,0 +1,5 @@
+<apex:page standardController="User" extensions="Dal_UserAccountSharingController"
+           action="{!createSharing}">
+
+  <h1>Account sharing is generated!</h1>
+</apex:page>

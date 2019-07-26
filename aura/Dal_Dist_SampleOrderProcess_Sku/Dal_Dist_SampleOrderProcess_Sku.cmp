@@ -1,0 +1,174 @@
+<!--
+ - Created by ranja on 07-08-2018.
+ -->
+
+<aura:component description="Dal_Dist_SampleOrderProcess_Sku" extends="c:Dal_Dist_SampleOrderBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes">
+
+    <aura:attribute name="wrapperData" type="Map" />
+    <aura:attribute name="savedOrdersUrl" type="Object" description=""/>
+
+    <aura:attribute name="today" type="Date" default="" description="Today's date"/>
+    <aura:attribute name="isOpenModal" type="boolean" default="false"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:attribute name="isSampleOrderBaseLoading" type="Boolean" default="false"/>
+    <aura:attribute name="headerTitle" type="String"  default="Add Products by Searching for available sample SKUs based on series and product" />
+    <aura:attribute name="currentPosition" type="Integer" />
+    <aura:attribute name="isSpinner" type="boolean" default="false" />
+    <aura:attribute name="isSearching" type="boolean" default="false" />
+    <aura:attribute name="isSeriesNotSelected" type="boolean" default="false" />
+    <aura:attribute name="isProductNotSelected" type="boolean" default="false" />
+    <aura:attribute name="isMore" type="boolean" default="false" />
+
+    <!-- Attributes to store values from backend -->
+    <aura:attribute name="listOfSeries" type="Object" description="List of series for products" />
+    <aura:attribute name="selectedAddress" type="Object" description="Address selected by user for 2nd page" />
+    <aura:attribute name="listOfProducts" type="Object" default="" description="List of products for selected series." />
+    <aura:attribute name="selectedProduct" type="String" description="" />
+    <aura:attribute name="selectedSeries" type="String" description="" />
+    <aura:attribute name="productResponse" type="Object" description="Wrapper Data for product Searches" />
+    <aura:attribute name="productOrderLines" type="Object" description="Added products from modal" />
+    <aura:attribute name="listOfIdsOfOrderLine" type="List" />
+    <aura:attribute name="cumulativeOrderWeight" type="Decimal" />
+    <aura:attribute name="freightTerms" type="String" default="1A1"/>
+    <aura:attribute name="carrier" type="String" default="UPS Ground"/>
+    <aura:attribute name="poNumber" type="String" default=""/>
+    <aura:attribute name="jobName" type="String" default=""/>
+    <aura:attribute name="isShipComplete" type="String" default=""/>
+    <aura:attribute name="isSmallPackage" type="String" default="" />
+    <aura:attribute name="sampleOrderHeaderInstructionalTextPageOne" type="String" access="global" />
+    <aura:attribute name="sampleOrderHeaderTextPageOne" type="String" access="global" default="Search For Product SKUs" />
+
+    <aura:registerEvent name="orderProcessEvt" type="c:Dal_Dist_OrderProcessStepEvt"/>
+   <!-- INIT HANDLER -->
+    <aura:handler name="init" value="{!this}" action="{!c.initData}" />
+
+    <!-- Used to display modal -->
+    <aura:attribute name="baseModal" type="Map" />
+
+    <!-- LAYOUT OF HEADER for TEXT & SEARCH FOR PRODUCT SKUs -->
+    <lightning:layout class="dal-form-order orderContainer slds-m-vertical_x-large">
+        <lightning:layout class="slds-p-horizontal_small slds-p-top_small" multipleRows="true">
+            
+            <!-- TOP HEADING -->
+            <p class="slds-p-top_small slds-p-horizontal_small">
+                <h2 class="top-heading">{!v.sampleOrderHeaderTextPageOne}</h2>
+                <h5>{!v.sampleOrderHeaderInstructionalTextPageOne} </h5>
+            </p>
+            <br/>
+
+            <!-- Layout for selectlist for Series and Products and Search button -->
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                                  class="slds-grid slds-order_2 slds-p-bottom_large slds-large-order_1"  >
+                <lightning:layout class="slds-size_12-of-12" multipleRows="true">
+
+                    <!-- Selectlist having values of series -->
+                    <lightning:layoutItem class="slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
+
+                        <lightning:select class="{!v.isSeriesNotSelected == true ? 'slds-has-error' : ''}" name="Series" label="Series" required="false"
+                                          value="{!v.selectedSeries}" aura:id="series"
+                                          onchange="{!c.getProducts}" onblur="{!c.checkSeriesSelected}" messageWhenValueMissing="Required">
+                            <aura:if isTrue="{!empty(v.selectedSeries)}">
+                                <option value="">Select Series</option>
+                            </aura:if>
+                            <aura:iteration items="{!v.listOfSeries}" var="ser" >
+                                <option value="{!ser.Series__r.Id}">{!ser.Series__r.Name}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                        <aura:if isTrue="{!v.isSeriesNotSelected == true}" >
+                            <p class="field-required slds-form-element__help">Required</p>
+                        </aura:if>
+                    </lightning:layoutItem>
+
+                    <!-- Selectlist having values of products -->
+                    <lightning:layoutItem class="slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <lightning:select class="{!v.isProductNotSelected == true ? 'slds-has-error' : ''}" name="Product" label="Product" required="false"
+                                          aura:id="products" value="{!v.selectedProduct}" messageWhenValueMissing="Required" onblur="{!c.checkProductSelected}">
+
+                            <!--<option value="">Select Product</option>-->
+                            <aura:if isTrue="{!empty(v.selectedProduct)}" >
+                                <option value="">Select Product</option>
+                            </aura:if>
+                            <aura:if isTrue="{!v.listOfProducts.length > 0}">
+                                <option value="All Products">All Products</option>
+                                <!-- Added "pro.colorCode" by Daltile on 04/13/2019 (Defect# : 657) -->
+                                <aura:iteration items="{!v.listOfProducts}" var="pro">
+                                    <option value="{!pro.colorCode}">{!pro.colorCode} - {!pro.colorName}</option>
+                                </aura:iteration>
+                            </aura:if>
+
+                        </lightning:select>
+                        <aura:if isTrue="{!v.isProductNotSelected == true}" >
+                            <p class="field-required slds-form-element__help">Required</p>
+                        </aura:if>
+                    </lightning:layoutItem>
+
+                    <!--Opens a modal for products -->
+                    <lightning:layoutItem class="slds-grid slds-p-horizontal_small dal-small-fullWidth slds-wrap slds-grid_align-center slds-p-bottom_small">
+                        <lightning:button label="Search" class="top-search-button" title="Search" onclick="{!c.openModalComponent}"/>
+                    </lightning:layoutItem>
+
+                </lightning:layout>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:layout>
+
+    <!-- Layout for Save and Continue -->
+    <lightning:layout class="dal-form-order orderContainer">
+        <div aura:id="navbar" id="navbar" class="slds-grid slds-size_12-of-12 section-border-bottom">
+
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                                  class="slds-grid slds-p-horizontal_large slds-grid_align-center slds-large-grid_align-end
+                                  slds-order_1 slds-large-order_2 slds-p-top_large slds-p-bottom_large">
+
+            <div aura:id="navbavSticky" id="navbavSticky" class="btnSaveContinue slds-grid slds-wrap slds-grid_align-center">
+               <lightning:button variant="brand" label="SAVE AND CONTINUE" disabled="{!!(v.productOrderLines.length > 0) }"
+                                  onclick="{!c.goToDetailPage}" class="dal-small-fullWidth dal-medium-fullWidth"/>
+            </div>
+
+        </lightning:layoutItem>
+        </div>
+    </lightning:layout>
+
+    <!-- LOAD SPINNER -->
+    <aura:if isTrue="{!v.isSearching == true}">
+        <lightning:layoutItem size="12" class="">
+            <lightning:layout class="slds-is-relative">
+                <lightning:spinner class="spinner-fixed" variant="brand" />
+            </lightning:layout>
+        </lightning:layoutItem>
+    </aura:if>
+
+    <!-- Layout for Product Skus order lines -->
+    <lightning:layout class="dal-form-order orderContainer">
+
+        <!-- Calling Component for Order Line -->
+        <c:Dal_Dist_SampleOrderProcess_SkuProductRw productOrderLines="{!v.productOrderLines}" productResponse="{!v.productResponse}" today="{!v.today}"
+                                                    listOfIdsOfOrderLine="{!v.listOfIdsOfOrderLine}" cumulativeOrderWeight="{!v.cumulativeOrderWeight}"/>
+
+    </lightning:layout>
+
+    <!-- Layout for CUMULATIVE ORDER WEIGHT -->
+    <lightning:layout class="dal-form-order orderContainer slds-m-bottom_x-large saveFooter slds-p-vertical_large slds-p-horizontal_small" multipleRows="true" horizontalAlign="center" verticalAlign="center">
+        <lightning:layoutItem class="slds-grid slds-p-around_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="6">
+            <div class="orderStats orderStats-medium orderStats-textLeftLarge dal-medium-inputFull dal-small-inputFull">
+                <dl>
+                    <dt>CUMULATIVE ORDER WEIGHT</dt>
+                    <dd> {!v.cumulativeOrderWeight} lbs</dd>
+                </dl>
+            </div>
+        </lightning:layoutItem>
+
+        <lightning:layoutItem class="slds-p-around_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="6">
+
+            <div class="btnSaveContinue slds-grid slds-wrap slds-grid_align-center">
+                <lightning:button label="ADD SKUS" class="slds-button slds-button_neutral dal-small-fullWidth dal-medium-fullWidth"
+                                  onclick="{!c.openModalComponent}"/>
+                <lightning:button variant="brand" label="SAVE AND CONTINUE" disabled="{!!(v.productOrderLines.length > 0) }"
+                     onclick="{!c.goToDetailPage}" class="slds-button slds-button_brand dal-small-fullWidth dal-medium-fullWidth"/>
+            </div>
+
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

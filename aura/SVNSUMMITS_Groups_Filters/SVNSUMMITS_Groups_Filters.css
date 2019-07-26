@@ -1,0 +1,29 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS.filterBox{
+    box-shadow: 0 0 2px #A7B8D1;
+    border-radius: 1px;
+    padding:12px;
+    width: 100%!important;
+}
+.THIS .myGrpsCss{
+    margin-top: 10px!important;
+}
+.THIS .ui.input {
+    font-size: 1em;
+    float: right;
+    width: 80%;
+}
+.THIS .tickSymbol{
+    height:12px;
+    margin-top: 6px;
+}
+.THIS .grupLabel{
+    float: left;
+    margin-right: 8px;
+}
+.THIS .showImg{
+    display:block;
+}
+.THIS .hideImg{
+    display:none;
+}

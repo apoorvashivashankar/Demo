@@ -1,0 +1,42 @@
+<apex:page standardController="Quote__c" showHeader="true">
+<apex:stylesheet value="{!URLFOR($Resource.slds, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+
+    <!-- UI Check : Salesforce Classic "Aloha" theme  -->
+    <apex:outputPanel rendered="{!$User.UIThemeDisplayed == 'Theme3'}">
+        <apex:stylesheet value="{!URLFOR($Resource.slds,'classic-styling.css')}" />
+        <apex:form >
+            <apex:iframe scrolling="true" height="1000"
+                src="https://s21.webcomcpq.com/salesforce/SfLogin.aspx?sfauthUserID={!$User.Username}&apiPartnerURL={!$Api.Partner_Server_URL_290}&apiSessionID={!$Api.Session_ID}&domain_name=daltile&apiPass=Password&action=Edit&sfqpOpportunityID={!Quote__c.Opportunity__c}&OwnerId={!CEILING(Quote__c.Owner_ID__c)}&QuoteId={!CEILING(Quote__c.Quote_ID__c)}"/>
+        </apex:form>
+    </apex:outputPanel>
+
+    <!-- UI Check : Lightning Desktop theme -->     
+    <apex:outputPanel rendered="{!$User.UIThemeDisplayed == 'Theme4d'}">
+        <apex:stylesheet value="{!URLFOR($Resource.slds,'lightning-styling.css')}" />
+        <apex:form >
+            <apex:iframe scrolling="true" height="1000"
+            src="https://s21.webcomcpq.com/salesforce/SfLogin.aspx?sfauthUserID={!$User.Username}&apiPartnerURL={!$Api.Partner_Server_URL_290}&apiSessionID={!$Api.Session_ID}&domain_name=daltile&apiPass=Password&action=Edit&sfqpOpportunityID={!Quote__c.Opportunity__c}&OwnerId={!CEILING(Quote__c.Owner_ID__c)}&QuoteId={!CEILING(Quote__c.Quote_ID__c)}"/>
+        </apex:form>
+    </apex:outputPanel>
+
+    <!-- UI Check : Salesforce1 mobile theme -->     
+    <apex:outputPanel rendered="{!$User.UIThemeDisplayed == 'Theme4t'}">
+        <apex:form >
+            <head>
+                <title>New Quote</title>
+                <apex:stylesheet value="{!URLFOR($Resource.slds, 'assets/styles/salesforce-lightning-design-system.css')}" />
+            </head>              
+            <body>    
+                <div class="slds">    
+                    <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                        <div class="slds-p-horizontal--small slds-size--1-of-1 slds-text-heading--large">Tap the Back Arrow to Return</div>
+                        <script>
+                            sforce.one.navigateToURL('https://s21.webcomcpq.com/salesforce/SfLogin.aspx?sfauthUserID={!$User.Username}&apiPartnerURL={!$Api.Partner_Server_URL_290}&apiSessionID={!$Api.Session_ID}&domain_name=daltile&apiPass=Password&action=Edit&sfqpOpportunityID={!Quote__c.Opportunity__c}&OwnerId={!CEILING(Quote__c.Owner_ID__c)}&QuoteId={!CEILING(Quote__c.Quote_ID__c)}');
+                        </script>                        
+                    </div>
+                </div>
+            </body>
+        </apex:form>
+    </apex:outputPanel>
+
+</apex:page>

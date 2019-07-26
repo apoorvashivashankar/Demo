@@ -1,0 +1,7 @@
+.THIS .ForWrap{
+    overflow-wrap: break-word;
+}
+
+.THIS .show-availability-fix {
+    max-width: 460px !important;
+ }

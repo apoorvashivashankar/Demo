@@ -1,0 +1,13 @@
+<!--
+ - Created by 7Summits on 4/2/18.
+ -->
+
+<aura:component description="Dal_PricingList" extends="c:Dal_ListBase" controller="Dal_PricingListController" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+    <aura:attribute name="effectiveDate" type="Date" default="" />
+
+    <aura:method name="searchPriceRecordList" action="{!c.searchPriceRecordList}" access="PUBLIC">
+        <aura:attribute name="effectiveDate" type="String" />
+    </aura:method>
+</aura:component>

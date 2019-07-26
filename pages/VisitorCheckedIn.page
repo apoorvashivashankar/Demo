@@ -1,0 +1,105 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="true" lightningStylesheets="true"  Controller="VisitorCheckinController" id="thePage" docType="html-5.0" applyHTmlTag="false">
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+		<apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+		<apex:includeScript value="{!$Resource.cleave}"/>
+		<apex:includeScript value="{!$Resource.phoneFormatter}"/>
+
+		<script src="cleave.min.js"></script>
+		<script src="cleave-phone.{country}.js"></script>
+		<script>
+			setTimeout(navigateToCheckin, 5000);
+			function navigateToCheckin(){
+				// Go back to the Account detail page
+				if( (typeof sforce != 'undefined') && sforce && (!!sforce.one) ) {
+				    // Salesforce app navigation
+				    sforce.one.navigateToURL('/apex/VisitorCheckIn');
+				}
+				else {
+				    // Set the window's URL using a Visualforce expression
+				    window.location.href = 
+				        '/apex/VisitorCheckIn';
+				}
+			}
+		</script>
+		<style>
+            .slds-scope .slds-grid--frame, .slds-scope .slds-grid_frame {
+                min-width: 90vw;
+                min-height: 80vh;
+                overflow: hidden;
+                }
+		</style>
+
+
+		<head>
+			<apex:slds />
+		</head>
+		<apex:form id="theForm" >
+			<body class="slds-scope" >
+				<div class="slds-page-header">
+					<div class="slds-media">
+						<div class="slds-media__figure">
+							<span class="slds-avatar slds-avatar_large">
+								<img alt="Daltile" src="{!$Resource.dLogo}" title="User avatar" />
+							</span>                          
+						</div>
+						<div class="slds-media__body">
+							<h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Welcome to Daltile">Welcome to Daltile</h1>
+							<p class="slds-text-body_small slds-line-height_reset">{!galleryAccountName} • Dallas TX</p>
+						</div>
+					</div>
+				</div>
+
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+				<link type="text/css" rel="stylesheet" href="https://www.lightningdesignsystem.com/assets/styles/slds.css"/>
+				<input type="hidden" name="currentvfpage" value="{!$CurrentPage.Name}"/>
+				<!-- Import the Design System style sheet -->
+				<apex:slds />
+				<!--<apex:actionFunction name="backToCheckIn" action="{!backToCheckIn}" rerender="out" status="myStatus"/>-->
+				<script>window.setTimeout(navigateToCheckin();,3000)</script>
+				<!-- REQUIRED SLDS WRAPPER -->
+				<div class="slds-scope" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" >
+					<div class="slds-grid slds-grid--frame slds-grid--vertical-align-center slds-grid--align-center ">
+						<!-- form wrapper -->
+						<div>
+							<article class="slds-card" style="-webkit-box-shadow: 10px 10px 29px -1px rgba(0,0,0,0.75);-moz-box-shadow: 10px 10px 29px -1px rgba(0,0,0,0.75);box-shadow: 10px 10px 29px -1px rgba(0,0,0,0.75);">
+								<div class="slds-card__header slds-grid">
+									<header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    					<div class="slds-form-element__control slds-hint-parent slds-align_absolute-center">
+											<h2>
+												<span class="slds-text-heading_large" style="font-size: 2.5rem;">Thanks {!appointment.Visitor_First_Name__c} for checking in!</span>
+												<!--<span class="slds-text-heading_large" style="font-size: 2.5rem;">{!verbiageVisitorCheckedIn}</span>-->
+											</h2>
+										</div>
+									</header>
+								</div>
+								<div class="slds-card__body slds-card__body_inner">
+									<apex:pageMessages />
+									<br/>
+									<header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    					<div class="slds-form-element__control slds-hint-parent slds-align_absolute-center">
+											<h2>
+												<span class="slds-text-heading_large" style="font-size: 2.5rem;">A consultant will assist you shortly.</span>
+											</h2>
+										</div>
+									</header>
+								</div>
+								<footer class="slds-card__footer">
+
+								</footer>
+							</article>
+						</div>
+						<!-- /form wrapper -->
+					</div>      
+				</div> 
+			</body>
+		</apex:form>
+	</html>
+	<script>
+        var cleavePhone = new Cleave('.input-custom', {
+            numericOnly: true,
+            delimiters: ['(',')','-','-'],
+            blocks: [0,3, 3, 4]            
+        });
+	</script>        
+</apex:page>

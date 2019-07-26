@@ -1,0 +1,61 @@
+<!--
+ - Created by 7Summits on 2/28/18.
+ -->
+<aura:component extends="c:Dal_Base" controller="Dal_DashboardController" description="Dal_SSC_MyDashboard" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <!-- design attributes -->
+    <aura:attribute name="title" type="String" default="My Dashboard"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="dataBlock" type="List" default="[]"/>
+    <aura:attribute name="isShowPop" type="Boolean" default="false"/>
+    <aura:attribute name="accountCartResponse" type="Object" default=""/>
+
+
+    <lightning:layout multipleRows="true" class="slds-p-around_small" horizontalAlign="center" verticalAlign="center">
+        <aura:if isTrue="{! v.isShowPop}">
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" class="slds-p-top_x-small title">
+                <lightning:layout pullToBoundary="small">
+                    <lightning:layoutItem size="12">
+                        <!--<c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.title}" />-->
+                        <div class="alert alert-warning">
+                            <strong>Your Cart Has Been Saved.</strong> <br/><p class="font-style">Your cart on {!v.accountCartResponse.accountNumber} {!v.accountCartResponse.accountName} {!v.accountCartResponse.city} {!v.accountCartResponse.divisionName} has been saved. The cart will be cleared
+                                <aura:if isTrue="{!v.accountCartResponse.count == 0}">
+                                    today.
+                                    <aura:set attribute="else">
+                                        after {!v.accountCartResponse.count} days.
+                                    </aura:set>
+                                </aura:if>
+                                 </p>
+                            <p class="slds-float_right slds-text-body_small slds-p-bottom_medium dismiss-button" onclick="{! c.handleClick }">DISMISS
+                                <b><lightning:buttonIcon iconName="utility:close" class="icon-color" value="DISMISS" variant="bare" onclick="{! c.handleClick }" alternativeText="DISMISS"/></b>
+                            </p>
+                            <!--<lightning:icon iconName="utility:close" size="x-small" alternativeText="Close" />-->
+                        </div>
+
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+        </aura:if>
+
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" class="slds-p-top_x-small title">
+            <lightning:layout pullToBoundary="small">
+                <lightning:layoutItem size="12">
+                    <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.title}" />
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+
+        <lightning:layoutItem size="12">
+            <lightning:layout pullToBoundary="small">
+                <lightning:layoutItem size="12">
+                    <c:Dal_DataBlocks blocks="{!v.dataBlock}" />
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+</aura:component>

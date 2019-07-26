@@ -1,0 +1,31 @@
+/**
+ * Created by ranja on 26-12-2018.
+ */
+.THIS {
+}
+
+.THIS.dal-filters {
+    background-color: #F3F3F3;
+    border: 1px solid #F3F3F3;
+    padding: 1rem;
+}
+
+.THIS .dal-filters-filter {
+    margin-top: 2px;
+    margin-bottom: 1rem;
+}
+
+@media only screen and (min-width: 900px) {
+    .THIS .dal-filters-filter .slds-select_container {
+        width: 11rem;
+    }
+}
+
+.THIS .dal-filters-filter .slds-form-element__label {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.THIS .dal-clear {
+    padding-right: 0.2rem;
+}

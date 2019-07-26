@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 2/27/18.
+ -->
+
+<aura:component description="Dal_ShipToList" extends="c:Dal_ListBase" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+</aura:component>

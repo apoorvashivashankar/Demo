@@ -1,0 +1,40 @@
+<!--
+ - Created by 7Summits on 4/9/18.
+ -->
+
+<aura:component description="Dal_PricingSearch" extends="c:Dal_Base" controller="Dal_PricingListController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+    <aura:attribute name="effectiveDate" type="Date" default="" />
+    <aura:attribute name="searchButton" type="String" default=""/>
+
+    <aura:attribute name="hasPagination" type="Boolean" default="false" />
+    <aura:attribute name="paginationItemsPerPage" type="Integer" default="30" />
+    <aura:attribute name="paginationStartPage" type="Integer" default="0" />
+    <aura:attribute name="listMaximum" type="Integer" default="300" />
+    <aura:attribute name="errorsEffectiveDate" type="List" default="[]"/>
+
+    <lightning:layout pullToBoundary="small" multipleRows="true">
+        <lightning:layoutItem class="orderDate slds-p-around_x-small slds-m-bottom_xx-large" size="12" mediumDeviceSize="12" largeDeviceSize="12">
+            <label>Effective Date:</label>
+            <div class="slds-has-error">
+                <ui:inputDate aura:id="estimatedShipDatePicker" displayDatePicker="true"
+                      value="{!v.effectiveDate}"
+                      change="{!c.handleDateChange}"
+                      format="MM/DD/YYYY"
+                      required="true"
+                      errors="{!v.errorsEffectiveDate}"
+                />
+            </div>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" class="pricingListWrapper">
+
+            <c:Dal_PricingList aura:id="pricingListComponent"
+               hasPagination="{!v.hasPagination}"
+               paginationItemsPerPage="{!v.paginationItemsPerPage}"
+               paginationStartPage="{!v.paginationStartPage}"
+               listMaximum="{!v.listMaximum}"/>
+
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

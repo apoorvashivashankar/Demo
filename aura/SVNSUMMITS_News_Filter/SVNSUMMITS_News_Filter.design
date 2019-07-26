@@ -1,0 +1,25 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S News Filter">
+	<design:attribute name="defaultView"
+	                  label="Default View"
+	                  datasource="Tile,List"/>
+	<design:attribute name="showAuthors"
+	                  label="Show author filter"
+	                  description="Select to show the author filter"/>
+	<design:attribute name="showDates"
+	                  label="Show date filter"
+	                  description="Select to show the start and end date filter"/>
+	<design:attribute name="showTopics"
+	                  label="Show topic filter"
+	                  description="Select to show the topic filter"/>
+	<design:attribute name="showLayout"
+	                  label="Show tile layout buttons"
+	                  description="Select to show the tile layout buttons"/>
+	<design:attribute name="showSort"
+	                  label="Show sort"
+	                  description="Select to show the sort selector"/>
+	<design:attribute name="sortBy"
+	                  label="Default sort"
+	                  description="Sort By"
+	                  datasource="Most Recent,Oldest First"/>
+</design:component>

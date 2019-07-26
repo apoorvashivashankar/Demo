@@ -1,0 +1,9 @@
+<!--
+ - Created by abdoundure on 2/13/18.
+ -->
+
+<design:component label="DalTile Footer">
+    <design:attribute name="showCopyright" label="Show / Hide Copyright ?" />
+    <design:attribute name="copyrightText" label="Copyright Text" description="Copyright text that shows after the year." />
+
+</design:component>

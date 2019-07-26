@@ -1,0 +1,89 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  position: relative;
+}
+.THIS .header-at-top {
+  font-weight: bold;
+  text-align: center;
+}
+.THIS .header-beneath {
+  font-weight: bold;
+  text-align: center;
+}
+.THIS .progress-count {
+  text-align: center;
+}
+.THIS .count {
+  font-size: 2.55rem;
+  display: inline-block;
+  margin-left: token(spacingSmall);
+}
+.THIS .progress-outer {
+  position: relative;
+  height: token(spacingLarge);
+  margin-bottom: 50px;
+  background: token(colorBorder);
+}
+.THIS .progress-outer .progress-inner {
+  position: absolute;
+  height: token(spacingLarge);
+  transition: width 2s;
+  background: token(colorBrand);
+}
+.THIS .progress-outer .progress-marker {
+  font-size: 0.875rem;
+  position: absolute;
+  width: 48px;
+  margin-left: -24px;
+  padding: .2rem .5rem;
+  text-align: center;
+  color: token(colorTextInverse);
+  background: token(colorBrand);
+}
+.THIS .progress-outer .progress-marker .carat {
+  width: 10px;
+}
+.THIS .progress-outer .progress-marker .carat:after {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  content: '';
+  border: 5px solid transparent;
+}
+.THIS .progress-outer .progress-marker .carat:after {
+  left: 50%;
+  margin-top: -10px;
+  margin-left: -5px;
+  border-bottom: 5px solid token(colorBrand);
+}
+.THIS.is-horizontal .progress-marker {
+  top: token(spacingXLarge);
+}
+.THIS.is-vertical .progress-outer {
+  width: 10%;
+  min-height: 150px;
+  margin: 0 45% 10px;
+}
+.THIS.is-vertical .progress-outer .progress-marker {
+  right: -54px;
+  height: 25px;
+  margin-bottom: -13px;
+}
+.THIS.is-vertical .progress-outer .progress-marker .carat:after {
+  margin-top: .5rem;
+  margin-left: -34px;
+  border-right: 5px solid token(colorBrand);
+  border-bottom: 5px solid transparent;
+}
+.THIS.is-vertical .progress-inner {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

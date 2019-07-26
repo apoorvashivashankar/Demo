@@ -1,0 +1,121 @@
+<!--
+ - Created by 7Summits on 7/3/17.
+ -->
+
+<aura:component controller="Peak_KnowledgeFilterController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!-- Design attributes -->
+    <aura:attribute name="articleFilter1" type="String" default="" />
+    <aura:attribute name="articleFilterSubtopics1" type="Boolean" default="false" />
+    <aura:attribute name="articleFilter2" type="String" default="" />
+    <aura:attribute name="articleFilterSubtopics2" type="Boolean" default="false" />
+    <aura:attribute name="articleFilter3" type="String" default="" />
+    <aura:attribute name="articleFilterSubtopics3" type="Boolean" default="false" />
+    <aura:attribute name="articleFilter4" type="String" default="" />
+    <aura:attribute name="articleFilterSubtopics4" type="Boolean" default="false" />
+
+    <!-- Labels -->
+    <aura:attribute name="peak_knowledgeFilter_searchPlaceholder" type="String" default="{!$Label.c.peak_knowledgeFilter_searchPlaceholder}" access="private" />
+    <aura:attribute name="peak_knowledgeFilter_pagerPrevlabel" type="String" default="{!$Label.c.peak_knowledgeFilter_pagerPrevlabel}" access="private" />
+    <aura:attribute name="peak_knowledgeFilter_pagerNextLabel" type="String" default="{!$Label.c.peak_knowledgeFilter_pagerNextLabel}" access="private" />
+    <aura:attribute name="peak_knowledgeFilter_pagerTypeLabel" type="String" default="{!$Label.c.peak_knowledgeFilter_pagerTypeLabel}" access="private" />
+    <aura:attribute name="peak_knowledgeFilter_pagerPageLabel" type="String" default="{!$Label.c.peak_knowledgeFilter_pagerPageLabel}" access="private" />
+
+    <!-- Internal Attributes -->
+    <aura:attribute name="searchValue" type="String" access="public" />
+    <aura:attribute name="searchResults" type="List" default="[]" />
+    <aura:attribute name="searchDebounce" type="Object" access="private" />
+    <aura:attribute name="topicFiltersList" type="List" access="private" />
+    <aura:attribute name="isSearching" type="Boolean" default="true" />
+    <aura:attribute name="pagerShow" type="Boolean" default="false" access="private" />
+    <aura:attribute name="pagerShowPrev" type="Boolean" default="false" access="private" />
+    <aura:attribute name="pagerShowNext" type="Boolean" default="false" access="private" />
+    <aura:attribute name="pagerTotalCount" type="String" access="private" />
+    <aura:attribute name="pagerCurrentPage" type="String" access="private" />
+    <aura:attribute name="pagerTotalPages" type="String" access="private" />
+
+    <!-- Events -->
+    <aura:registerEvent name="cmpEventTopicsLoaded" type="c:Peak_KnowledgeFilter_TopicsLoadedEvent"/>
+    <aura:handler name="cmpEventTopicsLoaded" event="c:Peak_KnowledgeFilter_TopicsLoadedEvent" action="{!c.handleTopicsLoaded}"/>
+
+    <lightning:layout class="peak_knowledgeFilter slds-grid_pull-padded-small" multipleRows="true">
+
+        <lightning:layoutItem class="peak_knowledgeFilter__search" size="12" padding="around-small">
+            <div class="slds-form-element">
+                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                    <lightning:input label="Search" type="text" name="search" class="slds-input" placeholder="{!v.peak_knowledgeFilter_searchPlaceholder}" onchange="{!c.searchChange}" />
+                    <lightning:icon iconName="utility:search" size="small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" variant="search" />
+                </div>
+            </div>
+        </lightning:layoutItem>
+
+        <lightning:layoutItem class="peak_knowledgeFilter__filter" size="12" padding="around-small">
+
+            <lightning:layout horizontalAlign="space" pullToBoundary="small">
+                <aura:iteration items="{!v.topicFiltersList}" var="filter" indexVar="index">
+                    <lightning:layoutItem flexibility="grow" padding="horizontal-small">
+                        <lightning:select name="{!filter.topicId}" aura:id="{!filter.topicId}" onchange="{!c.filterChange}">
+
+                            <aura:iteration items="{!filter.childTopicList}" var="item">
+                                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"></option>
+
+                                <!-- check if item has child topics, if so display them -->
+                                <aura:if isTrue="{!item.childTopicList}">
+                                    <aura:iteration items="{!item.childTopicList}" var="item">
+                                        <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"></option>
+                                    </aura:iteration>
+                                </aura:if>
+
+                            </aura:iteration>
+
+                        </lightning:select>
+                    </lightning:layoutItem>
+                </aura:iteration>
+            </lightning:layout>
+
+        </lightning:layoutItem>
+
+        <lightning:layoutItem class="peak_knowledgeFilter__results" size="12" padding="around-small">
+
+            <!-- Pager -->
+            <aura:if isTrue="{!v.pagerShow == true}">
+
+                <lightning:layout class="peak_knowledgeFilter__pager" verticalAlign="center" multipleRows="true">
+
+                    <lightning:layoutItem smallDeviceSize="3" size="6" class="slds-order_2 slds-small-order_1">
+                        <button class="slds-button slds-button_brand pager-left" onclick="{!c.pagerPrev}" disabled="{!(v.pagerShowPrev == false) ? 'disabled' : ''}">
+                            <lightning:icon iconName="utility:chevronleft" size="x-small" class="slds-button__icon slds-button__icon_left" />
+                            {!v.peak_knowledgeFilter_pagerPrevlabel}
+                        </button>
+                    </lightning:layoutItem>
+
+                    <lightning:layoutItem smallDeviceSize="6" size="12" class="slds-grid slds-grid_align-center slds-order_1 slds-small-order_2">
+                        <div class="slds-p-vertical_medium pager-pageCount">
+                            <span class="slds-p-horizontal_xxx-small pager-current-totalCount">{!v.pagerTotalCount}</span>
+                            <span class="slds-p-horizontal_xxx-small pager-current-label">{!v.peak_knowledgeFilter_pagerTypeLabel}</span>
+                            <span class="slds-p-horizontal_xxx-small pager-current-space">-</span>
+                            <span class="slds-p-horizontal_xxx-small pager-current-pageLabel">{!v.peak_knowledgeFilter_pagerPageLabel}</span>
+                            <span class="slds-p-horizontal_xxx-small pager-current-activePage">{!v.pagerCurrentPage} / {!v.pagerTotalPages}</span>
+                        </div>
+                    </lightning:layoutItem>
+
+                    <lightning:layoutItem smallDeviceSize="3" size="6" class="slds-grid slds-grid_align-end slds-order_3 slds-small-order_3">
+                        <button class="slds-button slds-button_brand pager-right" onclick="{!c.pagerNext}" disabled="{!(v.pagerShowNext == false) ? 'disabled' : ''}">
+                            {!v.peak_knowledgeFilter_pagerNextLabel}
+                            <lightning:icon iconName="utility:chevronright" size="x-small" class="slds-button__icon slds-button__icon_right" />
+                        </button>
+                    </lightning:layoutItem>
+
+                </lightning:layout>
+
+            </aura:if>
+            <!-- end pager -->
+
+            <c:Peak_KnowledgeFilter_Results results="{!v.searchResults}" isSearching="{!v.isSearching}" searchString="{!v.searchValue}" />
+
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+</aura:component>

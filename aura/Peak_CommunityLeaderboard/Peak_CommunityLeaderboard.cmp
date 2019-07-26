@@ -1,0 +1,225 @@
+<!-- Copyright © 2016-2018 7Summits, Inc. All rights reserved. -->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+		controller="Peak_LeaderboardController"
+		access="global">
+
+	<aura:attribute name="people" type="Object[]"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+	<aura:attribute name="titletext" type="String" default="Community Leaderboard" access="global"/>
+	<aura:attribute name="subtitletext" type="String" default="See who's the most active." access="global"/>
+	<aura:attribute name="headeralign" type="String" default="center" access="global"/>
+
+	<aura:attribute name="showImage" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showName" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showPosts" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showComments" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showBadge" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showRank" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showLevel" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showPoints" type="Boolean" default="true" access="global"/>
+
+	<aura:attribute name="nameLabel" type="String" default="Username" access="global"/>
+	<aura:attribute name="postsLabel" type="String" default="Posts" access="global"/>
+	<aura:attribute name="pointsLabel" type="String" default="Points" access="global"/>
+	<aura:attribute name="commentsLabel" type="String" default="Comments" access="global"/>
+	<aura:attribute name="badgeLabel" type="String" default="Badge" access="global"/>
+	<aura:attribute name="rankLabel" type="String" default="Rank" access="global"/>
+	<aura:attribute name="levelLabel" type="String" default="Level" access="global"/>
+
+	<aura:attribute name="showIcons" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="hideInternal" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="reputationEnabled" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="height" type="String" default="251px" access="global"/>
+	<aura:attribute name="numberOfRecords" type="String" default="10" access="global"/>
+
+	<aura:attribute name="sitePath" type="String" access="global"/>
+
+	<aura:if isTrue="{!v.reputationEnabled}">
+		<section>
+			<aura:if isTrue="{!v.titletext}">
+				<h2 style="{!'text-align:' + v.headeralign}"
+				    class="slds-text-heading_medium slds-m-bottom_small">
+						{!v.titletext}
+				</h2>
+			</aura:if>
+
+			<aura:if isTrue="{!v.titletext}">
+				<h4 style="{!'text-align:' + v.headeralign}"
+				    class="slds-text-heading_small slds-m-bottom_large">
+						{!v.subtitletext}
+				</h4>
+			</aura:if>
+
+			<div class="table-wrap" style="{!'height:'+v.height}">
+				<table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+					<thead>
+					<tr class="slds-text-title_caps"
+					    data-icons="{!v.showIcons}">
+						<aura:if isTrue="{!v.showRank}">
+							<th scope="col">
+								<lightning:icon iconName="utility:graph"/>
+								<a class="label slds-truncate desc"
+								   aura:id="rank"
+								   onclick="{!c.sortRank}">{!v.rankLabel}</a>
+							</th>
+						</aura:if>
+						<aura:if isTrue="{!v.showImage}">
+							<th scope="col"></th>
+						</aura:if>
+						<aura:if isTrue="{!v.showName}">
+							<th scope="col" colspan="2">
+								<div title="{!v.nameLabel}">
+									<lightning:icon iconName="utility:user"/>
+								</div>
+								<div class="label slds-truncate desc">
+										{!v.nameLabel}
+								</div>
+							</th>
+						</aura:if>
+						<aura:if isTrue="{!v.showLevel}">
+							<th scope="col">
+								<div title="{!v.levelLabel}">
+									<lightning:icon iconName="utility:standard_objects"/>
+								</div>
+								<div class="label slds-truncate desc">
+										{!v.levelLabel}
+								</div>
+							</th>
+						</aura:if>
+						<aura:if isTrue="{!v.showPoints}">
+							<th scope="col">
+								<div title="{!v.pointsLabel}">
+									<lightning:icon iconName="utility:topic"/>
+								</div>
+								<a class="label slds-truncate desc"
+								   aura:id="points"
+								   onclick="{!c.sortPoints}">
+										{!v.pointsLabel}
+								</a>
+							</th>
+						</aura:if>
+						<aura:if isTrue="{!v.showPosts}">
+							<th scope="col">
+								<div title="{!v.postsLabel}">
+									<lightning:icon iconName="utility:description"/>
+								</div>
+								<a class="label slds-truncate desc"
+								   aura:id="posts"
+								   onclick="{!c.sortPosts}">
+										{!v.postsLabel}
+								</a>
+							</th>
+						</aura:if>
+						<aura:if isTrue="{!v.showComments}">
+							<th scope="col">
+								<div title="{!v.commentsLabel}">
+									<lightning:icon iconName="utility:comments"/>
+								</div>
+								<a class="label slds-truncate desc"
+								   aura:id="comments"
+								   onclick="{!c.sortComments}">
+										{!v.commentsLabel}
+								</a>
+							</th>
+						</aura:if>
+						<aura:if isTrue="{!v.showBadge}">
+							<th scope="col">
+								<div title="{!v.badgeLabel}">
+									<lightning:icon iconName="utility:shield"/>
+								</div>
+								<div class="label slds-truncate"
+								     aura:id="badge">
+										{!v.badgeLabel}
+								</div>
+							</th>
+						</aura:if>
+					</tr>
+					</thead>
+					<tbody>
+					<aura:iteration items="{!v.people}" var="person">
+						<tr>
+							<aura:if isTrue="{!v.showRank}">
+								<td scope="row" data-label="Rank">
+									<div class="slds-truncate"
+									     title="{!person.result.chatterInfluence.rank}">
+											{!person.result.chatterInfluence.rank}
+									</div>
+								</td>
+							</aura:if>
+							<aura:if isTrue="{!v.showImage}">
+								<td data-label="Image">
+									<div title="Profile Image">
+										<a href="{!v.sitePath+'/profile/'+person.result.id}">
+											<img class="profile-image"
+											     src="{!person.result.photo.smallPhotoUrl}"
+											     width="50"/>
+										</a>
+									</div>
+								</td>
+							</aura:if>
+							<aura:if isTrue="{!v.showName}">
+								<td scope="row"
+								    data-label="Username"
+								    colspan="2">
+									<div class="slds-truncate"
+									     title="{!person.result.displayName}">
+											{!person.result.displayName}
+									</div>
+								</td>
+							</aura:if>
+							<aura:if isTrue="{!v.showLevel}">
+								<td scope="row"
+								    data-label="Level">
+									<div class="slds-truncate"
+									     title="{!person.result.reputation.reputationLevel.levelName}">
+											{!person.result.reputation.reputationLevel.levelName}
+									</div>
+								</td>
+							</aura:if>
+							<aura:if isTrue="{!v.showPoints}">
+								<td scope="row"
+								    data-label="Points">
+									<div class="slds-truncate"
+									     title="{!person.result.reputation.reputationPoints}">
+											{!person.result.reputation.reputationPoints}
+									</div>
+								</td>
+							</aura:if>
+							<aura:if isTrue="{!v.showPosts}">
+								<td data-label="Posts">
+									<div class="slds-truncate"
+									     title="{!person.result.chatterActivity.postCount + ' Posts'}">
+											{!person.result.chatterActivity.postCount}
+									</div>
+								</td>
+							</aura:if>
+							<aura:if isTrue="{!v.showComments}">
+								<td data-label="Comments">
+									<div class="slds-truncate"
+									     title="{!person.result.chatterActivity.commentCount + ' Comments'}">
+											{!person.result.chatterActivity.commentCount}
+									</div>
+								</td>
+							</aura:if>
+							<aura:if isTrue="{!v.showBadge}">
+								<td data-label="Badge">
+									<div class="slds-truncate">
+										<img width="50"
+										     src="{!person.result.reputation.reputationLevel.levelImageUrl}"/>
+									</div>
+								</td>
+							</aura:if>
+						</tr>
+					</aura:iteration>
+					</tbody>
+				</table>
+			</div>
+			<!--<div id="attr">Powered by&nbsp;<a href="http://www.7summitsinc.com/">7Summits</a></div>-->
+		</section>
+	</aura:if>
+</aura:component>

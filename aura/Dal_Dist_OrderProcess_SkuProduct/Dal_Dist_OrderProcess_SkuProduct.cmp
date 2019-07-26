@@ -1,0 +1,259 @@
+<!--
+ - Created by 7Summits on 3/6/18.
+ -->
+
+<aura:component extends="c:Dal_Base">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="store" type="Map" required="true" />
+    <aura:attribute name="isActive" type="Boolean" default="false"/>
+    <aura:attribute name="checkAvailability" type="Boolean" default="false"/>
+    <aura:attribute name="priceBySku" type="Boolean" default="false"/>
+    <aura:attribute name="isSSC" type="Boolean" default="false"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="isAtpLoading" type="Boolean" default="false"/>
+    <aura:attribute name="isPriceBySkuLoading" type="Boolean" default="false"/>
+    <aura:attribute name="orderDefaults" type="Map" default="{}" access="private"/>
+    <aura:attribute name="cartProducts" type="List" default="[]" access="private"/>
+    <aura:attribute name="isSaving" type="Boolean" default="false" />
+    <aura:attribute name="orderTotal" type="String" default="0"/>
+    <aura:attribute name="orderWeight" type="String" default="0"/>
+    <aura:attribute name="errorsShippingDate" type="List" default="[]"/>
+    <aura:attribute name="isLoadingDefaultPriceRecords" type="Boolean" default="false"/>
+    <aura:attribute name="allProductsHaveValidATP" type="Boolean" default="false"/>
+
+    <!-- labels -->
+    <aura:attribute name="labelOrderWeightUnitOfMeasure" type="String" default="lbs"/>
+    <aura:attribute name="labelHeader" type="String" default="Enter Product SKUs"/>
+    <aura:attribute name="labelHeaderInfo" type="String" default="Enter a SKU to get started. NOTE: Entered quantities will be automatically rounded to the nearest available piece quantity."/>
+    <aura:attribute name="labelDefaultRequestedShipDate" type="String" default="Requested Ship Date"/>
+    <aura:attribute name="labelDefaultPriceRecord" type="String" default="Default Special Pricing"/>
+    <aura:attribute name="labelSaveOrder" type="String" default="Save Draft"/>
+    <aura:attribute name="labelSaveContinueOrder" type="String" default="Save and Continue"/>
+    <aura:attribute name="labelAddSku" type="String" default="Add 1 New SKU"/>
+    <aura:attribute name="labelAddMultipleSku" type="String" default="Add 10 SKUS"/>
+    <aura:attribute name="labelTotalWeight" type="String" default="Cumulative order weight"/>
+    <aura:attribute name="labelTotalPrice" type="String" default="Sub-Total"/>
+    <aura:attribute name="labelViewDetails" type="String" default="View Details"/>
+    <aura:attribute name="labelAddToOrder" type="String" default="Add all to order"/>
+    <aura:attribute name="labelCheckPricing" type="String" default="Check Pricing"/>
+    <aura:attribute name="labelSearchProducts" type="String" default="Search Products By Keyword"/>
+    <aura:attribute name="savedOrdersUrl" type="String" default="{!$Label.c.Dal_SkuProduct_SavedOrder_Label}"/>
+    <aura:attribute name="addAllToOrder" type="Boolean"/>
+    <aura:attribute name="allOrderButton" type="Boolean"/>
+
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <aura:attribute name="baseModal" type="Map" />
+
+    <!-- events -->
+    <aura:handler event="c:Dal_Dist_OrderSaveEvt" action="{!c.handleSaveOrderEvent}"/>
+
+    <aura:if isTrue="{!v.priceBySku == false}">
+        <lightning:layout verticalAlign="center" multipleRows="true" horizontalAlign="center" pullToBoundary="small">
+            <lightning:layoutItem class="slds-p-top_small slds-p-left_small slds-p-right_small" size="12">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.labelHeader}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+
+        <p>{!v.labelHeaderInfo}</p>
+    </aura:if>
+
+    <lightning:layout class="dal-form-order orderContainer slds-m-vertical_x-large" horizontalAlign="center" verticalAlign="center">
+        <lightning:layoutItem size="12">
+
+            <!-- ******************** -->
+            <!-- Form Header -->
+            <!-- ******************** -->
+            <lightning:layout class="slds-p-horizontal_small section-border-bottom" multipleRows="true" horizontalAlign="center" verticalAlign="center">
+
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="6"
+                      class="slds-grid slds-order_2 slds-large-order_1 slds-p-vertical_small">
+
+                    <lightning:layout verticalAlign="center" multipleRows="true">
+                        <lightning:layoutItem class="dal-small-fullWidth slds-p-around_small label-lg input-medium">
+                            <ui:inputDate aura:id="defaultShippingDate" label="{!v.labelDefaultRequestedShipDate}" displayDatePicker="true"
+                              value="{!v.orderDefaults.shipDate}" format="MM/DD/YYYY" disabled="{!or(v.isLoadingDefaultPriceRecords == true, or(v.isAtpLoading == true, v.isPriceBySkuLoading == true))}"
+                              change="{!(v.priceBySku == false) ? c.handleDefaultShippingChange : c.handlePriceBySkuDefaultShippingChange}" errors="{!v.errorsShippingDate}"/>
+                        </lightning:layoutItem>
+
+                        <!-- show price records only if we are not on the product availability page -->
+                        <aura:if isTrue="{!v.checkAvailability == false}">
+                            <lightning:layoutItem class="dal-small-fullWidth slds-p-around_small defaultPriceRecord-cta-label">
+                                <lightning:select aura:id="defaultPriceRecord" name="selectItem" label="{!v.labelDefaultPriceRecord}" class="label-lg"
+                                      disabled="{!or(v.isLoadingDefaultPriceRecords == true, or(v.isAtpLoading == true, v.isPriceBySkuLoading == true))}"
+                                      onchange="{!(v.priceBySku == false) ? c.handleDefaultPriceRecordChange : c.handlePriceBySkuPriceRecordChange}">
+                                    <aura:iteration items="{!v.orderDefaults.priceRecord}" var="option">
+                                        <option value="{!option.value}" selected="{!option.selected}">{!option.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                                <a href="pricing" class="label-cta" data-url="pricing">{!v.labelViewDetails}</a>
+                            </lightning:layoutItem>
+                        </aura:if>
+
+                    </lightning:layout>
+
+                </lightning:layoutItem>
+
+                <!-- quick order cta's -->
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="6"
+                    class="slds-grid slds-p-horizontal_small slds-grid_align-center slds-large-grid_align-end slds-order_1 slds-large-order_2 slds-p-top_large slds-p-bottom_small">
+
+                    <div id="btnSaveContinue" class="btnSaveContinue slds-grid slds-wrap slds-grid_align-center">
+                        <!-- shown in normal order flow -->
+                        <aura:if isTrue="{!and(v.checkAvailability == false, v.priceBySku == false)}">
+                            <lightning:button variant="neutral" label="{!v.labelSaveOrder}" class="dal-small-fullWidth dal-medium-fullWidth" onclick="{!c.handleSaveOrderClick}"
+                                disabled="{!or(v.isAtpLoading == true, v.isPriceBySkuLoading == true)}" />
+                            <lightning:button variant="brand" label="{!v.labelSaveContinueOrder}" class="dal-small-fullWidth dal-medium-fullWidth" onclick="{!c.saveContinue}"
+                                disabled="{!or(or(v.isAtpLoading == true, v.isPriceBySkuLoading == true), or(v.allProductsHaveValidATP == false, v.cartProducts.length == 0))}"/>
+                        </aura:if>
+
+                        <!-- shown when in product availability flow -->
+                        <aura:if isTrue="{!and(v.checkAvailability == true, v.isSSC == false)}">
+                            <aura:if isTrue="{!v.allOrderButton}">
+                            <lightning:button variant="brand" label="{!v.labelAddToOrder}" class="dal-small-fullWidth dal-medium-fullWidth" onclick="{!c.handleAddToOrder}"
+                                disabled="{!or(or(v.isAtpLoading == true, v.isPriceBySkuLoading == true), or(v.allProductsHaveValidATP == false, v.cartProducts.length == 0))}"/>
+                            </aura:if>
+                        </aura:if>
+
+                        <!-- shown when in price by sku flow -->
+                        <aura:if isTrue="{!v.priceBySku == true}">
+                            <lightning:button variant="neutral" label="{!v.labelSearchProducts}" class="dal-small-fullWidth dal-medium-fullWidth"
+                                disabled="{!or(v.cartProducts.length == 0, or(v.isAtpLoading == true, v.isPriceBySkuLoading == true))}" onclick="{!c.showProductSearch}" />
+                        </aura:if>
+                    </div>
+                </lightning:layoutItem>
+
+
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- End Form Header -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- Form Rows -->
+            <!-- ******************** -->
+            <lightning:layout class="rowStriped section-border-bottom" multipleRows="true" horizontalAlign="center" verticalAlign="center">
+
+                <!-- iterate list of products from the store -->
+                <aura:iteration items="{!v.cartProducts}" var="product" indexVar="index">
+                    <c:Dal_Dist_OrderProcess_SkuProductRow store="{!v.store}"
+                        checkAvailability="{!v.checkAvailability}"
+                        priceBySku="{!v.priceBySku}"
+
+                        cartId="{!index}"
+                        sku="{!product.sku}"
+                        productName="{!product.productName}"
+                        quantity="{!product.quantity}"
+                        originalQuantityRequested="{!product.originalQuantityRequested}"
+                        quantityRounded="{!product.quantityRounded}"
+                        unitOfMeasure="{!product.unitOfMeasure}"
+                        sourceOfSupply="{!product.sourceOfSupply}"
+                        requestShipDate="{!product.requestShipDate}"
+                        priceRecord="{!product.priceRecord}"
+                        netPrice="{!product.netPrice}"
+                        qtyPrice="{!product.qtyPrice}"
+                        extendedWeight="{!product.extendedWeight}"
+                        estimatedShipDate="{!product.estimatedShipDate}"
+                        onTimeFlag="{!product.onTimeFlag}"
+                        isQtyAvailable="{!product.isQtyAvailable}"
+                        unitOfMeasureSelected="{!product.unitOfMeasureSelected}"
+                        futureProductSupply="{!product.futureProductSupply}"
+                        sourceOfSupplySelectedName="{!product.sourceOfSupplySelectedName}"
+
+                        showProductInfo="{!product.showProductInfo}"
+                        productInfoError="{!product.productInfoError}"
+                        isAtpLoading="{!product.isAtpLoading}"
+                        canPrimarySosFulfill="{!product.canPrimarySosFulfill}"
+                        isPriceRecordsLoading="{!product.isPriceRecordsLoading}"
+                        isProductSupplyLoading="{!product.isProductSupplyLoading}"
+                        showProductSupply="{!product.showProductSupply}"
+                        isPriceBySkuLoading="{!product.isPriceBySkuLoading}"
+                        showPriceBySku="{!product.showPriceBySku}"
+                        pricedUom="{!product.pricedUom}"
+                        isValidData="{!product.isValidData}"
+
+                    />
+                </aura:iteration>
+
+                <!-- ******************** -->
+                <!-- Row CTAs -->
+                <!-- ******************** -->
+                <lightning:layoutItem size="12" class="rowCtas slds-border_top slds-p-around_small">
+                    <div class="dal-buttonGroup dal-buttonGroup-2">
+                        <lightning:button variant="neutral" label="{!v.labelAddSku}" iconName="utility:add" onclick="{!c.addProduct}" disabled="{!or(v.isAtpLoading == true, v.isPriceBySkuLoading == true)}" />
+                        <lightning:button variant="neutral" label="{!v.labelAddMultipleSku}" iconName="utility:rows"  onclick="{!c.addTenProducts}" disabled="{!or(v.isAtpLoading == true, v.isPriceBySkuLoading == true)}" />
+                    </div>
+                </lightning:layoutItem>
+
+                <!-- ******************** -->
+                <!-- End Row CTAs -->
+                <!-- ******************** -->
+
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- End Form Rows -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- Form Footer -->
+            <!-- ******************** -->
+            <c:Dal_Dist_OrderProcess_SkuSaveFooter handleSave="{!c.handleSaveOrderClick}" labelSaveOrder="{!v.labelSaveOrder}"
+               handleSaveContinue="{!c.saveContinue}" labelSaveContinueOrder="{!v.labelSaveContinueOrder}"
+               disabledData1="{!or(v.isAtpLoading == true, v.isPriceBySkuLoading == true)}"
+               disabledData2="{!or(or(v.isAtpLoading == true, v.isPriceBySkuLoading == true), or(v.allProductsHaveValidATP == false, v.cartProducts.length == 0))}"
+               data1Label="{!v.labelTotalWeight}" data1Value="{!v.orderWeight + ' ' + v.labelOrderWeightUnitOfMeasure}"
+               data2Label="{!v.labelTotalPrice}" data2Value="{!v.orderTotal}"
+               checkAvailability="{!v.checkAvailability}"  priceBySku="{!v.priceBySku}"
+               handleAddToOrder="{!c.handleAddToOrder}" labelAddToOrder="{!v.labelAddToOrder}"
+               handleCheckPricing="{!c.handleCheckPricing}" labelCheckPricing="{!v.labelCheckPricing}"
+               isSSC="{!v.isSSC}" addAllOrder="{!v.addAllToOrder}" addAllOrderAtProductAvaialibilty="{!v.allOrderButton}"
+            />
+            <!-- ******************** -->
+            <!-- End Form Header -->
+            <!-- ******************** -->
+        </lightning:layoutItem>
+
+        <!-- ******************** -->
+        <!-- Sticky Nav -->
+        <!-- ******************** -->
+        <div aura:id="stickySaveFooter" id="stickySaveFooter" class="sticky-saveFooter">
+            <c:Dal_Dist_OrderProcess_SkuSaveFooter handleSave="{!c.handleSaveOrderClick}" labelSaveOrder="{!v.labelSaveOrder}"
+               handleSaveContinue="{!c.saveContinue}" labelSaveContinueOrder="{!v.labelSaveContinueOrder}"
+               disabledData1="{!or(v.isAtpLoading == true, v.isPriceBySkuLoading == true)}"
+               disabledData2="{!or(or(v.isAtpLoading == true, v.isPriceBySkuLoading == true), or(v.allProductsHaveValidATP == false, v.cartProducts.length == 0))}"
+               data1Label="{!v.labelTotalWeight}" data1Value="{!v.orderWeight + ' ' + v.labelOrderWeightUnitOfMeasure}"
+               data2Label="{!v.labelTotalPrice}" data2Value="{!v.orderTotal}"
+               checkAvailability="{!v.checkAvailability}" priceBySku="{!v.priceBySku}"
+               handleAddToOrder="{!c.handleAddToOrder}" labelAddToOrder="{!v.labelAddToOrder}"
+               handleCheckPricing="{!c.handleCheckPricing}" labelCheckPricing="{!v.labelCheckPricing}"
+               isSSC="{!v.isSSC}" addAllOrder="{!v.addAllToOrder}" addAllOrderAtProductAvaialibilty="{!v.allOrderButton}"
+            />
+        </div>
+        <!-- ******************** -->
+        <!-- End Sticky Nav -->
+        <!-- ******************** -->
+
+    </lightning:layout>
+
+    <!-- ******************** -->
+    <!-- Info comp -->
+    <!-- ******************** -->
+    <!--  <c:Dal_InfoPanel type="Single" icon1="utility:call" subText1="Call ProExchange Hotline"
+         mainText1="877-633-5603" size1="small" iconBG1="{!v.isSSC?'#CF0A2C':'#00416A'}" showTile1="true" position="Left" className="slds-show_inline-block slds-truncate" /> -->
+    <!-- ******************** -->
+    <!-- End info comp -->
+    <!-- ******************** -->
+
+
+
+    <!-- ******************** -->
+    <!-- Saving -->
+    <!-- ******************** -->
+    <aura:if isTrue="{!v.isSaving == true}">
+        <lightning:spinner variant="brand" size="medium" class="slds-is-fixed" />
+    </aura:if>
+    <!-- ******************** -->
+    <!-- End Saving -->
+    <!-- ******************** -->
+
+</aura:component>

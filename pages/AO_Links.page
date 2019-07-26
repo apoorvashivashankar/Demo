@@ -1,0 +1,30 @@
+<apex:page >
+
+<style type="text/css">
+
+h1 {font-size:350%;}
+h5 {font-size:150%;color:#DC143C}
+h6 {font-size:200%;color:#1E90FF}
+p {font-size:100%;}
+
+</style>
+
+<p></P>
+<apex:pageBlock title="External Links">
+<apex:outputLink value="http://reporting.daltile.net/Security/MainLogin.aspx?ReturnUrl=%2fDefault.aspx" target="_blank" id="Reporting_link"><h6>Reporting.daltile.net </h6></apex:outputLink> <h5> * Opens in a new window. Requires VPN access </h5><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rF0000000J9lp&ic=1" id="AO_Decor_link"><h6>AO Decor </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rF0000000J5rA&ic=1" id="Directory_link"><h6>Directory</h6></apex:outputLink> <h5> * Requires VPN access </h5><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rF0000000J9qQ&ic=1" id="American_Olean_link"><h6>American Olean </h6></apex:outputLink><br></br>
+<apex:outputLink value="http://www.marazziusa.com/products" target="_blank" id="Marazzi_link"><h6>Marazzi Tile </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rA0000000DvJY&ic=1" id="Dodge_link"><h6>Dodge </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rA0000000E1H6&ic=1" id="Marketing_Portal_link"><h6>Marketing Portal </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rA0000000E1HB&ic=1" id="Portal_link"><h6>Portal </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rA0000000E1HG&ic=1" id="D_Mail_link"><h6>D Mail </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rF0000000J3oJ&ic=1" id="Runzheimer_link"><h6>Runzheimer </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rF0000000J5iY&ic=1" id="National_Account_Database_link"><h6>National Account Database </h6></apex:outputLink> <h5>* Requires VPN access </h5><br></br>
+<apex:outputLink value="http://clearpay.mohawkind.com/cp" target="_blank" id="ClearPay_link_link"><h6>ClearPay Link </h6></apex:outputLink> <h5> * Opens in a new window.  Requires VPN access </h5><br></br>
+</apex:pageBlock>
+
+
+
+</apex:page>

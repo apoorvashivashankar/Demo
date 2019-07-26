@@ -1,0 +1,207 @@
+<!--
+ - Created by ranja on 26-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderProductSearchProdList" extends="c:Dal_SSC_CreateOrderBase"
+                controller="Dal_InventorySearchController" access="global"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+    <!-- Internal Atributes -->
+    <aura:attribute name="count" type="Integer" default="0"/>
+    <aura:attribute name="isProductSelected" type="Boolean" default="false"/>
+
+    <!-- Calculate Position -->
+    <aura:attribute name="pos" type="Integer" default="1"/>
+
+    <!-- Labels -->
+    <aura:attribute name="labelCheckInventory" type="String" default="Check Inventory"/>
+    <aura:attribute name="disableNext" type="Boolean" default="false"/>
+
+    <!--Event-->
+    <!--<aura:registerevent name="createOrderGlobalSearch" type="c:Dal_SSC_CreateOrderGlobalSearchDoVisible"/>-->
+
+
+
+    <!--<aura:if isTrue="{!v.isDestroyed}" >-->
+    <!-- Body Starts Here -->
+    <div class="baseCard slds-size_12-of-12">
+
+        <aura:if isTrue="{!v.responseFromSearchResult.length > 0}">
+            <!-- Header-->
+            <lightning:layout
+                    class="dal-form-order slds-grid slds-grid_align-center slds-grid_vertical-align-center slds-wrap"
+                    multipleRows="true" horizontalAlign="center" verticalAlign="center">
+                <lightning:layoutItem class="slds-grid slds-p-around_small" size="12" smallDeviceSize="6"
+                                      mediumDeviceSize="6" largeDeviceSize="6">
+
+                    <div class="orderStats orderStats-medium orderStats-textLeftLarge dal-medium-inputFull dal-small-inputFull">
+                        {!v.responseFromSearchResult.length} results
+                    </div>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem class="slds-p-around_small" size="12" smallDeviceSize="6" mediumDeviceSize="6"
+                                      largeDeviceSize="6">
+
+                    <div class="btnSaveContinue slds-grid slds-wrap slds-grid_align-center">
+                        <div class="table-sort-sortby">
+                            SORT BY
+                        </div>
+                        <div class="table-sort-list">
+                            <div>
+                                <lightning:select class="" name="Product Name" required="false"
+                                                  onchange="{!c.sortByOrder}"
+                                                  label="Product Name" variant="label-hidden"
+                                                  value="{!v.createOrderWrapper.sortByName}">
+                                    <option value="N-A">Name A-Z</option>
+                                    <option value="N-Z">Name Z-A</option>
+                                    <option value="C-A">Color A-Z</option>
+                                    <option value="C-Z">Color Z-A</option>
+                                </lightning:select>
+                            </div>
+                        </div>
+                    </div>
+
+                </lightning:layoutItem>
+            </lightning:layout>
+
+
+            <aura:set attribute="else" >
+                <div class="slds-m-vertical_medium slds-align_absolute-center slds-size_12-of-12">
+                    <ui:message title="" severity="info" closable="false" class="slds-size_12-of-12 slds-align_absolute-center">
+                        NO RESULTS FOUND
+                    </ui:message>
+                </div>
+            </aura:set>
+        </aura:if>
+
+        <!-- Displaying the product list -->
+        <lightning:layout class="section-top-custom">
+
+            <lightning:layoutItem size="12" class="dal-searchResultsContainer ">
+
+                <aura:if isTrue="{!v.responseFromSearchResult.length > 0}">
+
+                    <!-- Iteration of products -->
+                    <lightning:layoutItem size="12">
+
+                        <!-- Data Table -->
+                        <table class="slds-table slds-table_cell-buffer slds-no-row-hover">
+
+                            <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="slds-text-title_caps table-wrap-custom cell-custom-padding table-column-sku"
+                                    scope="col">
+                                    <div class="table-wrap-custom" title="Product/Sku#">Product/Sku#</div>
+                                </th>
+                                <th class="slds-text-title_caps table-wrap-custom cell-custom-padding inventory-table-color-section"
+                                    scope="col">
+                                    <div class="table-wrap-custom" title="SIZE">SIZE</div>
+                                </th>
+                                <th class="slds-text-title_caps table-wrap-custom cell-custom-padding inventory-table-color-section"
+                                    scope="col">
+                                    <div class="table-wrap-custom" title="COLOR">COLOR</div>
+                                </th>
+                                <th class="slds-text-title_caps table-wrap-custom slds-cell-wrap cell-custom-padding "
+                                    scope="col">
+                                    <div class="table-wrap-custom" title="Select">Select</div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <aura:iteration items="{!v.displayProdList}" var="result" indexVar="index">
+
+                                <tr class="{! (result.isChecked) ? 'color-for-selected-sku slds-hint-parent' : 'default-skulist slds-hint-parent' }">
+
+                                    <td class="cell-custom-padding table-wrap-custom" data-label="Product/Sku#">
+
+                                        <div class="table-wrap-custom" title="{!result.Description}">
+                                            <b>
+                                                <a class="a-color" name="{!index}" onclick="{!c.openSkuDetailPage}">
+                                                    {!result.Description}
+                                                </a>
+                                            </b>
+                                        </div>
+
+                                        <div class="table-product-sku-font table-wrap-custom">
+                                                {!result.DW_ID__c}
+                                            </div>
+                                    </td>
+
+                                    <td class="cell-custom-padding inventory-table-color-section" data-label="SIZE">
+                                        <aura:if isTrue="{!and (not(empty(result.Size__c)), result.Size__c != 'IP')}">
+                                        <!--<aura:if isTrue="{!result.Size__c}">-->
+                                            <div class="table-wrap-custom" title="Size">{!result.Size__c}</div>
+                                        </aura:if>
+                                    </td>
+
+                                    <td class="cell-custom-padding inventory-table-color-section" data-label="COLOR">
+                                        <aura:if
+                                                isTrue="{!and(result.Product_Color__r.Name,not(result.Product_Color__r.Name == '9999'))}">
+                                            <!-- Added "Product_Color__r.Code__c" by Daltile on 04/16/2019 (Defect# : 697) -->
+                                            <div class="table-wrap-custom" title="">{!result.Product_Color__r.Code__c} - {!result.Product_Color__r.Name}
+                                                </div>
+                                        </aura:if>
+                                    </td>
+
+                                    <td class="cell-custom-padding table-wrap-custom table-checkbox-custom"
+                                        data-label="Selection">
+                                        <lightning:input class="" variant="label-hidden" type="checkbox"
+                                                         value="{!index}"
+                                                         label="" aura:id="checkCheckboxes" onchange="{!c.onCheck}"
+                                                         checked="{!result.isChecked}"
+                                                         name="{!index}"/>
+                                    </td>
+
+                                </tr>
+
+                            </aura:iteration>
+
+                            </tbody>
+                        </table>
+
+                        <div class="slds-grid slds-grid_align-spread slds-m-top_xx-large">
+                            <div>
+                                <lightning:select class="" name="Page Number" required="false" value="{!v.perPageCount}"
+                                                  label="Page Number" variant="label-hidden" onchange="{!c.handleDisplayQuantityChange}">
+                                    <option value="10">10 per page</option>
+                                    <option value="20">20 per page</option>
+                                    <option value="30">30 per page</option>
+                                </lightning:select>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="table-pagination-spacing slds-grid">
+
+                                <lightning:button name="previous page" label="Previous Page" value="prev"
+                                                  title="Previous Page" onclick="{!c.changePageData}"
+                                                  variant="base" class="dal-page-number"
+                                                  disabled="{!v.pageNumber == 1}">
+                                    <lightning:icon alternativeText="Next" iconName="utility:chevronleft"
+                                                    size="x-small"/>
+                                    Prev
+                                </lightning:button>
+
+                                <p class="table-pagination-bottom">{!v.responseFromSearchResult.length} items &nbsp; Page
+                                    {!v.pageNumber} of {!v.totalPages}</p>
+
+                                <lightning:button name="next page" label="Next Page" value="next" title="Next Page"
+                                                  onclick="{!c.changePageData}" variant="base"
+                                                  disabled="{!or(v.disableNext, (v.totalPages == v.pageNumber))}"
+                                                  class="dal-page-number"> Next
+                                    <lightning:icon alternativeText="Next" iconName="utility:chevronright"
+                                                    size="x-small"/>
+                                </lightning:button>
+
+                            </div>
+                        </div>
+
+                    </lightning:layoutItem>
+
+                </aura:if>
+            </lightning:layoutItem>
+
+        </lightning:layout>
+
+    </div>
+    <!--</aura:if>-->
+</aura:component>

@@ -1,0 +1,124 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  min-height: 50px;
+  background-color: token(colorBrand);
+}
+.THIS a svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.THIS a:link,
+.THIS a:visited {
+  color: token(colorTextInverse);
+}
+.THIS a:link svg,
+.THIS a:visited svg {
+  fill: #fff;
+}
+.THIS a:hover,
+.THIS a:active {
+  color: token(colorTextInverse);
+}
+.THIS a:hover svg,
+.THIS a:active svg {
+  fill: #fff;
+}
+.THIS .navHamburger {
+  display: none;
+}
+@media screen and (max-width: 767px) {
+  .THIS .navHamburger {
+    display: inline;
+    height: 50px;
+    text-align: right;
+  }
+}
+@media screen and (max-width: 767px) {
+  .THIS .navHamburger ~ .cPeak_NavigationLink {
+    height: 0;
+    opacity: 0;
+  }
+}
+.THIS .navHamburger ~ .cPeak_NavigationLink a {
+  opacity: 1;
+}
+.THIS .slds-icon-utility-rows {
+  width: 20px;
+  opacity: 1;
+}
+.THIS .slds-icon-utility-rows svg {
+  display: inline-block;
+}
+.THIS .slds-icon-utility-close {
+  width: 0;
+  opacity: 0;
+}
+.THIS .slds-icon-utility-close svg {
+  display: none;
+}
+.THIS .showNav .slds-icon-utility-close {
+  width: 20px;
+  opacity: 1;
+  -webkit-transition: opacity 0.5s ease-out;
+  -moz-transition: opacity 0.5s ease-out;
+  transition: opacity 0.5s ease-out;
+}
+.THIS .showNav .slds-icon-utility-close svg {
+  display: inline-block;
+  fill: #fff;
+}
+.THIS .showNav .slds-icon-utility-rows {
+  width: 0;
+  opacity: 0;
+  -webkit-transition: opacity 0.5s ease-out;
+  -moz-transition: opacity 0.5s ease-out;
+  transition: opacity 0.5s ease-out;
+}
+.THIS .showNav .slds-icon-utility-rows svg {
+  display: none;
+}
+.THIS .showNav .cPeak_NavigationLink {
+  z-index: 10;
+  display: block;
+  width: 50%;
+  border-bottom: 1px solid token(colorBorder);
+}
+@media screen and (max-width: 767px) {
+  .THIS .showNav .cPeak_NavigationLink {
+    width: 100%;
+    height: 50px;
+    opacity: 1;
+    color: token(colorTextDefault);
+    background-color: #fff;
+    -webkit-transition: all 0.35s ease-out;
+    -moz-transition: all 0.35s ease-out;
+    transition: all 0.35s ease-out;
+  }
+}
+@media screen and (max-width: 767px) {
+  .THIS .showNav .cPeak_NavigationLink a {
+    display: block;
+    opacity: 1;
+    color: token(colorTextDefault);
+    background-color: #fff;
+  }
+}
+@media screen and (max-width: 767px) {
+  .THIS .cPeak_NavigationList {
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    width: 100%;
+  }
+}
+@media screen and (max-width: 767px) {
+  .THIS .cPeak_NavigationList .cPeak_NavigationLink {
+    width: 100%;
+  }
+}

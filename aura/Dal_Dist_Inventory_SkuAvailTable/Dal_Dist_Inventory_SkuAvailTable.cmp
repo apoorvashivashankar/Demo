@@ -1,0 +1,232 @@
+<!--
+ - Created by ranja on 01-11-2018.
+ -->
+
+<aura:component description="Dal_Dist_Inventory_SkuAvailTable" access="global" extends="c:Dal_ModalBase"
+                controller="Dal_InventorySearchController">
+
+    <!--Internal Attributes-->
+    <aura:attribute name="milesWrapperList" type="Map"/>
+    <aura:attribute name="storeName" type="String"/>
+    <aura:attribute name="sos" type="String"/>
+    <aura:attribute name="RequestedAdjustedQtyAvailabilityInd" type="String"/>
+    <aura:attribute name="ATP_DateAtSupplyPlant" type="Date"/>
+    <aura:attribute name="msgProductSupplyEmpty" type="String" default="No inventory data found."/>
+    <aura:attribute name="showTill" type="Integer" default="5"/>
+    <aura:attribute name="noDataMsg" type="String" default="Please contact your SSC for availability."/>
+    <aura:attribute name="listOfMiles" type="List" default="[50,75,100,125,150,175,200]"/>
+    <aura:attribute name="finalResponseWrapper" type="Map"/>
+    <aura:attribute name="displayMilesList" type="Map"/>
+    <aura:attribute name="startOfList" type="Integer" default="0"/>
+    <aura:attribute name="pageNumber" type="Integer" default="1"/>
+    <aura:attribute name="totalPages" type="Integer" default="1"/>
+    <aura:attribute name="disableNext" type="Boolean" default="false"/>
+    <aura:attribute name="indexOfDist" type="Integer" default="0"/>
+    <aura:attribute name="selectedMile" type="Integer" default="50"/>
+    <aura:attribute name="showSpinner" type="boolean" default="false"/>
+    <aura:attribute name="selectedAddressMile" type="String" />
+    <aura:attribute name="prevSupplyPlantId" type="String" />
+    <aura:attribute name="UOM" type="String" />
+    <aura:attribute name="distanceFromHome" type="String" default="Distance from Primary Store Location:" />
+    <aura:attribute name="isStoreChanged" type="Boolean" default="false" />
+    <aura:attribute name="availableQty" type="String" />
+    <aura:attribute name="totalCartons" type="String" />
+
+
+    <!-- For Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!-- Init Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+
+    <!--Body-->
+    <div>
+        <div>
+            <div class="slds-grid slds-wrap slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12
+                        slds-large-size_9-of-12 searchResult slds-p-horizontal_small slds-m-vertical_large">
+                <h4 class="slds-m-right_large"><strong>{!v.distanceFromHome}</strong></h4>
+                <lightning:select class="distance-from-home" label="Distance from Home" name="{!indexOfDist}"
+                                  variant="label-hidden" onchange="{!c.changeSelectedMiles}" value="{!v.selectedMile}">
+                    <aura:iteration items="{!v.listOfMiles}" var="ml">
+                        <option value="{!ml}">{!ml} mi.</option>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+
+        <aura:if isTrue="{!not(v.showSpinner)}">
+            <div>
+                <!-- Body Starts here -->
+                <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-no-row-hover
+                  inventory-table-custom slds-p-top_medium table-padding-custom">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="slds-cell-wrap ">
+                            <div></div>
+                        </th>
+                        <th scope="col" class="slds-cell-wrap ">
+                            <div class="slds-truncate slds-wrap-cell-text" title="STORE">STORE</div>
+                        </th>
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate slds-align_absolute-center" title="MILES">MILES</div>
+                        </th>
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate table-border-bottom slds-align_absolute-center" title="{!v.UOM}">
+                                {!v.UOM}
+                            </div>
+                        </th>
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate table-border-bottom slds-align_absolute-center"
+                                 title="# OF CARTONS">
+                                # OF CARTONS
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <aura:if isTrue="{!v.milesWrapperList.length > 0}">
+                        <aura:iteration items="{!v.displayMilesList}" var="milesData" indexVar="index">
+                            <tr>
+                                <td data-label="{!index}" class="table-cell-border-bottom">
+                                    <div class="slds-truncate table-border-bottom slds-align_absolute-center dal-hide-label">
+                                        <ui:inputRadio text="{!milesData.supplyPlantName}" label="{!index}" name="storeToLocate"
+                                                       change="{!c.changeAddress}" />
+                                        <!--<lightning:input type="radio"  label="" name="storeToLocate"-->
+                                        <!--value="{!milesData.supplyPlantName}"-->
+                                        <!--class="dal-radio-button" variant="label-hidden"/>-->
+                                    </div>
+                                </td>
+                                <td data-label="STORE" class="table-cell-border-bottom">
+                                    <div class="slds-truncate  slds-wrap-cell-text">
+                                        <b>
+                                            {!milesData.supplyPlantName}
+                                            <aura:if isTrue="{!milesData.supplyPlanState}">
+                                            {!milesData.supplyPlanState}
+                                        </aura:if>
+                                            <aura:if isTrue="{!milesData.supplyPlanState}">
+                                                ,{!milesData.supplyPlanState}
+                                            </aura:if>
+                                        </b>
+                                    </div>
+                                </td>
+                                <td data-label="MILES" class="table-cell-border-bottom">
+                                    <div class="slds-truncate slds-align_absolute-center">
+                                        <aura:if isTrue="{!milesData.miles}">
+                                            <lightning:formattedNumber value="{!milesData.miles}" maximumFractionDigits="2" minimumFractionDigits="2" />
+                                            <aura:set attribute="else">
+                                                0
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                </td>
+                                <td data-label="SQ. FT" class="table-cell-border-bottom">
+                                    <div class="slds-truncate table-border-bottom slds-align_absolute-center">
+                                        <lightning:formattedNumber value="{!milesData.availableQty}" maximumFractionDigits="2" minimumFractionDigits="2" />
+                                    </div>
+                                </td>
+                                <td data-label="# OF CARTONS" class="table-cell-border-bottom">
+                                    <div class="slds-truncate slds-align_absolute-center color-green">
+
+                                        <aura:if isTrue="{!milesData.totalCartons}">
+                                            <lightning:formattedNumber value="{!milesData.totalCartons}" maximumFractionDigits="2" minimumFractionDigits="2"/>&nbsp;
+                                            <aura:set attribute="else">
+                                                0&nbsp;
+                                            </aura:set>
+                                        </aura:if>
+                                        CARTONS
+                                    </div>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+
+                        <aura:set attribute="else">
+                            <td colspan="5">
+                                <ui:message title="" severity="info" closable="false">{!v.noDataMsg}</ui:message>
+                            </td>
+                        </aura:set>
+
+                    </aura:if>
+                    </tbody>
+
+                </table>
+
+                <div class="slds-m-vertical_medium slds-grid slds-p-horizontal_small slds-grid_align-spread">
+
+                    <lightning:button name="Previous page" label="Previous" value="prev"
+                                      title="Previous Page" onclick="{!c.handleChangeData}"
+                                      variant="base" class="dal-page-number"
+                                      disabled="{!v.pageNumber == 1}">
+                        <lightning:icon alternativeText="Next" iconName="utility:chevronleft"
+                                        size="x-small"/>
+                        Prev
+                    </lightning:button>
+
+                    <!--
+                    <a onclick="{!c.handleChangeData}" name="prev">
+                        <div class="slds-col slds-grid dal-view-cart-navigational-keys">
+                            <lightning:buttonIcon iconName="utility:chevronleft" variant="bare"
+                                                  onclick="{! c.handlePrevious }"
+                                                  alternativeText="Previous">
+                            </lightning:buttonIcon>
+                            <p class="navigational-button-label">Previous</p>
+                        </div>
+                    </a>
+
+                    <a onclick="{!c.handleChangeData}" name="next">
+                        <div class="slds-col slds-grid dal-view-cart-navigational-keys">
+                            <p class="navigational-button-label">Next</p>
+                            <lightning:buttonIcon iconName="utility:chevronright" variant="bare" onclick="{! c.handleNext }"
+                                                  alternativeText="Next">
+                            </lightning:buttonIcon>
+                        </div>
+                    </a>
+                    -->
+
+                    <lightning:button name="Next page" label="Next" value="next" title="Next Page"
+                                      onclick="{!c.handleChangeData}" variant="base" disabled="{! and(v.disableNext, v.totalPages == v.pageNumber)}"
+                                      class="dal-page-number"> Next
+                        <lightning:icon alternativeText="Next" iconName="utility:chevronright"
+                                        size="x-small"/>
+                    </lightning:button>
+
+                </div>
+            </div>
+        </aura:if>
+    </div>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:layoutItem size="12"
+                              class="slds-is-relative change-miles-spinner slds-p-around_xx-large">
+            <lightning:spinner class="bkg-transparent" variant="brand"/>
+        </lightning:layoutItem>
+    </aura:if>
+
+    <!--Footer-->
+    <lightning:layout class="footer-action-bar slds-m-top_small slds-p-top_small" multipleRows="true">
+
+        <lightning:layoutItem class="button-bold slds-p-around_small"
+                              size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="4">
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+                <lightning:button variant="neutral" class="modal-footer-close dal-createorder-cancel-button"
+                                  label="CANCEL"
+                                  onclick="{!c.handleCloseModal}"/>
+            </lightning:layoutItem>
+        </lightning:layoutItem>
+
+        <lightning:layoutItem class="button-bold dal-small-inputFull slds-p-around_small" size="12"
+                              smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="8">
+            <lightning:layout horizontalAlign="end">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="6">
+                    <lightning:button variant="destructive" class="modal-footer-close" label="CHANGE STORE"
+                                      onclick="{!c.handleChangeStore}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+
+</aura:component>

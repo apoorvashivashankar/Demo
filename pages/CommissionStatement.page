@@ -1,0 +1,850 @@
+<apex:page Controller="CommissionStatementSalesRep" action="{!parseIt}" sidebar="true">
+<apex:form >
+<style type="text/css">
+table, td
+ {
+  border-collapse:collapse;solid black;
+ }
+
+table.box-table-header
+{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 11px;
+    text-align: left;
+    border-collapse: collapse;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+    padding-bottom: .5em;
+    padding-top: .5em;
+    padding-left: .5em;
+    padding-right: .5em;
+}
+table.box-table-paymentForBorder
+{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    text-align: left;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #191970;
+    padding-bottom: .5em;
+    padding-top: .2em;
+    padding-left: .2em;
+    padding-right: .2em;
+}
+table.box-table-paymentBodyA
+{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    text-align: left;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #191970;
+    #padding-bottom: .5em;
+    #padding-top: .2em;
+    #padding-left: .2em;
+    #padding-right: .2em;
+    height:180px;
+}
+table.box-table-promotionBodyA
+{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    text-align: left;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #191970;
+}
+table.box-table-promotionBodyB
+{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    text-align: left;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+   
+    border-top: 1px solid #191970;
+}
+table.box-table-salesKickerBodyA
+{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    text-align: left;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #191970;
+}
+tr.sideGap> td
+{
+padding-left:.2em;
+padding-right:.2em;
+}
+tr.paymentDate> td
+{
+ border-collapse: collapse;
+ height:14px;
+}
+tr.paymentHeight> td
+{
+ height:10px;
+ padding-bottom: -5px;
+ 
+}
+tr.componentTotal> td
+{
+ border-collapse: collapse;
+ border-bottom: 1px solid #000000;
+ border-top: 1px solid #000000;
+}
+tr.sanfiOthersHeight> td
+{
+ border-bottom: 1px solid #000000;
+ height:10px;
+ word-wrap: normal;
+ padding-bottom: .5em;
+ font:bold 12px Arial;
+}
+tr.height>td
+{
+ height:10px;
+}
+tr.totalPayment> td
+{
+   valign: middle;
+   border-right: 1px solid #000000;
+   padding-top: 3.2em;
+}
+td.compoBorder
+{
+   padding-left: 1em;
+   border-collapse: collapse;
+   border-left: 1px solid #000000;
+   padding-bottom: .5em;
+}
+td.compoTotalFormat
+{
+   padding-left: 1em;
+   border-collapse: collapse;
+   padding-bottom: .5em;
+}
+
+tr.promotion> td
+{
+   padding-left: 1em;
+   padding-top: 1em;
+   text-align: center;
+   padding-bottom: .5em;
+   border-collapse: collapse;
+   word-wrap: normal;
+   font:12px Arial ;
+}
+td.promotionBorder
+{
+   border-collapse: collapse;
+   padding-left: 1em;
+   padding-bottom:.5em;
+   padding-top: .5em;
+   #padding:-5px;
+   align: center;
+   font:12px Arial ;
+   word-wrap: normal;
+}
+
+td.salesKickerGreyLeft
+{
+   border-collapse: collapse;
+   padding-left: 1em;
+   padding-bottom:.5em;
+   padding-top: .5em;
+   #padding:-5px;
+   text-align: left;
+   font:12px Arial ;
+   word-wrap: normal;
+}
+
+td.salesKickerGreyRight
+{
+   border-collapse: collapse;
+   padding-right: 5em;
+   padding-bottom:.5em;
+   padding-top: .5em;
+   #padding:-5px;
+   text-align: right;
+   font:12px Arial ;
+   word-wrap: normal;
+}
+
+td.promotionBord
+{
+   border-collapse: collapse;
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-bottom:.5em;
+   padding-top: .5em;
+   align: center;
+   font:12px Arial ;
+   word-wrap: normal;
+}
+td.promotionBo
+{
+   border-collapse: collapse;
+   padding-left: 1em;
+   padding-bottom: -5px;
+   padding-top: 0px;
+   #padding:-5px;
+   font:12px Arial ;
+   word-wrap: normal;
+}
+td.promotionBorder2
+{
+   border-collapse: collapse;
+   padding-left: 1em;
+   padding-bottom: .5em;
+   font:12px Arial ;padding-right: .1em;
+   word-wrap: normal;
+}
+td.promo
+{
+   border-collapse: collapse;
+   padding-left: 1em;
+   padding-bottom:.2em;
+   font:12px Arial ;padding-right:1em;
+   word-wrap: normal;
+}
+td.prom
+{
+   border-collapse: collapse;
+   padding-left: 0em;
+   padding-bottom:.5em;
+   font:12px Arial ;text-align:center;
+   padding-right: 2em;word-wrap: normal;
+}
+td.promoOther
+{
+   border-collapse: collapse;
+   padding-left: 0em;
+   padding-bottom: .5px;
+   padding-top: 1px;
+   font:12px Arial ;
+   #word-wrap: normal;
+}
+td.promoGreen
+{
+    padding-left: 1em; 
+    padding-bottom:.5em;
+    font:12px Arial;
+    word-wrap:normal;
+}tr.salesKickAnnual> td
+{
+   align: center;
+   padding-top: .5em;
+   padding-right:0em;
+}
+tr.d3 >td {
+    border-bottom: 1px solid #000000;
+}
+tr.d0 >td {
+    background-color: lightgrey;
+    font:bold 12px Arial;
+    height:10px;
+    border-bottom: 1px solid #000000;
+}
+tr.d1 > td {
+    background-color: lightgrey; font:bold 12px Arial;
+    border-bottom: 1px solid #000000;
+    height:10px;
+}
+tr.d2 >td {
+    background-color:lightgrey; font:bold 12px Arial;
+    text-align:left;
+}
+
+</style>
+
+<table class="box-table-header" align="center" border="0" width="100%">
+<apex:outputpanel rendered="{!headerFlag}">
+<tr>
+  <td>
+   <table border="0" width="100%"  height="50px">
+    <tr class="sideGap">
+     <td width="30%">
+      <apex:image url="{!URLFOR($Resource.Clear_Pay_Logo)}" width="175" height="50" />
+     </td>
+     <td width="40%" align="Center"><font size="4"><b>Commission Statement</b></font><br></br>
+      <apex:repeat value="{!listHeaderInfo}" var="headerInfo">
+       <b><font size="3" color="#000000">{!headerInfo}</font></b>
+       </apex:repeat>
+     </td>
+      <apex:repeat value="{!UserDetails}" var="listDetails">
+       <td width="30%" align="right" top="4"><font size="3">
+       <b><apex:outputText value="{!listDetails}" /></b><br></br>
+       <apex:outputText value="{!$User.EmployeeNumber}"/></font>
+      </td>
+      </apex:repeat>
+    </tr>
+    </table>
+    </td>
+   </tr>
+ </apex:outputpanel> 
+</table> 
+<apex:pageMessages />
+
+<table width="100%"><tr><td></td></tr></table>
+<table width="100%" > 
+<apex:outputpanel rendered="{!paymentFlag}">   
+<tr class="sideGap">
+ <td width="100%" colspan="6" bgcolor="#191970"><font size="3" color="#FFFFFF">&nbsp;&nbsp;&nbsp;<B>Payment Calculation</B></font></td>
+</tr>
+<tr>
+<td width="82%">
+<table width="100%" class="box-table-paymentBodyA">
+ <script> var iii = 0;</script>
+ <apex:repeat value="{!listPaymentCalculations}" var="paymentCalculation">
+ <script> 
+  var t = {!totalPay};
+  
+  if(iii > 0)
+  {   
+   var jjj = 0;
+   if(iii == (t-1)) {
+   document.write('<tr  class="d0" >');    
+   } else{
+         document.write('<tr>');
+     }
+   document.write('<apex:repeat value="{!paymentCalculation}" var="dataCal">'); 
+  if (jjj == 0)
+  {
+   if(iii == (t-1)) {
+     document.write('<td align="left" class="promotionBorder"><b>{!dataCal}</b></td>');  
+   }
+   else                        
+   {  
+    document.write('<td align="left" class="promotionBorder">{!dataCal}</td>');  
+   }  
+  }
+  else
+  {
+    if(iii == (t-1)) {
+     document.write('<td align="center"  class="promotionBorder"><b>{!dataCal}</b></td>');
+    }
+    else
+    {
+     document.write('<td align="center"  class="promotionBorder">{!dataCal}</td>');
+    }
+  }
+   jjj++;                       
+  document.write('</apex:repeat></tr>');  
+ }
+              
+ else{
+      var kkk = 0;
+       document.write('<tr bgcolor="#93DB70" class="promoGreen"><apex:repeat value="{!paymentCalculation}" var="dataCal">'); 
+      if (kkk == 0)
+        {
+         document.write('<td align="left" class="promotionBo"><b>{!dataCal}</b></td>');  
+        }
+        else
+        {
+         document.write('<td align="center" class="promotionBo"><b>{!dataCal}</b></td>'); 
+        }  
+         kkk++;                      
+        document.write('</apex:repeat></tr>');   
+}  
+iii = iii+1;
+</script>
+</apex:repeat> 
+</table>
+</td>
+<td width="18%">
+  <table width="100%" height="100%" border="0" class="box-table-paymentBodyA">
+   <tr class="paymentDate"> 
+    <td bgcolor="#191970" align ="center">
+    <apex:repeat value="{!listHeaderInfo}" var="headerInfo">  
+     <b><font size="2" color="#FFFFFF" >{!headerInfo}</font></b>
+    </apex:repeat>
+    </td>
+   </tr>
+   <tr class="totalPayment">
+    <td align="center"><b><font size="7" color="#000000">{!totalValue}</font></b></td>
+   </tr>
+  </table>
+</td>
+</tr> 
+</apex:outputPanel>
+</table>
+
+<table border="0" width="100%" class="box-table-promotionBodyB">
+  <apex:outputpanel rendered="{!promotionFlag}"> 
+    <script>
+      var inv2=0;
+      var inv2Size={!promValueSize};
+      var iii = 0;
+    </script>
+    <script>
+      document.write('<tr bgcolor="#93DB70" class="sanfiOthersHeight">');
+      document.write('<apex:repeat value="{!strKeyListInv1}" var="proK1">');
+      document.write('<td border ="0" align="left" class="promo"><b>{!proK1}</b></td>');
+      document.write('</apex:repeat>');
+      document.write('</tr>');
+      document.write('<apex:repeat value="{!listPromotionInv}" var="promInv1">');
+     
+    if(iii>=0){
+        
+        if(iii==(inv2Size-1))
+        {
+          document.write('<tr class="d0">');
+        } 
+        else{
+          document.write('<tr class="height">');
+        }
+        document.write('<apex:repeat value="{!promInv1}" var="prom">');
+        document.write('<td border ="0" class="prom" >{!prom}</td>');
+        document.write('</apex:repeat>');
+        document.write('</tr>');
+    }
+    iii++;  
+      document.write('</apex:repeat>');
+     </script> 
+     
+          <script>
+      var inv2=0;
+      var inv2Size={!promValueSize2};
+      var iii = 0;
+    </script>
+    <script>
+      document.write('<tr bgcolor="#93DB70" class="sanfiOthersHeight">');
+      document.write('<apex:repeat value="{!strKeyListInv2}" var="proK2">');
+      document.write('<td border ="0" align="left" class="promo"><b>{!proK2}</b></td>');
+      document.write('</apex:repeat>');
+      document.write('</tr>');
+      document.write('<apex:repeat value="{!listPromotionInv2}" var="promInv2">');
+     
+    if(iii>=0){
+        
+        if(iii==(inv2Size-1))
+        {
+          document.write('<tr class="d0">');
+        } 
+        else{
+          document.write('<tr class="height">');
+        }
+        document.write('<apex:repeat value="{!promInv2}" var="prom">');
+        document.write('<td border ="0" class="prom" >{!prom}</td>');
+        document.write('</apex:repeat>');
+        document.write('</tr>');
+    }
+    iii++;  
+      document.write('</apex:repeat>');
+      </script>
+     </apex:outputPanel>
+</table>
+        
+<table border="0" width="100%" class="box-table-promotionBodyA">
+<apex:outputpanel rendered="{!promotionFlag}">  
+<!--apex:outputpanel rendered="{!promInvBouFlag}"-->
+
+         <script> var ii = 0; var dup ={!dupVal};
+         var aa = 0;var max = 0; var dmax = 0;
+         var isgrey = 0; var isFirst = 0;
+         var isGreyDone = 0;var bounty=0;
+         var bounty={!strBounty};
+         </script>
+          <apex:repeat value="{!listPromotion}" var="promotion">
+         <script>
+            
+            if(bounty=="1"){
+              ii = ii+1;
+              var proSize={!promoTotalSize};
+              var ll=0;
+              
+               if(ii % 2 == 0)
+               { 
+                  var jj = 0;
+                  if(ii!= 0 && ii == dup+2 && dup!= 0)
+                  {  
+                    document.write('<tr class="d0">'); 
+                    isgrey = 1;
+                    isGreyDone  = 1;
+                  }
+                  else
+                  {
+                       if(isgrey == 0)
+                       {
+                            document.write('<tr class="height">'); 
+                            if(isGreyDone  == 1)
+                            {
+                                isgrey = 1;
+                            }
+                       }
+                        else
+                        { 
+                            document.write('<tr bgcolor="#93DB70"  class="sanfiOthersHeight">');
+                            
+                            if(isGreyDone  == 1)
+                            {
+                             isgrey = 0;
+                            }
+                        }
+                   }
+                    var dlength = 0;                       
+                    document.write('<apex:repeat value="{!promotion}" var="data">');   
+                    dlength++; 
+                    document.write('</apex:repeat>'); 
+                    
+                    if(dmax == 0 || dlength > dmax) {
+                       dmax = dlength;
+                    }
+                      document.write('<apex:repeat value="{!promotion}" var="data">'); 
+                    if (jj == 0)
+                      { 
+                         document.write('<td align="left" colspan="0" class="promotionBorder2">{!data}</td>')
+                      }
+                      else
+                      { 
+                          
+                          if((dmax - dlength) == 1 && (dlength - 1 == jj)) {
+                              document.write('<td align="center" colspan="2" class="promotionBorder2">{!data}</td>');    
+                          } else {
+                              document.write('<td align="center" colspan="0" class="promotionBorder2">{!data}</td>');
+                          }
+                       }
+                  jj++;
+                  
+                  document.write('</apex:repeat></tr>');  
+                  aa = jj;
+                 
+              }
+              else{ 
+                     if(ii != 0 && ii == dup+2 && dup != 0)
+                       {
+                        document.write('<tr class="d0">'); 
+                        isgrey = 1;
+                        isGreyDone  = 1;
+                        
+                       }
+                       else if(ii > 1 && ii <= dup+2)
+                       { 
+                           if(isgrey == 0)
+                           {
+                                document.write('<tr class="height">'); 
+                                if(isGreyDone  == 1)
+                                {
+                                    isgrey = 1;
+                                }
+                               
+                            }
+                            else
+                            {
+                                document.write('<tr bgcolor="#93DB70" class="sanfiOthersHeight">');
+                                if(isGreyDone  == 1)
+                                {
+                                    isgrey = 0;
+                                }
+                               
+                            }
+                       }
+                       else
+                       {
+                         if(isgrey == 0 && isFirst == 0)
+                           {
+                            //1st Green
+                            document.write('<tr bgcolor="#93DB70" class="sanfiOthersHeight">');
+                            //isgrey = 1;
+                            isFirst = 1;
+                           }
+                           else
+                            {
+                                if(isgrey == 0)
+                                {
+                                    document.write('<tr>'); 
+                                    
+                                    if(isGreyDone == 1)
+                                    {
+                                    isgrey = 1;
+                                    }
+                                    
+                                }
+                                else
+                                {
+                                    document.write('<tr bgcolor="#93DB70"  class="sanfiOthersHeight">');
+                                    if(isGreyDone  == 1)
+                                    {
+                                    isgrey = 0;
+                                    }
+                                    
+                                }
+                            }
+                       }
+                       var length = 0;
+                       document.write('<apex:repeat value="{!promotion}" var="data">');   
+                       length++; 
+                       document.write('</apex:repeat>'); 
+                      
+                       if(max == 0 || length > max) {
+                           max = length;
+                       }
+                        
+                      var kk = 0;
+                        document.write('<apex:repeat value="{!promotion}" var="data">'); 
+                      if (kk == 0)
+                      {                             
+                            if(ii > 1 && ii <= dup+2)
+                            {
+                                document.write('<td align="left" colspan="" class="promotionBo">{!data}</td>'); 
+                            }
+                            else
+                            {
+                                document.write('<td align="left" colspan="" class="promotionBo">{!data}</td>');  
+                            }
+                        }
+                        else
+                        {
+                            if(ii > 1 && ii <= dup+2)
+                            {
+                                document.write('<td align="center" colspan="" class="promotionBorder2">{!data}</td>'); 
+                            }
+                            else
+                            {
+                               
+                                if((max - length) == 1 && (length - 1 == kk)) {
+                                    document.write('<td align="center" colspan="2" class="promotionBorder">{!data}</td>');                                  
+                                } else {
+                                    document.write('<td align="center" colspan="" class="promotionBorder">{!data}</td>');  
+                                }
+                            }
+
+                        }  
+                        kk++; 
+                       document.write('</apex:repeat></tr>'); 
+              }
+            }
+            
+            else if(bounty=="3"){
+             ii = ii+1;
+              var ll=0;
+              if(ii % 2 == 0)
+               {
+                  var jj = 0;
+                  if(ii!= 0 && ii == dup+2 && dup!= 0)
+                   {  
+                    document.write('<tr class="d0" >'); 
+                   }
+                   else
+                   {
+                    document.write('<tr class="height">');
+                   }
+                    var dlength = 0;                       
+                    document.write('<apex:repeat value="{!promotion}" var="data">');   
+                    dlength++; 
+                    document.write('</apex:repeat>'); 
+                  
+                    if(dmax == 0 || dlength> dmax) {
+                       dmax = dlength;
+                    }
+                      document.write('<apex:repeat value="{!promotion}" var="data">'); 
+                    if (jj == 0)
+                      { 
+                         document.write('<td align="left" colspan="0" class="promotionBorder2">{!data}</td>')
+                      }
+                      else
+                      { 
+                        
+                          if((dmax - dlength) == 1 && (dlength- 1 == jj)) {
+                              document.write('<td align="center" colspan="2" class="promotionBorder2">{!data}</td>');    
+                          } else {
+                              document.write('<td align="center" colspan="0" class="promotionBorder2">{!data}</td>');
+                          }
+                       }
+                  jj++;
+                  
+                  document.write('</apex:repeat></tr>');  
+                  aa = jj;
+                 
+              }
+              else{ 
+                     if(ii != 0 && ii == dup+2 && dup != 0)
+                       {
+                        document.write('<tr class="d0">'); 
+                       }
+                       else if(ii > 1 && ii <= dup+2)
+                       {
+                        document.write('<tr class="height">'); 
+                       }
+                       else
+                       {
+                         document.write('<tr bgcolor="#93DB70"  class="sanfiOthersHeight">');
+                       }
+                       var length = 0;
+                       
+                       document.write('<apex:repeat value="{!promotion}" var="data">');   
+                       length++; 
+                       document.write('</apex:repeat>'); 
+                     
+                       if(max == 0 || length > max) {
+                           max = length;
+                       }
+                        
+                      var kk = 0;
+                        document.write('<apex:repeat value="{!promotion}" var="data">'); 
+                      if (kk == 0)
+                      {                             
+                            if(ii > 1 && ii <= dup+2)
+                            {
+                                document.write('<td align="left" colspan="" class="promotionBo">{!data}</td>'); 
+                            }
+                            else
+                            {
+                                document.write('<td align="left" colspan="" class="promotionBo"><b>{!data}</b></td>');  
+                            }
+                      }
+                        else
+                        {
+                            if(ii > 1 && ii <= dup+2)
+                            {
+                                document.write('<td align="center" colspan="" class="promotionBorder2">{!data}</td>'); 
+                            }
+                            else
+                            {
+                                
+                                if((max - length) == 1 && (length - 1 == kk)) {
+                                    document.write('<td align="center" colspan="2" class="promotionBorder2"><b>{!data}</b></td>');                                  
+                                } else {
+                                    document.write('<td align="center" colspan="" class="promotionBorder2"><b>{!data}</b></td>');  
+                                }
+                            }
+
+                        }  
+                        kk++; 
+                       document.write('</apex:repeat></tr>'); 
+                                            
+              }
+             }    
+            
+            
+      </script>
+              
+  </apex:repeat>
+  <!--/apex:outputPanel-->
+  </apex:outputPanel>
+ 
+</table>
+      
+<table width="100%"><tr><td></td></tr></table>
+
+ <table width="100%" border="0" class="box-table-salesKickerBodyA">
+ <apex:outputpanel rendered="{!salesKickFlag}">
+          <tr height="10px" bgcolor="#93DB70">          
+           <td colspan="{!colSpan}">&nbsp;&nbsp;&nbsp;<B>Sales Kicker Component *</B></td>
+          </tr>
+          <script> var i = 0; var maxtd = 0; var mx=0; var mx1=0; var diff=0; var diff1=0;</script>
+          <apex:repeat value="{!listSalesKickerSalesPerformColumn}" var="columndata">
+              <script> i = i+1;
+              var totalSK = {!salesKicker};
+              if(i <= totalSK) {
+              /*if(i < totalSK-1) { Commented for SR 155724*/
+                        
+                  if(i % 2 == 0)
+                  {
+                  /*Included tr for SR 155724*/
+                          document.write('<tr class="d3">');
+                          var j = 0;
+                          mx = 0;
+                          document.write('<apex:repeat value="{!columndata}" var="column">'); 
+                          if (j == 0)
+                          {
+                              document.write('<td align="left" class="promotionBorder">{!column}</</td>');
+                          }
+                          else
+                          {
+                              document.write('<td align="center" class="promotionBorder">{!column}</td>');
+                          }
+                          j++;  
+                          mx++;
+                                            
+                           document.write('</apex:repeat>');  
+                             if(mx > maxtd) 
+                             { 
+                               maxtd = mx;
+                             }
+                             diff = maxtd - j;
+                            
+                             if(diff > 0)
+                             {
+                               document.write('<td align="center" colspan="'+diff+'"  class="promotionBorder">&nbsp;</td>');
+                             }
+                     
+                  }
+                  else{
+                /*  Included tr for SR 155724 */
+                          document.write('<tr>'); 
+                          var k = 0;
+                          mx1 = 0;
+                          document.write('<apex:repeat value="{!columndata}" var="column">'); 
+                           if (k == 0)
+                            {
+                                document.write('<td align="left"   class="promotionBorder"><b>{!column}</b></td>'); 
+                            }
+                             else
+                            {   
+                                document.write('<td align="center" class="promotionBorder"><b>{!column}</b></td>'); 
+                            }
+                             
+                            k++; 
+                            mx1++;                     
+                           document.write('</apex:repeat>');  
+                           
+                           if(mx1 > maxtd) 
+                             { 
+                                 maxtd = mx1;
+                             }
+                             diff1 = maxtd - k;
+                             
+                             if(diff1 > 0)
+                             {  
+                                document.write('<td align="center" colspan="'+diff1+'"  class="promotionBorder">&nbsp;</td>');
+                             } 
+                          }                   
+                    }
+                     
+                    /* Commented for SR 155724
+                    if(i == totalSK) {
+                        document.write('<tr class="d0">');
+                        var index = 0;
+                        document.write('<apex:repeat value="{!columndata}" var="column">');
+                        
+                        if(index == 0) {                        
+                            document.write('<td colspan="'+(maxtd-1)+'" class="salesKickerGreyLeft"><b>{!column}</b></td>');
+                            index = 1
+                        } else if(index == 1){
+                            document.write('<td class="salesKickerGreyRight"><b>{!column}</b></td>');
+                        }                       
+                        document.write('</apex:repeat>');
+                    }*/
+                    document.write('</tr>');
+              </script>     
+    </apex:repeat>
+    </apex:outputPanel> 
+ </table>
+
+       
+<apex:outputpanel rendered="{!exceptionFlag}">
+   <b>{!listExceptionMsg[1]}</b>
+</apex:outputPanel>
+ 
+<BR></BR>
+        
+<table>
+ <apex:outputpanel rendered="{!headerFlag}"> 
+ <tr>
+  <td> 
+    <apex:outputLink target="_blank" value="{!clearPayLink}" >
+      <b>Clear Pay Website</b>
+    </apex:outputLink>
+  </td>
+ </tr>
+ </apex:outputPanel>
+</table>
+   
+ </apex:form>
+</apex:page>

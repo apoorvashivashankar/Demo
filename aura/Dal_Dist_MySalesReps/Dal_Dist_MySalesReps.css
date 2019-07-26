@@ -1,0 +1,51 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  /* Common CSS here */
+}
+.THIS .dal-minHeight_medium {
+  min-height: 150px;
+}
+.THIS h2,
+.THIS h4,
+.THIS a {
+  color: token(colorTextBrand);
+}
+.THIS h2 {
+  font-size: 1.875rem;
+}
+.THIS h4 {
+  font-size: 1.125rem;
+}
+.THIS p {
+  font-size: 0.875rem;
+}
+.THIS .slds-avatar {
+  padding: 2px;
+  border: 1px solid token(colorBorder);
+  border-radius: 50%;
+}
+.THIS .slds-avatar img {
+  border-radius: 50%;
+}
+.THIS .contactInfo p {
+  position: relative;
+  padding-left: 1.375em;
+}
+.THIS .contactInfo p.title {
+  padding-left: 0;
+}
+.THIS .contactInfo p .slds-icon_container {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.THIS .contactInfo p .slds-icon_container svg {
+  width: 1em;
+  height: 1em;
+}

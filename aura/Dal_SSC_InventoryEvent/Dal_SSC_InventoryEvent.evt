@@ -1,0 +1,7 @@
+<!--
+ - Created by Yadav on 10/31/2018.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_InventoryEvent">
+    <aura:attribute name="searchParam" type="String"/>
+</aura:event>

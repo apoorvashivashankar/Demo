@@ -1,0 +1,45 @@
+/**
+ * Created by Preshit on 02-01-2019.
+ */
+.THIS .background-color{
+    background-color: #cf0a2c;
+    color: white !important;
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+    padding-bottom: 0rem;
+    padding-top: 0rem;
+}
+
+
+.THIS .productTotal{
+    background-color: #F5F5F5 !important;
+}
+
+.THIS .table-border-bottom{
+    border-bottom: 1px solid #CBCCCE;
+}
+.THIS .table-border-top{
+    border-top: 1px solid #CBCCCE;
+}
+
+.THIS .top-margin{
+     margin-top: .7rem;
+}
+
+.THIS .dal-my-cart-place-order {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-weight: 700;
+}
+
+.THIS .ssc-order-prod-total {
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.THIS .ssc-order-prod-count {
+    font-size: 1.2rem;
+}
+.THIS .disable-color{
+    color: rgb(217, 219, 221) !important;
+}

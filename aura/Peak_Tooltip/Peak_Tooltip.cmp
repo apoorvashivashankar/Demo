@@ -1,0 +1,25 @@
+<aura:component >
+    <!-- Some help from http://salesforce.stackexchange.com/questions/141086/lightning-popovers-not-displaying -->
+    <aura:attribute name="message" type="String" default="Message here"/>
+   	<aura:attribute name="title" type="String" default=""/>
+   	<aura:attribute name="nubbinLocation" type="String" default="bottom-left"/>
+	<aura:attribute name="cssPosition" type="String" default="relative"/>
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <aura:handler name="init" action="{!c.initPopover}" value="{!this}"/>
+
+    <span class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+	    <button class="slds-button slds-button_icon" aria-describedby="help" title="{!v.title}" onmouseenter="{!c.handleMouseEnter}" onmouseleave="{!c.handleMouseLeave}" >
+			<lightning:icon iconName="utility:info" size="small" alternativeText="{!$Label.c.X7S_Help_Prompt}"/>
+  			<span class="slds-assistive-text">{!$Label.c.X7S_Help_Prompt}</span>
+	    </button>
+
+	    <div id="popoverid" aura:id="popoverid" class="slds-popover slds-popover_tooltip slds-hide" role="dialog" >
+	        <div class="slds-popover__body">
+	            <p><c:Peak_Base labelText="{!v.message}"/></p>
+	        </div>
+	    </div>
+	</span>
+</aura:component>

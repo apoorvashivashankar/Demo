@@ -1,0 +1,3 @@
+<design:component label="7S Spacer">
+    <design:attribute name="size" label="Spacing Size"   dataSource="xxx-small, xx-small,x-small,small,medium,large,x-large"/>
+</design:component>

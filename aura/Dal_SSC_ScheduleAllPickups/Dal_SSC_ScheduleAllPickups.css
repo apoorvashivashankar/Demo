@@ -1,0 +1,59 @@
+/**
+ * Created by Yadav on 8/23/2018.
+ */
+.THIS .dal-datePicker{
+    float:right;
+}
+
+.THIS .dal-datePicker label{
+    color: rgb(207, 10, 44)!important;
+    font-weight: normal!important;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.THIS .dal-datePicker .slds-form-element__control input,
+.THIS .dal-datePicker .slds-form-element__control input:hover,
+.THIS .dal-datePicker .slds-form-element__control input:focus,
+.THIS .dal-datePicker .slds-form-element__control input:active{
+    border: 0!important;
+    color: transparent;
+    position: absolute;
+    top: -20px;
+    background: transparent;
+    box-shadow:none;
+    cursor: pointer;
+}
+
+.THIS .spinner-fixed {
+    position : fixed;
+}
+
+.THIS .dal-datePicker .slds-form-element__control lightning-button-icon{
+
+    height:0;
+    width:0;
+    padding:0;
+}
+
+.THIS .slds-input__icon.slds-input__icon_right {
+    visibility: hidden;
+}
+
+.THIS .dal-custom-timePicker>div button.disabled {
+    background-color: #d4d4d4 !important;
+}
+
+.THIS #dal-pickerDate > lightning-datepicker > div > div > lightning-button-icon {
+     visibility: hidden;
+}
+
+
+.THIS .dal-datePicker .slds-form-element__control,
+.THIS .dal-datePicker .slds-form-element__control:focus,
+.THIS .dal-datePicker .slds-form-element__control:active{
+    height:0;
+    width:0;
+    padding:0;
+    border:0;
+}

@@ -1,0 +1,46 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS.vote-badge {
+	background: #fafafa;
+	border: token(borderWidthThin) solid token(colorBorder);
+	padding: 20px 30px;
+}
+
+.THIS .idea-status {
+	font-size: 16px;
+}
+
+.THIS .upsideDown {
+	transform: rotateX(180deg);
+}
+
+.THIS .voteButtons .likeButton,
+.THIS .voteButtons .dislikeButton {
+	line-height: normal;
+	background: token(colorBackgroundButtonBrand);
+	border-color: token(colorBorderButtonBrand);
+	padding: 10px 20px;
+}
+
+.THIS .voteButtons .likeButton.large {
+	padding: 10px 40px;
+}
+
+.THIS .voteButtons .likeButton:hover,
+.THIS .voteButtons .dislikeButton:hover {
+	background: token(colorBackgroundButtonBrandHover);
+}
+
+.THIS .voteButtons .slds-button .slds-icon {
+	width: 1.5rem;
+	height: 1.5rem;
+	line-height: normal;
+}
+
+/*.THIS .voteButtons .dislikeButton {*/
+/*-moz-transform: scale(1, -1);*/
+/*-webkit-transform: scale(1, -1);*/
+/*-o-transform: scale(1, -1);*/
+/*-ms-transform: scale(1, -1);*/
+/*transform: scale(1, -1);*/
+/*opacity:0.5;*/
+/*}*/

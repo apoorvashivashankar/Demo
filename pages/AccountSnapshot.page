@@ -1,0 +1,186 @@
+<apex:page standardController="Account" extensions="AccountSnapshotController" lightningStylesheets="true" id="thePage" sidebar="false" showHeader="false" >
+    <apex:slds />
+    <apex:outputPanel rendered="{!bolPrintableView}">
+         <script>
+          window.print()
+         </script>
+         
+        <style type="text/css" media="print">
+            @media print {
+                
+            }
+            
+            .PrintFont {
+            
+                font-size: 75%;
+            }
+        </style>
+         
+    </apex:outputPanel>
+    
+    <apex:outputPanel rendered="{!bolPrintableView}">
+    
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <nav role="navigation" aria-label="Breadcrumbs">
+                            <ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
+                                <li class="slds-breadcrumb__item">Account Snapshot</li>
+                            </ol>
+                        </nav>
+                        <div class="slds-media">
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1>
+                                            <span class="slds-page-header__title slds-truncate" title="{!Account.Name}">{!Account.Name}
+                                             • {!Account.Salesman__r.Name} • {!Account.DW_ID__c}
+                                            </span>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        <hr style="margin: 4px 0 4px 0; border-top: 3px solid rgb(221, 219, 218);" />          
+        <c:AccountSnapshotSalesGrowthPlan />            
+        <hr style="margin: 4px 0 4px 0; border-top: 3px solid rgb(221, 219, 218);" />   
+        <c:AccountSnapshotActivityLog />            
+        <hr style="margin: 2px 0 2px 0; border-top: 3px solid rgb(221, 219, 218);" />   
+        <c:AccountSnapshotSalesByQuarter />         
+        
+        
+        <table cellspacing="0" cellpadding="0" style="margin: 0; padding: 0;border-top: 3px solid rgb(221, 219, 218);">
+        <tr>
+        <td>
+        <c:AccountSnapshotProductMixYTD /> 
+        </td>
+        <td>
+                    
+                        <apex:chart height="350" width="450" data="{!pieData}" name="YTD Product Mix">
+                            <apex:pieSeries dataField="data" labelField="name">
+                                <apex:chartLabel display="none"/>
+                                <apex:chartTips height="40" width="120" />
+                            </apex:pieSeries>
+                            <apex:legend position="right"  />
+                        </apex:chart>
+        </td>
+        </tr>
+        </table>
+
+        
+        <table cellspacing="0" cellpadding="0" style="margin: 0; padding: 0;border-top: 3px solid rgb(221, 219, 218);">
+        <tr>
+        <td valign="top" cellspacing="0" cellpadding="0" style="margin: 0; padding: 0;border: 0;">
+            <c:AccountSnapshotOppsClosed />
+        </td>
+        <td>&nbsp;&nbsp;</td>
+        <td valign="top" cellspacing="0" cellpadding="0" style="margin: 0; padding: 0;border: 0;">
+            <c:AccountSnapshotOppsOpen />
+        </td>
+        </tr>
+        </table>
+    </apex:outputPanel>
+    
+    <apex:outputPanel rendered="{!NOT(bolPrintableView)}">
+    
+        <apex:pageBlock id="theBlockHeader" >
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <nav role="navigation" aria-label="Breadcrumbs">
+                            <ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
+                                <li class="slds-breadcrumb__item">Account Snapshot</li>
+                            </ol>
+                        </nav>
+                        <div class="slds-media">
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1>
+                                            <span class="slds-page-header__title slds-truncate" title="{!Account.Name}">{!Account.Name}</span>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-page-header__col-actions">
+                        <div class="slds-page-header__controls">
+                            <div class="slds-page-header__control">
+                                <ul class="slds-button-group-list">
+                                    <li>
+                                        <apex:outputPanel rendered="{!NOT(bolPrintableView)}">
+                                            <a class="slds-button slds-button_brand" href='/{!Account.Id}' target='_parent'>back to account</a> 
+                                            &nbsp;
+                                        </apex:outputPanel> 
+                                    </li>
+                                    <li>
+                                        <apex:outputPanel rendered="{!NOT(bolPrintableView)}">
+                                            <a class="slds-button slds-button_brand" href='AccountSnapshot?id={!Account.Id}&print=1' target='_blank'>print/pdf</a> 
+                                        </apex:outputPanel>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-meta">
+                        <p class="slds-page-header__meta-text">{!Account.Salesman__r.Name} • {!Account.DW_ID__c}</p>
+                    </div>
+                    
+                </div>
+        </apex:pageBlock>       
+        
+        <apex:outputPanel layout="none" id="thePanelReport">
+            <apex:pageBlock id="theBlockReport1" >
+                <apex:pageBlockSection columns="1" Id="accountObjectives">
+                    <c:AccountSnapshotSalesGrowthPlan />            
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            <apex:pageBlock id="theBlockReport2" >
+                <apex:pageBlockSection columns="1" Id="accountActivityLog">
+                    <c:AccountSnapshotActivityLog />            
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            <apex:pageBlock id="theBlockReport3" >
+                <apex:pageBlockSection columns="1" Id="accountSalesByQuarter">
+                    <c:AccountSnapshotSalesByQuarter />         
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            <apex:pageBlock id="theBlockReport4" >
+                <apex:pageBlockSection columns="2" Id="accountProductMixYTD" >
+                    <apex:pageBlockSectionItem >
+                        <c:AccountSnapshotProductMixYTD /> 
+                    </apex:pageBlockSectionItem>                   
+                    <apex:pageBlockSectionItem >
+                    
+                        <apex:chart height="350" width="450" data="{!pieData}" name="YTD Product Mix (graph)">
+                            <apex:pieSeries dataField="data" labelField="name">
+                                <apex:chartLabel display="none"/>
+                                <apex:chartTips height="40" width="120" />
+                            </apex:pieSeries>
+                            <apex:legend position="right"  />
+                        </apex:chart>
+                
+                    </apex:pageBlockSectionItem>      
+                </apex:pageBlockSection>
+            </apex:pageBlock>        
+            <apex:pageBlock id="theBlockReport5" >
+                <apex:pageBlockSection columns="2" Id="accountOpps" >
+                    <apex:pageBlockSectionItem >
+                        <c:AccountSnapshotOppsClosed />
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <c:AccountSnapshotOppsOpen />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>        
+        </apex:outputPanel>
+   
+
+    </apex:outputPanel>
+    
+</apex:page>

@@ -1,0 +1,72 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_NewsController"
+                access="global"
+                extends="c:SVNSUMMITS_News_Base"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+	<ltng:require scripts="{!join(',',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/fullcalendar-2.6.1/moment.min.js')}"/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_News_BaseReady" action="{!c.doInit}"/>
+	<aura:attribute name="nameSpace" type="String" default="" access="global"/>
+
+	<aura:attribute name="newsListWrapper" type="SVNSUMMITS_WrapperNews" access="global"/>
+	<aura:attribute name="showCategories" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="isObjectEditable" type="Boolean" access="global"/>
+	<aura:attribute name="isRecordEditable" type="Boolean" access="global"/>
+	<aura:attribute name="isEdit" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="newsRecId" type="String" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="sitePathnew" type="String" access="global"/>
+	<aura:attribute name="sitePrefix" type="String" access="global"/>
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="recordId" type="String" access="global"/>
+	<aura:attribute name="ImageSize" type="String" access="global"/>
+	<aura:attribute name="limitToSpecificGroups" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="groupName" type="String" default="" access="global"/>
+	<aura:attribute name="labelGroup" type="String" default="Group:" access="global"/>
+	<aura:attribute name="newsDetails" type="String" default="" access="global"/>
+	<aura:attribute name="newsGroupId" type="String" default="" access="global"/>
+	<aura:attribute name="newsPrivate" type="Boolean" access="global"/>
+
+	<aura:attribute name="news" type="News__c"
+	                default="{ 'sobjectType': 'News__c'}" access="global"/>
+
+	<div class="slds-grid slds-wrap">
+		<div class="slds-col--padded slds-size--1-of-1">
+			<aura:if isTrue="{!v.newsListWrapper.newsList[0].Attachments.length > 0}">
+				<div class="featuredImage"
+				     data-size="{!v.ImageSize}">
+					<div class="image">
+						<img src="{!v.sitePrefix + '/servlet/servlet.FileDownload?file='+v.newsListWrapper.newsList[0].Attachments[0].Id}"/>
+					</div>
+				</div>
+			</aura:if>
+
+			<div class="slds-col--padded slds-size--1-of-1 textDetail">
+				<!--<div class="slds-rich-text-editor__output">-->
+				<div class="slds-text-longform">
+					<aura:unescapedHtml aura:Id="newsDetail" value="{!v.newsDetails}"/>
+					<!--<ui:outputRichText aura:id="newsDetail" value="{!v.newsDetails}"/>-->
+				</div>
+			</div>
+
+			<aura:if isTrue="{!v.limitToSpecificGroups}">
+				<aura:if isTrue="{!v.groupName}">
+					<div class="slds-text-heading--label group-name">
+					{!v.labelGroup}&nbsp;
+						<a href="javascript:void(0);"
+						   onclick="{!c.goToRecord}"
+						   data-id="{!v.newsGroupId}">
+								{!v.groupName}
+						</a>
+					</div>
+				</aura:if>
+			</aura:if>
+		</div>
+
+	</div>
+</aura:component>

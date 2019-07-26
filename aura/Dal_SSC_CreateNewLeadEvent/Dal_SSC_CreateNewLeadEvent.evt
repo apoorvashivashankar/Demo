@@ -1,0 +1,7 @@
+<!--
+ - Created by ranja on 21-11-2018.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_CreateNewLeadEvent">
+    <aura:attribute name="isEdit" type="boolean" />
+</aura:event>

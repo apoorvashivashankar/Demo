@@ -1,0 +1,204 @@
+.THIS .dal-sub-menu-trigger{
+}
+
+.THIS .dal-sub-menu{
+    display:none;
+}
+
+.THIS .comm-navigation__list li:first-child >button {
+    padding-left: 16px !important;
+}
+
+.THIS .dal-sub-menu.slds-is-open{
+    display:block;
+}
+
+.THIS .slds-grid.dal-sub-menu.slds-is-open{
+    display:flex;
+}
+
+.THIS .forceCommunityGlobalNavigation{
+    min-height:33px;
+    color:rgb(105, 96, 87)
+}
+.THIS .forceCommunityGlobalNavigation>*{
+    max-width:1140px
+}
+.THIS .forceCommunityGlobalNavigation{
+    background-color:rgba(255, 255, 255, 0.75)
+}
+.THIS .forceCommunityGlobalNavigation .slds-list_vertical{
+    background-color:rgb(255, 255, 255)
+}
+.THIS .forceCommunityGlobalNavigation .slds-list__item a,
+.THIS .forceCommunityGlobalNavigation .slds-list__item button{
+    font-weight:400;
+    font-size:.875rem;
+    font-family:Helvetica;
+    line-height:normal;
+    padding:8px 14px
+}
+.THIS .forceCommunityGlobalNavigation .slds-is-nested .slds-list__item a,
+.THIS .forceCommunityGlobalNavigation .slds-is-nested .slds-list__item button{
+    font-weight:300
+}
+.THIS .forceCommunityGlobalNavigation .slds-list__item a:hover,
+.THIS .forceCommunityGlobalNavigation .slds-list__item a.slds-is-active:not([data-type="home"]),
+.THIS .forceCommunityGlobalNavigation .slds-list__item button:not([disabled]):hover,
+.THIS .forceCommunityGlobalNavigation .slds-list__item button:not([disabled]).slds-is-active:not([data-type="home"]){
+    background-color:rgba(0,0,0,.2)
+}
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal>.slds-list__item>a:hover,
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal>.slds-list__item>a.slds-is-active:not([data-type="home"]),
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal>.slds-list__item>button:hover,
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal>.slds-list__item>button.slds-is-active:not([data-type="home"]){
+    background-color:rgba(0,0,0,.2)
+}
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal .slds-is-nested a,
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal .slds-is-nested button{
+    padding:8px 28px
+}
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal>.slds-list__item>.slds-list_vertical>.slds-list__item+.slds-list__item>a,
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal>.slds-list__item>.slds-list_vertical>.slds-list__item+.slds-list__item>button{
+    border-top:1px solid rgba(105, 96, 87, 0.2)
+}
+.THIS .forceCommunityGlobalNavigation .slds-is-fixed>.slds-list_vertical>.slds-list__item>a,
+.THIS .forceCommunityGlobalNavigation .slds-is-fixed>.slds-list_vertical>.slds-list__item>button:not(.slds-is-open),
+.THIS .forceCommunityGlobalNavigation .slds-is-fixed .slds-is-nested{
+    border-bottom:1px solid rgba(105, 96, 87, 0.2)
+}
+.THIS .forceCommunityGlobalNavigation>*{
+    display:block;
+    margin:0 auto
+}
+.THIS .forceCommunityGlobalNavigation a{
+    text-decoration:none
+}
+.THIS .forceCommunityGlobalNavigation .slds-list_vertical.slds-is-absolute{
+    z-index:7000
+}
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal .slds-list_vertical.right-align{
+    right:0
+}
+.THIS .forceCommunityGlobalNavigation .slds-list__item.slds-hidden{
+    pointer-events:none;
+    position:absolute;
+    right:0;
+    z-index:-1
+}
+.THIS .forceCommunityGlobalNavigation .slds-is-nested{
+    margin-left:0
+}
+.THIS .forceCommunityGlobalNavigation .slds-is-fixed{
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background:rgba(0,0,0,.1);
+    z-index:7000
+}
+.THIS .forceCommunityGlobalNavigation .slds-is-fixed>.slds-list_vertical{
+    height:100%;
+    width:80%;
+    overflow-y:scroll
+}
+.THIS .forceCommunityGlobalNavigation .slds-is-fixed .slds-list__item button:not(.slds-is-open) .slds-icon{
+    -webkit-transform:rotate(-90deg);
+    -ms-transform:rotate(-90deg);
+    transform:rotate(-90deg)
+}
+.THIS .forceCommunityGlobalNavigation>*,
+.THIS .forceCommunityGlobalNavigation>*>.slds-grid{
+    min-height:inherit
+}
+.THIS .forceCommunityGlobalNavigation svg{
+    fill:currentColor
+}
+.THIS .forceCommunityGlobalNavigation a,
+.THIS .forceCommunityGlobalNavigation button{
+    display:block
+}
+.THIS .forceCommunityGlobalNavigation *,
+.THIS .forceCommunityGlobalNavigation button,
+.THIS .forceCommunityGlobalNavigation button:focus,
+.THIS .forceCommunityGlobalNavigation button[disabled],
+.THIS .forceCommunityGlobalNavigation button:hover,
+.THIS .forceCommunityGlobalNavigation a:focus,
+.THIS .forceCommunityGlobalNavigation a:hover{
+    color:inherit
+}
+.THIS .forceCommunityGlobalNavigation .slds-list__item a,
+.THIS .forceCommunityGlobalNavigation .slds-list__item button{
+    text-transform:capitalize;
+    border-radius:0;
+    white-space:nowrap
+}
+.THIS .forceCommunityGlobalNavigation .slds-is-fixed>.slds-list_vertical .slds-icon_container{
+    width:18px;
+    text-align:right
+}
+.THIS .forceCommunityGlobalNavigation .slds-is-fixed>.slds-list_vertical a *{
+    padding-left:28px
+}
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal .slds-is-nested .slds-is-nested a *{
+    padding-left:18px
+}
+
+.THIS a.slds-container_fluid.slds-truncate.mobileSubMenu{
+    padding-left:28px
+}
+
+.THIS .forceCommunityGlobalNavigation .slds-list_horizontal>.slds-list__item>.slds-is-nested{
+    min-width:100%;
+    border-radius:.125rem;
+    box-shadow:0 2px 4px rgba(0, 0, 0, 0.07)
+}
+.THIS .forceCommunityGlobalNavigation .slds-icon-waffle_container:not(:hover):not(:focus) [class*=slds-r]{
+    background-color:currentColor
+}
+
+.THIS .menu-block img{
+    height: 100px;
+    width: 100%;
+}
+
+.THIS .menu-block {
+   padding: 12px;
+   padding-top: 0px;
+}
+
+.THIS .dal-nav-image {
+    height : 40px;
+    position: absolute;
+    z-index: 0;
+    top: 2px;
+    right: 0px;
+    bottom: 0px;
+    left: 60px;
+}
+
+.THIS .comm-navigation__list li:first-child button {
+    padding-left : 0px !important;
+}
+
+.THIS .dal-menu-item-inventory {
+    height: 8rem;
+}
+
+.THIS .dal-inventory-nav-image{
+    height: 80px;
+    width: 100px;
+    position: relative;
+}
+
+.THIS .dal-navigation-image-label{
+    padding: 10px;
+    background-color: #888;
+    color: #FFF;
+}
+
+.THIS .searchBy {
+    margin-bottom: 2px;
+    margin-left: 26px;
+    margin-top: 10px;
+}

@@ -1,0 +1,24 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #fafafa;
+}
+.THIS .breadcrumbWrapper a,
+.THIS .breadcrumbWrapper span {
+  color: #5d5d5d;
+}
+.THIS .breadcrumbWrapper a {
+  font-size: 14px;
+  text-decoration: underline;
+  color: token(colorTextLabel);
+}
+.THIS .breadcrumbWrapper span {
+  font-size: 14px;
+}

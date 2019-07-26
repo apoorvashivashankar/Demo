@@ -1,0 +1,11 @@
+<aura:component description="Peak_BannerComponentInclude"> 
+
+    <aura:attribute name="component" type="String" default="" />
+
+    <aura:if isTrue="{!v.component == 'Sample Component'}">
+        <c:Peak_SampleComponent />
+    </aura:if>
+    <aura:if isTrue="{!v.component == 'Some other name'}">
+        <!-- <c:Your_Component /> -->
+    </aura:if>
+</aura:component>

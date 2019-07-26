@@ -1,0 +1,66 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component access="global">
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="showMyIdeas" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showCategoryFilter" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showTopicFilter" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showStatusFilter" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showThemesFilter" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showViewSelector" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showSortByFilter" type="Boolean" default="true" access="global"/>
+
+	<aura:attribute name="currIdea" type="Idea" default="{'sobjectType' : 'Idea'}" access="global"/>
+
+	<div class="slds-grid slds-wrap">
+		<div class="slds-p-around--small slds-size--1-of-1 slds-large-hide">
+			<ui:button aura:id="filterToggle" class="filter-toggle" press="{!c.toggleFilters}">
+				Filter/Sort
+				<span class="icon-expand">
+                    <lightning:icon iconName="standard:down" alternativeText="Down" size="x-small"/>
+                </span>
+				<span class="icon-collapse">
+                    <lightning:icon iconName="standard:up" size="x-small" alternativeText="Up"/>
+                </span>
+			</ui:button>
+		</div>
+	</div>
+	<div class="slds-grid slds-wrap slds-grid--align-end slds-max-medium-hide" aura:id="theFilters">
+		<div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-7">
+			<aura:if isTrue="{!v.showMyIdeas}">
+				<c:SVNSUMMITS_Ideas_Filter_MyIdeas debugMode="{!v.debugMode}"/>
+			</aura:if>
+		</div>
+		<div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-4 slds-large-size--1-of-7">
+			<aura:if isTrue="{!v.showTopicFilter}">
+				<c:SVNSUMMITS_Ideas_Filter_Topics debugMode="{!v.debugMode}"/>
+			</aura:if>
+		</div>
+		<div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-4 slds-large-size--1-of-7">
+			<aura:if isTrue="{!v.showCategoryFilter}">
+				<c:SVNSUMMITS_Ideas_Filter_Category debugMode="{!v.debugMode}"/>
+			</aura:if>
+		</div>
+		<div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-4 slds-large-size--1-of-7">
+			<aura:if isTrue="{!v.showStatusFilter}">
+				<c:SVNSUMMITS_Ideas_Filter_Stages debugMode="{!v.debugMode}"/>
+			</aura:if>
+		</div>
+		<div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-4 slds-large-size--1-of-7">
+			<aura:if isTrue="{!v.showThemesFilter}">
+				<c:SVNSUMMITS_Ideas_Filter_Themes debugMode="{!v.debugMode}"/>
+			</aura:if>
+		</div>
+		<div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-4 slds-large-size--1-of-7 slds-max-small-hide slds-grid--align-end">
+			<aura:if isTrue="{!v.showViewSelector}">
+				<c:SVNSUMMITS_Ideas_Filter_ListGrid debugMode="{!v.debugMode}"/>
+			</aura:if>
+		</div>
+		<div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-4 slds-large-size--1-of-7 slds-grid--align-end">
+			<aura:if isTrue="{!v.showSortByFilter}">
+				<c:SVNSUMMITS_Ideas_Filter_Sort debugMode="{!v.debugMode}"/>
+			</aura:if>
+		</div>
+	</div>
+</aura:component>

@@ -1,0 +1,35 @@
+<!--
+ - Created by 7Summits on 2/27/18.
+ -->
+
+<aura:component extends="c:Dal_Base" controller="Dal_DashboardController" description="Dal_Dist_MyDashboard" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <!-- design attributes -->
+    <aura:attribute name="title" type="String" default="My Dashboard"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="dataBlock" type="List" default="[]"/>
+
+    <lightning:layout multipleRows="true" class="slds-p-around_small" horizontalAlign="center" verticalAlign="center">
+
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" class="slds-p-top_small title">
+            <lightning:layout pullToBoundary="small">
+                <lightning:layoutItem size="12">
+                    <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.title}" />
+                </lightning:layoutItem>
+            </lightning:layout>
+
+        </lightning:layoutItem>
+
+        <lightning:layoutItem size="12">
+            <lightning:layout pullToBoundary="small">
+                <lightning:layoutItem size="12">
+                    <c:Dal_DataBlocks blocks="{!v.dataBlock}" />
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+</aura:component>

@@ -1,0 +1,49 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ - Edited by Joe Callin on 8/12/2017.
+ - Edited by Brian Poulsen on 11/13/2017.
+ -->
+
+<aura:component description="Peak_HTML_Subnav" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="labelText" type="String"/>
+    <aura:attribute name="navItem1" type="String"/>
+    <aura:attribute name="navItem2" type="String"/>
+    <aura:attribute name="navItem3" type="String"/>
+    <aura:attribute name="navItem4" type="String"/>
+    <aura:attribute name="navItem5" type="String"/>
+    <aura:attribute name="navItem6" type="String"/>
+    <aura:attribute name="navItem7" type="String"/>
+    <aura:attribute name="navItem8" type="String"/>
+    <aura:attribute name="navItem9" type="String"/>
+    <aura:attribute name="navItem10" type="String"/>
+    <aura:attribute name="navItemLabel1" type="String"/>
+    <aura:attribute name="navItemLabel2" type="String"/>
+    <aura:attribute name="navItemLabel3" type="String"/>
+    <aura:attribute name="navItemLabel4" type="String"/>
+    <aura:attribute name="navItemLabel5" type="String"/>
+    <aura:attribute name="navItemLabel6" type="String"/>
+    <aura:attribute name="navItemLabel7" type="String"/>
+    <aura:attribute name="navItemLabel8" type="String"/>
+    <aura:attribute name="navItemLabel9" type="String"/>
+    <aura:attribute name="navItemLabel10" type="String"/>
+    <aura:attribute name="itemList" type="String"/>
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+    <aura:attribute name="ScrollToAnchors" type="Boolean" default="true" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <section aura:id="pagenav" class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <aura:if isTrue="{!v.labelText}">
+            <h4><c:Peak_Base labelText="{!v.labelText}"/></h4>
+        </aura:if>
+        <ul class="slds-has-block-links_space">
+            <aura:iteration items="{!v.itemList}" var="item" indexVar="index">
+                <li>
+                    <a href="javascript:void(0)" data-link="{!item.link}" onclick="{!c.onClick}"><c:Peak_Base labelText="{!item.label}"/></a>
+                </li>
+            </aura:iteration>
+        </ul>
+    </section>
+</aura:component>

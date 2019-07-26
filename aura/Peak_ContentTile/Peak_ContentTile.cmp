@@ -1,0 +1,37 @@
+<aura:component description="Peak_ContentTile">
+    <aura:attribute name="Headline" type="String" />
+    <aura:attribute name="SubHeadline" type="String" />
+    <aura:attribute name="Paragraph" type="String" />
+    <aura:attribute name="ButtonText" type="String" />
+    <aura:attribute name="ButtonURL" type="String"  />
+    <aura:attribute name="Button2Text" type="String"  />
+    <aura:attribute name="Button2URL" type="String" />
+    <aura:attribute name="darkText" type="Boolean"  />
+    <aura:attribute name="centered" type="Boolean"  />
+    <aura:attribute name="className" type="String"  />
+
+    <aura:handler name="init" action="{!c.initPeakContentTile}" value="{!this}"/>
+
+    <div class="{!'peak-component ' + v.className}">
+      <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+
+           <div class="slds-size_12-of-12 slds-m-top_medium slds-medium-size_9-of-12">
+               <h1 class="font-specialty-title">
+                   <c:Peak_Base labelText="{!v.Headline}"/>
+               </h1>
+               <h2 class="font-specialty">
+                   <c:Peak_Base labelText="{!v.SubHeadline}"/>
+               </h2>
+               <aura:if isTrue="{!v.Paragraph != ''}">
+                   <p class="slds-m-bottom_large">
+                       <c:Peak_Base labelText="{!v.Paragraph}"/>
+                   </p>
+               </aura:if>
+           </div>
+           <div class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-m-top_medium btnwrapper">
+               <c:Peak_ContentTileButton ButtonURL="{!v.ButtonURL}" ButtonText="{!v.ButtonText}"  darkText="{!v.darkText}" />
+               <c:Peak_ContentTileButton ButtonURL="{!v.Button2URL}" ButtonText="{!v.Button2Text}"  darkText="{!v.darkText}" />
+           </div>
+       </div>
+    </div>
+</aura:component>

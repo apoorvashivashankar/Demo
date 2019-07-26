@@ -1,0 +1,58 @@
+<apex:page standardController="Account" extensions="AccountDashboardCtl" sidebar="false" showHeader="false">
+   
+   <head>  <!-- sidebar="false" header="false" -->
+   <script type='text/javascript' src='https://www.google.com/jsapi' />  
+   <script src="/soap/ajax/19.0/connection.js" type="text/javascript" />  
+   <script type="text/javascript">  
+
+   // use this function to format the label  
+     formatCurrencyLabel = function( value )  
+     {  
+       return "$" + String(value);  
+     }  
+     google.load("visualization", "1", {packages:["corechart"]});  
+     google.setOnLoadCallback(drawChart);  
+
+     function drawChart() {  
+ var data = new google.visualization.DataTable();  
+         data.addColumn('string', 'Product Family');  
+         data.addColumn('number', 'Sales');  
+    
+         // We need the sessionId to be able to query data  
+        sforce.connection.sessionId = '{!$Api.Session_ID}';  
+        // Query data using SOQL.  
+        
+         var result = sforce.connection.query("Select Product_Team__r.Name , sum( Net_Sales__c) netSales "+
+                                              " From Sales__c s "+
+                                              " where account__c in ID +
+                                              " and Year__c =  2013
+                                              " and SalesType__c = 'T' " +
+                                              " group by Product_Team__r.Name ");  
+         // Iterate over the result  
+         
+         var it = new sforce.QueryResultIterator(result); 
+         
+         while(it.hasNext()) {
+             var record = it.next();  
+             // Add the data to the table 
+             var name = record.Name==""?"BLANK":record.Name; 
+            data.addRow([name, {v:parseFloat(record.netSales), f: formatCurrencyLabel(record.netSales)}]);  
+         }   
+         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));  
+         chart.draw(data, {chartArea:{left:10,top:30,width:"90%",height:"90%"}, pieSliceText:'label', width: 300, height: 200, title: 'YTD Sales by Product Mix', is3D: true, legend:'right'});  
+}
+   </script>  
+   </head>  
+    <apex:pageBlock id="mainBlock"> 
+     <apex:pageBlockSection columns="2" Id="salesByProduct">
+     
+       <apex:outputText escape="false" value="{!YtdSalesGrid}"/>
+       
+       <apex:pageBlockSectionItem >
+          <div id="chart_div" style="text-align:left; border:1px solid black; width:300px;"/>
+       </apex:pageBlockSectionItem>
+       
+     </apex:pageBlockSection>
+        
+        </apex:pageBlock>
+</apex:page>

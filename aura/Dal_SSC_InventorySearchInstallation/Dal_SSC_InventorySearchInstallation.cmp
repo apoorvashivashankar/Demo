@@ -1,0 +1,113 @@
+<!--
+ - Created by ranja on 19-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_InventorySearchInstallation" controller="Dal_InventorySearchController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" extends="c:Dal_SSC_InventoryBase">
+
+
+    <aura:attribute name="inventorySearchLabel" type="String" default="Search by product keyword and/or product type.
+                                                                       Then, select items and add them to your inventory list to check product availability."/>
+
+    <!-- Calculate Position -->
+    <aura:attribute name="pos" type="Integer" default="1"/>
+
+    <!-- Selection Attributes -->
+    <aura:attribute name="productTypes" type="List" default="['Branded Product','Installation Product']"/>
+    <aura:attribute name="skuKeyword" type="String"/>
+
+    <aura:attribute name="isBranded" type="Boolean"/>
+    <aura:attribute name="responseWrapperData" type="Map"/>
+
+    <aura:attribute name="selectedProductType" type="String" default="Installation Product" />
+
+    <aura:if isTrue="{!v.pos == 1}">
+        <!-- BODY -->
+        <p class="heading-top">{!v.inventorySearchLabel}</p>
+
+        <!-- Inventory Search -->
+        <div>
+
+            <lightning:layout>
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                                      class="">
+                    <div class="custom-box-top slds-grid slds-wrap">
+                        <div class="slds-m-bottom_medium dal-product-dropdown slds-m-right_large">
+                            <b>
+                                <lightning:select class="" label="Product Type" onchange="{!c.setProductType}"
+                                                  name="Product Type" required="false"
+                                                  value="{!v.selectedProductType}" aura:id="productType">
+
+                                    <aura:if isTrue="{!empty(v.selectedProductType)}">
+                                        <option value="">Select Product Type</option>
+                                    </aura:if>
+                                    <aura:iteration items="{!v.productTypes}" var="prod">
+                                        <option value="{!prod}">{!prod}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </b>
+                        </div>
+
+                        <div class="slds-m-bottom_medium slds-m-right_large slds-large-size_8-of-12
+                                    slds-medium-size_8-of-12 slds-small-size_1-of-1 slds-size_1-of-1">
+                            <b>
+                                <lightning:input aura:id="productSku" name="productSku"
+                                                 label="Keyword (SKU or product name)"
+                                                 value="{!v.skuKeyword}" placeholder="Search by Keyword"
+                                                 class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_1-of-1
+                                                        slds-size_1-of-1" disabled="{!v.isProductSelected == false}"/>
+                            </b>
+                        </div>
+
+                        <div class="slds-m-bottom_medium dal-search-button">
+                            <b>
+                                <lightning:button label="SEARCH" title="Search" onclick="{!c.handleSearchClick}"
+                                                  class="search-button-onclick"/>
+                            </b>
+                        </div>
+
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+    </aura:if>
+
+
+    <aura:if isTrue="{!v.isFilterOpen}">
+
+        <aura:if isTrue="{!v.pos == 1}">
+
+            <div class="slds-grid slds-size_12-of-12 slds-wrap slds-m-top_large">
+
+                <div class="slds-grid slds-large-size_1-of-5 slds-size-1-of-1">
+                    <c:Dal_SSC_InventoryProductSku responseWrapperData="{!v.responseWrapperData}" pos="{!v.pos}" selectedProductType="{!v.selectedProductType}"
+                                                   isProductSelected="{!v.isProductSelected}" listOfVendors="{!v.listOfVendors}"
+                                                   pageNumber="{!v.pageNumber}" disableNext="{!v.disableNext}" isFilterOpen="{!v.isFilterOpen}"
+                                                   listOfSelectedProducts="{!v.listOfSelectedProducts}" skuKeyword="{!v.skuKeyword}"
+                                                   displayProdList="{!v.displayProdList}" totalPages="{!v.totalPages}" listOfSizes="{!v.listOfSizes}"
+                                                   divisionCode="{!v.divisionCode}" isBranded="{!v.isBranded}"/>
+                </div>
+
+                <div class=" slds-grid slds-large-size_4-of-5 slds-size-1-of-1 slds-m-top_x-small">
+                    <c:Dal_SSC_InventorySearchRecordList responseWrapperData="{!v.responseWrapperData}" selectedProductType="{!v.selectedProductType}"
+                                                         isProductSelected="{!v.isProductSelected}" pageNumber="{!v.pageNumber}"
+                                                         pos="{!v.pos}" displayProdList="{!v.displayProdList}" isFilterOpen="{!v.isFilterOpen}"
+                                                         totalPages="{!v.totalPages}" divisionCode="{!v.divisionCode}"
+                                                         finalResponseWrapper="{!v.finalResponseWrapper}"
+                                                         listOfSelectedProducts="{!v.listOfSelectedProducts}"/>
+                </div>
+
+            </div>
+        </aura:if>
+
+        <!-- Inventory List -->
+        <aura:if isTrue="{!v.pos == 2}">
+            <div class="slds-grid slds-size_12-of-12">
+                <c:Dal_SSC_InventoryList finalResponseWrapper="{!v.finalResponseWrapper}" listOfSelectedProducts="{!v.listOfSelectedProducts}"/>
+            </div>
+        </aura:if>
+
+    </aura:if>
+
+</aura:component>

@@ -1,0 +1,8 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S Ideas Vote">
+    <design:attribute name="zoneName"       label="Zone Name" description="Ideas Zone Name" />
+    <design:attribute name="showPoints"     label="Show number of points" description="Show number of points for this idea"/>
+    <design:attribute name="showStage"      label="Show Status of the Idea" description="Ideas stage"/>
+
+    <design:attribute name="recordId"       label="Record Id" description="record id" default="{!recordId}" />
+</design:component>

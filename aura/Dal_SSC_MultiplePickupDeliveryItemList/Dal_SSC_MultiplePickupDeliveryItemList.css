@@ -1,0 +1,45 @@
+.THIS {
+  border-top: 10px solid #555759;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+}
+.THIS h4 {
+  color: token(colorTextDefault);
+}
+.THIS .slds-button {
+  color: #5f5f5f;
+}
+.THIS .slds-button:hover {
+  text-decoration: underline;
+}
+.THIS .slds-button:focus {
+  box-shadow: none;
+}
+.THIS.dal-right {
+ width: -webkit-fill-available;
+ padding-bottom : 2rem;
+}
+
+.THIS .dal-font {
+    font-size: medium;
+}
+
+.THIS .dal-body {
+    font-size : small;
+}
+
+.THIS .slds-border_bottom{
+ border-bottom: 1px solid  #d9d9d9;
+}
+
+.THIS .slds-border_top {
+    border-top: 1px solid  #d9d9d9;
+}
+
+.THIS .dal-order-item {
+
+    font-size: medium;
+    padding-top: 2px;
+    padding-left: 5px;
+    font-weight: 600;
+
+}

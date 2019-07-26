@@ -1,0 +1,10 @@
+<design:component label="7S Join Community">
+    <design:attribute name="title" label="Title" />
+    <design:attribute name="boldText" label="Bold Text" />
+    <design:attribute name="plainText" label="Plain Text" />
+    <design:attribute name="ctaText" label="CTA Text" />
+    <design:attribute name="ctaLink" label="CTA Link" />
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

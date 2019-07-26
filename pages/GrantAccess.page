@@ -1,0 +1,15 @@
+<apex:page sidebar="false" >
+<style type="text/css">
+h1
+{
+font-size:20px;
+}
+</style>
+<center>
+<h1> <u>How To Grant Access</u></h1>
+</center>
+
+
+<br></br>
+<apex:image id="GrantAcess" url="{!$Resource.GrantAccess}" />
+</apex:page>

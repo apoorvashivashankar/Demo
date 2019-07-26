@@ -1,0 +1,67 @@
+<!--
+ - Created by michaelsullivan on 4/28/17.
+ -->
+
+<aura:component description="Peak_IntroBanner"  implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="backgroundImage" type="String" default="" />
+    <aura:attribute name="backgroundColor" type="String" default="#ffffff" />
+    <aura:attribute name="bannerTextColor" type="String" default="" />
+    <aura:attribute name="headlineText" type="String" default="Let's Go!" />
+    <aura:attribute name="headlineParagraph" type="String" default="Enter your intro text here" />
+    <aura:attribute name="rightColHTML" type="String" />
+    <aura:attribute name="ctaButtonUrl" type="String" default=""/>
+    <aura:attribute name="ctaButtonText" type="String" default="Start Now!" />
+    <aura:attribute name="ctaDarkText" type="Boolean" default="false" />
+    <aura:attribute name="youTubeEmbedID" type="String"  default="ANJ4ZjuEUhU" />
+    <aura:attribute name="showButton" type="Boolean" default="true"/>
+    <aura:attribute name="useThemeButton" type="Boolean" default="true"/>
+    <aura:attribute name="customButtonBackgroundColor" type="String" default=""/>
+    <aura:attribute name="customButtonTextColor" type="String" default=""/>
+    <aura:attribute name="customTileClass" type="String" default="" />
+
+    <aura:attribute name="overlayColor" type="String" default="#333333" />
+    <aura:attribute name="overlayOpacity" type="String" default=".7" />
+
+    <aura:attribute name="fixed" type="boolean" default="false" />
+    <aura:attribute name="fixedProperty" type="String" default="" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <aura:handler name="init" action="{!c.initPeakIntroBanner}" value="{!this}"/>
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <!-- Why so many inline styles? So that they can be set in .design when adding to page. Background size and fixed must be added here because the particular order of these properties matter! -->
+        <div class="{!'peak-intro-banner  slds-p-vertical_large ' + v.customTileClass}" style="{!'background: '+v.fixedProperty+ ';background-color:' + v.backgroundColor + ';background-image:url(' + v.backgroundImage + ');background-size: cover; color: '+v.bannerTextColor}">
+            <div class="peak-banner-overlay" style="{!'background: '+v.overlayColor+'; opacity: '+v.overlayOpacity}"></div>
+            <div class="slds-container_x-large  slds-container_center slds-grid slds-wrap slds-grid_pull-padded slds-p-vertical_large" >
+                <div class="slds-size_1-of-1 banner-top  slds-col_padded">
+                    <h1><c:Peak_Base labelText="{!v.headlineText}"/></h1>
+                    <p class="slds-p-vertical_large"><c:Peak_Base labelText="{!v.headlineParagraph}"/></p>
+                </div>
+                <div class="slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-col_padded">
+                    <aura:if isTrue="{!v.youTubeEmbedID != ''}">
+                        <c:Peak_YoutubeEmbed VideoID="{!v.youTubeEmbedID}" />
+                    </aura:if>
+                </div>
+                <div class="slds-small-size_1-of-1 slds-medium-size_1-of-2 slds-col_padded">
+                    <div class="html-holder">
+                        <c:Peak_Base labelText="{!v.rightColHTML}"/>
+                    </div>
+                    <aura:if isTrue="{!v.showButton}">
+                        <aura:if isTrue="{!v.useThemeButton}">
+                            <div class="cta-button">
+                                <c:Peak_ContentTileButton ButtonURL="{!v.ctaButtonUrl}" ButtonText="{!v.ctaButtonText}" darkText="{!v.ctaDarkText}"/>
+                            </div>
+                            <aura:set attribute="else">
+                                <div class="cta-button">
+                                    <a class="slds-button cta-button-custom" href="http://example.com" style="{!'background-color: ' + v.customButtonBackgroundColor + '; color: ' + v.customButtonTextColor + ';'}">Start Now!</a>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+    </section>
+</aura:component>

@@ -1,0 +1,13 @@
+<!--
+ - Created by joecallin on 6/11/17.
+ -->
+<aura:component description="SVNSUMMITS_Groups_SetLabelUtil" access="global" extensible="true">
+    <aura:attribute name="text" type="String"/>
+    <aura:attribute name="label" type="String"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+
+    <aura:unescapedHtml value="{!v.label}"/>
+
+</aura:component>

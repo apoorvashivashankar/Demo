@@ -1,0 +1,60 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_NewsController"
+                access="global"
+                extends="c:SVNSUMMITS_News_Base"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+	<ltng:require scripts="{! $Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js'}"/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_News_BaseReady" action="{!c.doInit}"/>
+	<aura:attribute name="nameSpace" type="String" default="" access="global"/>
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="newsListWrapper" type="SVNSUMMITS_WrapperNews" access="global"/>
+	<aura:attribute name="isFeatured" type="boolean" default="true" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="recordId1" type="String" access="global"/>
+	<aura:attribute name="recordId2" type="String" access="global"/>
+	<aura:attribute name="recordId3" type="String" access="global"/>
+	<aura:attribute name="allNewsUrl" type="String" access="global" default="/news-list-view/"/>
+	<aura:attribute name="isObjectCreatable" type="Boolean" access="global" default="false"/>
+	<aura:attribute name="allNewsButtonText" type="String" default="ALL NEWS" access="global"/>
+	<aura:attribute name="addNewButtonText" type="String" default="ADD NEWS ITEM" access="global"/>
+	<aura:attribute name="profileURL" type="String" default="/profile/" access="global"/>
+	<aura:attribute name="newsURL" type="String" default="/news/" access="global"/>
+	<aura:attribute name="createNewsURL" type="String" default="/create-news/" access="global"/>
+	<aura:attribute name="bandText" type="String" access="global" default="Featured News"/>
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" access="global"/>
+	<aura:attribute name="limitToSpecificGroups" type="Boolean" default="false" access="global"/>
+
+	<h2 class="slds-text-heading--medium slds-m-bottom--large slds-text-align--center setTitleFeatured">{!v.bandText}</h2>
+
+	<div>
+		<c:SVNSUMMITS_News_Tile debugMode="true"
+		                        displayMode="Tile"
+		                        wrapperNewsObj="{!v.newsListWrapper}"
+		                        profileURL="{!v.profileURL}"
+		                        newsURL="{!v.newsURL}"
+		                        limitToSpecificGroups="{!v.limitToSpecificGroups}"
+		                        isFeatured="{!v.isFeatured}"
+		                        isNicknameDisplayEnabled="{!v.isNicknameDisplayEnabled}"/>
+	</div>
+
+	<div class="slds-grid slds-grid--align-center">
+
+		<aura:if isTrue="{!v.allNewsUrl != ''}">
+			<div class="slds-button-group" role="group">
+				<ui:outputURL label="{!v.allNewsButtonText}"
+				              class="slds-button slds-button--neutral slds-not-selected btn btn-link"
+				              value="{!v.sitePath + v.allNewsUrl}"/>
+			</div>
+		</aura:if>
+		<div class="slds-button-group" role="group">
+			<aura:if isTrue="{!v.isObjectCreatable}">
+				<ui:outputURL class="slds-button slds-button slds-button--brand btn btn-primary"
+				              value="{!v.sitePath + v.createNewsURL}" label="{!v.addNewButtonText}"/>
+			</aura:if>
+		</div>
+	</div>
+</aura:component>

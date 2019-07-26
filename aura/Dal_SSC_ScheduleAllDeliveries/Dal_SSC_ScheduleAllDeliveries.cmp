@@ -1,0 +1,232 @@
+<!--
+ - Created by 7Summits on 4/26/18.
+ -->
+
+<aura:component description="Dal_SSC_ScheduleAllDeliveries" controller="Dal_ScheduleOrderController" >
+ 
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="currentOrder" type="Map" default="{}"/>
+    <aura:attribute name="currentOrderScheduling" type="String" default=""/>
+    <aura:attribute name="totalOrdersToSchedule" type="String" default=""/>
+    <aura:attribute name="successedSkus" type="List" default="[]" />
+    <aura:attribute name="failedSkus" type="List" default="[]" />
+
+    <!-- internal attributes -->
+    <aura:attribute name="deliveryDate" type="String" default="" />
+    <aura:attribute name="dlDate" type="String" default="" />
+    <aura:attribute name="deliveryDateFormatted" type="Object" default="" />
+    <aura:attribute name="deliveryDateErrors" type="List" default="[]" />
+
+    <aura:attribute name="shipToName" type="String" default=""/>
+    <aura:attribute name="shipToName2" type="String" default=""/>
+    <aura:attribute name="shipToCareOf" type="String" default=""/>
+    <aura:attribute name="shipToStreet1" type="String" default=""/>
+    <aura:attribute name="shipToStreet2" type="String" default=""/>
+    <aura:attribute name="shipToCity" type="String" default=""/>
+    <aura:attribute name="shipToState" type="String" default=""/>
+    <aura:attribute name="shipToZipcode" type="String" default=""/>
+    <aura:attribute name="shipToCountry" type="String" default=""/>
+    <aura:attribute name="listOfOrders" type="List" default="[]" />
+    <aura:attribute name="showModalDelivery" type="boolean" default="false" />
+    <aura:attribute name="isMultipleOrderSuccess" type="boolean" default="false" />
+    <aura:attribute name="isDelivery" type="String" default="false" />
+    <aura:attribute name="showSpinner" type="boolean" default="false" />
+    <aura:attribute name="totalOrders" type="Integer" default="0"/>
+    <aura:attribute name="totalSkus" type="Integer" default="0"/>
+    <aura:attribute name="isFirstTime" type="Boolean" default="true" />
+ 
+    <aura:attribute name="tempPickDate" type="String" default="" />
+    <aura:attribute name="baseModal" type="Map" />
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+    <aura:attribute name="isReschedule" type="Boolean" default="false" />
+    <aura:attribute name="isMultiple" type="Boolean" default="false" />
+	<aura:attribute name="tempDeliveryDate" type="String" default="" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doAllDeliveryInit}"/>
+    
+    
+    <!-- labels -->
+    <aura:attribute name="labelSelectDay" type="String" default="1. Request ship date - sales center will call you to confirm shipping availability"/>
+    <aura:attribute name="labelSelectDayHelper" type="String" default="Please note this is not your delivery date and your order may take 2-3 days to delivered."/>
+    <aura:attribute name="labelDeliveryLocation" type="String" default="2. Where should these items be delivered?"/>
+    <aura:attribute name="labelChange" type="String" default="Change"/>
+
+    <!-- events -->
+    <aura:handler event="c:Dal_ChooseShippingAddressEvt" action="{!c.handleChooseDeliveryAddressEvent}"/>
+
+    <lightning:layout multipleRows="true" pullToBoundary="medium">
+
+        <!-- ******************** -->
+        <!-- left column -->
+        <!-- ******************** -->
+        <lightning:layoutItem class="slds-p-horizontal_medium slds-p-vertical_small dal-form dal-form-order" size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8">
+
+            <!-- ******************** -->
+            <!-- select date -->
+            <!-- ******************** -->
+            <lightning:layout >
+                <lightning:layoutItem size="12">
+                    <h4 class="bold">{!v.labelSelectDay}</h4>
+                    <label class="helptext">{!v.labelSelectDayHelper}</label>
+
+                    <lightning:layout class="dal-selectDate slds-m-top_small slds-m-left_small slds-p-around_medium" verticalAlign="center">
+                        <lightning:layoutItem size="12">
+                            
+                            <ui:inputDate  aura:id="requestPickupDate" label="Change" value="{!v.dlDate}" displayDatePicker="true" class="dal-date-picker "
+                               change="{!c.handleDeliveryDateChange}" />
+							<!--<lightning:input class="dal-datePicker" label="Change" aura:id="requestPickupDate" type="date" value="{!v.deliveryDate}"
+                                             onchange="{!c.handleDeliveryDateChange}"  />-->
+                            
+                            <h4 class="bold date-format">{!v.deliveryDateFormatted}</h4>
+                            <aura:if isTrue="{!v.deliveryDateErrors.length > 0}">
+                                <div class="slds-has-error">
+                                    <div class="slds-form-element__help">{!v.deliveryDateErrors[0].message}</div>
+                                </div>
+                            </aura:if>
+
+
+                            <!-- <ui:inputDate  aura:id="requestPickupDate" label="" displayDatePicker="true" class="dal-date-picker"
+                              value="{!v.deliveryDate}" change="{!c.handleDeliveryDateChange}" /> -->
+                        </lightning:layoutItem>
+                    </lightning:layout>
+
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- end select date -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- delivery location -->
+            <!-- ******************** -->
+            <lightning:layout class="slds-p-top_x-large">
+                <lightning:layoutItem size="12">
+                    <h4 class="bold">{!v.labelDeliveryLocation}</h4>
+
+                    <lightning:layout class="dal-shipTo slds-m-top_small slds-m-left_small slds-p-around_medium" verticalAlign="center">
+                        <div class="orderOutputData orderOutputData-stacked">
+                            <label class="bold">Ship-To Address:</label>
+                            <span>
+                                <aura:if isTrue="{!!empty(v.shipToName)}">{!v.shipToName}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.shipToName2)}">{! v.shipToName2}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.shipToCareOf)}">{! v.shipToCareOf}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.shipToStreet1)}">{!v.shipToStreet1}<br/></aura:if>
+                                <aura:if isTrue="{!!empty(v.shipToStreet2)}">{!v.shipToStreet2}<br/></aura:if>
+                                <aura:if isTrue="{!and(v.shipToCity, v.shipToState)}">
+                                    {!v.shipToCity},&nbsp;{!v.shipToState}&nbsp;{!v.shipToZipcode}&nbsp;{!v.shipToCountry}
+                                </aura:if>
+                            </span>
+                        </div>
+                        <a href="javascript:void(0);" onclick="{!c.changeShippingAddress}">{!v.labelChange}</a>
+                    </lightning:layout>
+
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- end delivery location -->
+            <!-- ******************** -->
+
+            <!-- SPINNER -->
+            <aura:if isTrue="{!v.showSpinner}">
+                <lightning:spinner class="spinner-fixed"/>
+            </aura:if>
+
+
+            <!-- ******************** -->
+            <!-- save/cancel -->
+            <!-- ******************** -->
+            <lightning:layout class="slds-m-top_x-large slds-p-top_medium slds-border_top" multipleRows="true">
+                <lightning:layoutItem size="12">
+                    <lightning:layout multipleRows="true" pullToBoundary="small" horizontalAlign="end" verticalAlign="center">
+                        <lightning:layoutItem class="slds-p-around_small slds-order_2 slds-small-order_2 slds-medium-order_1 slds-large-order_1 dal-small-inputFull">
+                            <lightning:button label="Cancel" variant="neutral" onclick="{!c.handleCancel}" />
+                        </lightning:layoutItem>
+                       <!--
+                        <lightning:layoutItem class="slds-p-around_small slds-order_1 slds-small-small_1 slds-medium-order_2 slds-large-order_2 dal-small-inputFull">
+                            <lightning:button label="{!(v.currentOrderScheduling == v.totalOrdersToSchedule) ? 'Save' : 'Save and go to next order'}" variant="brand" onclick="{!c.handleSaveNext}" disabled="{!v.deliveryDateErrors[0].message}"/>
+                        </lightning:layoutItem>-->
+
+                        <aura:if isTrue="{!and((!v.isReschedule),(!v.isMultiple))}" >
+                            <lightning:layoutItem class="slds-p-around_small slds-order_1 slds-small-small_1 slds-medium-order_2 slds-large-order_2 dal-small-inputFull">
+                                <lightning:button label="{!(v.currentOrderScheduling == v.totalOrdersToSchedule) ? 'Save' : 'Save and go to next order'}" variant="brand"
+                                                  onclick="{!c.handleSaveNext}" disabled="{!v.isSubmitting}"/>
+                            </lightning:layoutItem>
+                            <!--<lightning:layoutItem class="slds-p-around_small slds-order_1 slds-small-small_1 slds-medium-order_2 slds-large-order_2 dal-small-inputFull">
+                                <lightning:button label="All in One" variant="brand" onclick="{!c.handleSaveDiff}"
+                                                  disabled="{!v.isSubmitting}"/>
+                            </lightning:layoutItem> -->
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!(!v.isMultiple)}">
+                                    <lightning:layoutItem class="slds-p-around_small slds-order_1 slds-small-small_1 slds-medium-order_2 slds-large-order_2 dal-small-inputFull">
+                                        <lightning:button label="{!(v.currentOrderScheduling == v.totalOrdersToSchedule) ? 'Update' : 'Update'}" variant="brand"
+                                                          onclick="{!c.handleSaveNext}" disabled="{!or(v.isSubmitting,v.totalOrders==0)}"/>
+                                    </lightning:layoutItem>
+                                </aura:if>
+                            </aura:set>
+                        </aura:if>
+                        <aura:if isTrue="{!v.isMultiple}" >
+                            <lightning:layoutItem class="slds-p-around_small slds-order_1 slds-small-small_1 slds-medium-order_2 slds-large-order_2 dal-small-inputFull">
+                                <lightning:button label="APPLY TO ALL ORDERS" variant="brand"
+                                                  onclick="{!c.handleSaveDiff}" disabled="{!or(v.isSubmitting,v.totalSkus==0)}"/>
+                            </lightning:layoutItem>
+                        </aura:if>
+
+                    </lightning:layout>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- end save/cancel -->
+            <!-- ******************** -->
+
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- end left column -->
+        <!-- ******************** -->
+
+        <!-- ******************** -->
+        <!-- right column -->
+        <!-- ******************** -->
+        <lightning:layoutItem class="slds-p-horizontal_medium slds-p-vertical_small" size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4">
+            <lightning:layout multipleRows="true" horizontalAlign="center">
+
+                <aura:if isTrue="{!and(!v.isMultiple,!v.isReschedule)}">
+                    <lightning:layoutItem size="12">
+                        <c:Dal_SSC_SchedulePickupDeliveryItemList items="{!v.currentOrder.skus}" orderNumber="{!v.currentOrder.orderNumber}" />
+                    </lightning:layoutItem>
+
+                    <aura:set attribute="else" >
+
+                        <aura:if isTrue="{!v.isReschedule}">
+                            <c:Dal_SSC_ReSchedulePickupDeliveryItemList  store="{!v.store}" totalOrders="{!v.totalOrders}" />
+
+                            <aura:set attribute="else">
+                                <c:Dal_SSC_MultiplePickupDeliveryItemList store="{!v.store}"
+                                                                          totalSkus="{!v.totalSkus}" successedSkus="{!v.successedSkus}" />
+                            </aura:set>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+
+                <lightning:layoutItem size="12" class="slds-p-top_x-large">
+                    <c:Dal_SSC_SchedulePickupDeliveryLocation title="Your order will be delivered from this SSC location:" location="{!v.currentOrder.sscLocation}" />
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="12" class="slds-p-top_x-large">
+                    <c:Dal_InfoPanel type="Single" icon1="utility:question" subText1="SEE OUR" panelURL1="{!$Label.c.Dal_SSC_Delivery_FAQ_Link}" noPadding1="true"
+                         mainText1="Delivery FAQs" size1="large" iconBG1="#CF0A2C" showTile1="true" position="Left" />
+                </lightning:layoutItem>
+
+            </lightning:layout>
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- end right column -->
+        <!-- ******************** -->
+
+        <aura:if isTrue="{!v.showModalDelivery}" >
+            <c:Dal_SSC_OrderScheduleMultipleMsgModal listOfOrders="{!v.listOfOrders}" isDelivery="true" showModal="{!v.showModalDelivery}"
+                                                     isSuccess= "{!v.isMultipleOrderSuccess}" successedSkus="{!v.successedSkus}" failedSkus="{!v.failedSkus}"/>
+        </aura:if>
+
+    </lightning:layout>
+</aura:component>

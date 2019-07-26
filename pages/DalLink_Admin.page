@@ -1,0 +1,37 @@
+<apex:page >
+
+<style type="text/css">
+
+h1 {font-size:350%;}
+h5 {font-size:150%;color:#DC143C}
+h6 {font-size:200%;color:#1E90FF}
+p {font-size:100%;}
+
+</style>
+
+
+<p></p>
+<h1>  </h1>
+<p></p>
+<apex:pageBlock title="Admin Links">
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rA0000000E6ML&ic=1" id="System_Status_link"><h6>System Status </h6></apex:outputLink><br></br>
+</apex:pageBlock>
+<hr />
+
+<p></P>
+<apex:pageBlock title="Dal Links">
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rA0000000DvJ4&ic=1" id="Dal_Decor_link"><h6>Dal Decor </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rF0000000J5rA&ic=1" id="Directory_link"><h6>Dal Directory</h6></apex:outputLink> <h5> * Requires VPN access </h5><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rA0000000DvJ9&ic=1" id="Daltile_Products_link"><h6>Daltile Products </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rA0000000DvJE&ic=1" id="Daltile_Stone_link"><h6>Daltile Stone </h6></apex:outputLink><br></br>
+<apex:outputLink value="http://reporting.daltile.net/Security/MainLogin.aspx?ReturnUrl=%2fDefault.aspx" target="_blank" id="Reporting_link"><h6>Reporting.daltile.net </h6></apex:outputLink> <h5> * Opens in a new window. Requires VPN access </h5><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rA0000000DvJY&ic=1" id="Dodge_link"><h6>Dodge </h6></apex:outputLink><br></br>
+<apex:outputLink value="http://portal.dal-tile.com/" id="Marketing_Portal_link" target="_blank" ><h6>Marketing Portal </h6></apex:outputLink><br></br>
+<apex:outputLink value="http://dallas09/" id="Portal_link" target="_blank" ><h6>Portal </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rA0000000E1HG&ic=1" id="D_Mail_link"><h6>D Mail </h6></apex:outputLink><br></br>
+<apex:outputLink value="https://na10.salesforce.com/servlet/servlet.Integration?lid=01rF0000000J3oJ&ic=1" id="Runzheimer_link"><h6>Runzheimer </h6></apex:outputLink><br></br>
+<apex:outputLink value="http://national.daltile.com:8080/specs/" id="National_Account_Database_link" target="_blank" > <h6>National Account Database </h6></apex:outputLink> <h5> * Requires VPN access </h5><br></br>
+</apex:pageBlock>
+
+
+</apex:page>

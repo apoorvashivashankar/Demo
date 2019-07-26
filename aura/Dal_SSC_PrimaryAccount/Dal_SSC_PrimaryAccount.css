@@ -1,0 +1,40 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  background: transparent url('/resource/dal_icon_map') left 38% no-repeat;
+  border-top: 10px solid #555759;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+}
+.THIS h4 {
+  color: token(colorTextDefault);
+}
+.THIS h4 a {
+  font-family: 'Gotham', sans-serif;
+  font-size: .875rem;
+  display: block;
+}
+.THIS p {
+  color: token(colorTextLabel);
+}
+.THIS p.address {
+  font-size: .875rem;
+}
+.THIS .contactInfo p {
+  font-size: .9375rem;
+  position: relative;
+  padding-left: 1.375em;
+}
+.THIS .contactInfo p .slds-icon_container {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.THIS .contactInfo p .slds-icon_container svg {
+  width: 1em;
+  height: 1em;
+}

@@ -1,0 +1,37 @@
+<!--
+ - Created by 7Summits on 4/13/18.
+ -->
+
+<aura:component description="Dal_MultiRow1ColumnLayout" implements="forceCommunity:layout">
+    <aura:attribute name="headerinBG" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="content" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="fullInBG2" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="fullInBG3" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="row1" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="row2" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="row3" type="Aura.Component[]" required="false"/>
+
+    <section class="dal_lead-banner">
+        <section class="slds-container_x-large slds-container_center slds-p-top_xx-small slds-p-bottom_medium dal_top">
+                {!v.headerinBG}
+        </section>
+    </section>
+    <section class="slds-container_x-large  slds-container_center slds-p-vertical_large dal_middle">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-size_12-of-12 slds-medium-size_12-of-12">
+                    {!v.content}
+            </div>
+        </div>
+    </section>
+    <section class="dal_lead-banner slds-m-vertical_xx-large">
+            <section class="slds-container_x-large slds-container_center slds-p-vertical_large">
+                <div class="slds-p-around_small">{!v.fullInBG2}</div>
+                <div class="slds-grid slds-wrap row-wrapper slds-p-around_small">
+                    <div class="slds-size_12-of-12 slds-medium-size_4-of-12">{!v.row1}</div>
+                    <div class="slds-size_12-of-12 slds-medium-size_4-of-12">{!v.row2}</div>
+                    <div class="slds-size_12-of-12 slds-medium-size_4-of-12">{!v.row3}</div>
+                </div>
+                <div class="slds-p-horizontal_small">{!v.fullInBG3}</div>
+            </section>
+    </section>
+</aura:component>

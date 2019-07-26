@@ -1,0 +1,21 @@
+<design:component label="7s Profile Progress">
+    <design:attribute name="requiredFields" label="Required Fields For Progression" description='Include all the fields that are required to calculate the profile completion percentage. Separate each required field with a as ";"'/>
+    <design:attribute name="resultFormat" label="Result Format" description='This controls what will display in the center of the progress circle. For example, Percentage will display the percentage only' dataSource="Percentage,Actual Number,Mix,Percentage Mix"/>
+    <design:attribute name="theme" label="Progress Color" description="This is the color of the progress portion of the tracker. The default color is the community's border color"/>
+    <design:attribute name="remainTheme" label="Remaining Color" description="This is the color of the remaining portion of the tracker. The default color is the community's border color"/>
+    <design:attribute name="circleColor" label="Inner Circle Color" description="This will be the background color of inner circle. Default in transparent"/>
+    <design:attribute name="threshold" label="Would you like to create a threshold" description="If checked this will allow a threshold to be added. For example, you can set it to 50 and the color will be different before 50% from the color after 50%"/>
+    <design:attribute name="thresholdNumber" label="Threshold Percent" description="The percentage at when the threshold is. This is an integer."/>
+    <design:attribute name="beforeTheme" label="Before Threshold Color" description="This is the color of the tracker before the threshold percentage"/>
+    <design:attribute name="afterTheme" label="After Threshold Color" description="This is the color of the tracker after the threshold percentage"/>
+
+    <design:attribute name="includeText" label="Include any text?" description="Check the box if you would like to include text to the right of the progress circle"/>
+    <design:attribute name="header" label="Header Text" description="If you choose to display text this is for the header of the text section"/>
+    <design:attribute name="subHeader" label="Sub-Header Text" description="If you choose to display text this is for the sub header of the text section"/>
+    <design:attribute name="description" label="Description Text" description="If you choose to display text this is for the description of the text section"/>
+    <design:attribute name="linkText" label="Link Text" description="If you choose to display text this is for the link text of the text section"/>
+    <design:attribute name="customUrl" label="Custom Link URL" description="If you choose to display text and provide a custom navigation url. If no custom url is provided the link will navigate to the current user's profile page."/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

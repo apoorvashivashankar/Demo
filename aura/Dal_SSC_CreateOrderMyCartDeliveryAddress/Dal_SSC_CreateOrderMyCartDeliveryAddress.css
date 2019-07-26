@@ -1,0 +1,64 @@
+.THIS .font-color{
+    color: #cf0a2c;
+}
+
+.THIS .background-color{
+    background-color: #cf0a2c;
+    color: white;
+}
+
+.THIS .dal-delivery-address label{
+    font-size: 1rem !important;
+}
+
+.THIS .dal-delivery-address-button-change {
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    color : white !important;
+}
+
+.THIS .dal-delivery-address-button-cancel {
+    padding-left: 6rem;
+    padding-right: 6rem;
+    margin-top: 1rem;
+}
+
+@media only screen and (min-width: 1200px) {
+    .THIS .dal-delivery-modal {
+        padding-left : 8rem;
+    }
+}
+
+@media (min-width: 800px)  and (max-width: 1200px) {
+    .THIS .dal-delivery-modal {
+        padding-left : 6rem;
+    }
+}
+
+.THIS .dal-delivery-address-footer {
+    margin-top: 3rem;
+}
+
+.THIS .delivery-modal-header {
+    background-color: gray;
+    margin-top: -1rem;
+    padding-top: 16px;
+}
+
+.THIS .delivery-modal-header h2 {
+    color : white;
+}
+
+@media only screen and (min-width: 1200px) {
+    .THIS .dal-delivery-modal {
+        padding-left : 8rem; 
+    }
+}
+
+@media (min-width: 800px)  and (max-width: 1200px) {
+    .THIS .dal-delivery-modal {
+        padding-left : 6rem;
+    }
+}

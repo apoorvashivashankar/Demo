@@ -1,0 +1,38 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  position: relative;
+}
+.THIS .slds-popover {
+  position: absolute;
+  min-width: 300px;
+}
+.THIS .slds-popover.slds-nubbin_bottom-left {
+  bottom: 2em;
+  left: -0.75em;
+}
+.THIS .slds-popover.slds-nubbin_right {
+  top: -0.5em;
+  right: 2em;
+}
+.THIS .slds-popover.slds-nubbin_left {
+  top: -0.5em;
+  left: 2em;
+}
+.THIS .slds-popover.slds-nubbin_top-left {
+  top: 2em;
+  left: -0.75em;
+}
+.THIS .slds-popover.slds-nubbin_bottom-right {
+  right: -0.75em;
+  bottom: 2em;
+}
+.THIS .slds-popover.slds-nubbin_top-right {
+  top: 2em;
+  right: -0.75em;
+}

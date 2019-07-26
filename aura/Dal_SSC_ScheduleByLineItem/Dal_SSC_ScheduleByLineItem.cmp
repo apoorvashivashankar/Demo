@@ -1,0 +1,147 @@
+<!--
+ - Created by 7Summits on 5/3/18.
+ -->
+
+<aura:component description="Dal_SSC_ScheduleByLineItem">
+
+    <!-- passed in attributes -->
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="currentOrder" type="Map" default="{}"/>
+    <aura:attribute name="currentOrderScheduling" type="String" default=""/>
+    <aura:attribute name="totalOrdersToSchedule" type="String" default=""/>
+    <aura:attribute name="skusToSchedule" type="String" default=""/>
+    
+
+    <!-- internal attributes -->
+    <aura:attribute name="activeTab" type="String" default="selectItems"/>
+    <aura:attribute name="scheduleByItemPackages" type="List" default="[]"/>
+
+    <aura:attribute name="baseModal" type="Map" />
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <lightning:layout verticalAlign="start" multipleRows="true" horizontalAlign="center" pullToBoundary="small">
+
+        <!-- ******************** -->
+        <!-- left column -->
+        <!-- ******************** -->
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" class="slds-p-around_small">
+
+            <!-- ******************** -->
+            <!-- items left to schedule -->
+            <!-- ******************** -->
+            <div class="dal-scheduleLineItem-columnItem slds-p-vertical_small">
+                <h4>{!v.skusToSchedule} Items to Schedule</h4>
+                <p>{!v.skusToSchedule} items on order #{!v.currentOrder.orderNumber} have not been scheduled for pickup or delivery. You may
+                schedule them at this time, or wait until later.</p>
+                <p><a href="javascript:void(0)" onclick="{!c.gotoSelectItems}">Schedule Additional Items</a></p>
+                <i class="fas fa-plus icon-scheduledOrder"></i>
+            </div>
+            <!-- ******************** -->
+            <!-- end items left to schedule -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- scheduled containers  -->
+            <!-- ******************** -->
+            <aura:iteration items="{!v.scheduleByItemPackages}" var="item">
+                <!-- active state 'active' -->
+                <div class="dal-scheduleLineItem-columnItem slds-p-vertical_small">
+                    <h4>
+                        <aura:if isTrue="{!item.submittedType == 'pickup'}">Pickup<aura:set attribute="else">Delivery</aura:set></aura:if> #{!item.pos} <span>– {!item.skus.length} items</span>
+                    </h4>
+                    <aura:if isTrue="{!item.submittedType == 'pickup'}">
+                        <p>
+                            <aura:if isTrue="{!!empty(item.pickupLocation.streetAddress1)}">{!item.pickupLocation.streetAddress1}<br/></aura:if>
+                            <aura:if isTrue="{!!empty(item.pickupLocation.streetAddress2)}">{!item.pickupLocation.streetAddress2}<br/></aura:if>
+                            <aura:if isTrue="{!!empty(item.pickupLocation.streetAddress3)}">{!item.pickupLocation.streetAddress3}<br/></aura:if>
+                            <aura:if isTrue="{!and(!empty(item.pickupLocation.city), !empty(item.pickupLocation.state))}">{!item.pickupLocation.city},&nbsp;{!item.pickupLocation.state}&nbsp;{!item.pickupLocation.zipCode}<br/></aura:if>
+                            <aura:if isTrue="{!!empty(item.pickupDateFormatted)}">{!item.pickupDateFormatted}<br/></aura:if>
+                            <aura:if isTrue="{!!empty(item.pickupTimeFormatted)}">{!item.pickupTimeFormatted}</aura:if>
+                        </p>
+                        <i class="fas fa-archive icon-scheduledOrder"></i>
+                    </aura:if>
+
+                    <aura:if isTrue="{!item.submittedType == 'delivery'}">
+                        <p>
+                            <aura:if isTrue="{!!empty(item.deliveryLocation.name)}">{!item.deliveryLocation.name}<br/></aura:if>
+                            <aura:if isTrue="{!!empty(item.deliveryLocation.name2)}">{!item.deliveryLocation.name2}<br/></aura:if>
+                            <aura:if isTrue="{!!empty(item.deliveryLocation.careOf)}">{!'c/o ' + item.deliveryLocation.careOf}<br/></aura:if>
+                            <aura:if isTrue="{!!empty(item.deliveryLocation.streetAddress1)}">{!item.deliveryLocation.streetAddress1}<br/></aura:if>
+                            <aura:if isTrue="{!!empty(item.deliveryLocation.streetAddress2)}">{!item.deliveryLocation.streetAddress2}<br/></aura:if>
+                            <aura:if isTrue="{!and(!empty(item.deliveryLocation.city), !empty(item.deliveryLocation.state))}">{!item.deliveryLocation.city},&nbsp;{!item.deliveryLocation.state}&nbsp;{!item.deliveryLocation.zipCode}&nbsp;{!item.deliveryLocation.country}<br/></aura:if>
+                            <aura:if isTrue="{!!empty(item.deliveryDateFormatted)}">{!item.deliveryDateFormatted}</aura:if>
+                        </p>
+                        <i class="fas fa-truck icon-scheduledOrder"></i>
+                    </aura:if>
+
+                </div>
+            </aura:iteration>
+
+            <aura:if isTrue="{!v.scheduleByItemPackages.length == 0}">
+                <div class="dal-scheduleLineItem-columnItem slds-p-vertical_small">
+                    <p>0 Items Schedules</p>
+                </div>
+            </aura:if>
+            <!-- ******************** -->
+            <!-- end scheduled containers -->
+            <!-- ******************** -->
+
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- end left column -->
+        <!-- ******************** -->
+
+        <!-- ******************** -->
+        <!-- right column -->
+        <!-- ******************** -->
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" class="slds-p-around_small">
+
+            <c:Dal_SSC_ScheduleByLineItemTabs activeTab="{!v.activeTab}" store="{!v.store}" currentOrder="{!v.currentOrder}" />
+
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- end left column -->
+        <!-- ******************** -->
+
+
+
+
+        <!-- ******************** -->
+        <!-- cta buttons -->
+        <!-- ******************** -->
+
+        <lightning:layoutItem size="12" class="slds-p-around_small">
+            <lightning:layout class="slds-border_top slds-p-top_large" multipleRows="true">
+                <lightning:layoutItem class="slds-medium-text-align_right slds-large-text-align_right " size="12">
+                    <p class="slds-form-element__label">Once your deliveries and pickups have been scheduled for the order above, confirm this order and schedule the next.</p>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="12" class="slds-p-horizontal_small">
+
+                    <lightning:layout verticalAlign="center" multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" class="slds-p-top_medium slds-order_2 slds-medium-order_1">
+                            <lightning:button class="dal-small-fullWidth dal-large-inlineBlock dal-medium-inlineBlock uppercase bold" label="Cancel" variant="neutral" onclick="{!c.handleCancel}" />
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" class="slds-p-top_medium slds-order_1 slds-medium-order_2 slds-medium-text-align_right slds-large-text-align_right">
+                            <p class="slds-form-element__label slds-p-vertical_small slds-p-right_x-small dal-large-inlineBlock dal-medium-inlineBlock">Order {!v.currentOrderScheduling} of {!v.totalOrdersToSchedule}</p>
+                            <lightning:button class="dal-small-fullWidth dal-large-inlineBlock dal-medium-inlineBlock uppercase bold" variant="brand" onclick="{!c.handleSaveNext}"
+                                label="{!(v.currentOrderScheduling == v.totalOrdersToSchedule) ? 'Confirm' : 'CONFIRM AND GO TO NEXT ORDER'}" disabled="{!v.scheduleByItemPackages.length == 0}" />
+                        </lightning:layoutItem>
+                    </lightning:layout>
+
+                </lightning:layoutItem>
+
+            </lightning:layout>
+        </lightning:layoutItem>
+
+        <!-- ******************** -->
+        <!-- end cta buttons -->
+        <!-- ******************** -->
+
+
+    </lightning:layout>
+</aura:component>

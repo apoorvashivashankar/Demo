@@ -1,0 +1,41 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .slds-icon-standard-solution {
+    background-color:token(colorBackgroundButtonBrand);
+}
+.THIS .ideas-header h1 {
+
+    display: inline-block;
+    vertical-align: middle;
+    margin:0;
+    margin-left:20px;
+}
+
+.THIS.slds-page-header {
+    padding:0px;
+}
+
+.THIS.ideas-filters {
+        border-bottom: token(borderWidthThin) solid token(colorBorder);
+}
+
+.THIS .new-idea-button {
+    text-align:right;
+    text-transform:uppercase;
+}
+
+.THIS .searchContain {
+    position:relative;
+}
+
+.THIS .searchContain .displayIconImage {
+    position: absolute;
+    right: 15px;
+    top: 18px;
+    z-index: 1;
+}
+
+@media screen and (max-width:767px) {
+    .THIS .new-idea-button {
+        text-align:left;
+    }
+}

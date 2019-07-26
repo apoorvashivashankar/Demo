@@ -1,0 +1,298 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .slds-select_container:after {
+	border-top: 0px solid #061c3f !important;
+	bottom: calc((2.125rem / 2) - 6px);
+}
+
+.THIS .required {
+	color: red;
+}
+
+.THIS .attachmentLabel {
+	padding-left: 5px !important;
+}
+
+.THIS .attachEdit[type=file] {
+	width: 97px;
+}
+
+.THIS .attachEditSafari {
+	width: 100px !important;
+}
+
+.THIS .attachEditMozilla {
+	width: 97px !important;
+}
+
+.THIS .testColor {
+	background: red !important;
+	width: 150px !important;
+}
+
+.THIS .fontFix {
+	color: white;
+}
+
+.THIS .slds-notify--toast {
+	margin: 0 0 0.5rem 0 !important;
+	min-width: 150px !important;
+}
+
+.THIS .checkboxCss {
+	float: left;
+	margin-right: 8px;
+}
+
+.THIS .authorSelection {
+	margin-left: 5%;
+}
+
+.THIS .authorDropdown {
+	font-size: 17px;
+	font-weight: 300;
+	margin-bottom: 10px;
+}
+
+.THIS .slds-form-element__control {
+	margin-bottom: 4%;
+}
+
+.THIS .showlabel {
+	font-weight: 400;
+	margin-bottom: 15px;
+}
+
+.THIS .descriptiveText {
+	font-size: 16px;
+	font-weight: 300;
+	color: #8E8A8A;
+	margin-bottom: 12px;
+}
+
+.THIS .inputDiv {
+	margin-left: 20px;
+}
+
+.THIS .dateText {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.THIS .dtInput {
+	margin-left: 3%;
+}
+
+.THIS .buttonCss {
+	width: 150px;
+}
+
+.THIS .hideDropdown {
+	display: none;
+}
+
+.THIS .showDropdown {
+	display: block;
+}
+
+.THIS .slds-select_container {
+	width: 100%;
+}
+
+.THIS.createNewsBox {
+	box-shadow: 0 0 5px #807d7d !important;
+	border-radius: 5px !important;
+	padding-left: 3% !important;
+	padding-right: 3% !important;
+	padding-top: 7% !important;
+	padding-bottom: 7% !important;
+}
+
+.THIS .uiInput--datetime + .datePicker-openIcon + .clearIcon, .THIS .uiInput--datetime .clearIcon {
+	top: 0px !important;
+	right: 0px !important;
+}
+
+.THIS .fontFix {
+	color: #fff !important;
+}
+
+.THIS .errorDiv .uiInputDefaultError .form-element__help {
+	font-size: 16px;
+	color: #fff !important;
+}
+
+.THIS .errorDiv {
+	width: 358px;
+}
+
+.THIS .hide {
+	display: none;
+}
+
+.THIS .slds-spinner--large {
+	text-align: center;
+	opacity: .9;
+	color: #ccc;
+	border-radius: .25rem;
+	width: 90px;
+	padding: 1.5rem 0;
+	top: 50%;
+	left: 50%;
+	margin-left: -55px;
+	margin-top: -110px;
+	position: fixed;
+	display: block;
+}
+
+.THIS .slds-select_container:before {
+	border-bottom: 0px solid rgb(6, 28, 63) !important;
+}
+
+.THIS .salesforceSource_blurybackground {
+	position: absolute;
+	left: 1px;
+	top: 1px;
+	width: 100%;
+	height: 700%;
+	z-index: 9999;
+	text-align: center;
+	vertical-align: middle;
+	/*background-color: #dcdcdc; */
+	opacity: 0.7;
+	filter: alpha(opacity=60)
+}
+
+.THIS .toggle {
+	display: none;
+}
+
+.THIS .waitingHolder {
+	width: 144px;
+	vertical-align: middle;
+}
+
+.THIS .uiInputDefaultError .form-element__help {
+	margin-top: 0 !important;
+}
+
+/*class addition 010616 - To fix alignment of red & yellow alerts on Create News page*/
+.THIS .w100 {
+	width: 100% !important;
+	display: block !important
+}
+
+/*class addition 010616 - To fix alignment of red & yellow alerts on Create News page*/
+
+/*media query 010616 - To fix alignment of red alerts in iPhone5 & iPhone6*/
+@media screen and (max-width: 375px) {
+	.THIS .errorAttachment {
+		width: 275px !important
+	}
+
+	.THIS .errorDiv .uiInputDefaultError .form-element__help {
+		font-size: 13px !important
+	}
+
+	.THIS .fontFix {
+		font-size: 13px !important
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.THIS .something {
+		width: 100% !important;
+	}
+
+	.THIS .uiDatePicker {
+		position: absolute !important;
+		top: 100% !important;
+	}
+}
+
+@media only screen and (max-width: 1200px) {
+	.THIS .uiInput--datetime + .datePicker-openIcon {
+		top: 7px !important;
+		right: 10px !important
+	}
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1024px) {
+	.THIS .uiDatePicker {
+		position: absolute !important;
+		top: 100% !important;
+	}
+}
+
+.THIS .targetButton {
+	background: token(colorBackgroundButtonBrand);
+	border-color: token(colorBorderButtonBrand);
+}
+
+.THIS .btn-primary {
+	background: token(colorBackgroundButtonBrand);
+	border-color: token(colorBorderButtonBrand);
+}
+
+.THIS .btn-link {
+	color: token(colorTextLink);
+}
+
+.THIS .btn {
+	text-transform: uppercase;
+}
+
+.THIS .hide {
+	display: none;
+}
+
+.THIS .show {
+	display: initial;
+}
+
+.THIS .topic.ui.multiple.dropdown > .label {
+	white-space: nowrap;
+}
+
+.THIS .topic.ui.fluid.dropdown {
+	height: 100%;
+}
+
+.THIS .topic a.ui.label i.delete.icon {
+	margin-right: -5px;
+	margin-left: 5px;
+	line-height: 6px;
+}
+
+.THIS .topic a.ui.label i.delete.icon:before {
+	content: "x";
+	padding-left: 5px;
+	color: #666;
+	font-style: normal;
+	font-weight: 600;
+	vertical-align: top;
+}
+
+.THIS .topic a.ui.label:hover {
+	background-color: #eee;
+}
+
+.THIS .topic a.ui.label:hover i.delete.icon:before {
+	color: #333;
+}
+
+.THIS .displayIconImage {
+	height: 18px;
+	margin-right: 5px;
+}
+
+.THIS .searchContainer {
+	position: relative;
+}
+
+.THIS .searchContainer .displayIconImage {
+	position: absolute;
+	height: 15px;
+	right: 20px;
+	z-index: 5000;
+	top: 8px;
+}

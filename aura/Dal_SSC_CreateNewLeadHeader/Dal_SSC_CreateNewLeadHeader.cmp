@@ -1,0 +1,121 @@
+<!--
+ - Created by ranja on 21-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateNewLeadHeader" extends="c:Dal_SSC_LeadManagementBase" controller="Dal_LeadManager"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="isOutput" type="String" default="true"/>
+    <aura:attribute name="fieldParams" type="String" />
+    <aura:attribute name="selectedOwnerName" type="String" />
+    <aura:attribute name="selectedOwner" type="String" />
+    <aura:attribute name="recordTypeId" type="String" />
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!--  Events -->
+    <aura:registerEvent name="leadIsEdit" type="c:Dal_SSC_CreateNewLeadEvent"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:registerEvent name="changeBreadscrumbs" type="c:Dal_SSC_LeadManagement_BreadCrumbEvent"/>
+
+
+    <!-- Body Starts Here -->
+    <aura:if isTrue="{!and((v.isOutput),v.recordId)}">
+        <lightning:recordEditForm
+                onload="{!c.handleOnLoad}"
+                recordId="{!v.recordId}"
+                objectApiName="Lead">
+
+            <!-- The messages component is for error messages -->
+            <lightning:messages class="dal-form-show-error"/>
+
+
+            <div class="slds-grid slds-wrap slds-m-verical_x-large">
+                <div class="slds-large-size_8-of-12 slds-medium-size_12-of-12 slds-size_1-of-1">
+                    <div class="dal-header-name">
+                        <lightning:outputField fieldName="Name" aura:id="leadName" variant="label-hidden"/>
+                    </div>
+                    <div class="slds-hide">
+                        <lightning:inputField fieldName="Name" aura:id="leadNameInput" />
+                    </div>
+                    <div class="slds-grid slds-wrap slds-size_12-of-12">
+                        <div class="slds-large-size_3-of-12 slds-m-vertical_small slds-medium-size_3-of-12 slds-size_1-of-1 slds-name-sub-header">
+                            <div class="header-subheader-detail-text">
+                                TITLE
+                            </div>
+                            <div class=" slds-size_1-of-1 slds-name-sub-header">
+                                <lightning:outputField fieldName="Job_Title__c" variant="label-hidden"/>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_3-of-12 slds-m-vertical_small slds-medium-size_3-of-12 slds-size_1-of-1 slds-name-sub-header">
+                            <div class="header-subheader-detail-text">
+                                COMPANY
+                            </div>
+                            <div class="slds-name-data-sub-header">
+                                <lightning:outputField fieldName="Company" variant="label-hidden" aura:id="companyName"/>
+                            </div>
+                            <div class="slds-hide   ">
+                                <lightning:inputField fieldName="Company" aura:id="companyValue" />
+                            </div>
+                        </div>
+                        <div class="slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_1-of-1 slds-m-vertical_small slds-name-sub-header">
+                            <div class="header-subheader-detail-text">
+                                PHONE #
+                            </div>
+                            <div class="slds-name-data-sub-header">
+                                <lightning:outputField fieldName="Phone" variant="label-hidden"/>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_3-of-12 slds-m-vertical_small slds-medium-size_3-of-12 slds-size_1-of-1 slds-name-sub-header">
+                            <div class="header-subheader-detail-text">
+                                PRODUCT INTEREST
+                            </div>
+                            <div class="slds-name-data-sub-header">
+                                <lightning:outputField fieldName="Product_Type__c" variant="label-hidden"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-hide">
+                    <lightning:inputField fieldName="Name" aura:id="inputLeadName" />
+                </div>
+                <div class="slds-hide">
+                    <lightning:inputField fieldName="Status" aura:id="inputStatus" />
+                    <!--<lightning:outputField fieldName="Status" aura:id="outputStatus" />-->
+                </div>
+
+                <div class="slds-hide">
+                    <lightning:inputField fieldName="Lead_Score__c" aura:id="inputLeadScore" />
+                    <!--<lightning:outputField fieldName="Status" aura:id="outputStatus" />-->
+                </div>
+
+                <!-- Header Button -->
+                <div class="slds-grid slds-large-size_4-of-12 slds-size_1-of-1 dal-header-button">
+                    <div class="slds-m-right_medium">
+                        <lightning:button class="dal-header-editButton" name="EDIT" label="EDIT" onclick="{!c.handleEditClick}"/>
+                    </div>
+                    <div class="">
+                        <lightning:button class="dal-header-convertToOpp" name="CONVERT TO OPPORTUNITY" label="CONVERT TO OPPORTUNITY"
+                                          onclick="{!c.convertToOpportunity}" />
+                    </div>
+                </div>
+            </div>
+
+        </lightning:recordEditForm>
+
+        <aura:set attribute="else" >
+            <aura:if isTrue="{!v.recordId}" >
+                <c:Peak_HTML_Headings headingTag="H1 - Section Heading"
+                                      headingText="Edit Lead" />
+                <aura:set attribute="else">
+                    <c:Peak_HTML_Headings headingTag="H1 - Section Heading"
+                                          headingText="Create New Lead" />
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

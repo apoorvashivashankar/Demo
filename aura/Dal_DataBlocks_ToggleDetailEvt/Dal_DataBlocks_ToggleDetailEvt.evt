@@ -1,0 +1,8 @@
+<!--
+ - Created by 7Summits on 2/28/18.
+ -->
+
+<aura:event type="COMPONENT" description="Dal_DataBlocks_ToggleDetailEvt">
+    <aura:attribute name="id" type="string" />
+    <aura:attribute name="componentName" type="String" />
+</aura:event>

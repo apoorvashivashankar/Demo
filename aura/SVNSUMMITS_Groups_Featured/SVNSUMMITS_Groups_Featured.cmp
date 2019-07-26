@@ -1,0 +1,103 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_GroupsController"
+                access="global"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+	<ltng:require styles="{!$Resource.SVNSUMMITS_LightningSlider + '/light-slider/light-slider/css/light-slider.css'}"
+			scripts="{!join(',',
+					$Resource.MomentJS,
+					$Resource.SVNSUMMITS_LightningSlider + '/light-slider/light-slider/js/jquery.min.js',
+					$Resource.SVNSUMMITS_LightningSlider + '/light-slider/light-slider/js/lightslider.js')}"
+			afterScriptsLoaded="{!c.doInit}"/>
+	<!--Static Resources Section End -->
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="groupsListWrapper" type="SVNSUMMITS_WrapperGroups" access="global"/>
+	<aura:attribute name="featuredTitle" type="String" default="{!$Label.c.ss_grp_label_Explore_Relevant_Groups}"
+	                access="global"/>
+	<aura:attribute name="featuredDescription" type="String" access="global"/>
+	<aura:attribute name="displayPublicPrivateGrp" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="showAuthor" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showLastActive" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showJoinButton" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="descriptionLines" type="String" default="2" access="global"/>
+	<aura:attribute name="showAllGroups" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showBackgroundImage" type="Boolean" default="true" access="global"/>
+
+	<aura:attribute name="recordId1" type="String" access="global"/>
+	<aura:attribute name="recordId2" type="String" access="global"/>
+	<aura:attribute name="recordId3" type="String" access="global"/>
+	<aura:attribute name="recordId4" type="String" access="global"/>
+	<aura:attribute name="recordId5" type="String" access="global"/>
+	<aura:attribute name="recordId6" type="String" access="global"/>
+	<aura:attribute name="recordId7" type="String" access="global"/>
+	<aura:attribute name="recordId8" type="String" access="global"/>
+
+	<aura:attribute name="groupsURL" type="String" default="/group/" access="global"/>
+	<aura:attribute name="profileURL" type="String" default="/profile/" access="global"/>
+	<aura:attribute name="allGroupsButtonText" type="String" default="{!$Label.c.ss_grp_label_All_Groups}"
+	                access="global"/>
+	<aura:attribute name="allGroupsUrl" type="String" default="/groups-list-view" access="global"/>
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" access="global"/>
+	<aura:attribute name="customClass" type="String" default="" access="global"/>
+	<aura:attribute name="customId" type="String" default="" access="global"/>
+
+	<lightning:layout multipleRows="true"
+	                  verticalAlign="start"
+	                  pullToBoundary="small">
+		<lightning:layoutItem size="12"
+		                      class="slds-text-heading--large slds-p-around--small">
+			<aura:if isTrue="{!and(v.featuredTitle != '' , v.featuredTitle != 'none')}">
+				<c:SVNSUMMITS_Groups_SetLabelUtil text="{!v.featuredTitle}"/>
+				<aura:set attribute="else">
+					<aura:if isTrue="{!v.featuredTitle != 'none'}">
+							{!$Label.c.ss_grp_label_Explore_Relevant_Groups}
+					</aura:if>
+				</aura:set>
+			</aura:if>
+		</lightning:layoutItem>
+
+		<aura:if isTrue="{! v.featuredDescription}">
+			<lightning:layoutItem size="12"
+			                      class="slds-text-heading--small slds-p-around--small">
+					{!v.featuredDescription}
+			</lightning:layoutItem>
+		</aura:if>
+
+		<lightning:layoutItem size="12"
+		                      class="slds-p-around--small">
+			<div>
+				<ul id="responsive">
+					<aura:iteration items="{!v.groupsListWrapper.groupsList}" var="currentGroup">
+						<li>
+							<c:SVNSUMMITS_Groups_Tile wrapperGroupsObj="{!v.groupsListWrapper}"
+							                          group="{!currentGroup}"
+							                          profileURL="{!v.profileURL}"
+							                          groupsURL="{!v.groupsURL}"
+							                          isNicknameDisplayEnabled="{!v.isNicknameDisplayEnabled}"
+							                          showAuthor="{!v.showAuthor}"
+							                          showGroupType="{!v.displayPublicPrivateGrp}"
+							                          showJoinButton="{!v.showJoinButton}"
+							                          showLastActive="{!v.showLastActive}"
+							                          showBackgroundImage="{!v.showBackgroundImage}"
+							                          descriptionLines="{!v.descriptionLines}"/>
+						</li>
+					</aura:iteration>
+
+				</ul>
+			</div>
+
+		</lightning:layoutItem>
+
+		<aura:if isTrue="{!v.showAllGroups}">
+			<lightning:layoutItem size="12"
+			                      class="slds-p-around--small">
+				<lightning:button label="{!$Label.c.ss_grp_label_All_Groups}"
+				                  onclick="{!c.goToAllGroups}"
+				                  title="{!$Label.c.ss_grp_label_All_Groups}"
+				                  variant="neutral"/>
+			</lightning:layoutItem>
+		</aura:if>
+
+	</lightning:layout>
+</aura:component>

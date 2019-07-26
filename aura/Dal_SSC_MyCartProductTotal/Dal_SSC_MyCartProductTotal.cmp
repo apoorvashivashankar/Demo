@@ -1,0 +1,87 @@
+<!--
+ - Created by Preshit on 02-01-2019.
+ -->
+
+<aura:component description="Dal_SSC_MyCartProductTotal" extends="c:Dal_SSC_CreateOrderBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global">
+
+    <!--Internal Attributes-->
+    <aura:attribute name="myCartPageNumber" type="Integer" default="1"/>
+
+    <!--Label-->
+    <aura:attribute name="pageOneLabel" type="String" default="CONTINUE TO CHECKOUT" />
+    <aura:attribute name="pageTwoLabel" type="String" default="CONTINUE TO REVIEW" />
+    <aura:attribute name="pageThreeLabel" type="String" default="PLACE ORDER" />
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+
+    <!--BODY-->
+    <div>   
+        <lightning:layout>
+            <lightning:layoutItem flexibility="auto" size="12" class="top-margin">
+                <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_8-of-12 productTotal slds-p-around_medium ">
+                    <div class="slds-align_absolute-center slds-text-heading_small slds-m-bottom_small ssc-order-prod-count">
+                        <b>{!v.myCartOrderOne.length + v.myCartOrderTwo.length}</b>&nbsp; Products
+                    </div>
+
+                    <table>
+                        <tr class="table-border-top slds-grid slds-p-around_x-small slds-grid_align-spread">
+                            <td class="slds-col">Order Sub-Total</td>
+
+                            <td class="slds-col">
+                                <b>
+                                    <lightning:formattedNumber value="{!v.orderSubTotalTotal}" style="currency" currencyCode="USD" />
+                                </b>
+                            </td>
+                        </tr> 
+                        <tr class="table-border-top slds-grid slds-p-around_x-small slds-grid_align-spread">
+                            <td class="slds-col">Energy Surcharge</td>
+                            <td class="slds-col">
+                                <b>
+                                    <lightning:formattedNumber value="{!v.energySurchargeTotal}" style="currency" currencyCode="USD" />
+                                </b>
+                            </td>
+                        </tr>
+                        <tr class="table-border-bottom table-border-top slds-p-around_x-small">
+                            <td class="slds-p-around_x-small slds-grid slds-grid_align-spread">
+                                <div class="slds-col">
+                                    Estimated Total
+                                </div>
+                                <div class="slds-col">
+                                    <b>
+                                        <lightning:formattedNumber value="{!v.estimatedTotal}" style="currency"
+                                                                   currencyCode="USD"/>
+                                    </b>
+                                </div> 
+                            </td>
+                            <aura:if isTrue="{!(v.myCartPageNumber==3)}">
+                                <td class=" slds-align_absolute-center">
+                                    <div class="slds-p-bottom_xx-small">
+                                        <b><i>Additional charges may apply</i></b>
+                                    </div>
+                                </td>
+                            </aura:if>
+                        </tr>
+                    </table>
+
+                    <br/>
+
+                    <center>
+                        <lightning:button class="{!or(v.isPriceError,not(v.myCartOrderOne.length > 0)) ? 'disable-color slds-text-align_center dal-my-cart-place-order slds-m-top_large' : 'background-color slds-text-align_center dal-my-cart-place-order slds-m-top_large'}"
+                                          label="{!(v.myCartPageNumber==1) ? v.pageOneLabel : (v.myCartPageNumber==2) ? v.pageTwoLabel :
+                                             (v.myCartPageNumber==3) ? v.pageThreeLabel : v.pageOneLabel}"
+                                          title="{!(v.myCartPageNumber==1) ? v.pageOneLabel : (v.myCartPageNumber==2) ? v.pageTwoLabel :
+                                             (v.myCartPageNumber==3) ? v.pageThreeLabel : v.pageOneLabel}"
+                                          onclick="{!c.handlePlaceOrder}"
+                                          disabled="{!or(v.isPriceError,not(v.myCartOrderOne.length > 0))}"/>
+                    </center>
+
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>

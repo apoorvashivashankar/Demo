@@ -1,0 +1,22 @@
+<!--
+ - Created by ranja on 26-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_MyOpportunityHeader" extends="c:Dal_SSC_LeadManagementBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    
+    <!-- Attribute Label -->
+    <aura:attribute name="labelNewOpp" type="String" default="CREATE NEW OPPORTUNITY" />
+    
+    <div class="slds-grid">    
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="9" class="dal-my-opportunity-header">
+            <c:Peak_HTML_Headings headingTag="H1 - Section Heading"
+                                  headingText="My Opportunities" />
+        </lightning:layoutItem> 
+        
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="3" >
+            <lightning:button name="{!v.labelNewOpp}" label="{!v.labelNewOpp}" title="{!v.labelNewOpp}"
+                              onclick="{!c.createNewOpp}" class="header-opp-button" />
+        </lightning:layoutItem>
+    </div>
+</aura:component>

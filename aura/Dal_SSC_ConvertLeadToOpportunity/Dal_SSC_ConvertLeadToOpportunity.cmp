@@ -1,0 +1,229 @@
+<!--
+ - Created by ranja on 23-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_ConvertLeadToOpportunity" extends="c:Dal_ModalBase" controller="Dal_LeadManager"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+    <!-- Opening and Closing modal -->
+    <aura:attribute name="isOpen" type="boolean" default="true"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="listOfSearchRecords" type="Object" />
+    <aura:attribute name="searchKeyWord" type="String" default="" />
+    <aura:attribute name="selectedRecord" type="String" />
+    <aura:attribute name="showDropdown" type="Boolean" default="false" />
+    <aura:attribute name="selectedAccount" type="String" />
+    <aura:attribute name="selectedOwner" type="String" />
+    <aura:attribute name="selectedContact" type="String" />
+    <aura:attribute name="selectedAccountName" type="String" />
+    <aura:attribute name="selectedOwnerName" type="String" />
+    <aura:attribute name="selectedContactName" type="String" />
+    <aura:attribute name="labelEmail" type="String" default="Send Email to the Owner" />
+    <aura:attribute name="chooseAccount" type="String" />
+    <aura:attribute name="chooseContact" type="String" />
+    <aura:attribute name="sendEmail" type="Boolean" default="false" />
+    <aura:attribute name="opportunityName" type="String" default="" />
+    <aura:attribute name="selectedConvertedStatus" type="String" default="In Progress" />
+    <aura:attribute name="selectedOpportunityRating" type="String" default="Hot" />
+    <aura:attribute name="opportunityRatings" type="List" default="['Hot','Warm','Cold']" />
+    <aura:attribute name="isAccountNew" type="boolean" default="false" />
+    <aura:attribute name="isContactNew" type="boolean" default="false" />
+    <aura:attribute name="newAccountName" type="String" />
+    <aura:attribute name="newContactName" type="String" />
+    <aura:attribute name="fieldParams" type="String" />
+    <aura:attribute name="showErrorAcc" type="boolean" default="false" />
+    <aura:attribute name="showErrorCon" type="boolean" default="false"/>
+    <aura:attribute name="showErrorAccNull" type="boolean" default="false" />
+    <aura:attribute name="showErrorConNull" type="boolean" default="false"/>
+    <aura:attribute name="isOwnerNull" type="boolean" default="false" />
+    <aura:attribute name="selectedStatusOfLead" type="String" />
+    <aura:attribute name="selectedScoreOfLead" type="String" />
+
+
+    <aura:attribute name="recordTypeId" type="String" />
+    <aura:attribute name="showSpinner" type="boolean" default="false" />
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!-- Labels -->
+    <aura:attribute name="convertLeadModalTitle" type="String" default="Convert Lead"
+                    description="Lead Conversion modal heading"/>
+
+
+
+    <!-- Modal header here -->
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.convertLeadModalTitle}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+
+    <!-- Modal Body -->
+    <lightning:layout class="dal-form dal-form-order slds-p-around_small slds-m-bottom_large" multipleRows="true">
+       <div class="slds-size_12-of-12" aura:id="lead-details">
+
+           <!-- For Owner -->
+           <div class="dal-convert-margin-owner slds-size_5-of-12">
+               <div >
+                    <div class="{!v.isOwnerNull ? 'slds-has-error' : ''}">
+                        <label class="custom-label">Record Owner</label>
+                        <c:Dal_SSC_ConvertLeadCustomLookup objectType="User" selectedOwner="{!v.selectedOwner}"
+                                                           selectedOwnerName="{!v.selectedOwnerName}"/>
+                    </div>
+                   <aura:if isTrue="{!v.isOwnerNull}" >
+                       <p class="slds-has-error error-message">Required</p>
+                   </aura:if>
+                   <!--<lightning:recordEditForm objectApiName="Case" class="slds-size_5-of-12 dal-convert-margin-bottom"
+                                             recordTypeId="{!v.recordTypeId}" >
+                       <label class="custom-label">Record Owner</label>
+                       <lightning:inputField fieldName="OwnerId" class="label-hidden" aura:id="recordOwner" />
+                   </lightning:recordEditForm>-->
+               </div>
+           </div>
+            <div class="dal-convert-send-email slds-grid">
+                <lightning:input type="checkbox" checked="{!v.sendEmail}" label="" variant="label-hidden" />&nbsp;<p class="dal-email-label">{!v.labelEmail}</p>
+            </div>
+
+           <!-- For Account -->
+            <div class="slds-grid dal-convert-account dal-convert-margin-bottom">
+                <div class="slds-size_5-of-12 slds-m-right_xx-large">
+                    <lightning:select label="Account Name" name="Account Name" class="{!(v.showErrorAccNull)?'slds-has-error': ''}"
+                                      value="{!v.chooseAccount}" onchange="{!c.onAccountChange}" required="true"  >
+
+                        <option value="" class="{!(v.chooseAccount)? 'slds-hide' : ''}">Choose Account</option>
+                        <option value="existing">Existing Account</option>
+                        <option value="new">New Account</option>
+                    </lightning:select>
+                    <aura:if isTrue="{!v.showErrorAccNull}" >
+                        <p class="slds-has-error error-message">Required</p>
+                    </aura:if>
+                </div>
+
+                <aura:if isTrue="{!v.chooseAccount == 'existing'}" >
+                    <div class="slds-size_5-of-12">
+                       <!-- <h5 class="record-owner-label">Search Existing Account</h5> -->
+                        <lightning:recordEditForm objectApiName="Opportunity" >
+                            <label class="custom-label">Search Existing Account</label>
+                            <lightning:inputField class="{!(v.showErrorAcc)? 'slds-has-error label-hidden record-lookup ' : 'label-hidden record-lookup ' }"
+                                                  fieldName="AccountId" aura:id="selectedAccount"
+                                                  onchange="{!c.handleAccountChange}" />
+                            <aura:if isTrue="{!v.showErrorAcc}" >
+                                <p class="slds-has-error error-message">An invalid option has been chosen.</p>
+                            </aura:if>
+                        </lightning:recordEditForm>
+                      <!--  <c:Dal_SSC_ConvertLeadCustomLookup objectType="Account" selectedAccount="{!v.selectedAccount}" isAccountNew="{!v.isAccountNew}"
+                                                           selectedAccountName="{!v.selectedAccountName}" />
+                       -->
+                    </div>
+                    <aura:set attribute="else" >
+                        <aura:if isTrue="{!!empty(v.chooseAccount)}" >
+                            <lightning:input label="New Account Name" class="slds-size_5-of-12 record-owner-label" value="{!v.newAccountName}"
+                                             name="New Account Name" type="text" />
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+            </div>
+
+           <!-- SPINNER -->
+           <aura:if isTrue="{!v.showSpinner}" >
+                <lightning:spinner variant="brand"/>
+           </aura:if>
+
+           <!-- For Contact -->
+           <div class="slds-grid dal-convert-margin-bottom dal-convert-margin-bottom">
+               <div class="slds-size_5-of-12 slds-m-right_xx-large">
+                   <lightning:select label="Contact Name" name="Contact Name"  class="{!(v.showErrorConNull)?'slds-has-error': ''}"
+                                     value="{!v.chooseContact}" onchange="{!c.onContactChange}" >
+                       <option value="" class="{!(v.chooseContact)? 'slds-hide' : ''}">Choose Contact</option>
+                       <option value="existing">Existing Contact</option>
+                       <option value="new">New Contact</option>
+                   </lightning:select>
+                   <aura:if isTrue="{!v.showErrorConNull}" >
+                       <p class="slds-has-error error-message">Required</p>
+                   </aura:if>
+               </div>
+
+               <aura:if isTrue="{!v.chooseContact == 'existing'}" >
+                   <div class="slds-size_5-of-12">
+                       <!--<h5 class="record-owner-label">Search Existing Contact</h5>
+                       <c:Dal_SSC_ConvertLeadCustomLookup objectType="Contact" selectedContact="{!v.selectedContact}"
+                                                          isContactNew="{!v.isContactNew}" selectedContactName="{!v.selectedContactName}" />-->
+                       <lightning:recordEditForm objectApiName="Lead" >
+                           <label class="custom-label">Search Existing Contact</label>
+                           <lightning:inputField class="{(v.showErrorCon)? 'slds-has-error label-hidden record-lookup ' : 'label-hidden record-lookup '}"
+                                                 fieldName="ConvertedContactId" aura:id="selectedContact"
+                                                 onchange="{!c.handleContactChange}"/>
+                           <aura:if isTrue="{!v.showErrorCon}" >
+                               <p class="slds-has-error error-message">An invalid option has been chosen.</p>
+                           </aura:if>
+                       </lightning:recordEditForm>
+                   </div>
+                   <aura:set attribute="else" >
+                       <aura:if isTrue="{!!empty(v.chooseContact)}" >
+                           <lightning:input label="New Contact Name" class="slds-size_5-of-12 record-owner-label" value="{!v.newContactName}"
+                                            name="New Contact Name" type="text" />
+                       </aura:if>
+                   </aura:set>
+               </aura:if>
+           </div>
+
+           <!-- Opportunity Name -->
+           <lightning:input name="Opportunity Name" label="Opportunity Name" value="{!v.opportunityName}"
+                            class="slds-size_5-of-12 dal-convert-margin-bottom" />
+
+           <!-- Converted Status -->
+          <!-- <lightning:recordEditForm objectApiName="Lead" class="slds-size_5-of-12 dal-convert-margin-bottom"
+                                     recordTypeId="{!v.recordTypeId}" onload="{!c.handleOnload}" >
+               <label class="custom-label">Converted Status</label>
+               <lightning:inputField fieldName="Status" class="label-hidden" aura:id="convertedStatus" />
+
+           </lightning:recordEditForm>-->
+
+           <lightning:select label="Converted Status" name="Converted Status" class="slds-size_5-of-12 dal-convert-margin-bottom"
+                             value="{!v.selectedConvertedStatus}" required="true" >
+                   <option value="In Progress">In Progress</option>
+           </lightning:select>
+        <!--
+           <lightning:select label="Converted Status" name="Converted Status" class="slds-size_5-of-12 dal-convert-margin-bottom"
+                             value="{!v.selectedConvertedStatus}" required="true" >
+               <option value="Qualified">Qualified</option>
+           </lightning:select> -->
+
+           <!-- Opportunity Rating -->
+           <lightning:select label="Opportunity Rating" name="Opportunity Rating" class="slds-size_5-of-12 dal-convert-margin-bottom"
+                             value="{!v.selectedOpportunityRating}" required="true"  >
+               <aura:iteration items="{!v.opportunityRatings}" var="rating" >
+                   <option value="{!rating}">{!rating}</option>
+               </aura:iteration>
+           </lightning:select>
+
+       </div>
+    </lightning:layout>
+
+    <!-- Modal Footer -->
+    <lightning:layout class="footer-action-bar slds-m-top_small slds-border_top slds-p-top_small" multipleRows="true">
+
+        <lightning:layoutItem class="button-bold slds-p-around_small"
+                              size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="3">
+            <lightning:button variant="neutral" class="modal-footer-close dal-lead-conversion-button-custom" label="CANCEL"
+                              onclick="{!c.handleCloseModal}"/>
+        </lightning:layoutItem>
+
+        <lightning:layoutItem class="button-bold dal-small-inputFull slds-p-around_small" size="12"
+                              smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="9">
+            <lightning:layout horizontalAlign="end">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="3">
+                    <lightning:button variant="brand" class="modal-footer-close dal-lead-conversion-button-custom" label="CONVERT"
+                                      onclick="{!c.handleConvert}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+
+</aura:component>

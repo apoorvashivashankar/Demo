@@ -1,0 +1,9 @@
+/**
+ * Created by ranja on 07-09-2018.
+ */
+.THIS {
+}
+
+.THIS .forceRecordLayout .slds-section:nth-child(2) .forcePageBlockSectionRow .forcePageBlockItem:first-child .slds-form-element_separator {
+    border : none;
+}

@@ -1,0 +1,53 @@
+<apex:page standardController="Account" extensions="ChangeRequestExtension">
+
+<apex:includeScript value="/soap/ajax/10.0/connection.js"/>
+<apex:includeScript value="/soap/ajax/10.0/apex.js"/>
+
+    <!-- Salesforce Classic "Aloha" theme -->
+    <apex:variable var="uiTheme" value="classic2010Theme" 
+        rendered="{!$User.UIThemeDisplayed == 'Theme3'}">
+        <apex:stylesheet value="{!URLFOR($Resource.slds, 
+                                         'classic-styling.css')}" />
+    <apex:sectionHeader title="Account" subtitle="New Customer Account" />
+    <apex:outputLink value="https://dal-tile.my.salesforce.com/a0D/e?">Click me!</apex:outputLink>
+    
+    <body onLoad="createNewReq()"/>
+    <script type="text/javascript">
+        function createNewReq(){
+        sforce.apex.execute("ChangeRequest","newCustomerRequest", {createType:"new"}); 
+        }
+    </script>
+    
+    
+    </apex:variable>
+
+    <!-- Lightning Desktop theme -->
+    <apex:variable var="uiTheme" value="lightningDesktop" 
+        rendered="{!$User.UIThemeDisplayed == 'Theme4d'}">
+        <apex:stylesheet value="{!URLFOR($Resource.slds, 
+                                         'lightning-styling.css')}" />
+
+    <script>   
+{
+    sforce.connection.sessionId = "{!$Api.Session_ID}";
+    sforce.one.createRecord("Change_Request__c","012F0000000mu50IAA");
+}
+    </script> 
+
+    </apex:variable>
+
+    <!-- Salesforce1 mobile theme -->
+    <apex:variable var="uiTheme" value="Salesforce1" 
+        rendered="{!$User.UIThemeDisplayed == 'Theme4t'}">
+        <apex:stylesheet value="{!URLFOR($Resource.slds, 
+                                         'mobile-styling.css')}" />
+    <script>   
+{
+    sforce.connection.sessionId = "{!$Api.Session_ID}";
+    sforce.one.createRecord("Change_Request__c","012F0000000mu50IAA");
+}
+    </script> 
+    </apex:variable>
+
+    
+</apex:page>

@@ -1,0 +1,1063 @@
+<apex:page standardStylesheets="true" lightningStylesheets="true" id="thePage" standardController="Change_Request__c" extensions="CustomerRequestNewLightningExtension" >
+    <apex:stylesheet value="{!URLFOR($Resource.slds, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    
+    <head>
+      <!--Import Google Icon Font-->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+      
+        <link rel="stylesheet" href="https://cdn.rawgit.com/mailtoharshit/ForceSpinner/master/src/css/forcespinner.css" media="screen,projection"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+      <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    
+    <script type='text/javascript' src='/canvas/sdk/js/42.0/publisher.js'/>
+    
+    <script>
+
+        var updateName;
+        var updateContact;
+        var updatePhone;
+        var updateFax;
+        var updateComments;
+        var updateDBAName;
+        var updateWebsite;
+        var updateNewRegion;
+        var updateNewRep;
+        var updateNewSSC;
+        var updateNewCusClass;
+        var updateNewReasonForClass;
+        var updateNewCusType;
+        var updateShipToCountryChange;
+        var updateShipToAddress1Change;
+        var updateShipToAddress2Change;
+        var updateShipToCityChange;
+        var updateShipToZip;
+        var updateShipToState;
+        var updateBillToCountryChange;
+        var updateBillToAddress1Change;
+        var updateBillToAddress2Change;
+        var updateBillToCityChange;
+        var updateBillToZip;
+        var updateBillToState;
+        var updateCopyBillto;
+        var updateContactProExch;
+        var updateContactFirstName
+        var updateContactLastName
+        var updateContactPhone
+        var updateContactEmail
+        var theResults;
+        var theNewCRId;
+        var errorMessage;
+
+        var $ = jQuery.noConflict();
+        $(document).ready(function(){
+            lookUps();
+        });
+
+        Sfdc.canvas.publisher.subscribe({
+            name: "publisher.showPanel",
+            onData: function(e) {
+                console.log('enable the publisher window save and cancel buttons')
+                Sfdc.canvas.publisher.publish({
+                    name: "publisher.setValidForSubmit",
+                    payload: "true"
+                });
+            }
+        });
+
+        // call lookup functions to activate jQuery 
+        function lookUps(){
+            regionLookUp();
+            repLookUp();
+            sscLookUp();
+            classLookUp();
+            typeLookUp();
+        }
+        
+        function regionLookUp(){
+            $('#lookupRegion').keyup(function(e) 
+            {                                  
+              $('#resultsRegion').css("display","block");
+              $('#lookupRegion').attr('aria-expanded','true'); 
+              $('#keywordRegion').html($('#lookupRegion').val());
+              Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.queryRegions}',
+                $('#lookupRegion').val(),                                                 
+                 function(result, event){
+                    if (event.status) {
+                        $('#ui_RegionResults').empty();
+                        populatelookupRegion(result);
+                    } else if (event.type === 'exception') {
+                        $('#lookupRegion') = 'ERROR: ' + event.message;   
+                    } else {
+                        $('#lookupRegion') = 'ERROR: ' + event.message;
+                    }
+                }, 
+                {escape: true}
+                );            
+            });
+            function populatelookupRegion(result){
+                if(result){                        
+                    $( result ).each(function() {                        
+                        console.log(this);
+                        $('#ui_RegionResults').append('<li class="slds-lookupRegion__item">' + '<a id="' + this.Id + '" href="javascript:void(0)" role="option">' + '</svg>' + this.Name + '</a>' + '</li>');
+                    });
+                    $('ul.slds-lookup__list a').click(function(e) 
+                    {                                                   
+                        $('#lookupRegion').val($(this)[0].innerText);
+                        updateNewRegionText = $(this)[0].innerText;
+                        $('#lookupRegion').attr('aria-activedescendant',$(this)[0].id);
+                        updateNewRegion = $(this)[0].id;
+                        $('#lookupRegion').attr('aria-expanded','false');
+                        $('#resultsRegion').css("display","none");
+                    }); 
+                }
+            }
+            if (updateNewRegion) {
+                $('#lookupRegion').attr('aria-activedescendant',updateNewRegion);
+                $('#lookupRegion').val(updateNewRegionText);
+                console.log('#lookupRegion: ' + $('#lookupRegion').val());
+                console.log('updateNewRegion: ' + updateNewRegion);
+            } else {
+                $('#lookupRegion').attr('aria-activedescendant','');
+                $('#lookupRegion').val('');
+                console.log('updateNewRegion clezred out: ' + updateNewRegion);
+            }
+        }   
+            
+        function repLookUp(){
+            $('#lookupRep').keyup(function(e) 
+            {                                  
+               $('#resultsRep').css("display","block");
+               $('#lookupRep').attr('aria-expanded','true'); 
+               $('#keywordRep').html($('#lookupRep').val());
+               Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.queryReps}',
+                $('#lookupRep').val(),                                                 
+                 function(result, event){
+                    if (event.status) {
+                        $('#ui_RepResults').empty();
+                        populatelookupRep(result);
+                    } else if (event.type === 'exception') {
+                        $('#lookupRep') = 'ERROR: ' + event.message;   
+                    } else {
+                        $('#lookupRep') = 'ERROR: ' + event.message;
+                    }
+                }, 
+                {escape: true}
+                );            
+            });
+            function populatelookupRep(result){
+                if(result){                        
+                    $( result ).each(function() {                        
+                        console.log(this);
+                        $('#ui_RepResults').append('<li class="slds-lookupRep__item">' + '<bb id="' + this.Id + '" href="javascript:void(0)" role="option">' + '</svg>' + this.DW_ID__c + ' - ' + this.Name + '</bb>' + '</li>');
+                    });
+                    $('ul.slds-lookup__list bb').click(function(e) 
+                    {                                                   
+                        $('#lookupRep').val($(this)[0].innerText);
+                        $('#lookupRep').attr('aria-activedescendant',$(this)[0].id);                  
+                        console.log('$(this)[0].id: ' + $(this)[0].id);
+                        updateNewRep = $(this)[0].id;
+                        updateNewRepText = $(this)[0].innerText;
+                        $('#lookupRep').attr('aria-expanded','false');
+                        $('#resultsRep').css("display","none");
+                    }); 
+                }
+            }
+            if (updateNewRep) {
+                $('#lookupRep').attr('aria-activedescendant',updateNewRep);
+                $('#lookupRep').val(updateNewRepText);
+                console.log('#lookupRep: ' + $('#lookupRep').val());
+                console.log('updateNewRep: ' + updateNewRep);
+            } else {
+                $('#lookupRep').attr('aria-activedescendant','');
+                $('#lookupRep').val('');
+                console.log('updateNewRep clezred out: ' + updateNewRep);
+            }
+        }
+        function sscLookUp(){
+            $('#lookupSSC').keyup(function(e) 
+            {                                  
+              $('#resultsSSC').css("display","block");
+              $('#lookupSSC').attr('aria-expanded','true'); 
+              $('#keywordSSC').html($('#lookupSSC').val());
+              Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.querySSC}',
+                $('#lookupSSC').val(),                                                 
+                 function(result, event){
+                    if (event.status) {
+                        $('#ui_SSCResults').empty();
+                        populatelookupSSC(result);
+                    } else if (event.type === 'exception') {
+                        $('#lookupSSC') = 'ERROR: ' + event.message;   
+                    } else {
+                        $('#lookupSSC') = 'ERROR: ' + event.message;
+                    }
+                }, 
+                {escape: true}
+                );            
+            });
+            function populatelookupSSC(result){
+                if(result){                        
+                    $( result ).each(function() {                        
+                        console.log(this);
+                        $('#ui_SSCResults').append('<li class="slds-lookupSSC__item">' + '<c id="' + this.Id + '" href="javascript:void(0)" role="option">' + '</svg>' + this.DW_ID__c + ' - ' + this.Name + '</c>' + '</li>');
+                    });
+                    $('ul.slds-lookup__list c').click(function(e) 
+                    {                                                   
+                        $('#lookupSSC').val($(this)[0].innerText);
+                        $('#lookupSSC').attr('aria-activedescendant',$(this)[0].id);
+                        updateNewSSC = $(this)[0].id;
+                        updateNewSSCText = $(this)[0].innerText;
+                        $('#lookupSSC').attr('aria-expanded','false');
+                        $('#resultsSSC').css("display","none");
+                    }); 
+                }
+            }
+            if (updateNewSSC) {
+                $('#lookupSSC').attr('aria-activedescendant',updateNewSSC);
+                $('#lookupSSC').val(updateNewSSCText);
+                console.log('#lookupSSC: ' + $('#lookupSSC').val());
+                console.log('updateNewSSC: ' + updateNewSSC);
+            } else {
+                $('#lookupSSC').attr('aria-activedescendant','');
+                $('#lookupSSC').val('');
+                console.log('updateNewSSC clezred out: ' + updateNewSSC);
+            }
+        }
+        function classLookUp(){
+            $('#lookupClass').keyup(function(e) 
+            {                                  
+              $('#resultsClass').css("display","block");
+              $('#lookupClass').attr('aria-expanded','true'); 
+              $('#keywordClass').html($('#lookupClass').val());
+              Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.queryClass}',
+                $('#lookupClass').val(),                                                 
+                 function(result, event){
+                    if (event.status) {
+                        $('#ui_ClassResults').empty();
+                        populatelookupClass(result);
+                    } else if (event.type === 'exception') {
+                        $('#lookupClass') = 'ERROR: ' + event.message;   
+                    } else {
+                        $('#lookupClass') = 'ERROR: ' + event.message;
+                    }
+                }, 
+                {escape: true}
+                );            
+            });
+            function populatelookupClass(result){
+                if(result){                        
+                    $( result ).each(function() {                        
+                        console.log(this);
+                        $('#ui_ClassResults').append('<li class="slds-lookupClass__item">' + '<d id="' + this.Id + '" href="javascript:void(0)" role="option">' + '</svg>' + this.Name + ' - ' + this.Customer_Class_Details__c  + '</d>' + '</li>');
+                    });
+                    $('ul.slds-lookup__list d').click(function(e) 
+                    {                                                   
+                        $('#lookupClass').val($(this)[0].innerText);
+                        $('#lookupClass').attr('aria-activedescendant',$(this)[0].id);
+                        updateNewCusClass = $(this)[0].id;
+                        updateNewCusClassText = $(this)[0].innerText;
+                        $('#lookupClass').attr('aria-expanded','false');
+                        $('#resultsClass').css("display","none");
+                    }); 
+                }
+            }
+            if (updateNewCusClass) {
+                $('#lookupClass').attr('aria-activedescendant',updateNewCusClass);
+                $('#lookupClass').val(updateNewCusClassText);
+                console.log('#lookupClass: ' + $('#lookupClass').val());
+                console.log('updateNewCusClass: ' + updateNewCusClass);
+            } else {
+                $('#lookupClass').attr('aria-activedescendant','');
+                $('#lookupClass').val('');
+                console.log('updateNewCusClass clezred out: ' + updateNewCusClass);
+            }
+        }       
+        function typeLookUp(){
+            $('#lookupType').keyup(function(e) 
+            {                                  
+              $('#resultsType').css("display","block");
+              $('#lookupType').attr('aria-expanded','true'); 
+              $('#keywordType').html($('#lookupType').val());
+              Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.queryType}',
+                $('#lookupType').val(),                                                 
+                 function(result, event){
+                    if (event.status) {
+                        $('#ui_TypeResults').empty();
+                        populatelookupType(result);
+                    } else if (event.type === 'exception') {
+                        $('#lookupType') = 'ERROR: ' + event.message;   
+                    } else {
+                        $('#lookupType') = 'ERROR: ' + event.message;
+                    }
+                }, 
+                {escape: true}
+                );            
+            });
+            function populatelookupType(result){
+                if(result){                        
+                    $( result ).each(function() {                        
+                        console.log(this);
+                        $('#ui_TypeResults').append('<li class="slds-lookupType__item">' + '<e id="' + this.Id + '" href="javascript:void(0)" role="option">' + '</svg>' + this.Name + ' - ' + this.Cust_Type__c  + '</e>' + '</li>');
+                    });
+                    $('ul.slds-lookup__list e').click(function(e) 
+                    {                                                   
+                        $('#lookupType').val($(this)[0].innerText);
+                        $('#lookupType').attr('aria-activedescendant',$(this)[0].id);
+                        updateNewCusType = $(this)[0].id;
+                        updateNewCusTypeText = $(this)[0].innerText;
+                        $('#lookupType').attr('aria-expanded','false');
+                        $('#resultsType').css("display","none");
+                    }); 
+                }
+            }
+            if (updateNewCusType) {
+                $('#lookupType').attr('aria-activedescendant',updateNewCusType);
+                $('#lookupType').val(updateNewCusTypeText);
+                console.log('#lookupType: ' + $('#lookupType').val());
+                console.log('updateNewCusType: ' + updateNewCusType);
+            } else {
+                $('#lookupType').attr('aria-activedescendant','');
+                $('#lookupType').val('');
+                console.log('updateNewCusType clezred out: ' + updateNewCusType);
+            }
+        }
+        
+        // buttons to clear lookup values
+        
+        function regionClear(){
+            updateNewRegion = '';
+            $('#lookupRegion').val('');
+            $('#ui_RegionResults').val('');
+            $('#resultsRegion').css("display","none");
+            $('#lookupRegion').attr('aria-expanded','true'); 
+            $('#keywordRegion').html($('#lookupRegion').val());
+            $('#lookupRegion').attr('aria-activedescendant',null);
+            console.log('updateNewRegion cleared out: ' + updateNewRegion);
+        }    
+        function repClear(){
+            updateNewRep = '';
+            $('#lookupRep').attr('aria-activedescendant',null);
+            $('#lookupRep').val('');
+            $('#ui_RepResults').val('');
+            $('#resultsRep').css("display","none");
+            $('#lookupRep').attr('aria-expanded','true'); 
+            $('#keywordRep').html($('#lookupRep').val());
+            console.log('repClear clezred out: ' + updateNewRep);
+        }
+        function sscClear(){
+            updateNewSSC = '';
+            $('#lookupSSC').attr('aria-activedescendant',null);
+            $('#lookupSSC').val('');
+            $('#ui_SSCResults').val('');
+            $('#resultsSSC').css("display","none");
+            $('#lookupSSC').attr('aria-expanded','true'); 
+            $('#keywordSSC').html($('#lookupSSC').val());     
+            console.log('sscClear clezred out: ' + updateNewSSC);
+        }
+        function classClear(){
+            updateNewCusClass = '';
+            $('#lookupClass').attr('aria-activedescendant',null);
+            $('#lookupClass').val('');
+            $('#ui_ClassResults').val('');
+            $('#resultsClass').css("display","none");
+            $('#lookupClass').attr('aria-expanded','true'); 
+            $('#keywordClass').html($('#lookupRep').val());
+            console.log('classClear clezred out: ' + updateNewCusClass);
+        }
+        function typeClear(){
+            updateNewCusType = '';
+            $('#lookupType').attr('aria-activedescendant',null);
+            $('#lookupType').val('');
+            $('#ui_TypeResults').val('');
+            $('#resultsType').css("display","none");
+            $('#lookupType').attr('aria-expanded','true'); 
+            $('#keywordType').html($('#lookupRep').val());
+            console.log('classClear clezred out: ' + updateNewCusType);
+        }
+    function saveNewCustomer(){
+        getValues();
+    }
+        
+    function getValues(){
+        
+        theResultsError = '';
+        hasError = false;
+        errorMessage = [];
+        updateName = document.getElementById('{!$Component.theForm:thePageBlock:theInfoSection:newName}').value;
+        if (!updateName) {
+            hasError = true;
+            errorMessage.push(" a Name");
+        }
+        updateContact = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateContact}').value;
+        updateContactProExch = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theContacSection:updateContactProExch}').checked;
+        updateContactFirstName = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theContacSection:updateContactFirstName}').value;
+        updateContactLastName = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theContacSection:updateContactLastName}').value;
+        updateContactEmail = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theContacSection:updateContactEmail}').value;
+        updateContactPhone = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theContacSection:updateContactPhone}').value;
+        if (updateContactProExch) {
+            if (!updateContactFirstName) {
+                hasError = true;
+                errorMessage.push(" a First Name for the ProExchange member");
+            }
+            if (!updateContactLastName) {
+                hasError = true;
+                errorMessage.push(" a Last Name for the ProExchange member");
+            }
+            if (!updateContactEmail) {
+                hasError = true;
+                errorMessage.push(" an Email for the ProExchange member");
+            }
+        }
+        updateWebsite = document.getElementById('{!$Component.theForm:thePageBlock:theInfoSection:newWebsite}').value;
+        updatePhone = document.getElementById('{!$Component.theForm:thePageBlock:theInfoSection:newPhone}').value;
+        updateFax = document.getElementById('{!$Component.theForm:thePageBlock:theInfoSection:newFax}').value;
+        updateComments = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theCommentsSection:theCommentsSectionItem:cr__comments}').value;
+        updateDBAName = document.getElementById('{!$Component.theForm:thePageBlock:theInfoSection:newDBAName}').value;
+        updateWebsite = document.getElementById('{!$Component.theForm:thePageBlock:theInfoSection:newWebsite}').value;
+        updateNewReasonForClass = document.getElementById('{!$Component.theForm:thePageBlock:theInfoSection:newReasonForClass}').value;
+        if (!updateNewReasonForClass) {
+            hasError = true;
+            errorMessage.push(" a Reason for the Customer Class");
+        }
+        updateBillToCountryChange = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateBillToCountryChange}').value;
+        if (!updateBillToCountryChange) {
+            hasError = true;
+            errorMessage.push(" a BillTo Country");
+        }
+        updateBillToAddress1Change = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateBillToAddress1Change}').value;
+        if (!updateBillToAddress1Change) {
+            hasError = true;
+            errorMessage.push(" a BillTo Address");
+        }
+        updateBillToAddress2Change = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateBillToAddress2Change}').value;
+        updateBillToCityChange = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateBillToCityChange}').value;
+        if (!updateBillToCityChange) {
+            hasError = true;
+            errorMessage.push(" a BillTo City");
+        }
+        updateBillToZip = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateBillToZip}').value;
+        if (!updateBillToZip) {
+            hasError = true;
+            errorMessage.push(" a BillTo Zip");
+        }
+        updateBillToState = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateBillToState}').value;
+        if (!updateBillToState) {
+            hasError = true;
+            errorMessage.push(" a BillTo State");
+        }
+        updateCopyBillto = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateCopyBillto}').checked;
+        if (updateCopyBillto) {
+            updateShipToState = updateBillToState;
+            updateShipToZip = updateBillToZip;
+            updateShipToCityChange = updateBillToCityChange;
+            updateShipToAddress2Change = updateBillToAddress2Change;
+            updateShipToAddress1Change = updateBillToAddress1Change;
+            updateShipToCountryChange = updateBillToCountryChange;
+        } else {
+            updateShipToCountryChange = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateShipToCountryChange}').value;
+            if (!updateShipToCountryChange) {
+                hasError = true;
+                errorMessage.push(" a ShipTo Country");
+            }
+            updateShipToAddress1Change = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateShipToAddress1Change}').value;
+            if (!updateShipToCountryChange) {
+                hasError = true;
+                errorMessage.push(" a ShipTo Address");
+            }
+            updateShipToAddress2Change = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateShipToAddress2Change}').value;
+            updateShipToCityChange = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateShipToCityChange}').value;
+            if (!updateShipToCityChange) {
+                hasError = true;
+                errorMessage.push(" a ShipTo City");
+            }
+            updateShipToZip = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateShipToZip}').value;
+            if (!updateShipToZip) {
+                hasError = true;
+                errorMessage.push(" a ShipTo Zip");
+            }
+            updateShipToState = document.getElementById('{!$Component.thePage:theForm:thePageBlock:theAddresssSection:updateShipToState}').value;
+            if (!updateShipToState && updateShipToState != 'undefined') {
+                hasError = true;
+                errorMessage.push(" a ShipTo State");
+            }
+            if (!updateNewRegion && updateNewRegion != 'undefined') {
+                hasError = true;
+                errorMessage.push(" a Region");
+            }
+            if (!updateNewRep && updateNewRep != 'undefined') {
+                hasError = true;
+                errorMessage.push(" a Sales Rep");
+            }
+            if (!updateNewSSC && updateNewSSC != 'undefined') {
+                hasError = true;
+                errorMessage.push(" a SSC");
+            }
+            if (!updateNewCusClass && updateNewCusClass != 'undefined') {
+                hasError = true;
+                errorMessage.push(" a Customer Class");
+            }
+            if (!updateNewCusType && updateNewCusType != 'undefined') {
+                hasError = true;
+                errorMessage.push(" a Customer Type");
+            }
+        }        
+        console.log('hasError: ' + hasError);
+        if (hasError == true) {
+            console.log('errorMessage: ' + errorMessage);
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;            
+            alert('There was an issue submitting your request, it looks like you forgot to enter ' + errorMessage + '... Please review and try again, or hit cancel to close the window.');
+        } else {
+            saveNewChangeRequest();
+        }
+    }
+ 
+    function saveNewChangeRequest(){
+
+        console.log('updateNewRegion results: ' + updateNewRegion);
+        console.log('updateName results: ' + updateName);
+        console.log('updateContact results: ' + updateContact);
+        console.log('updatePhone results: ' + updatePhone);
+        console.log('updateFax results: ' + updateFax);
+        console.log('updateComments results: ' + updateComments);
+        console.log('updateDBAName results: ' + updateDBAName);
+        console.log('updateWebsite results: ' + updateWebsite);
+        console.log('updateNewRegion results: ' + updateNewRegion);
+        console.log('updateNewRep results: ' + updateNewRep);
+        console.log('updateNewSSC results: ' + updateNewSSC);
+        console.log('updateNewCusClass results: ' + updateNewCusClass);
+        console.log('updateNewReasonForClass results: ' + updateNewReasonForClass);
+        console.log('updateNewCusType results: ' + updateNewCusType);
+        console.log('updateShipToCountryChange results: ' + updateShipToCountryChange);
+        console.log('updateShipToAddress1Change results: ' + updateShipToAddress1Change);
+        console.log('updateShipToAddress2Change results: ' + updateShipToAddress2Change);
+        console.log('updateShipToCityChange results: ' + updateShipToCityChange);
+        console.log('updateShipToZip results: ' + updateShipToZip);
+        console.log('updateShipToState results: ' + updateShipToState); 
+        console.log('updateBillToCountryChange results: ' + updateBillToCountryChange);
+        console.log('updateBillToAddress1Change results: ' + updateBillToAddress1Change);
+        console.log('updateBillToAddress2Change results: ' + updateBillToAddress2Change);
+        console.log('updateBillToCityChange results: ' + updateBillToCityChange);
+        console.log('updateBillToZip results: ' + updateBillToZip);
+        console.log('updateBillToState results: ' + updateBillToState);
+        console.log('updateCopyBillto results: ' + updateCopyBillto);
+        console.log('updateContactProExch results: ' + updateContactProExch);
+        console.log('updateContactFirstName results: ' + updateContactFirstName);
+        console.log('updateContactLastName results: ' + updateContactLastName);
+        console.log('updateContactPhone results: ' + updateContactPhone);
+        console.log('updateContactEmail results: ' + updateContactEmail);
+
+
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.CustomerRequestNewLightningExtension.saveNewCustomer}',        
+            updateName,
+            updateContact,
+            updatePhone,
+            updateFax,
+            updateComments,
+            updateDBAName,
+            updateWebsite,
+            updateNewRegion,
+            updateNewRep,
+            updateNewSSC,
+            updateNewCusClass,
+            updateNewReasonForClass,
+            updateNewCusType,
+            updateShipToCountryChange,
+            updateShipToAddress1Change,
+            updateShipToAddress2Change,
+            updateShipToCityChange,
+            updateShipToZip,
+            updateShipToState  ,
+            updateBillToCountryChange,
+            updateBillToAddress1Change,
+            updateBillToAddress2Change,
+            updateBillToCityChange,
+            updateBillToZip,
+            updateBillToState,
+            updateCopyBillto,
+            updateContactProExch,
+            updateContactFirstName,
+            updateContactLastName,
+            updateContactPhone,
+            updateContactEmail,
+            function(result, event) {
+                if (event.status) {
+                    console.log('createrequest Complete: ' + result);
+                    if (result != null){
+                        if (result.substring(0, 3) == 'a0D') {
+                            theNewCRId = result;
+                            closeWindow();                    
+                        } else {
+                            theError = result;
+                            var theErrorThrown = ',';
+                            if (theError.indexOf(theErrorThrown) >= 0) {
+                                var theResultsError = theError.slice(theError.indexOf(theErrorThrown) + theErrorThrown.length);
+                                document.getElementById('{!$Component.thePage:theForm:theError}').innerHTML = theResultsError;
+                                theResults = theResultsError;
+                            } else {
+                                theResults = theResults;
+                            }
+                            console.log('2 theResults: ' + theResults);
+                            deleteRequest();                                                    
+                        }
+                    }
+                } else if (event.type === 'exception') {
+                    console.log('saveNewCustomer Other Issues Errors...: ' + event.message);
+                } else {
+                    console.log('saveNewCustomer Errors...maybe?: ');
+                }
+            }, {
+                escape: true,
+                timeout: 120000
+            });
+            console.log('saveNewCustomer complete');
+        }
+        
+        // delete the invalid request
+        function deleteRequest() {
+        console.log('deleteRequest theNewCRId: ' + theNewCRId);
+        alert('There was an issue submitting your request.  Please check for error messages at the top of the page.')
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;           
+        if (theNewCRId || theNewCRId != 'undefined') {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.deleteCR}',
+                theNewCRId,
+                function(result, event) {
+                    if (event.status) {
+                        console.log('deleteCR results: ' + result);
+                    } else {
+                        console.log('deleteCR Errors: ' + event.message);
+                    } 
+                }, {
+                    escape: true,
+                    timeout: 120000
+                });  
+                theNewCRId = '';                                        
+            }
+        }
+        
+        // close the window and launch the request
+        function closeWindow() {
+            console.log('closeWindow: ' + closeWindow);
+            if ({!theCr.Error_Messages__c != ''}) {
+                theError = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').value;            
+            } else {
+                theError = '';
+            }           
+            if (theNewCRId && theNewCRId && !theError) {
+                alert('Your Request was submitted.  Once all approvals are final, allow 3 business days for processing. To see the status, please refer back to the original request and check if it is still waiting on someones approval.  After all approvals are complete, please contact Data Management with any questions on the update.')
+                console.log('closeWindow complete + theNewCRId: '+ theNewCRId);
+                if ({!$User.UIThemeDisplayed != 'Theme3'
+                    }) {
+                    sforce.one.navigateToSObject(theNewCRId);
+                } else {
+                    window.open('/' + theNewCRId);
+                }
+            } else {
+                console.log('closeWindow + no new CR, just leaving...: ' + closeWindow);
+                sforce.one.navigateToURL('/001');
+            }
+        }        
+    </script>
+    
+    <style type="text/css">
+    
+        a,bb,c,d,e {
+            text-decoration: none;
+            color: #0070d2;
+            -webkit-transition: color .1s linear;
+            transition: color .1s linear;
+            background-color: transparent;
+            box-sizing: border-box;
+            color: -webkit-link;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+            
+        .slds-modal__container{
+            max-width: 70rem !important;
+            width:70% !important;
+        }
+            
+        .dataCol {
+            font-size: .75rem;
+            font-weight: 400;
+        }
+        
+        .errorMessage {
+            position: relative;
+            display: -ms-inline-flexbox;
+            display: inline-flex;
+            -ms-flex-align: center;
+            align-items: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            border: 0 !important;
+            width: relative;
+            font-size: .9rem !important;
+            font-weight: 500;
+            text-align: center;
+            background-color: #c23934 !important;       
+            border-radius: 10px;
+            color: white;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        
+        .errorMessage:empty {
+            padding:0;
+        }    
+        
+        body .autoCompleteBoxScrolling, .slds-scope .autoCompleteBoxScrolling  {
+            max-width: 50% !important;;
+            width: 50% !important;;
+            left: 50% !important;;
+            top: 296px;
+            height: auto;
+            display: block;    
+        }
+        
+        element.style {
+            width: 318px;
+            left: 200px;
+            top: 735px;
+            height: auto;
+        }    
+    
+    </style>    
+
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <form autocomplete="off" >
+    <apex:sectionHeader title="Customer Request" subtitle="New Customer Request" />
+    <apex:form id="theForm" >
+    <apex:outputText styleClass="errorMessage" id="theError" rendered="{!isErrorVisiable}">
+        <div>{!Change_Request__c.Error_Messages__c}</div>    
+    </apex:outputText>         
+    <apex:pageBlock title="New Customer Request" id="thePageBlock">
+        <apex:pageBlockButtons location="top" id="theTopButtonsSection">
+            <apex:commandButton value="Request Account" 
+                                onclick="saveNewCustomer()" 
+                                styleClass="slds-button--brand"
+                                onComplete="return null;"/>
+            <apex:commandButton styleClass="slds-button slds-button-space-left slds-button--neutral" 
+                                onclick="closeWindow();" 
+                                value="Cancel" 
+                                action="{!doCancel}" 
+                                immediate="true" 
+                                html-formnovalidate="formnovalidate" />
+        </apex:pageBlockButtons>
+        <apex:messages />
+        <apex:pageBlockSection title="Customer Account Request Information" id="theInfoSection">
+            <!--<apex:inputField value="{!Change_Request__c.Region__c}" required="true" />-->
+            <apex:outputPanel layout="block" id="panelNewRegion">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <div class="slds-lookup" data-select="multi" data-scope="single" data-typeahead="true">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="lookupRegion">Region</label>
+                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                        <input id="lookupRegion" value="{!Change_Request__c.Region__c}" class="slds-input" type="text" aria-autocomplete="list" role="combobox" aria-expanded="false" aria-activedescendant="" />
+                                        <apex:commandButton styleClass="slds-button--brand slds-button-space-right " style="background-color: #f44242 !important; border: 1px solid #f44242 !important;color: #fff !important; border-radius: .5rem; font-size: 1rem; font-weight: bold; background: #f44242 !important; padding-left: 0.5rem;padding-right: .5rem;"  value="X" onclick="regionClear(); return false;" />
+                                    </div>
+                                </div>
+                                <div class="slds-lookup__menu" role="listbox" id="resultsRegion" style="display:none">
+                                    <div class="slds-lookup__item"></div>
+                                    <ul class="slds-lookup__list" role="presentation" id="ui_RegionResults"></ul>                           
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel layout="block" id="panelWebsite" >
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <label class="slds-form-element__label" for="newWebsite">Website</label>
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                    <apex:inputField id="newWebsite" value="{!Change_Request__c.Website__c}" required="false" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>  
+            
+            <apex:outputPanel layout="block" id="panelName" >
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <label class="slds-form-element__label" for="newName">New Account Name</label>
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                    <apex:inputField id="newName" value="{!Change_Request__c.Customer_Name__c}" required="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>          
+            <apex:outputPanel layout="block" id="panelPhone" >
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <label class="slds-form-element__label" for="newPhone">Phone</label>
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                    <apex:inputField value="{!Change_Request__c.Ship_To_Phone__c}" id="newPhone" required="false" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>     
+            <apex:outputPanel layout="block" id="panelDBAName" >
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <label class="slds-form-element__label" for="newDBAName">DBA Name</label>
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                    <apex:inputField value="{!Change_Request__c.DBA_Name__c}" id="newDBAName" required="false" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>     
+            <apex:outputPanel layout="block" id="panelFax" >
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <label class="slds-form-element__label" for="newFax">Fax</label>
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                    <apex:inputField value="{!Change_Request__c.Fax__c}" id="newFax" required="false" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>     
+            <!--<apex:inputField value="{!Change_Request__c.SSC__c}" required="true" /> -->
+            <apex:outputPanel layout="block" id="panelNewSSC">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <div class="slds-lookup" data-select="multi" data-scope="single" data-typeahead="true">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="lookupSSC">New SSC</label>
+                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                        <input id="lookupSSC" value="" class="slds-input" type="text" aria-autocomplete="list" role="combobox" aria-expanded="false" aria-activedescendant="" />
+                                        <apex:commandButton styleClass="slds-button--brand slds-button-space-right " style="background-color: #f44242 !important; border: 1px solid #f44242 !important;color: #fff !important; border-radius: .5rem; font-size: 1rem; font-weight: bold; background: #f44242 !important; padding-left: 0.5rem;padding-right: .5rem;"  value="X"  onclick="sscClear(); return false;" />
+                                    </div>
+                                </div>
+                                <div class="slds-lookup__menu" role="listbox" id="resultsSSC" style="display:none">
+                                    <div class="slds-lookup__item"></div>
+                                    <ul class="slds-lookup__list" role="presentation" id="ui_SSCResults"></ul>                           
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>              
+            <!--<apex:inputField value="{!Change_Request__c.Sales_Representative__c}" required="true" />-->
+            <apex:outputPanel layout="block" id="panelNewRep" >
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <div class="slds-lookup" data-select="multi" data-scope="single" data-typeahead="true">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="lookupRep">Sales Rep</label>
+                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                        <input id="lookupRep" value="{!Change_Request__c.Sales_Representative__c}" class="slds-input" type="text" aria-autocomplete="list" role="combobox" aria-expanded="false" aria-activedescendant="" />
+                                        <apex:commandButton styleClass="slds-button--brand slds-button-space-right " style="background-color: #f44242 !important; border: 1px solid #f44242 !important;color: #fff !important; border-radius: .5rem; font-size: 1rem; font-weight: bold; background: #f44242 !important; padding-left: 0.5rem;padding-right: .5rem;"  value="X" onclick="repClear(); return false;" />
+                                    </div>
+                                </div>
+                                <div class="slds-lookup__menu" role="listbox" id="resultsRep" style="display:none">
+                                    <div class="slds-lookup__item"></div>
+                                    <ul class="slds-lookup__list" role="presentation" id="ui_RepResults"></ul>                           
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>                   
+            <!--<apex:inputField value="{!Change_Request__c.Customer_Class__c}" required="true" />-->
+            <apex:outputPanel layout="block" id="panelNewClass">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <div class="slds-lookup" data-select="multi" data-scope="single" data-typeahead="true">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" styleClass="labelCol" for="lookupClass">New Class</label>
+                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                        <input id="lookupClass" value="" class="slds-input" type="text" aria-autocomplete="list" role="combobox" aria-expanded="false" aria-activedescendant="" />
+                                        <apex:commandButton styleClass="slds-button--brand slds-button-space-right " style="background-color: #f44242 !important; border: 1px solid #f44242 !important;color: #fff !important; border-radius: .5rem; font-size: 1rem; font-weight: bold; background: #f44242 !important; padding-left: 0.5rem;padding-right: .5rem;"  value="X"  onclick="classClear(); return false;" />
+                                    </div>
+                                </div>
+                                <div class="slds-lookup__menu" role="listbox" id="resultsClass" style="display:none">
+                                    <div class="slds-lookup__item"></div>
+                                    <ul class="slds-lookup__list" role="presentation" id="ui_ClassResults"></ul>                           
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>             
+            <!--<apex:inputField value="{!Change_Request__c.Customer_Type__c}"  required="true" />-->
+            <apex:outputPanel layout="block" id="panelNewType" >
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <div class="slds-lookup" data-select="multi" data-scope="single" data-typeahead="true">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="lookupType">New Type</label>
+                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                        <input id="lookupType" value="" class="slds-input" type="text" aria-autocomplete="list" role="combobox" aria-expanded="false" aria-activedescendant="" />
+                                        <apex:commandButton styleClass="slds-button--brand slds-button-space-right "  style="background-color: #f44242 !important; border: 1px solid #f44242 !important;color: #fff !important; border-radius: .5rem; font-size: 1rem; font-weight: bold; background: #f44242 !important; padding-left: 0.5rem;padding-right: .5rem;"  value="X"  onclick="typeClear(); return false;" />
+                                    </div>
+                                </div>
+                                <div class="slds-lookup__menu" role="listbox" id="resultsType" style="display:none">
+                                    <div class="slds-lookup__item"></div>
+                                    <ul class="slds-lookup__list" role="presentation" id="ui_TypeResults"></ul>                           
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>              
+            <!--<apex:inputField value="{!Change_Request__c.Business_Reason__c}" required="true" />                       -->
+            <apex:outputPanel layout="block" id="panelReasonforClass" >
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <div class="slds-lookup" data-select="multi" data-scope="single" data-typeahead="true">
+                                <label class="slds-form-element__label" for="newReasonForClass">Business Reason for Class</label>
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                        <!--<input id="lookupType" value="" class="slds-input" type="text" aria-autocomplete="list" role="combobox" aria-expanded="false" aria-activedescendant="" />-->
+                                        <apex:inputField label="Business Reason for Class" id="newReasonForClass" value="{!theCR.Business_Reason__c}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>        
+            <apex:outputPanel layout="block" id="panelPO" >
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                        <div class="slds-form_horizontal">
+                            <label class="slds-form-element__label" for="newPO">PO # Required?</label>
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                    <apex:inputField value="{!Change_Request__c.ponumber__c}" id="newID" required="false" />  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>      
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Comments" columns="1" id="theCommentsSection">
+            <apex:pageBlockSectionItem id="theCommentsSectionItem">
+                <apex:outputLabel value="Comments" for="cr__comments"/>
+                <apex:inputText value="{!Change_Request__c.Comments__c}" id="cr__comments"/> 
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Contact" columns="2" id="theContacSection">
+            <apex:pageBlockSectionItem ></apex:pageBlockSectionItem> 
+            <apex:inputCheckbox value="{!Change_Request__c.Set_Up_In_ProExchange__c}" id="updateContactProExch" required="false" selected="true" />
+            <apex:inputField value="{!Change_Request__c.Contact_First_Name__c}" id="updateContactFirstName"  required="false" />
+            <apex:inputField value="{!Change_Request__c.Contact_Last_Name__c}" id="updateContactLastName" required="false" />
+            <apex:inputField value="{!Change_Request__c.Contact_Email__c}" id="updateContactEmail" required="false" />
+            <apex:inputField value="{!Change_Request__c.Contact_Phone__c}" label="Contact Phone" id="updateContactPhone" required="false" />         
+        </apex:pageBlockSection>        
+        
+        <apex:pageBlockSection title="Address Details 1" id="theAddresssSection">
+            <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+            <apex:inputField value="{!Change_Request__c.Copy_Bill_To_Address__c}" id="updateCopyBillto" required="false" />
+            <apex:inputField value="{!Change_Request__c.Bill_Country_N__c}" id="updateBillToCountryChange" required="true" />
+            <apex:inputField value="{!Change_Request__c.Country_N2__c}" id="updateShipToCountryChange" required="false" />
+            <apex:inputField value="{!Change_Request__c.Billing_Street_N__c}" id="updateBillToAddress1Change" required="true" />
+            <apex:inputField value="{!Change_Request__c.Billing_Street__c}" id="updateShipToAddress1Change" required="false" />
+            <apex:inputField value="{!Change_Request__c.Address2__c}"  id="updateBillToAddress2Change" required="false" />
+            <apex:inputField value="{!Change_Request__c.Shipping_Address_2__c}" id="updateShipToAddress2Change" required="false" />
+            <apex:inputField value="{!Change_Request__c.Billing_City_N__c}"  id="updateBillToCityChange" required="true" />
+            <apex:inputField value="{!Change_Request__c.Billing_City__c}" id="updateShipToCityChange" required="false" />
+            <apex:inputField value="{!Change_Request__c.Billing_State_N2__c}" id="updateBillToState" required="true" />
+            <apex:inputField value="{!Change_Request__c.Shipping_State_N2__c}" id="updateShipToState" required="false" />
+            <apex:inputText value="{!Change_Request__c.Billing_Zip_N__c}" id="updateBillToZip" required="true" />
+            <apex:inputText value="{!Change_Request__c.Shipping_Zip_N__c}" id="updateShipToZip" required="false" />
+            <apex:inputText value="{!Change_Request__c.Phone_N__c}" id="updatePhone" required="false" />                
+            <apex:inputField value="{!Change_Request__c.Contact__c}" id="updateContact" required="false" />
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockButtons location="bottom" id="theBottomButtonsSection">
+            <apex:commandButton value="Request Account" 
+                                onclick="saveNewCustomer()" 
+                                styleClass="slds-button--brand"
+                                onComplete="return null;"/>
+            <apex:commandButton styleClass="slds-button slds-button-space-left slds-button--neutral" 
+                                onclick="closeWindow();" 
+                                value="Cancel" 
+                                action="{!doCancel}" 
+                                immediate="true" 
+                                html-formnovalidate="formnovalidate" />
+        </apex:pageBlockButtons>        
+        
+    </apex:pageBlock>
+    </apex:form>
+        <script>
+    var a = navigator.userAgent;
+    if ((a.indexOf('Salesforce') != -1) && (a.indexOf('iPhone') != -1 || a.indexOf('iPad') != -1) && (a.indexOf('Safari') == -1)) { 
+        if (a.indexOf('OS/8') != -1 || a.indexOf('OS 8') != -1) {
+            s.innerHTML = "html,html body{overflow: auto;-webkit-overflow-scrolling:touch;}body{position:absolute;left:0;right:0;top:0;bottom:0;}";
+        }
+        else if (a.indexOf('OS/9') != -1 || a.indexOf('OS 9') != -1) {
+            s.innerHTML = "html,html body{overflow: auto;-webkit-overflow-scrolling:auto;}body{position:absolute;left:0;right:0;top:0;bottom:0;}";
+        }
+        document.getElementsByTagName('head')[0].appendChild(s);
+    };
+    </script>
+    <script>
+    var ua = navigator.userAgent;
+    if ((ua.indexOf('Salesforce') != -1) && (ua.indexOf('iPhone') != -1 || ua.indexOf('iPad') != -1) && (ua.indexOf('OS/8') != -1 || ua.indexOf('OS 8') != -1) && (ua.indexOf('Safari') == -1)) {
+        function IOS_SCROLL_BOOTSTRAP() {
+            var children = Array.prototype.slice.call(document.body.children),
+                placeholder = document.createElement('section'),
+                fragment = document.createDocumentFragment(),
+                styles,
+                width,
+                height;
+            children.forEach(function(c) { fragment.appendChild(c); });
+            placeholder.appendChild(fragment);
+            styles = [
+                'width:100%;',
+                'height:', (window.screen.height - 42), 'px;',
+                'position: absolute; overflow: auto; -webkit-overflow-scrolling: touch'
+            ].join('');
+            placeholder.style.cssText = styles;
+            document.body.appendChild(placeholder);
+        }
+        window.addEventListener('load', function(e) {
+            IOS_SCROLL_BOOTSTRAP();
+        });
+    }
+    </script>
+    </form>
+    </html>
+</apex:page>

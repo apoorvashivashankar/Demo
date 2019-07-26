@@ -1,0 +1,37 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS a {
+  font-weight: normal;
+  color: token(colorTextDefault);
+}
+.THIS a:hover {
+  text-decoration: none;
+}
+.THIS.footerNav .cPeak_NavigationLink {
+  font-size: calc(0.80357143rem);
+  width: 100%;
+  padding: token(spacingSmall) 0;
+  text-align: left;
+  border-bottom: 2px solid #fafafa;
+}
+.THIS.footerNav .cPeak_NavigationLink:first-child {
+  border-top: 2px solid #fafafa;
+}
+@media (max-width: 47.9375em) {
+  .THIS.footerNav .cPeak_NavigationLink {
+    text-align: center;
+    border-bottom: none;
+  }
+}
+.THIS.quickLinksList .cPeak_NavigationLink {
+  font-size: 1rem;
+  width: 100%;
+  margin: .1875rem 0;
+  padding: .25rem .75rem;
+  border-left: 4px solid #c7c8ca;
+}

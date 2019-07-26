@@ -1,0 +1,197 @@
+<!--
+ - Created by 7Summits on 5/1/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderProductSearch" extends="c:Dal_ModalBase" controller="Dal_OrderProcessController">
+    <aura:attribute name="store" type="Map" default="" required="true"/>
+    <aura:attribute name="cartId" type="String" default="" required="true"/>
+    <aura:attribute name="priceBySku" type="Boolean" default="false" />
+
+    <!-- internal attributes -->
+    <aura:attribute name="hasSelectedProductForCartId" type="Boolean" default="false"/>
+    <aura:attribute name="searchMinLength" type="Integer" default="3"/>
+    <aura:attribute name="hasSearchLengthError" type="Boolean" default="false"/>
+    <aura:attribute name="hasSearched" type="Boolean" default="false"/>
+    <aura:attribute name="isSearching" type="Boolean" default="false"/>
+    <aura:attribute name="searchResults" type="List" default="[]"/>
+    <aura:attribute name="searchValue" type="String" default=""/>
+    <aura:attribute name="hasSearchError" type="Boolean" default="false"/>
+
+    <!-- labels -->
+    <aura:attribute name="title" type="String" default="Find a Product"/>
+    <aura:attribute name="labelSearch" type="String" default="Enter a partial SKU, product name, series, color or keyword:"/>
+    <aura:attribute name="noResultsMsg" type="String" default="No products found" />
+    <aura:attribute name="errorMsg" type="String" default="Error searching product please try again" />
+    <aura:attribute name="errorLengthMsg" type="String" default="{!'Search string must be at least ' +  v.searchMinLength + ' character in length'}"/>
+
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.title}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+
+
+    <lightning:layout class="dal-form dal-form-order slds-p-vertical_small" multipleRows="true">
+
+        <!-- ******************** -->
+        <!-- product search -->
+        <!-- ******************** -->
+        <lightning:layoutItem size="12">
+            <lightning:layout class="dal-searchInputContainer" multipleRows="true">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="9" class="slds-col slds-p-around_x-small dal-medium-inputFull dal-small-inputFull">
+                    <lightning:input type="text" name="inputSearch" label="{!v.labelSearch}" value="{!v.searchValue}" />
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="3"
+                                      class="dal-searchInputBtnContainer slds-p-around_x-small dal-medium-inputFull dal-small-inputFull slds-large-grid_align-end slds-medium-grid_align-end">
+                    <lightning:button label="Search" variant="neutral" onclick="{!c.handleSearchClick}" />
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- end product search -->
+        <!-- ******************** -->
+
+
+        <!-- ******************** -->
+        <!-- product search results -->
+        <!-- ******************** -->
+        <aura:if isTrue="{!and(v.isSearching == false, v.hasSearched == true)}">
+            <lightning:layoutItem size="12" class="dal-searchResultsContainer">
+
+                <lightning:layout class="slds-p-around_small">
+                    <lightning:layoutItem size="12">
+
+                        <!-- ******************** -->
+                        <!-- product results item -->
+                        <!-- ******************** -->
+                        <aura:if isTrue="{!v.searchResults.length > 0}">
+                            <aura:iteration items="{!v.searchResults}" var="result" indexVar="index">
+                                <div class="{!'searchResult slds-p-around_small' + ((result.added == true) ? ' added' : '')}">
+                                    <h4>{!result.Description}</h4>
+                                    <div class="outputDataContainer">
+
+                                        <aura:if isTrue="{!!empty(result.DW_ID__c)}">
+                                            <div>
+                                                <label>Sku:</label>
+                                                <span>{!result.DW_ID__c}</span>
+                                            </div>
+                                        </aura:if>
+
+                                        <aura:if isTrue="{!!empty(result.Product_Color__c)}">
+                                            <div>
+                                                <label>Color:</label>
+                                                <span>{!result.Product_Color__r.Name}</span>
+                                            </div>
+                                        </aura:if>
+
+                                        <aura:if isTrue="{!!empty(result.Product_Line__c)}">
+                                            <div>
+                                                <label>Series:</label>
+                                                <span>{!result.Product_Line__c}</span>
+                                            </div>
+                                        </aura:if>
+
+                                    </div>
+                                    <button class="slds-button slds-button--neutral" value="{!index}" disabled="{!result.added == true ? 'disabled' : ''}" onclick="{!c.handleAddToOrder}">
+                                        {!result.added == true ? 'Added' : 'Add' }
+                                    </button>
+                                </div>
+                            </aura:iteration>
+                        </aura:if>
+                        <!-- ******************** -->
+                        <!-- end product results item -->
+                        <!-- ******************** -->
+
+                        <!-- ******************** -->
+                        <!-- no product results -->
+                        <!-- ******************** -->
+                        <aura:if isTrue="{!and(v.searchResults.length == 0, and(v.hasSearchError == false, v.hasSearchLengthError == false))}">
+                            <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="warning" closable="false">{!v.noResultsMsg}</ui:message>
+                        </aura:if>
+                        <!-- ******************** -->
+                        <!-- end no product results -->
+                        <!-- ******************** -->
+
+                        <!-- ******************** -->
+                        <!-- search error -->
+                        <!-- ******************** -->
+                        <aura:if isTrue="{!v.hasSearchError == true}">
+                            <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="error" closable="false">{!v.errorMsg}</ui:message>
+                        </aura:if>
+                        <!-- ******************** -->
+                        <!-- end search error -->
+                        <!-- ******************** -->
+
+                    </lightning:layoutItem>
+                </lightning:layout>
+
+            </lightning:layoutItem>
+        </aura:if>
+
+
+        <!-- ******************** -->
+        <!-- search length error -->
+        <!-- ******************** -->
+        <aura:if isTrue="{!v.hasSearchLengthError == true}">
+            <lightning:layoutItem size="12">
+                <lightning:layout class="slds-p-around_small">
+                    <lightning:layoutItem size="12">
+                        <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="warning" closable="false">{!v.errorLengthMsg}</ui:message>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+        </aura:if>
+        <!-- ******************** -->
+        <!-- end search length error -->
+        <!-- ******************** -->
+
+
+        <!-- ******************** -->
+        <!-- product search loading -->
+        <!-- ******************** -->
+        <aura:if isTrue="{!v.isSearching == true}">
+            <lightning:layoutItem size="12" class="slds-p-around_xx-large">
+                <lightning:layout class="slds-is-relative slds-p-around_xx-large">
+                    <lightning:spinner class="bkg-transparent" variant="brand" />
+                </lightning:layout>
+            </lightning:layoutItem>
+        </aura:if>
+
+        <!-- ******************** -->
+        <!-- end product search loading -->
+        <!-- ******************** -->
+
+        <!-- ******************** -->
+        <!-- action buttons -->
+        <!-- ******************** -->
+        <aura:if isTrue="{!v.hasSearched == true}">
+            <lightning:layoutItem size="12">
+                <lightning:layout class="footer-action-bar slds-m-top_medium slds-border_top slds-p-top_small slds-p-horizontal_large" multipleRows="true">
+
+                    <lightning:layoutItem class="dal-medium-inputFull dal-small-inputFull slds-p-vertical_small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                        <aura:if isTrue="{!and(v.isSearching == false, v.searchResults.length > 0)}">
+                            <lightning:button variant="neutral" label="Add all results" onclick="{!c.handleAddAll}" />
+                        </aura:if>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="dal-medium-inputFull dal-small-inputFull slds-p-vertical_small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                        <lightning:layout horizontalAlign="end">
+                            <lightning:layoutItem class="dal-medium-inputFull dal-small-inputFull">
+                                <lightning:button variant="neutral" label="Close" onclick="{!c.handleClose}" />
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+        </aura:if>
+        <!-- ******************** -->
+        <!-- end action buttons -->
+        <!-- ******************** -->
+
+    </lightning:layout>
+
+
+</aura:component>

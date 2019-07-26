@@ -1,0 +1,748 @@
+<apex:page standardcontroller="Contact"  extensions="CPQNewSamplePrepareController" standardStylesheets="true" lightningStylesheets="true" id="thePage">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.slds, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    <apex:includeScript value="{!$Resource.SLDSDynamicLookupScript}"/>
+    <apex:includeScript value="{!$Resource.CPQ}"/>
+    <script type='text/javascript' src='/canvas/sdk/js/42.0/publisher.js'></script>
+    <script> 
+
+        var updateOppName;
+        var updateNewOpportunity;
+        var updateNewOpportunityText;
+        var updateNewOpp;
+        var updateNewAccount;
+        var updateNewAccountText;
+        var updateShipCountry;
+        var updateShipState;
+        var updateShipAddress1;
+        var updateShipCity;
+        var updateShipPostal;
+        var updateNewContact;
+        var newContactFirstName;
+        var newContactLastName ;
+        var newContactEmail;
+        var newContactPhone;
+        var oldContactFirstName;
+        var oldContactLastName ;
+        var oldContactEmail;
+        var oldContactPhone;
+        var newGalleryConsultantIndex;
+        var newGalleryConsultant;
+        var visitorType ;
+        var currentOpp ;
+        var currentAccount ;
+        var currentContact ;
+        var newRelatedCustomer;
+        var hasError;
+        var theError;
+        var errorMessage;
+        var resultDWID;
+        var resultOwner;
+        var accountResult;
+        var resultDWID;
+        var resultOwner;
+        var accountResult;
+
+        var $ = jQuery.noConflict();
+        $(document).ready(function(){
+            lookUps();
+        });
+      
+        var currentAccount = '{!acc}';
+        var currentAccountName = '{!accountName}';
+        var galVisitorAcc = '{!galVisitorAcc.Name}';      
+        
+        var currentOpportunity = '{!opp}';
+        var currentOpportunityText = '{!oppName}';
+      
+    // enable the chatter publisher save and cancel buttons
+    enableButtons();
+    lookUps();
+
+    // call lookup functions to activate jQuery 
+    function lookUps(){
+        accountLookUp();
+        opportunityLookUp();
+    }    
+    
+         function accountLookUp(){
+            $('#lookupAccount').keyup(function(e) 
+            {                                  
+               $('#resultsAccount').css("display","block");
+               $('#lookupAccount').attr('aria-expanded','true'); 
+               $('#keywordAccount').html($('#lookupAccount').val());
+               Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CPQNewSamplePrepareController.queryAccount}',
+                $('#lookupAccount').val(),                                                 
+                 function(result, event){
+                    if (event.status) {
+                        $('#ui_AccountResults').empty();
+                        populatelookupAccount(result);
+                    } else if (event.type === 'exception') {
+                        $('#lookupAccount') = 'ERROR: ' + event.message;   
+                    } else {
+                        $('#lookupAccount') = 'ERROR: ' + event.message;
+                    }
+                }, 
+                {escape: true}
+                );            
+            });
+        function populatelookupAccount(result){
+            if(result){                        
+                console.log('galVisitorAcc + result: ' + result);
+                $( result ).each(function() {                        
+                    console.log(this);
+                    resultsName = this.Name;
+                    resultDWID = this.DW_ID__c;
+                    resultOwner = this.Owner.Name;
+                    if (!resultDWID && resultDWID == undefined) {
+                        accountResult = resultsName + ' - ' + resultOwner;
+                    } else {
+                        accountResult = resultDWID + ' - ' + resultsName + ' - ' + resultOwner;
+                    }
+                    $('#ui_AccountResults').append('<li class="slds-lookupAccount__item">' + '<a id="' + this.Id + '" href="javascript:void(0)" role="option">' + '</svg>' + accountResult + '</a>' + '</li>');
+                });
+                $('ul.slds-lookup__list a').click(function(e) 
+                {                                                   
+                    $('#lookupAccount').val($(this)[0].innerText);
+                    $('#lookupAccount').attr('aria-activedescendant',$(this)[0].id);
+                    assignAccount($(this)[0].id);
+                    assignAccountContacts($(this)[0].id);
+                    updateNewAccount = $(this)[0].id;
+                    updateNewAccountText = $(this)[0].innerText;
+                    $('#lookupAccount').attr('aria-expanded','false');
+                    $('#resultsAccount').css("display","none");
+                }); 
+            }
+        }
+        console.log('populatelookupAccount + updateNewAccount: ' + updateNewAccount);
+        console.log('populatelookupAccount + currentAccountName: ' + currentAccountName);
+        console.log('populatelookupAccount + currentAccount: ' + currentAccount);
+        if (updateNewAccount) {
+            $('#lookupAccount').attr('aria-activedescendant',updateNewAccount);
+            $('#lookupAccount').val(updateNewAccountText);
+        } if (galVisitorAcc) {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CPQNewSamplePrepareController.queryAccount}', 
+                galVisitorAcc,
+                function(result, event) {
+                    if (event.status) {
+                        populatelookupAccount(result);
+                    } else if (event.type === 'exception') {
+                        $('#lookupAccount') = 'ERROR: ' + event.message;   
+                    } else {
+                        $('#lookupAccount') = 'ERROR: ' + event.message;
+                    }
+                });            
+        } if (currentAccount) {
+            result = currentAccount;
+            console.log('#lookupAccount + currentAccount: ' + currentAccount);
+            updateNewAccount = currentAccount;
+            updateNewAccountText = currentAccountName;            
+            $('#lookupAccount').val(currentAccountName);
+            $('#lookupAccount').attr('aria-activedescendant',currentAccount);            
+        } else {
+            $('#lookupAccount').attr('aria-activedescendant','');
+            $('#lookupAccount').val('');
+            console.log('updateNewAccount clezred out: ' + updateNewAccount);
+        }
+    }   
+        
+    function opportunityLookUp(){
+        $('#lookupOpportunity').keyup(function(e) 
+        {                                  
+           $('#resultsOpportunity').css("display","block");
+           $('#lookupOpportunity').attr('aria-expanded','true'); 
+           $('#keywordOpportunity').html($('#lookupOpportunity').val());
+           Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.CPQNewSamplePrepareController.queryOpportunity}',
+            $('#lookupOpportunity').val(),                                                 
+             function(result, event){
+                if (event.status) {
+                    $('#ui_OpportunityResults').empty();
+                    populatelookupOpportunity(result);
+                } else if (event.type === 'exception') {
+                    $('#lookupOpportunity') = 'ERROR: ' + event.message;   
+                } else {
+                    $('#lookupOpportunity') = 'ERROR: ' + event.message;
+                }
+            }, 
+            {escape: true}
+            );            
+        });
+        function populatelookupOpportunity(result){
+            if(result){                        
+                $( result ).each(function() {                        
+                    console.log(this);
+                    $('#ui_OpportunityResults').append('<li class="slds-lookupOpportunity__item">' + '<bb id="' + this.Id + '" href="javascript:void(0)" role="option">' + '</svg>' + this.Owner.Name + ' - ' + this.Name + '</bb>' + '</li>');
+                });
+                $('ul.slds-lookup__list bb').click(function(e) 
+                {                                                   
+                    $('#lookupOpportunity').val($(this)[0].innerText);
+                    $('#lookupOpportunity').attr('aria-activedescendant',$(this)[0].id);                  
+                    console.log('$(this)[0].id: ' + $(this)[0].id);
+                    updateNewOpportunity = $(this)[0].id;
+                    updateNewOpp = updateNewOpportunity;
+                    updateNewOpportunityText = $(this)[0].innerText;
+                    document.getElementById('{!$Component.thePage:theForm:theBlock:theOpptSection:theSectionOppName:newOppName}').value = '';
+                    $('#lookupOpportunity').attr('aria-expanded','false');
+                    $('#resultsOpportunity').css("display","none");
+                }); 
+            }
+        }
+        if (updateNewOpportunity) {
+            $('#lookupOpportunity').attr('aria-activedescendant',updateNewOpportunity);
+            $('#lookupOpportunity').val(updateNewOpportunityText);
+            console.log('#lookupOpportunity: ' + $('#lookupOpportunity').val());
+            console.log('updateNewOpportunity: ' + updateNewOpportunity);
+        } else if (currentOpportunity){
+            console.log('#lookupOpportunity + currentOpportunity: ' + currentOpportunity);
+            $('#lookupOpportunity').attr('aria-activedescendant',currentOpportunity);
+            $('#lookupOpportunity').val(currentOpportunityText);
+        } else {
+            $('#lookupOpportunity').attr('aria-activedescendant','');
+            $('#lookupOpportunity').val('');
+            updateNewOpp = '';
+            console.log('updateNewOpportunity clezred out: ' + updateNewOpportunity);
+        }
+    }    
+    
+    
+    // buttons to clear lookup values
+    
+    function accountClear(){
+        updateNewAccount = '';
+        $('#lookupAccount').val('');
+        $('#ui_AccountResults').val('');
+        $('#resultsAccount').css("display","none");
+        $('#lookupAccount').attr('aria-expanded','true'); 
+        $('#keywordAccount').html($('#lookupAccount').val());
+        $('#lookupAccount').attr('aria-activedescendant',null);
+        console.log('updateNewAccount cleared out: ' + updateNewAccount);
+    }    
+    function opportunityClear(){
+        updateNewOpportunity = '';
+        $('#lookupOpportunity').attr('aria-activedescendant',null);
+        $('#lookupOpportunity').val('');
+        $('#ui_OpportunityResults').val('');
+        $('#resultsOpportunity').css("display","none");
+        $('#lookupOpportunity').attr('aria-expanded','true'); 
+        $('#keywordOpportunity').html($('#lookupOpportunity').val());
+        updateNewOpp = '';
+        console.log('opportunityClear cleared out: ' + updateNewOpportunity);
+    }        
+    
+    // on button press...
+    // get values ... which validates and populates user entered values
+    // then calls updates ... which looks at the changes , and determines which updates to send to the server
+    // then launchCpq ... which will launch CPQ for product selection , and close the chatter publisher window
+    Sfdc.canvas.publisher.subscribe({ name: "publisher.post",
+                                     onData: function(e) {            
+                                        console.log('now to update the opp and launch CPQ')
+                                        getValues();                 
+                                     }});                       
+
+    function getValues() {
+        console.log(getValues);
+        updateOppName = document.getElementById('{!$Component.thePage:theForm:theBlock:theOpptSection:theSectionOppName:newOppName}').value;
+        updateShipCountry = document.getElementById('{!$Component.thePage:theForm:theBlock:theShiptoSection:newShipCountry}').value;
+        updateShipState = document.getElementById('{!$Component.thePage:theForm.theBlock:theShiptoSection:newShipState}').value;              
+        updateShipAddress1 = document.getElementById('{!$Component.thePage:theForm:theBlock:theShiptoSection:newShipAdd}').value;             
+        updateShipCity = document.getElementById('{!$Component.thePage:theForm:theBlock:theShiptoSection:newShipCity}').value;
+        updateShipPostal = document.getElementById('{!$Component.thePage:theForm:theBlock:theShiptoSection:newShipZip}').value;                                       
+        if ( document.getElementById('{!$Component.thePage:theForm:theBlock:theAccountContactSection:theSectionContactName:theContact}') != null) {
+            updateNewContact = document.getElementById('{!$Component.thePage:theForm:theBlock:theAccountContactSection:theSectionContactName:theContact}').value;
+        } else {
+            updateNewContact = ''
+        }        
+
+        newContactFirstName = document.getElementById('{!$Component.thePage:theForm:theBlock:theContactSection:newContactFirstName}').value;
+        if (!newContactFirstName) {
+            newContactFirstName = document.getElementById('{!$Component.thePage:theForm:theBlock:theContactSection:newContactFirstName}').placeholder;
+        }
+        newContactLastName  = document.getElementById('{!$Component.thePage:theForm.theBlock:theContactSection:newContactLastName}').value;
+        if (!newContactLastName) {
+            newContactLastName = document.getElementById('{!$Component.thePage:theForm.theBlock:theContactSection:newContactLastName}').placeholder;
+        }
+        newContactEmail = document.getElementById('{!$Component.thePage:theForm.theBlock:theContactSection:newContactEmail}').value;
+        if (!newContactEmail) {
+            newContactEmail = document.getElementById('{!$Component.thePage:theForm.theBlock:theContactSection:newContactEmail}').placeholder;
+        }
+        newContactPhone = document.getElementById('{!$Component.thePage:theForm.theBlock:theContactSection:newContactPhone}').value;
+        if (!newContactPhone) {
+            newContactPhone = document.getElementById('{!$Component.thePage:theForm.theBlock:theContactSection:newContactPhone}').placeholder;
+        }
+        
+        if (!updateNewOpp && updateNewOpp !== null) {
+            if (!updateNewOpportunity && updateNewOpportunity != undefined) {
+                updateNewOpp = updateNewOpportunity;
+            } else {
+                updateNewOpp = '';
+            }
+        }
+
+        console.log('test updateNewOpp: ' + updateNewOpp);
+        updateNewAccount = updateNewAccount;
+        
+        oldContactFirstName = '{!cnt.FirstName}';
+        oldContactLastName = '{!cnt.LastName}';
+        oldContactEmail = '{!cnt.Email}';
+        oldContactPhone = '{!cnt.Phone}';
+        
+        currentRelatedCustomer = '{!relatedCustomerId}';
+        currentOpp  = '{!oppId}'; 
+        currentAccount  = '{!accountId}'; 
+        currentContact  = '{!contactId}'; 
+        newRelatedCustomer = '{!newRC}';
+        
+        if ('{!newRC}' != '') {
+            relatedCustomerID = '{!newRC}';
+        } else {
+            relatedCustomerID = '{!relatedCustomerId}';
+        }           
+        
+        updates();
+    }
+    
+    function updates(){
+        updateCpqAccount();
+    }                       
+    
+    function updateCpqAccount() {
+        if (updateNewAccountName || updateShipCountry || updateShipState || updateShipAddress1 || updateShipCity || updateShipPostal) {
+            var currentAppointment = '';
+            var updateNewAccountName = '';
+            console.log('updateCpqAccount ...: ');
+            console.log('updateNewAccount: '+updateNewAccount);
+            console.log('updateNewContact: '+updateNewContact);
+            console.log('updateNewOpp: '+updateNewOpp);
+            console.log('updateNewAccountName: ' +updateNewAccountName);
+            console.log('updateShipCountry: '+updateShipCountry);
+            console.log('updateShipState: '+updateShipState);
+            console.log('updateShipAddress1: '+updateShipAddress1);
+            console.log('updateShipCity: '+updateShipCity);
+            console.log('updateShipPostal: '+updateShipPostal);
+            console.log('currentAppointment: '+currentAppointment);
+            
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CPQNewSamplePrepareController.updateCpqAccount}', 
+                currentAppointment,
+                updateNewAccount,
+                updateNewContact,
+                updateNewOpp,
+                updateNewAccountName,
+                updateShipCountry,
+                updateShipState,
+                updateShipAddress1,
+                updateShipCity,
+                updateShipPostal,
+                function(result, event) {
+                    if (event.status) {
+                        updateNewAccount = result;
+                        console.log('updateCpqAccount + updateNewAccount: '+updateNewAccount);
+                        if (newContactFirstName || newContactLastName|| newContactEmail || newContactPhone) {
+                            updateCpqContact();
+                        } else {
+                            createCpqOpp();
+                        }        
+                    } else if (event.type === 'exception') {
+                        console.log('Errors: ' + event.message);
+                    } else {
+                        console.log('Errors...maybe?: ' + event.message);
+                    }
+                }, {escape: true, timeout: 120000});   
+        } else {
+            if (newContactFirstName || newContactLastName|| newContactEmail || newContactPhone) {
+                updateCpqContact();
+            } else {
+                createCpqOpp();
+            }           
+        }
+    }
+
+    function updateCpqContact() {
+            var currentAppointment = '';
+            var updateNewAccountName = '';
+        
+        console.log('updateCpqContact ...: ');
+        console.log('updateNewAccount: '+updateNewAccount);
+        console.log('updateNewContact: '+updateNewContact);
+        console.log('updateNewOpp: '+updateNewOpp);
+        console.log('newContactFirstName: '+newContactFirstName);
+        console.log('newContactLastName: '+newContactLastName);
+        console.log('newContactEmail: '+newContactEmail);
+        console.log('newContactPhone: '+newContactPhone);
+        
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.CPQNewSamplePrepareController.updateCpqContact}', 
+            currentAppointment,
+            updateNewAccount,
+            updateNewContact,
+            updateNewOpp,
+            newContactFirstName,
+            newContactLastName,
+            newContactEmail,
+            newContactPhone,                        
+            function(result, event) {
+                console.log('updateCpqContact complete');           
+                if (event.status) {
+                    console.log('Updated Contact');
+                    updateNewContact = result;
+                    createCpqOpp();
+                } else if (event.type === 'exception') {
+                    console.log(event.message);
+                } else {}
+            }, {escape: true, timeout: 120000});        
+    }
+    
+    function createCpqOpp() {
+        
+            var currentAppointment = '';
+            var updateNewAccountName = '';
+            var newGalleryConsultant = '';
+            var visitorType = '';
+        console.log('createCpqOpp ...: ');
+        console.log('updateNewAccount: '+updateNewAccount);
+        console.log('updateNewContact: '+updateNewContact);
+        console.log('updateNewOpp: '+updateNewOpp);
+        console.log('updateOppName: '+updateOppName);
+        
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.CPQNewSamplePrepareController.createCpqOpp}', 
+            currentAppointment,
+            updateNewAccount,
+            updateNewContact,
+            newGalleryConsultant,
+            visitorType,
+            updateNewOpp,
+            updateOppName,
+            function(result, event) {
+                console.log('createCpqOpp ... result: ' + result);
+                if (event.status) {
+                    callUpdateOpp(); 
+                    console.log('winner: '+result);
+                    currentOpp = result;
+                    console.log('update apt complete'); 
+                    launchCPQ();
+                } else if (event.type === 'exception') {
+                    console.log('Errors: ' + event.message);
+                } else {
+                    console.log('Errors...maybe?: ' + event.message);
+                }
+            });   
+    }
+    
+    function launchCPQ() {
+        
+        if (!currentOpp) {
+            currentOpp = '{!theOppID}'; 
+        }
+        if ((updateNewOpp != '')&&(updateNewOpp != '000000000000000')) {
+            var opportuntiyID = updateNewOpp;
+        } else {
+            var opportuntiyID = currentOpp;
+        }           
+        console.log('here is what we will be using:...'+opportuntiyID);   
+
+        // Open CPQ & close the publisher / refresh the feed.
+        if ({!$User.UIThemeDisplayed != 'Theme3'}){
+            sforce.one.navigateToURL('https://{!$Label.CPQ_URL}.webcomcpq.com/salesforce/SfLogin.aspx?sfauthUserID={!$User.Username}&apiPartnerURL={!$Api.Partner_Server_URL_290}&apiSessionID={!$Api.Session_ID}&domain_name=daltile&apiPass=Password&action=New&sfqpOpportunityID='+opportuntiyID, false);                
+        } else {
+            window.open ('/apex/CPQNewMobile?&id='+opportuntiyID,"_self");
+        }
+        closePublisher();                      
+    }
+
+    function disableOnSubmit(input) {
+        setTimeout('disableAfterTimeout(\'' + input.id + '\');', 50);
+    }
+    function disableAfterTimeout(id) {
+        var toDisable = document.getElementById( id );
+        console.log('toDisable id: ' + id);
+        console.log('toDisable disableAfterTimeout: ' + toDisable);
+        classicButton = toDisable;
+        console.log('classicButton disableAfterTimeout: ' + classicButton);
+        toDisable.disabled = 'disabled';
+        // Use the Salesforce CSS style to make the button appear disabled
+        toDisable.className = 'btnDisabled';
+        toDisable.value = "Saving..."
+    }
+
+    // disable the publisher window save and cancel buttons
+    function disableButtons() {
+        console.log('disable the publisher window save and cancel buttons')
+        Sfdc.canvas.publisher.publish({
+            name: "publisher.setValidForSubmit",
+            payload: "false"
+        });
+    }
+    
+    // enable the publisher window save and cancel buttons
+    function enableButtons() {
+        Sfdc.canvas.publisher.subscribe({
+            name: "publisher.showPanel",
+            onData: function(e) {
+                console.log('enable the publisher window save and cancel buttons')
+                Sfdc.canvas.publisher.publish({
+                    name: "publisher.setValidForSubmit",
+                    payload: "true"
+                });
+            }
+        });
+    }
+
+    // clears error message
+    function resetError() {
+        theError = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}');
+        if(theError) {
+            document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').innerHTML = '';
+        }
+    }
+    
+    function closePublisher() {
+        Sfdc.canvas.publisher.publish({
+            name: "publisher.setValidForSubmit",
+            payload: "false"
+        });
+        Sfdc.canvas.publisher.publish({
+            name: "publisher.close",
+            payload: {
+                refresh: "true"
+            }
+        });         
+    }                           
+    
+    </script>
+    
+    <style type="text/css">
+        
+    .slds-modal__container{
+        max-width: 90rem !important;
+        width:90% !important;
+    }
+        
+    .dataCol {
+        font-size: .75rem;
+        font-weight: 400;
+    }
+    
+    a,bb,c,d,e {
+        text-decoration: none;
+        color: #0070d2;
+        -webkit-transition: color .1s linear;
+        transition: color .1s linear;
+        background-color: transparent;
+        box-sizing: border-box;
+        color: -webkit-link;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .errorMessage {
+        position: relative;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        border: 0 !important;
+        width: relative;
+        font-size: .9rem !important;
+        font-weight: 500;
+        text-align: center;
+        background-color: #c23934 !important;       
+        border-radius: 10px;
+        color: white;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+    
+    .errorMessage:empty {
+        padding:0;
+    }    
+    
+    body .autoCompleteBoxScrolling, .slds-scope .autoCompleteBoxScrolling  {
+        max-width: 50% !important;;
+        width: 50% !important;;
+        left: 50% !important;;
+        top: 296px;
+        height: auto;
+        display: block;    
+    }
+    
+    element.style {
+        width: 318px;
+        left: 200px;
+        top: 735px;
+        height: auto;
+    }    
+    
+    
+    </style>
+    
+    <apex:pagemessages />
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head></head>
+        <apex:sectionHeader title="New Quote / Sample Request" subtitle="Please Verify Information" />
+        <apex:form id="theForm">
+            <apex:outputText id="scriptGetOpp">
+            <script>
+                function hello() {
+                    var currentOpp  = '{!oppList}';  
+                    alert(currentOpp);
+                } 
+            </script>
+            </apex:outputText>            
+            <apex:actionFunction action="{!doGetOppID}" reRender="script" name="callUpdateOpp"/>
+            <body>
+                <apex:pageBlock title="Current Account / Contact / Opportunity / Shipping Details" mode="inlineEdit" id="theBlock"> 
+                    <apex:pageBlockSection title="Selecting Products For..." columns="2" id="theAccountContactSection">
+                        <apex:pageBlockSectionItem id="theSectionAccountName">
+                            <apex:outputPanel layout="block" id="panelNewAccount" >
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                                        <div class="slds-form--stacked">
+                                            <div class="slds-lookup" data-select="multi" data-scope="single" data-typeahead="true">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                                        <label class="slds-form-element__label" for="lookupRegion">Account</label>
+                                                        <!--<input id="lookupAccount" value="{!galVisitorAcc.Name}" class="slds-input" type="text" aria-autocomplete="list" role="combobox" aria-expanded="false" aria-activedescendant="{!galVisitorAcc.Name}" >-->
+                                                        <input id="lookupAccount" value="" class="slds-input" style="padding-right: 50px;" type="text" aria-autocomplete="list" role="combobox" aria-expanded="false" aria-activedescendant="" autocomplete="nope">
+                                                            <apex:actionFunction name="assignAccount" action="{!changeAccount}"  rerender="theContact,newContactFirstName,newContactLastName,newContactEmail,newContactPhone,oldShipCountry,oldShipStreet,oldShipCity,oldShipState,oldShipZip,newShipCountry,newShipAdd,newShipCity,newShipState,newShipZip " >
+                                                                <apex:param name="assignedAccount" assignTo="{!relatedCustomer.Related_Account__c}"  value="" />
+                                                            </apex:actionFunction> 
+                                                            <apex:actionFunction name="assignAccountContacts" action="{!changeContact}"  rerender="theContact,newContactFirstName,newContactLastName,newContactEmail,newContactPhone,oldShipCountry,oldShipStreet,oldShipCity,oldShipState,oldShipZip,newShipCountry,newShipAdd,newShipCity,newShipState,newShipZip " >
+                                                                <apex:param name="assignedContactAccount" assignTo="{!relatedCustomer.Related_Account__c}"  value="" />
+                                                            </apex:actionFunction>   
+                                                        </input>
+                                                        <apex:commandButton styleClass="slds-button--brand slds-button-space-right " style="background-color: #f44242 !important; border: 1px solid #f44242 !important;color: #fff !important; border-radius: .5rem; font-size: .75rem; font-weight: bold; background: #f44242 !important;margin-left: -35px;padding-left: .5rem;padding-right: .5rem;line-height: 1rem;"  value="X" onclick="accountClear(); return false;" />
+                                                    </div>
+                                                </div>
+                                                <div class="slds-lookup__menu" role="listbox" id="resultsAccount" style="display:none">
+                                                    <div class="slds-lookup__item"></div>
+                                                    <ul class="slds-lookup__list" role="presentation" id="ui_AccountResults"></ul>                           
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </apex:outputPanel>  
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem id="theSectionContactName">
+                            <apex:outputLabel value="Contact: " for="theContact"/>
+                            <apex:actionRegion >   
+                                <apex:selectList id="theContact" size="1" value="{!theContact}"  readonly="false">
+                                    <apex:selectOptions value="{!theContacts}"/>
+                                    <apex:actionSupport event="onchange" action="{!changeContact}" rerender="newContactFirstName,newContactLastName,newContactEmail,newContactPhone" />
+                                </apex:selectList><p/>
+                            </apex:actionRegion>    
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    
+                     <apex:pageBlockSection columns="2"  id="theContactSection">
+                        <apex:inputField id="newContactFirstName" label="First Name" value="{!relatedCustomer.New_ContactFirstName__c}" html-placeholder="{!cnt.FirstName}"/>
+                        <apex:inputField id="newContactLastName" label="Last Name" value="{!relatedCustomer.New_ContactLastName__c}" html-placeholder="{!cnt.LastName}"/>
+                        <apex:inputField id="newContactEmail" label="Email" value="{!relatedCustomer.New_ContactEmail__c}" html-placeholder="{!cnt.Email}" />
+                        <apex:inputField id="newContactPhone" label="Phone" value="{!relatedCustomer.New_ContactPhone__c}" html-placeholder="{!cnt.Phone}" />
+                    </apex:pageBlockSection>                      
+                    
+                    <apex:pageBlockSection title="Select / Create an Opportunity..." columns="2" id="theOpptSection">
+                        <apex:pageBlockSectionItem id="theSectionNewOppp">
+                            <apex:outputPanel layout="block" id="panelNewOpportunity">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2">
+                                        <div class="slds-form--stacked">
+                                            <div class="slds-lookup" data-select="multi" data-scope="single" data-typeahead="true">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                                        <label class="slds-form-element__label" for="lookupOpportunity">Opportunity</label>
+                                                        <input id="lookupOpportunity" value="" class="slds-input" style="padding-right: 50px;" type="text" aria-autocomplete="list" role="combobox" aria-expanded="false" aria-activedescendant="" autocomplete="nope">
+                                                        
+                                                            <apex:pageBlockSectionItem id="hmsdnsdkh">
+                                                            </apex:pageBlockSectionItem>                                                    
+                                                        
+                                                        </input>
+                                                        <apex:commandButton styleClass="slds-button--brand slds-button-space-right " style="background-color: #f44242 !important; border: 1px solid #f44242 !important;color: #fff !important; border-radius: .5rem; font-size: .75rem; font-weight: bold; background: #f44242 !important;margin-left: -35px;padding-left: .5rem;padding-right: .5rem;line-height: 1rem;"  value="X" onclick="opportunityClear(); return false;" />
+                                                    </div>
+                                                </div>
+                                                <div class="slds-lookup__menu" role="listbox" id="resultsOpportunity" style="display:none">
+                                                    <div class="slds-lookup__item"></div>
+                                                    <ul class="slds-lookup__list" role="presentation" id="ui_OpportunityResults"></ul>                           
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </apex:outputPanel>     
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem id="theSectionOppName">
+                            <apex:outputLabel value="Change the Opportunity Name" for="newOppName"/>
+                            <apex:inputField label="Change the Opportunity Name" id="newOppName" value="{!relatedCustomer.New_Opportunity_Name__c}"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection title="Update Shipping Location..." columns="2" id="theShiptoSection">
+                        <apex:inputField label="Shipping Country" id="newShipCountry" value="{!relatedCustomer.Update_ShippingCountry__c}" html-placeholder="{!acc.ShippingCountry}" />
+                        <apex:inputField label="Shipping Address" id="newShipAdd" value="{!relatedCustomer.Update_ShippingStreet__c}" html-placeholder="{!acc.ShippingStreet}" />
+                        <apex:inputField label="Shipping City" id="newShipCity" value="{!relatedCustomer.Update_ShippingCity__c}" html-placeholder="{!acc.ShippingCity}" />
+                        <apex:inputField label="Shipping State" id="newShipState" value="{!relatedCustomer.Update_ShippingState__c}" html-placeholder="{!acc.ShippingState}" />
+                        <apex:inputField label="Shipping Zip" id="newShipZip" value="{!relatedCustomer.Update_ShippingPostalCode__c}" html-placeholder="{!acc.ShippingPostalCode}" />
+                    </apex:pageBlockSection>
+
+                    <!-- UI Check : Salesforce Classic "Aloha" theme  -->
+
+                    <apex:pageBlockButtons location="bottom" rendered="{!$User.UIThemeDisplayed  == 'Theme3'}">
+                        <apex:commandButton value="Save & Launch CPQ" id="save" onclick="disableOnSubmit(this);getValues();" rerender="none"/>
+                        <apex:commandButton value="Cancel" action="{!cancel}" />
+                    </apex:pageBlockButtons>                    
+
+
+                </apex:pageBlock>
+            </body>
+            
+        </apex:form>
+        
+    </html>
+    
+    <!-- SFDC Support J McCarthy addition below for picklist scrolling behavior on iOS 5/16/2017 -->
+    <script>
+    var a = navigator.userAgent;
+    if ((a.indexOf('Salesforce') != -1) && (a.indexOf('iPhone') != -1 || a.indexOf('iPad') != -1) && (a.indexOf('Safari') == -1)) { 
+        if (a.indexOf('OS/8') != -1 || a.indexOf('OS 8') != -1) {
+            s.innerHTML = "html,html body{overflow: auto;-webkit-overflow-scrolling:touch;}body{position:absolute;left:0;right:0;top:0;bottom:0;}";
+        }
+        else if (a.indexOf('OS/9') != -1 || a.indexOf('OS 9') != -1) {
+            s.innerHTML = "html,html body{overflow: auto;-webkit-overflow-scrolling:auto;}body{position:absolute;left:0;right:0;top:0;bottom:0;}";
+        }
+        document.getElementsByTagName('head')[0].appendChild(s);
+    };
+    </script>
+    <script>
+    var ua = navigator.userAgent;
+    if ((ua.indexOf('Salesforce') != -1) && (ua.indexOf('iPhone') != -1 || ua.indexOf('iPad') != -1) && (ua.indexOf('OS/8') != -1 || ua.indexOf('OS 8') != -1) && (ua.indexOf('Safari') == -1)) {
+        function IOS_SCROLL_BOOTSTRAP() {
+            var children = Array.prototype.slice.call(document.body.children),
+                placeholder = document.createElement('section'),
+                fragment = document.createDocumentFragment(),
+                styles,
+                width,
+                height;
+            children.forEach(function(c) { fragment.appendChild(c); });
+            placeholder.appendChild(fragment);
+            styles = [
+                'width:100%;',
+                'height:', (window.screen.height - 42), 'px;',
+                'position: absolute; overflow: auto; -webkit-overflow-scrolling: touch'
+            ].join('');
+            placeholder.style.cssText = styles;
+            document.body.appendChild(placeholder);
+        }
+        window.addEventListener('load', function(e) {
+            IOS_SCROLL_BOOTSTRAP();
+        });
+    }
+    </script>
+</apex:page>

@@ -1,0 +1,202 @@
+<apex:page standardcontroller="Appointment__c" extensions="AppointmentSchedulerController" standardStylesheets="true" lightningStylesheets="true" id="thePage">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    
+    <script type='text/javascript' src='/canvas/sdk/js/42.0/publisher.js'></script> 
+    <script> 
+    // enable the publisher window save and cancel buttons
+    Sfdc.canvas.publisher.subscribe({name: "publisher.showPanel",
+                                     onData:function(e) {
+                                         console.log('enable the publisher window save and cancel buttons')
+                                         Sfdc.canvas.publisher.publish({name:"publisher.setValidForSubmit", payload:"true"});
+                                     }});
+    
+    // close the window
+    Sfdc.canvas.publisher.subscribe({ name: "publisher.post",
+                                     onData: function(e) {               
+                                         console.log('now to update the opp and launch CPQ')
+                                         closeAppointment();
+                                        //  updateRecords();                
+                                     }});                       
+    
+    function updateRecords() {
+        console.log('going to update records');
+
+        var visitId = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theAppointementID}').innerHTML ;
+
+        if ( document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theConsultantSection:newGalleryConsultant}') != null) {
+            var newGalleryConsultantIndex = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theConsultantSection:newGalleryConsultant}').selectedIndex;
+            var newGalleryConsultant = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theConsultantSection:newGalleryConsultant}').options[newGalleryConsultantIndex].value;
+        }        
+        
+        if ( document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theVisitorTypeSection:appointmentVisitorType}') != null) {
+            var visitorType  = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theVisitorTypeSection:appointmentVisitorType}').value;
+        } 
+        
+        var visitComments = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theCommentSection:appointmentComments}').value;
+    
+        console.log('updateRecords + visitId...'+visitId);
+        console.log('updateRecords + newGalleryConsultantIndex...'+newGalleryConsultantIndex);
+        console.log('updateRecords + newGalleryConsultant...'+newGalleryConsultant);
+        console.log('updateRecords + visitorType...'+visitorType);
+        console.log('updateRecords + visitComments...'+visitComments);
+        
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.AppointmentSchedulerController.closeAppointment}', 
+            visitId,
+            newGalleryConsultant, 
+            visitorType,
+            visitComments,
+   
+            function(result, event) {
+                if (event.status) {
+                    console.log('winner: '+result);
+                    
+                } else {
+                    console.log('Errors...maybe?: ' + event.message);
+                }
+            }, { escape: true, timeout: 120000});   
+            console.log('appointment closed out'); 
+            createTask(visitId);
+    }   
+
+    function fixTime(time){
+      if(time < 10) {time = "0" + time};
+      return time;
+    }
+    
+    function fixDate(date){
+        var today = new Date();
+        var Month = fixTime(date.getMonth() + 1);
+        var Day = fixTime(date.getDate());
+        var UTC = date.toUTCString();
+        var Time = UTC.substring(UTC.indexOf(':')-2, UTC.indexOf(':')+6);
+        var Minutes = fixTime(date.getMinutes());
+        var Seconds = fixTime(date.getSeconds());
+        console.log('timeCheckIn + today: ' + today);
+        console.log('timeCheckIn + UTC: ' + UTC);
+        console.log('timeCheckIn + Time: ' + Time);
+        console.log('timeCheckIn + Minutes: ' + Minutes);
+        console.log('timeCheckIn + Seconds: ' + Seconds);
+        console.log('timeCheckIn + fixDate(today): ' +  date.getFullYear() + "-" + Month + "-" + Day + "T" + Time);
+        return date.getFullYear() + "-" + Month + "-" + Day + "T" + Time;
+    }
+
+    function closeAppointment(){
+    
+        var today = new Date();
+        var updatedId;
+        var visitId = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theAppointementID}').innerHTML ;
+        if ( document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theConsultantSection:newGalleryConsultant}') != null) {
+            var newGalleryConsultantIndex = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theConsultantSection:newGalleryConsultant}').selectedIndex;
+            var newGalleryConsultant = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theConsultantSection:newGalleryConsultant}').options[newGalleryConsultantIndex].value;
+        }        
+        if ( document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theVisitorTypeSection:appointmentVisitorType}') != null) {
+            var visitorType  = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theVisitorTypeSection:appointmentVisitorType}').value;
+        } 
+        var visitComments = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theCommentSection:appointmentComments}').value;
+        
+        var newAppointment = new SObjectModel.apt({
+            Id : visitId,
+            Consultant__c : newGalleryConsultant,
+            Visitor_Type__c : visitorType,
+            Comments__c : visitComments,
+            Visitor_Time_Out__c : fixDate(today),
+            Status__c : 'Closed'
+        });
+        
+        newAppointment.update(function(err, ids) {
+            if (err) {
+                alert(err);
+                console.log('closeAppointment + err: ' + err);
+            } else {
+                console.log('closeAppointment + ids: ' + ids);                                
+                updatedId = ids;
+                console.log('closeAppointment sending + updatedId: ' + updatedId);
+                createTask(updatedId);
+            }
+        });
+    }    
+
+    function createTask(updatedId) {
+        console.log('createTask + updatedId:... ' + updatedId);
+        
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.AppointmentSchedulerController.createGalleryTask}', 
+            updatedId,        
+            function(result, event) { 
+                console.log('createGalleryTask + result :...>' + result)
+                console.log('createGalleryTask + event :...>' + event)      
+                if (event.status) {
+                    console.log('createGalleryTask Complete:... ' + result);
+                                         closePublisher();      
+                } else if (event.type === 'exception') {
+                    console.log('createGalleryTask error:... ' + result);
+                    console.log('createGalleryTask event.message:... ' + event.message);
+                } else {}
+            }, {
+                escape: true,
+                timeout: 120000
+            });   
+    }
+
+    function closePublisher() {
+        Sfdc.canvas.publisher.publish({
+            name: "publisher.setValidForSubmit",
+            payload: "false"
+        });
+        sforce.one.navigateToList('00B0G000008t1Su', 'Waitlist', 'Appointment__c');   
+        Sfdc.canvas.publisher.publish({
+            name: "publisher.close",
+            payload: {
+                refresh: "true"
+            }
+        });         
+    }               
+    
+    </script>
+    
+    <!-- Visualforce Remote object coponent -->
+
+    <apex:remoteObjects >
+        <apex:remoteObjectModel name="Appointment__c" 
+            jsShorthand="apt" 
+            fields="Name,Id,Daltile_Location__c,Visitor_First_Name__c,Visitor_Last_Name__c,Status__c,Visitor_Time_In__c,Visitor_Phone_Number__c,Visitor_Email__c,Contact__c,Account__c,Appointment_Time__c,Prescheduled__c">
+        </apex:remoteObjectModel>
+    </apex:remoteObjects>   
+    
+    <apex:pagemessages />
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    
+        <head></head>
+        <apex:form id="theForm">
+            <body>
+                <apex:pageBlock title="Complete Appointment" mode="inlineEdit" id="theBlock">             
+                    <apex:pageBlockSection title="Gallery Details" columns="1" id="theUpdateSection" >
+                        
+                        <apex:outputPanel style="display:none" id="theId">
+                            <apex:outputField value="{!Appointment__c.id}" id="theAppointementID"/>
+                        </apex:outputPanel>                        
+                        
+                        <apex:pageBlockSectionItem id="theConsultantSection">
+                            <apex:outputLabel value="Gallery Consultant" for="newGalleryConsultant"/>
+                            <apex:selectList id="newGalleryConsultant" size="1" value="{!galleryContact}" readonly="false" styleClass="slds-select"> 
+                                <apex:selectOptions value="{!galleryContacts}"/>
+                            </apex:selectList>  
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem id="theVisitorTypeSection">
+                            <apex:outputLabel value="Visitor Type" for="appointmentVisitorType"/>
+                            <apex:inputField id="appointmentVisitorType" value="{!appointment.Visitor_Type__c}"/>
+                        </apex:pageBlockSectionItem> 
+
+                       <apex:pageBlockSectionItem id="theCommentSection">
+                            <apex:outputLabel value="Appointment Comments" for="appointmentComments"/>
+                            <apex:inputField id="appointmentComments" value="{!appointment.Comments__c}"/>                    
+                        </apex:pageBlockSectionItem>                    
+
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </body>
+        </apex:form>
+    </html>    
+</apex:page>

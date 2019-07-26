@@ -1,0 +1,210 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaListController"
+                extends="c:SVNSUMMITS_Ideas_Base"
+                access="public">
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="sitePrefix" type="String" access="global"/>
+	<aura:attribute name="wrappedIdeasObj" type="SVNSUMMITS_ideaListWrapper" access="global"/>
+
+	<!-- Compact and Featured are not exposed to the Builder -->
+	<aura:attribute name="displayMode" type="String" default="Tile View" required="true" access="global"
+	                description="Tile View,Tile Carousel View, List View, Compact, Featured"/>
+
+	<aura:attribute name="displayImages" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="displayPostDateAuthor" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="allowVoting" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="enableDownVoting" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" default="true" access="global"/>
+
+	<aura:attribute name="listSize" type="Integer" default="12" access="global"/>
+	<aura:attribute name="sortBy" type="String" access="global"/>
+
+	<aura:attribute name="userProfileURL" type="String" default="/profile/" access="global"/>
+	<aura:attribute name="ideasListURL" type="String" default="/ideas/" access="global"/>
+	<aura:attribute name="ideaDetailURL" type="String" default="/idea/" access="global"/>
+	<aura:attribute name="ideaImageURL" type="String" default="/servlet/fileField?field=AttachmentBody"
+	                access="global"/>
+
+	<!-- UI -->
+	<aura:attribute name="labelPoints" type="String" default="{!$Label.c.ss_idea_label_points}" access="global"/>
+	<aura:attribute name="tooltipVoteUp" type="String" default="{!$Label.c.ss_idea_label_UpVote}" access="global"/>
+	<aura:attribute name="tooltipVoteDown" type="String" default="{!$Label.c.ss_idea_label_DownVote}" access="global"/>
+	<aura:attribute name="labelUpVoted" type="String" default="{!$Label.c.ss_idea_label_UpVoted}" access="global"/>
+	<aura:attribute name="labelDownVoted" type="String" default="{!$Label.c.ss_idea_label_DownVoted}" access="global"/>
+
+	<!-- Filter handler -->
+	<aura:handler event="c:SVNSUMMITS_Ideas_Set_Display_Mode_Filter" action="{!c.setDisplayMode}"/>
+
+	<!-- Init -->
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+	<!-- Carousel! -->
+	<ltng:require styles="{!join(',', $Resource.SlickCSS, $Resource.SlickTheme)}"
+	              scripts="{!join(',', $Resource.jquery_2_2_4, $Resource.SlickJS)}"/>
+
+	<div class="slds-grid slds-wrap slds-grid--vertical-stretch slds-grid--pull-padded" aura:id="carouselViewer">
+		<aura:iteration items="{!v.wrappedIdeasObj.ideaList}" var="idea">
+			<div class="{!v.displayMode == 'Tile View'
+					? 'slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-4 tileView'
+					: v.displayMode == 'Tile Carousel View'
+					? 'slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-4 carouselView'
+					: v.displayMode == 'Compact'
+					? 'slds-p-around--small slds-size--1-of-1 compactView'
+					: v.displayMode == 'Featured'
+					? 'slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-3 tileView'
+					: 'slds-p-around--small slds-size--1-of-1 listView'}">
+
+				<!-- Image -->
+				<div class="{!v.displayImages == true ? 'slds-grid slds-wrap idea showingImage' : 'slds-grid slds-wrap idea'}">
+					<aura:renderIf isTrue="{!v.displayMode != 'Compact'}">
+						<aura:renderIf isTrue="{!v.displayImages}">
+							<div class="{!v.displayMode == 'Tile View'
+									? 'slds-size--1-of-1'
+									: v.displayMode == 'Tile Carousel View'
+									? 'slds-size--1-of-1'
+									: v.displayMode == 'Featured'
+									? 'slds-size--1-of-1'
+									: 'slds-size--1-of-1 slds-medium-size--1-of-6 slds-large-size--3-of-12'}">
+								<a href="{!v.sitePath + v.ideaDetailURL + idea.Id}" label="{!idea.Name}">
+									<aura:if isTrue="{!idea.AttachmentName}">
+										<div class="idea-image"
+										     style="{!'background-image:url(' + v.sitePrefix + v.ideaImageURL + '&amp;entityId=' + idea.Id + ')'}">
+										</div>
+										<aura:set attribute="else">
+											<div class="idea-image"
+											     style="{!'background-image:url(' + $Resource.Ideas_Resources + '/Images/default-ideas.png'}">
+											</div>
+										</aura:set>
+									</aura:if>
+								</a>
+							</div>
+						</aura:renderIf>
+					</aura:renderIf>
+
+					<div class="{!v.displayMode == 'Tile View'
+							? 'slds-size--1-of-1 slds-p-horizontal--small '
+							: v.displayMode == 'Tile Carousel View'
+							? 'slds-size--1-of-1 slds-p-horizontal--small '
+							: v.displayMode == 'Featured'
+							? 'slds-size--1-of-1 slds-p-horizontal--small '
+							: v.displayMode == 'Compact'
+							? 'slds-size--1-of-1 slds-p-horizontal--small '
+							: v.displayImages == true
+							? 'slds-size--1-of-1 slds-medium-size--3-of-6 slds-large-size--7-of-12 slds-p-horizontal--small'
+							: 'fullHeight slds-size--1-of-1 slds-medium-size-4-of-6 slds-large-size--10-of-12 slds-p-horizontal--small'}">
+
+						<!-- Topic "> -->
+						<div class="slds-size--1-of-1">
+							<div class="topics">
+                                <span class="slds-text-heading--label topic-label">
+                                    <c:SVNSUMMITS_Ideas_TopicURL topicName="{!idea.Related_Topic_Name__c}"
+                                                                 topicNameToId="{!v.wrappedIdeasObj.topicNameToId}"
+                                                                 sitePath="{!v.sitePath}"/>
+                                </span>
+							</div>
+						</div>
+
+						<!-- Title -->
+						<div class="slds-size--1-of-1">
+							<div class="slds-text-heading--small name">
+								<a href="{!v.sitePath + v.ideaDetailURL + idea.Id}" title="{!idea.Title}"
+								   class="ideaTitle">{!idea.Title}</a>
+							</div>
+						</div>
+
+						<!-- Author -->
+						<div class="slds-size--1-of-1">
+							<aura:if isTrue="{!and(v.displayPostDateAuthor, v.displayMode != 'Compact')}">
+								<div class="slds-text-heading--label-normal owner-label">
+									<ui:outputText value="{!idea.fromNow}"/>
+									&nbsp;{!$Label.c.ss_idea_label_by}&nbsp;
+									<a class="slds-truncate"
+									   href="{!v.sitePath + v.userProfileURL + idea.CreatedBy.Id}">
+											{!if(v.isNicknameDisplayEnabled, idea.CreatedBy.CommunityNickname, idea.CreatedBy.Name)}
+									</a>
+								</div>
+							</aura:if>
+						</div>
+					</div>
+
+					<!-- Vote -->
+					<div class="{!v.displayMode == 'Tile View'
+							? 'slds-p-horizontal--small slds-size--1-of-1'
+							: v.displayMode == 'Tile Carousel View'
+							? 'slds-p-horizontal--small slds-size--1-of-1'
+							: v.displayMode == 'Featured'
+							? 'slds-p-horizontal--small slds-size--1-of-1'
+							: v.displayMode == 'Compact'
+							? 'slds-size--1-of-1 slds-p-horizontal--small '
+							: 'slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--2-of-12'}">
+						<div class="slds-grid slds-wrap">
+							<div class="{!v.displayMode == 'List View'
+									? 'slds-size--1-of-1 spacer statusAndPoints'
+									: 'slds-size--1-of-2 statusAndPoints'}">
+								<aura:if isTrue="{!idea.Status}">
+									<div class="idea-status">
+											{!idea.Status}
+									</div>
+								</aura:if>
+								<aura:if isTrue="{!v.allowVoting}">
+									<div class="points">{!idea.VoteTotal}&nbsp;{!v.labelPoints}</div>
+								</aura:if>
+							</div>
+
+							<div class="{!v.displayMode == 'List View'
+									? 'slds-size--1-of-1 ideaVoting'
+									: 'slds-size--1-of-2 ideaVoting'}">
+								<aura:if isTrue="{!and(v.allowVoting, v.displayMode != 'Compact' )}">
+									<aura:if isTrue="{!idea.Votes[0]}">
+										<ui:button aura:id="voteButtonDiv"
+										           class="{!'slds-button slds-button--brand'
+												           + if(and(idea.Votes[0].Type == 'Down', v.enableDownVoting),
+												           ' upsideDown')}"
+										           disabled="true">
+											<lightning:icon iconName="utility:like"
+											                size="x-small"
+											                class="voteButtons"
+											                alternativeText="Like"/>
+										</ui:button>
+										<aura:set attribute="else">
+											<div class="{!v.displayMode == 'List View'
+													? 'slds-size--1-of-1 voteButtons '
+													: 'slds-size--1-of-1 slds-text-align--right voteButtons '}">
+												<a title="{!v.tooltipVoteUp}"
+												   class="slds-button btn-primary likeButton"
+												   onmouseup="{!c.handle_VoteUp}"
+												   data-recordid="{!idea.Id}">
+													<lightning:icon iconName="utility:like"
+													                size="x-small"
+													                class="voteButtons"
+													                alternativeText="Like"/>
+												</a>
+												<aura:if isTrue="{!v.enableDownVoting}">
+													<a title="{!v.tooltipVoteDown}"
+													   class="slds-button btn-other dislikeButton"
+													   onmouseup="{!c.handle_VoteDown}"
+													   data-recordid="{!idea.Id}">
+														<lightning:icon iconName="utility:like"
+														                size="x-small"
+														                class="voteButtons"
+														                alternativeText="Like"/>
+													</a>
+												</aura:if>
+											</div>
+										</aura:set>
+									</aura:if>
+								</aura:if>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</aura:iteration>
+	</div>
+</aura:component>

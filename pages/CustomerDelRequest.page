@@ -1,0 +1,39 @@
+<apex:page standardStylesheets="true" lightningStylesheets="true" id="thePage" standardController="Account" extensions="CustomerDelRequestController" >
+
+    <apex:includeScript value="/soap/ajax/20.0/connection.js"/>
+    <apex:includeScript value="/soap/ajax/20.0/apex.js"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>    
+    
+    <script type='text/javascript' src='/canvas/sdk/js/42.0/publisher.js'></script>
+    <script> 
+        function recordCreated() {
+            alert('Your delete request has been submitted, please aloow 2-3 business days for processing');
+        }
+    </script>   
+
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <apex:form id="theForm">.
+        <body>
+            <apex:pageBlock title="Customer Delete Request" id="theBlock">
+                <apex:outputPanel layout="block" id="panelYesDelete" rendered="{!Account.Mark_For_Deletion__c == false}">
+                    <apex:messages /> 
+                    <apex:pageMessage title="Select Save to confirm the delete request" summary="Please allow 3 business days for processing" severity="warning" strength="2" />
+                     <apex:inputHidden rendered="false" value="{!Account.Tag__c}" />
+                </apex:outputPanel> 
+                <apex:outputPanel layout="block" id="panelNoDelete" rendered="{!Account.Mark_For_Deletion__c}">
+                    <apex:pageMessage title="Sorry..." summary="This Account is already marked for delete, it can not be requested again." severity="error" strength="3" />
+                </apex:outputPanel> 
+                <apex:pageBlockButtons location="bottom" >
+                    <apex:commandButton value="Save" action="{!saveDel}" onclick="recordCreated();" rendered="{!Account.Mark_For_Deletion__c == false}"/>
+                    <apex:commandButton value="Cancel" action="{!cancel}" />
+                </apex:pageBlockButtons>  
+            </apex:pageBlock>
+        </body>
+    </apex:form>
+
+    </html>
+
+
+</apex:page>

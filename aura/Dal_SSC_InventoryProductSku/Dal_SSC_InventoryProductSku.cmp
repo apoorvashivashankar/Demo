@@ -1,0 +1,162 @@
+<!--
+ - Created by Yadav on 10/30/2018.
+ -->
+
+<aura:component description="Dal_SSC_InventoryProductSku" controller="Dal_InventorySearchController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" extends = "c:Dal_SSC_InventoryBase">
+
+    <!-- Init Handler -->
+   <!-- <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>-->
+
+    <!-- Label Attributes -->
+    <aura:attribute name="title" type="String" default="Keyboard (SKU, Collection, Product Name)"/>
+    <aura:attribute name="labelBrand" type="String" default="Brand" />
+    <aura:attribute name="labelCollection" type="String" default="Series"/>
+    <aura:attribute name="labelProduct_Color" type="String" default="Product / Color"/>
+    <aura:attribute name="labelSize" type="String" default="Size"/>
+    <aura:attribute name="labelVendor" type="String" default="Vendor"/>
+
+    <!-- List Attributes -->
+    <aura:attribute name="productList" type="List" />
+    <aura:attribute name="listOfSeries" type="Object" description="List of series for products" />
+    <aura:attribute name="listOfColors" type="Object" description="List of Color for selected series." />
+    <aura:attribute name="count" type="Integer" default="0"/>
+
+    <!-- Selected Attributes -->
+    <aura:attribute name="skuValue" type="String" />
+    <aura:attribute name="selectedColor" type="String" description="" />
+    <aura:attribute name="selectedSeries" type="String" description="" />
+    <aura:attribute name="selectedSize" type="String" />
+    <aura:attribute name="selectedBrand" type="String" />
+
+    <aura:attribute name="isProductSelected" type="Boolean" default="false"/>
+    <aura:attribute name="isBranded" type="Boolean" />
+    <aura:attribute name="skuKeyword" type="String" default=''/>
+
+    <!-- Calculate Position -->
+    <aura:attribute name="pos" type="Integer" default="1" />
+
+
+    <!-- Body Starts here -->
+    <div class="slds-size_12-of-12">
+
+        <aura:if isTrue="{!v.isBranded}" >
+        <!-- Left box for selecting Product sku with color and size -->
+        <lightning:layout>
+            <lightning:layoutItem size="12"
+                                  smallDeviceSize="12"
+                                  mediumDeviceSize="12"
+                                  largeDeviceSize="12"
+                                  class="slds-p-around_x-small ">
+                <div class="custom-box">
+
+                    <!-- Brand -->
+                    <div class="dal-box slds-m-bottom_medium">
+                        <lightning:select class="" name="Brand"  required="false"
+                                          value="{!v.selectedBrand}" aura:id="series" label="Brand" onchange="{!c.handleBrandChange}">
+                            <aura:if isTrue="{!v.divisionCode == '40'}" >
+                                <option value="DB">Daltile</option>
+                            </aura:if>
+                            <aura:if isTrue="{!v.divisionCode == '41'}" >
+                                <option value="AO">American Olean</option>
+                                <option value="MZ">Marazzi</option>
+                            </aura:if>
+
+                        </lightning:select>
+                    </div>
+
+                    <!-- Series -->
+                    <div class="dal-box slds-m-bottom_medium">
+                        <lightning:select class="" name="Series"  required="false"
+                                          value="{!v.selectedSeries}" aura:id="series" label="{!v.labelCollection}"
+                                          onchange="{!c.getColors}" >
+                                <option value="ALL">Select Series</option>
+                            <aura:iteration items="{!v.listOfSeries}" var="ser" >
+                                <option value="{!ser.Id}">{!ser.Name}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+
+                    <!-- Product / Color -->
+                    <div class="dal-box slds-m-bottom_medium">
+                        <lightning:select class="" name="Product" value="{!v.selectedColor}"
+                                          onchange="{!c.handleCollectionSearchClick}"
+                                          label="{!v.labelProduct_Color}" required="false" aura:id="products" >
+
+                                <option value="All">ALL</option>
+                            <aura:if isTrue="{!v.listOfColors.length > 0}">
+                                <aura:iteration items="{!v.listOfColors}" var="pro">
+                                    <option value="{!pro.colorCode}">{!pro.colorName}</option>
+                                </aura:iteration>
+                            </aura:if>
+                        </lightning:select>
+                    </div>
+
+                    <!-- Size -->
+                    <div class="size-box slds-m-bottom_large">
+                        <lightning:select class="size-box-custom" name="Size" value="{!v.selectedSize}" aura:id ="size"
+                                          label="{!v.labelSize}" required="false" onchange="{!c.getResultBySizeFilter}"
+                                          disabled="{!empty(v.selectedColor)}">
+
+                            <option value="All">ALL</option>
+                            <aura:iteration items="{!v.listOfSizes}" var="sz">
+                                <option value="{!sz}">{!sz}</option>
+                            </aura:iteration>
+
+                        </lightning:select>
+                    </div>
+
+                    <!-- Clear all Fields -->
+                    <div class="button-box slds-size_12-of-12 slds-m-bottom_medium ">
+                            <a href="" onclick="{!c.clearAllFields}" >
+                                <strong><u>Clear all Fields</u></strong>
+                            </a>
+                    </div>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+
+        <!-- End of Lower Box -->
+            <aura:set attribute="else" >
+                <lightning:layout>
+                    <lightning:layoutItem size="12"
+                                          smallDeviceSize="12"
+                                          mediumDeviceSize="12"
+                                          largeDeviceSize="12"
+                                          class="slds-p-around_x-small ">
+                        <div class="custom-box">
+                            <div class="dal-box slds-m-bottom_medium">
+
+                                <lightning:select class="" name="Vendor"  required="false"
+                                                  value="{!v.selectedVendor}" aura:id="vendor" label="{!v.labelVendor}"
+                                                  onchange="{!c.getVendorsResult}"  >
+
+                                        <option value="">Select Vendor</option>
+                                    <aura:iteration items="{!v.listOfVendors}" var="ven" >
+                                        <option value="{!ven}">{!ven}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+
+                            </div>
+
+                            <!-- Clear all Fields for Vendors -->
+                            <div class="button-box slds-size_12-of-12 slds-m-bottom_medium ">
+                                <a href="" onclick="{!c.clearAllFieldsForVendors}" >
+                                    <strong><u>Clear all Fields</u></strong>
+                                </a>
+                            </div>
+
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </aura:set>
+
+        </aura:if>
+
+
+
+
+    </div>
+    
+</aura:component>

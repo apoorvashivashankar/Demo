@@ -1,0 +1,7 @@
+<!--
+ - Created by ranja on 09-11-2018.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_InventorySearchCurrentPage">
+    <aura:attribute name="currentPos" type="Integer" />
+</aura:event>

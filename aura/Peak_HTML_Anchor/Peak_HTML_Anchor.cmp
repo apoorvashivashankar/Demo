@@ -1,0 +1,14 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ -->
+
+<aura:component description="Peak_HTML_Anchor" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="anchorName" type="string"/>
+    <aura:attribute name="anchor" type="string"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <section class="peak-component">
+        <aura:unescapedHtml value="{!v.anchor}" />
+    </section>
+</aura:component>

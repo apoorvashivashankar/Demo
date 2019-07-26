@@ -1,0 +1,122 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaCommentsController"
+                implements="force:hasRecordId,force:hasSObjectName"
+                access="global">
+
+	<c:SVNSUMMITS_Include_MomentJS />
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="recordId" type="String" default="{!recordId}" access="global"/>
+	<aura:attribute name="zoneId" type="String" default="" access="global"/>
+	<aura:attribute name="zoneName" type="String" default="" required="true" access="global"/>
+
+	<aura:attribute name="title" type="String" default="{!$Label.c.ss_idea_label_Comments}" access="global"/>
+	<aura:attribute name="likesText" type="String" default="{!$Label.c.ss_idea_label_Points_capitalized}"
+	                access="global"/>
+	<aura:attribute name="numComments" type="Integer" default="50" access="global"/>
+	<aura:attribute name="pointsText" type="String" access="global"/>
+	<aura:attribute name="allowComment" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="allowHtml" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="validity" type="Boolean" default="true"/>
+	<aura:attribute name="userProfileURL" type="String" default="/profile/" access="global"/>
+	<aura:attribute name="comments" type="IdeaComment[]" access="global"/>
+	<aura:attribute name="commentVotesMap" type="Map" access="global"/>
+	<aura:attribute name="totalCommentCount" type="Integer" access="global"/>
+	<aura:attribute name="isValidIdeaId" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="newComment" type="String" default="" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+
+	<!-- UI -->
+	<aura:attribute name="buttonLabel" type="String" default="{!$Label.c.ss_idea_label_AddComment}" access="global"/>
+	<aura:attribute name="labelComment" type="String" default="{!$Label.c.ss_idea_label_Comment}" access="global"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+	<div class="idea-comments">
+		<aura:if isTrue="{!and(v.zoneId != '', v.isValidIdeaId)}">
+			<h3 class="compact-list-header">{!v.title} ({!v.totalCommentCount || 0})</h3>
+			<ul class="slds-list--vertical slds-has-dividers">
+				<aura:iteration items="{!v.comments}" var="comment">
+					<li class="slds-list__item">
+						<div class="slds-media slds-tile">
+							<div class="slds-media__figure">
+								<img class="slds-avatar slds-avatar--circle slds-avatar--medium"
+								     src="{!comment.CreatorSmallPhotoUrl}"/>
+							</div>
+							<div class="slds-media__body">
+								<p class="slds-tile__title slds-truncate">
+									<a href="{!v.sitePath + v.userProfileURL + comment.CreatedById}">
+											{!if(v.isNicknameDisplayEnabled,comment.CreatedBy.CommunityNickname, comment.CreatorName)}
+									</a>
+								</p>
+								<div class="the-comment">
+									<aura:if isTrue="{!comment.IsHtml}">
+										<ui:outputRichText value="{!comment.CommentBody}"/>
+										<aura:set attribute="else">
+											<ui:outputTextArea value="{!comment.CommentBody}"/>
+										</aura:set>
+									</aura:if>
+								</div>
+								<ul class="slds-tile__detail slds-list--horizontal slds-has-dividers slds-text-body--small">
+									<li class="slds-truncate slds-list__item">
+										<!--<ui:outputDateTime value="{!comment.CreatedDate}"/> -->
+										<ui:outputText value="{!comment.fromNow}"/>
+									</li>
+									<li class="slds-truncate slds-list__item">
+											{!comment.UpVotes + ' ' + v.likesText}
+									</li>
+									<li class="slds-truncate slds-list__item">
+										<aura:if isTrue="{!comment.likedByUser}">
+											<a href="javascript:void(0);"
+											   onmouseup="{!c.unlikeComment}"
+											   data-recordid="{!comment.voteByUser.Id}">
+												Unlike
+											</a>
+											<aura:set attribute="else">
+												<a href="javascript:void(0);"
+												   onmouseup="{!c.likeComment}"
+												   data-recordid="{!comment.Id}">
+													Like
+												</a>
+											</aura:set>
+										</aura:if>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+				</aura:iteration>
+			</ul>
+
+			<aura:if isTrue="{!v.allowComment}">
+				<div class="slds-form-element">
+					<div class="slds-form-element__control">
+						<aura:if isTrue="{!v.allowHtml}">
+							<lightning:inputRichText aura:id="richtextComment"
+							                         value="{!v.newComment}"
+							                         placeholder="{!v.labelComment}"
+							                         messageWhenBadInput="{!$Label.c.ss_idea_error_CommentEntry}"
+							                         valid="{!v.validity}"/>
+
+							<aura:set attribute="else">
+								<ui:inputTextArea aura:id="comment"
+								                  class="slds-input"
+								                  label="{!v.labelComment}"
+								                  value="{!v.newComment}"/>
+							</aura:set>
+						</aura:if>
+					</div>
+				</div>
+				<div class="slds-col slds-no-flex slds-align-bottom slds-p-top--small">
+					<div class="slds-button-group" role="group">
+						<ui:button class="slds-button slds-button--neutral"
+						           label="{!v.buttonLabel}"
+						           press="{!c.addNewIdeaComment}"/>
+					</div>
+				</div>
+			</aura:if>
+
+		</aura:if>
+	</div>
+</aura:component>

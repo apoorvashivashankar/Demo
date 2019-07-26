@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 5/24/18.
+ -->
+
+<design:component label="DalTile SSC - Schedule Pickups and Deliveries Header">
+    <design:attribute name="title" label="Title" />
+</design:component>

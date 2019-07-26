@@ -1,0 +1,64 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+	<div class="link-groups">
+        
+<div class="link-group">
+	<h3 class="substantial-icon"><a href="http://products.daltile.com/literature.cfm"><span class="catalog icon"></span>Literature</a></h3>
+</div> <!-- .link-group -->
+
+<div class="link-group">
+	<h3>What's New<span class="whats-new icon"></span></h3>
+	<ul>
+    
+<li><a href="http://www.daltile.com/inspiration-and-diy/kitchens/trends-in-contemporary-kitchens-increased-function-and-more">
+    Contemporary Kitchens<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/2015-insiders-tile-trends-forecast">
+    2016 Tile Trends<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/2015-kitchen-trends">
+    2016 Kitchen Trends<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/bathrooms/2015-bathroom-trends">
+    2016 Bathroom Trends<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/backsplash-ideas/need-ideas-for-your-mosaic-tile-backsplash">
+    Mosaic Backsplash Designs<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/the-zen-of-bathroom-remodels">
+    Bathroom Design Ideas<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/backsplash-ideas/functional-and-gorgeous-backsplash-ideas">
+    Backsplash Design Ideas<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/countertops/natural-quartzite-faq">
+    Natural Quartzite FAQ<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/wood-look-tile/4-benefits-of-wood-looking-tile">
+    Wood Look Tile Benefits<span class="icon"></span></a></li> 
+	</ul>
+</div> <!-- .link-group -->
+
+<div class="link-group">
+	<h3>Quick Links<span class="quick-links icon"></span></h3>
+	<ul> 
+       
+<li><a href="http://www.daltile.com/inspired/tools/virtual-catalogs">
+    Virtual Catalogs<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/tile-trends/3-Trendy-Tile-Tips-for-2015">
+    3 Trendy 2016 Tile Tips<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/subway-tile/white-subway-tile">
+    White Subway Tile<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/subway-tile/subway-tile-backsplash">
+    Subway Tile Backsplashes<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/wood-look-tile-flooring">
+    Wood Look Tile Flooring <span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/bathrooms/Tips-for-Your-Bathroom-Makeover-Making-the-Most-of-a-Small-Space">
+    Bathroom Makeover Ideas<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/kitchens/Stay-on-Trend-With-Your-Kitchen-Remodel-Using-Popular-Colors-and-Tiles">
+    Kitchen Remodel Trends<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/wood-look-tile/reclaimed-wood-tile">
+    Reclaimed Wood Look<span class="icon"></span></a></li> 
+<li><a href="http://www.daltile.com/inspiration-and-diy/backsplash-ideas/backsplash-ideas-to-help-create-your-dream-kitchen">
+    Kitchen Backsplash Ideas<span class="icon"></span></a></li> 
+	</ul>
+</div> <!-- .link-group -->
+						
+
+<div class="link-group">
+	<h3 class="substantial-icon"><a href="http://products.daltile.com"><span class="samples icon"></span>Samples</a></h3>
+</div> <!-- .link-group -->
+			
+		</div>
+</aura:component>

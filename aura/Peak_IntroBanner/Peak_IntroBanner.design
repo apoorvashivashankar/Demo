@@ -1,0 +1,29 @@
+<!--
+ - Created by michaelsullivan on 4/28/17.
+ -->
+<design:component label="7S Intro Banner">
+    <design:attribute name="customTileClass" label="Custom Class" description="Enter custom class(or classes separated by space)"/>
+    <design:attribute name="backgroundColor" label="Background Color"   description="Enter a valid web color"/>
+    <design:attribute name="backgroundImage"  label="Banner Background Image" description="(Optional) Enter a full image path"/>
+    <design:attribute name="fixed" label="Fixed Background?"   description="Fix the background image for a scrolling effect"/>
+
+    <design:attribute name="overlayColor" label="Overlay Color"   description="Enter a valid web color"/>
+    <design:attribute name="overlayOpacity" label="Overlay Opacity"   description="0 is transparent, .9 is almost solid" datasource="0,.1,.2,.3,.4,.5,.6,.7,.8,.9"/>
+
+    <design:attribute name="bannerTextColor" label="Banner Text Color" description="Enter a valid web color"/>
+    <design:attribute name="headlineText" label="Banner headline" description="Enter the headline H1 text" />
+    <design:attribute name="headlineParagraph" label="Banner Top Paragraph" description="Enter the paragraph text" />
+    <design:attribute name="rightColHTML" label="Right Column HTML" description="Enter HTML" />
+    <design:attribute name="showButton" label="Show CTA Button?" description="Button shown if checked"/>
+    <design:attribute name="ctaButtonUrl" label="CTA Button URL" description="Enter relative or full (including http://) URL" />
+    <design:attribute name="useThemeButton" label="Use Theme Button colors?" description="Button will use theme colors if checked"/>
+    <design:attribute name="ctaDarkText" label="Dark Text?" description="Check to use Dark text (only if Use Theme Button checked)" />
+    <design:attribute name="ctaButtonText" label="CTA Button Text" description="Enter Button Text" />
+    <design:attribute name="customButtonBackgroundColor" label="Custom Background Color" description="If not using theme colors, enter a valid web color"/>
+    <design:attribute name="customButtonTextColor" label="Custom Text Color" description="If not using theme colors, enter a valid web color"/>
+    <design:attribute name="youTubeEmbedID" label="youTube Embed ID" description="Enter a youTube Embed ID" />
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+
+</design:component>

@@ -1,0 +1,10 @@
+<!--
+ - Created by presh on 21-11-2018.
+ -->
+<design:component label="Dal SSC MyLead Search">
+        <design:attribute name="listType" label="List Type" datasource="Open, New, Working-Opened, Working-Contacted"/>
+        <design:attribute name="communityType" label="Community Type" datasource="Distributor, SSC"/>
+        <design:attribute name="hasPagination" label="Enable Pagination" />
+        <design:attribute name="paginationItemsPerPage" label="Number of Items Per Page" />
+        <design:attribute name="listMaximum" label="Maximum number of records retrieved" />
+</design:component>

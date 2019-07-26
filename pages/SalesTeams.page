@@ -1,0 +1,5 @@
+<apex:page >
+  
+   <apex:enhancedList type="UserTeamMember" height="350"/>
+  
+</apex:page>

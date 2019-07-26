@@ -1,0 +1,71 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS .slds-container_x-large {
+  max-width: 1140px;
+}
+@media (max-width: 47.9375em) {
+  .THIS .dal_top,
+  .THIS.dal_middle {
+    padding: token(spacingSmall);
+  }
+}
+.THIS.dal_lead-banner {
+  background: #eeeeee;
+}
+@media (max-width: 30em){
+  .THIS .forceCommunityTabset.uiTabset .uiTabBar .uiTabItem{
+    max-width: 120px;
+    min-width: 80px;
+    margin: 0 .15rem;
+    text-align: left;
+    text-transform: none;
+    border: 1px solid #f1f2f3;
+    border-bottom: 0;
+    background-color: #f1f2f3;
+    padding: 0 .25rem;
+  }
+  .THIS .forceCommunityTabset .uiTabBar .uiTabItem .tabHeader{
+    display: block;
+    font-size: 0.725rem !important;
+  }
+  .THIS li.tabs__item .uiTabOverflowMenuItem{
+    display: none
+  }
+}
+ 
+.THIS .forceActionsContainer {
+    display: none;
+}
+
+.THIS .forceVirtualAction {
+    display: none;
+}
+
+.THIS .inlineEditTooltipButton {
+    display: none;
+}
+
+.THIS .forceInlineEditButton {
+    display: none;
+} 
+
+.THIS .forceChartButton {
+    display: none;
+}
+
+.THIS .forceFilterButton {
+    display: none;
+}
+
+.THIS .forceListViewManagerDisplaySwitcher {
+    display: none;
+}
+
+.THIS .forceListViewSettingsMenu  {
+    display: none;
+}

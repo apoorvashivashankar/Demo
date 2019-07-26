@@ -1,0 +1,41 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  position: relative;
+  width: 100%;
+ 
+}
+.THIS .selectButton,
+.THIS .slds-dropdown {
+  color: #231f20 !important;
+}
+.THIS .selectButton svg,
+.THIS .slds-dropdown svg {
+  fill: #231f20 !important;
+}
+.THIS .selectButton svg {
+  width: .8em!important;
+  height: .8em!important;
+  margin-left: token(spacingXSmall);
+}
+.THIS .icon {
+  padding-right: .5rem;
+}
+@media (min-width: 40.0625em) {
+  .THIS {
+    max-width: 100%;
+  }
+}
+.THIS .slds-dropdown {
+      top: 36px;
+  max-width: none;
+}
+.THIS .slds-dropdown svg {
+  width: 1rem!important;
+  height: 1rem!important;
+}

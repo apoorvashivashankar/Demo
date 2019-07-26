@@ -1,0 +1,14 @@
+.THIS.slds-section-title--divider {
+    background-color: rgba(0, 0, 186, 0.5)!important;
+    line-height: 1 !important;
+    font-size: 1rem !important;
+    color:white;
+}
+
+.THIS .label-hidden label {
+    display: none;
+}
+
+.THIS .slds-form-element__control {
+    padding-left: 0%;   
+}

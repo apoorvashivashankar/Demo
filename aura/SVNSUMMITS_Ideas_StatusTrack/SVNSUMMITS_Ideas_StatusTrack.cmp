@@ -1,0 +1,51 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaViewController"
+                implements="force:appHostable,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                extends="c:SVNSUMMITS_Ideas_Base"
+                access="global">
+
+	<ltng:require scripts="{!$Resource.jquery_2_2_4}"
+	              afterScriptsLoaded="{!c.afterScriptsLoaded}"/>
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+
+	<!-- Property Editor-->
+	<aura:attribute name="zoneName" default="" type="String" required="true" access="global"/>
+
+	<aura:attribute name="recordId" type="String" default="{!recordId}" access="global"/>
+	<aura:attribute name="idea" type="Idea" access="global"/>
+	<aura:attribute name="sObjectName" type="String" access="global"/> <!-- doesn't work :/ -->
+
+	<aura:attribute name="zoneId" type="String" default="" access="global"/>
+	<aura:attribute name="statusSet" type="Set" access="global"/>
+	<aura:attribute name="currentStep" type="Integer" default="1" access="global"/>
+	<aura:attribute name="intCountWidth" type="Integer" access="global"/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_BaseReady" action="{!c.doInit}"/>
+
+	<aura:if isTrue="{!and(v.idea.Id, v.zoneId != '')}">
+		<div class="slds">
+			<div>
+				<h3 class="compact-list-header header-title">{!$Label.c.ss_idea_label_Status}</h3>
+			</div>
+
+			<div class="slds-wizard" role="navigation">
+				<ol class="slds-wizard__list">
+					<aura:iteration items="{!v.statusSet}" var="status" indexVar="step">
+						<li class="{!'slds-wizard__item' + if ((step + 1) lt v.currentStep, ' slds-is-active', (if ((step + 1) == v.currentStep, ' slds-is-active', ' ') ) )}">
+                            <span class="slds-wizard__link">
+                                <span class="slds-wizard__marker"></span>
+                                <span class="slds-wizard__label slds-text-heading--label slds-truncate">{!status}</span>
+                            </span>
+						</li>
+					</aura:iteration>
+				</ol>
+
+				<span class="slds-wizard__progress" style="z-index: 0;">
+                    <span class="slds-wizard__progress-bar" style="{!'width:'+v.intCountWidth+'%; z-index: 0;'}"></span>
+                </span>
+			</div>
+		</div>
+	</aura:if>
+</aura:component>

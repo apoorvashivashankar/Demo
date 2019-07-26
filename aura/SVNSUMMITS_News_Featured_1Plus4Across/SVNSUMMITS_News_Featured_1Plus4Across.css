@@ -1,0 +1,140 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .buttonText{
+    color:grey!important;
+}
+.THIS.slds-grid{
+    clear:both!important
+}
+.THIS .badgeFix1 {
+    position:absolute;
+    text-align:center!important;
+    z-index:100;
+    margin-left:-15px!important;
+}
+
+.THIS.ftileWithoutAttchmentGreyBlock {
+    width:100%!important
+}
+
+.THIS.ftileWithoutAttchment {
+    width:100%!important
+}
+
+.THIS .ax-shape {
+    font-weight: 200;
+    font-style: normal;
+    font-size: 14px;
+    color: #333333;
+    line-height:
+    normal;
+    position:absolute;
+}
+
+.THIS #u39 {
+    position: absolute;
+    left: 0px;
+    top: 280px;
+    width: 150px;
+    height: 30px;
+    font-size: 12px;
+    color: #FFFFFF;
+    text-align: center!important;
+}
+
+/*.THIS #u40 {position: absolute; left: 10px;top: 8px; width: 130px; white-space:nowrap; left:0; top: 6px; transform-origin: 65px 9px 0px;background-color: grey;z-index:50;}*/
+.THIS #u40 {
+    position: relative!important;
+    left: -6px;
+    top: 8px;
+    min-width: 130px!important;
+    padding: 0 5px;
+    text-align: center!important;
+    background-color: grey;
+}
+.THIS .whiteColor {
+    color:#fff!important;
+}
+
+/* updated 17052016 @ 12.47pm onwards */
+.THIS .ftileWithoutAttchmentGreyBlock{height:40px!important;}
+
+.THIS .spanTime img{margin-top:-2px!important;}
+
+.THIS .textNews{width:100%!important;}
+
+.THIS .textNewsWithoutAttachment, .THIS .textNews{margin-top:15px!important; line-height:20px!important; margin-bottom:5px!important;}
+
+.THIS .topicButtonDesign {
+    border-radius: 11px!important;
+    background: #FBF7F7!important;
+    height: 22px!important;
+    color: #666666!important;
+    line-height: 20px!important;
+    text-transform: uppercase!important;
+    margin-top: -9%!important;
+    font-size: 11px!important;
+    padding-left: 12px!important;
+    padding-right: 12px!important;
+    border-color: #fbf7f7!important;
+}
+
+.THIS .btnPillFix {border: 1px solid #005fb2!important; background: #fff!important;}
+
+.THIS .btnPillFix a {color: #005fb2!important;}
+
+.THIS .textLink{color:#4183c4!important;}
+
+.THIS .ftileWithoutAttchment{margin-bottom:5px!important; height:auto!important; min-height:183px!important;}
+
+.THIS .vstretch {
+    -webkit-align-items: stretch!important;
+    -ms-flex-align: stretch!important;
+    -ms-grid-row-align: stretch!important;
+    align-items: stretch!important;
+    -webkit-align-content: stretch!important;
+    -ms-flex-line-pack: stretch!important;
+    align-content: stretch!important;
+}
+
+.THIS .ftileWithoutAttchmentGreyBlock1 {
+    width: 98%!important;
+    height: 40px!important;
+    background: #c7c7c7!important;
+}
+.THIS .topicButtonDisplay{
+    padding: 10px 10px 3% 0%!important;
+    float:right!important;
+}
+.THIS .pillFix{margin-top:-40px!important;}
+.THIS .ftextNewsWithoutAttachment{width:100%!important; margin-top:15px!important;}
+
+.THIS .ftextNews{width:100%!important;}
+
+.THIS .fimgStyle1{width:99%!important;}
+.THIS .ftileWithAttchment1 {width:99%!important;}
+.THIS .ftileWithoutAttchmentGreyBlock1 {width:98%!important;}
+.THIS .ftileWithoutAttchment1{width:98%!important;}
+.THIS .topicButtonDisplay, .THIS .fsmallTextTime{width:auto!important;}
+.THIS .fsmallTextTime span a{word-break: break-all!important;}
+.THIS .textNewsWithoutAttachment{width:100%!important;}
+
+.THIS .pRelative{position:relative!important;}
+@media only screen and (min-width:1024px) and (max-width:1024px)
+{
+    .THIS .ftileWithoutAttchment{height:auto!important; min-height:167px!important;}
+}
+
+@media only screen and (min-width:768px) and (max-width:773px)
+{
+    .THIS .ftileWithoutAttchment{height:auto!important; min-height:150px!important;}
+    .THIS .ftileWithAttchment{height:auto!important; min-height:175px!important;}
+}
+@media only screen and (max-width:767px){
+    .THIS .fimgStyle1{height:auto!important;}
+}
+
+@media only screen and (max-width:480px)
+{
+    .THIS.ftileWithoutAttchmentGreyBlock{width:auto!important}
+    .THIS.ftileWithoutAttchment{width:auto!important}
+}

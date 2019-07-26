@@ -1,0 +1,14 @@
+<!--
+ - Created by 7Summits on 5/10/18.
+ -->
+
+<aura:component description="Dal_SSC_ScheduleByLineItemSched">
+    <!-- passed in attributes -->
+    <aura:attribute name="store" type="Map" default="{}"/>
+
+    <c:Dal_SSC_ScheduleByLineItemSchedDel />
+
+    <div style="display: none">
+        <c:Dal_SSC_ScheduleByLineItemSchedPick />
+    </div>
+</aura:component>

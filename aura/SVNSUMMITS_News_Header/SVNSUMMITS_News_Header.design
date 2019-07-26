@@ -1,0 +1,18 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S News Banner">
+	<design:attribute name="debugMode"
+	                  label="Debug Mode"
+	                  description="Enable or disable debug mode, enabling debug mode will write messages to the browser console for debugging errors"/>
+	<design:attribute name="titleText"
+	                  label="Title"
+	                  description="Enter the title to display in header"/>
+	<design:attribute name="createNewsURL"
+	                  label="Create News Item URL"
+	                  description="Relative url to the create new item page"/>
+	<design:attribute name="newNewsLabel"
+	                  label="Add New Button text"
+	                  description="New item button text"/>
+	<design:attribute name="showNumberOfNews"
+	                  label="Display Number of News"
+	                  description="Enable or disable to display Number of News"/>
+</design:component>

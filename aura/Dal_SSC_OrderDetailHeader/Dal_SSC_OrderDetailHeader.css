@@ -1,0 +1,75 @@
+/**
+* Created by Preshit on 21-02-2019.
+*/
+@media only screen 
+    and (min-width : 375px) 
+    and (max-width : 812px) 
+    and (orientation: landscape){
+	.THIS .cancelButton{
+        width: 25% !important;
+        padding: 0rem !important;
+    }
+    .THIS .scheduleButton{
+        width: 30% !important;
+         padding: 0rem !important;
+    }
+    .THIS .printButton{
+        width: 13% !important;
+        padding: 0rem !important;
+    }
+    .THIS .deliverytButton{
+        width: 32% !important;
+         padding: 0rem !important;
+    }.THIS .layoutClass{
+        text-align :  center;
+        width:100%;
+    }
+}
+@media (max-width: 768px) and (orientation: portrait) {    .THIS .button-full-width{
+        width: 75% !important;
+        padding: 0rem !important;
+       }.THIS .layoutClass{
+        text-align :  center;
+    }
+}
+@media (max-width: 768px) and (orientation: landscape) {   
+    .THIS .cancelButton{
+        width: 34% !important;
+        padding: 0rem !important;
+    }
+    .THIS .scheduleButton{
+        width: 40% !important;
+         padding: 0rem !important;
+    }
+    .THIS .printButton{
+        width: 18% !important;
+        padding: 0rem !important;
+    }
+    .THIS .deliverytButton{
+        width: 40% !important;
+         padding: 0rem !important;
+    }.THIS .layoutClass{
+        text-align :  center;
+    }
+}
+@media (max-width: 1366px) and (min-width: 1024px) {    
+    .THIS .cancelButton{
+        width: 34% !important;
+        padding: 0rem !important;
+    }
+    .THIS .scheduleButton{
+        width: 38% !important;
+         padding: 0rem !important;
+    }
+    .THIS .printButton{
+        width: 20% !important;
+        padding: 0rem !important;
+    }
+    .THIS .deliverytButton{
+        width: 58% !important;
+         padding: 0rem !important;
+    }
+}
+.THIS .orderButtons{
+    white-space:nowrap;
+}

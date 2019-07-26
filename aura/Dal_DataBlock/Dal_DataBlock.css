@@ -1,0 +1,95 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  position: relative;
+  overflow: hidden;
+  min-height: 124px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.19);
+}
+.THIS .headerLabel,
+.THIS .label,
+.THIS a {
+  color: token(colorTextLabel);
+}
+.THIS .headerLabel,
+.THIS a {
+  font-size: .75rem;
+  min-height: 20px;
+}
+.THIS .value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1.15em;
+  color: token(colorTextBrand);
+}
+.THIS .value.value-large {
+  font-size: 3rem;
+  font-weight: normal;
+}
+@media (min-width: 64.0625em) {
+  .THIS .value {
+    font-size: 1.4rem;
+    word-wrap: break-word;
+  }
+}
+.THIS .dal-dataBlockContent {
+  z-index: 1;
+}
+.THIS .bottomCta {
+  min-width: 100px;
+  margin: 0 -0.75rem;
+  padding: .5rem .75rem 0;
+  border-top: 1px solid #f1f2f3;
+  flex: 1;
+}
+.THIS .bkg-icon {
+  position: absolute;
+  z-index: 0;
+  top: 18px;
+  right: -3px;
+}
+.THIS .bkg-icon.icon-custom {
+  top: 4px;
+  right: -20px;
+}
+.THIS .bkg-icon.icon-custom svg {
+  width: 90px;
+  height: 90px;
+}
+.THIS .bkg-icon svg {
+  width: 60px;
+  height: 60px;
+  background-color: #ffffff;
+  fill: #f1f2f3;
+}
+@media (min-width: 48em) and (max-width: 1088px) {
+  .THIS .value {
+    font-size: 1.2rem;
+  }
+  .THIS .label {
+    font-size: .79rem !important;
+  }
+}
+.THIS .label {
+  font-size: .75rem;
+  text-transform: uppercase;
+}
+.THIS a .labelIcon svg {
+  width: .9em;
+  height: .9em;
+  padding-left: 2px;
+  fill: token(colorTextLabel);
+}
+.THIS.innerComponent-active {
+  position: relative;
+  top: .75rem;
+  margin-top: -0.75rem;
+  padding-bottom: 1rem;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.19);
+}

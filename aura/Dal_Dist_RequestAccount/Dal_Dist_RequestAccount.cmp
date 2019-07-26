@@ -1,0 +1,80 @@
+<!--
+ - Created by 7Summits on 2/27/18.
+ -->
+<aura:component description="Dal_Dist_RequestAccount" extends="c:Dal_Dist_FormModalBase" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <aura:set attribute="title" value="Distributor Portal" />
+    <aura:set attribute="subtitle" value="Register for an Account" />
+    <aura:set attribute="description" value="Fill out the information below with your Dal-Tile Distributor
+        information. A service rep will create your account within 2 business days. You may be contacted during this
+        time with any questions or clarifications needed. All fields are required unless noted." />
+
+    <!-- private variables -->
+    <aura:attribute name="states" type="List" default="[]"/>
+
+    <lightning:layout class="slds-p-vertical_medium" multipleRows="true">
+
+        <!-- Form left column -->
+        <lightning:layoutItem class="slds-p-horizontal_medium" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+            <div class="slds-form slds-form_stacked">
+                <h4>Contact Information</h4>
+                <lightning:input aura:id="name" name="name" label="Name" type="text" class="slds-p-vertical_x-small" maxlength="50" />
+                <lightning:select aura:id="role" name="role" label="Role" class="slds-p-vertical_x-small">
+                    <option value=""></option>
+                    <option value="1">Role 1</option>
+                    <option value="2">Role 2</option>
+                </lightning:select>
+                <lightning:input aura:id="email" name="email" label="Email Address" type="email" class="slds-p-vertical_x-small" maxlength="50" />
+                <lightning:input aura:id="phone" name="phone" label="Phone Number" type="text" class="slds-p-vertical_x-small" maxlength="10"
+                                 pattern="[0-9]{10}" messageWhenPatternMismatch="Enter 10 digit phone number, no special characters" />
+                <lightning:input aura:id="phoneMobile" name="phoneMobile" label="Mobile Phone Number" type="text" class="slds-p-vertical_x-small" maxlength="10"
+                                 pattern="[0-9]{10}" messageWhenPatternMismatch="Enter 10 digit phone number, no special characters"/>
+                <lightning:input aura:id="sendNotifications" type="checkbox" label="Send me account-related notifications via SMS text." name="sendNotifications" class="slds-p-vertical_x-small" />
+            </div>
+        </lightning:layoutItem>
+        <!-- End Form left column -->
+
+        <!-- Form right column -->
+        <lightning:layoutItem class="slds-p-horizontal_medium" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+            <div class="slds-form slds-form_stacked">
+                <h4>Company Information</h4>
+
+                <lightning:input aura:id="companyName" name="companyName" label="Company Name" type="text" class="slds-p-vertical_x-small" maxlength="50"/>
+                <lightning:input aura:id="companyAddressStreet" name="companyAddressStreet" label="Street Address" type="text" class="slds-p-vertical_x-small" maxlength="75"/>
+
+                <lightning:layout pullToBoundary="small" multipleRows="true">
+                    <lightning:layoutItem size="6" class="slds-p-horizontal_small">
+                        <lightning:input aura:id="companyAddressCity" name="companyAddressCity" label="City" type="text" class="slds-p-vertical_x-small" maxlength="50" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="3" class="slds-p-horizontal_small">
+                        <lightning:select aura:id="companyAddressState" name="companyAddressState" label="State" class="slds-p-vertical_x-small">
+                            <option value=""></option>
+                            <aura:iteration items="{!v.states}" var="item">
+                                <option value="{!item.value}">{!item.label}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="3" class="slds-p-horizontal_small">
+                        <lightning:input aura:id="companyAddressZipCode" name="companyAddressZipCode" label="Zip Code" type="text" class="slds-p-vertical_x-small" maxlength="5"
+                                         pattern="[0-9]{5}" messageWhenPatternMismatch="Enter valid 5 digit zip code"/>
+                    </lightning:layoutItem>
+                </lightning:layout>
+
+                <lightning:input aura:id="dalAccountNumber" name="dalAccountNumber" label="Dal-Tile Account # (optional)" type="text" class="slds-p-vertical_x-small" maxlength="25" />
+
+                <lightning:input aura:id="requestCashAccount" type="checkbox" label="I am requesting a cash account for ordering" name="requestCashAccount" class="slds-p-top_x-small" />
+                <p class="desc slds-p-top_x-small slds-text-color_weak slds-p-left_large">A cash account allows you to […]. Most distributors use a credit account, but you may choose this if […]</p>
+            </div>
+        </lightning:layoutItem>
+        <!-- End Form right column -->
+
+    </lightning:layout>
+
+    <lightning:layout class="slds-p-around_medium" horizontalAlign="end">
+        <lightning:layoutItem >
+            <lightning:button variant="brand" label="Request Account" onclick="{! c.handleSubmit }" />
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

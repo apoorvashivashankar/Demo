@@ -1,0 +1,20 @@
+<!--
+ - Edited by Joe Callin on 8/12/2017.
+ -->
+<aura:component extensible="true" controller="Peak_BaseController" >
+    <aura:attribute name="sitePrefix" type="String" access="global"/>
+    <aura:attribute name="isGuest" type="Boolean" access="global"/>
+    <aura:attribute name="isGuestInit" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="labelText" type="String" access="global"/>
+    <aura:attribute name="label" type="String" access="global"/>
+
+    <aura:handler name="init" action="{!c.initPeakBase}" value="{!this}"/>
+    <aura:handler name="labelUtilEvent" event="c:Peak_LabelUtilEvent" action="{!c.handleLabelUtilEvent}"/>
+
+    <aura:if isTrue="{!v.labelText != undefined}">
+        <aura:unescapedHtml value="{!v.label}"/>
+        <aura:set attribute="else">
+                {!v.body}
+        </aura:set>
+    </aura:if>
+</aura:component>

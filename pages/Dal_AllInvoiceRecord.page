@@ -1,0 +1,1 @@
+<apex:page controller="Dal_InvoiceController" sidebar="false"  cache="true" showHeader="true" contentType="text/csv#AllInvoiceExport.csv">{!csvText}</apex:page>

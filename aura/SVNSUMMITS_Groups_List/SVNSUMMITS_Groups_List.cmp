@@ -1,0 +1,136 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_GroupsController"
+                access="global"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+	<ltng:require scripts="{!join(',',
+					$Resource.MomentJS,
+					$Resource.SVNSUMMITS_LightningSlider + '/light-slider/light-slider/js/jquery.min.js')}"
+			afterScriptsLoaded="{!c.doInit}"/>
+
+	<aura:registerEvent type="c:SVNSUMMITS_Groups_Header_Event" name="appEvent"/>
+
+	<aura:handler event="c:SVNSUMMITS_Groups_SortBy_Event" action="{!c.setSortBy}"/>
+	<aura:handler event="c:SVNSUMMITS_Groups_Filters_Event" action="{!c.setGroupsFilters}"/>
+	<aura:handler event="c:SVNSUMMITS_Groups_Load_Event" action="{!c.doInit}"/>
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="strError" type="String[]" access="global"/>
+	<aura:attribute name="showAuthor" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showGroupType" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showLastActive" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showJoinButton" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showBackgroundImage" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="descriptionLines" type="String" default="2" access="global"/>
+	<aura:attribute name="paginationPosition" type="String" default="Bottom" access="global"/>
+
+	<aura:attribute name="groupsListWrapper" type="SVNSUMMITS_WrapperGroups" access="global"/>
+	<aura:attribute name="displayMode" type="String" access="global"/>
+	<aura:attribute name="profileURL" type="String" default="/profile/" access="global"/>
+	<aura:attribute name="groupsURL" type="String" default="" access="global"/>
+	<aura:attribute name="numberOfGroups" type="Integer" default="12" required="true" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="sitePrefix" type="String" access="global"/>
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="sortBy" type="String" default="Latest Group Activity" access="global"/>
+	<aura:attribute name="searchMyGroups" type="String" default="" access="global"/>
+	<aura:attribute name="searchString" type="String" default="" access="global"/>
+	<aura:attribute name="customClass" type="String" default="" access="global"/>
+	<aura:attribute name="customId" type="String" default="" access="global"/>
+
+	<lightning:layout multipleRows="true">
+
+		<aura:if isTrue="{! or(v.paginationPosition == 'Top', v.paginationPosition == 'Both')}">
+			<lightning:layoutItem size="12"
+			                      class="slds-p-top--medium">
+				<lightning:layout multipleRows="false"
+				                  verticalAlign="start"
+				                  horizontalAlign="end">
+					<lightning:layoutItem class="slds-badge slds-theme--default slds-p-around--small">
+					{!$Label.c.ss_grp_label_Page}
+						&nbsp;{!v.groupsListWrapper.pageNumber}&nbsp;/&nbsp;{!v.groupsListWrapper.totalPages}
+					</lightning:layoutItem>
+
+					<lightning:layoutItem class="slds-x-small-buttons--horizontal slds-p-bottom--medium">
+						<lightning:button name="prevPage"
+						                  variant="brand"
+						                  label="{!$Label.c.ss_grp_button_Previous}"
+						                  disabled="{! !v.groupsListWrapper.hasPreviousSet}"
+						                  onclick="{!c.getPreviousPage}"/>
+
+						<lightning:button name="nextPage"
+						                  variant="brand"
+						                  label="{!$Label.c.ss_grp_button_next}"
+						                  disabled="{! !v.groupsListWrapper.hasNextSet}"
+						                  onclick="{!c.getNextPage}"/>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</lightning:layoutItem>
+		</aura:if>
+
+		<lightning:spinner size="small"
+		                   variant="brand"
+		                   class="slds-hide"
+		                   aura:id="listSpinner"
+		                   alternativeText="Loading..."/>
+
+		<lightning:layoutItem size="12">
+			<lightning:layout multipleRows="true"
+			                  verticalAlign="stretch"
+			                  horizontalAlign="spread">
+				<aura:iteration items="{!v.groupsListWrapper.groupsList}"
+				                var="currentGroup">
+					<lightning:layoutItem padding="around-small"
+					                      size="12"
+					                      largeDeviceSize="4"
+					                      mediumDeviceSize="6"
+					                      smallDeviceSize="12">
+						<c:SVNSUMMITS_Groups_Tile wrapperGroupsObj="{!v.groupsListWrapper}"
+						                          group="{!currentGroup}"
+						                          profileURL="{!v.profileURL}"
+						                          groupsURL="{!v.groupsURL}"
+						                          isNicknameDisplayEnabled="{!v.isNicknameDisplayEnabled}"
+						                          showAuthor="{!v.showAuthor}"
+						                          showGroupType="{!v.showGroupType}"
+						                          showLastActive="{!v.showLastActive}"
+						                          showJoinButton="{!v.showJoinButton}"
+						                          showBackgroundImage="{!v.showBackgroundImage}"
+						                          descriptionLines="{!v.descriptionLines}"
+						                          customClass="{!v.customClass}"
+						                          customId="{!v.customId}"
+						                          debugMode="{!v.debugMode}"/>
+					</lightning:layoutItem>
+				</aura:iteration>
+			</lightning:layout>
+		</lightning:layoutItem>
+
+		<!-- Pagination -->
+		<aura:if isTrue="{! or(v.paginationPosition == 'Bottom', v.paginationPosition == 'Both')}">
+			<lightning:layoutItem size="12"
+			                      class="slds-p-top--medium">
+				<lightning:layout multipleRows="false"
+				                  verticalAlign="start"
+				                  horizontalAlign="end">
+					<lightning:layoutItem class="slds-badge slds-theme--default slds-p-around--small">
+					{!$Label.c.ss_grp_label_Page}
+						&nbsp;{!v.groupsListWrapper.pageNumber}&nbsp;/&nbsp;{!v.groupsListWrapper.totalPages}
+					</lightning:layoutItem>
+
+					<lightning:layoutItem class="slds-x-small-buttons--horizontal slds-p-bottom--medium">
+						<lightning:button name="prevPage"
+						                  variant="brand"
+						                  label="{!$Label.c.ss_grp_button_Previous}"
+						                  disabled="{! !v.groupsListWrapper.hasPreviousSet}"
+						                  onclick="{!c.getPreviousPage}"/>
+
+						<lightning:button name="nextPage"
+						                  variant="brand"
+						                  label="{!$Label.c.ss_grp_button_next}"
+						                  disabled="{! !v.groupsListWrapper.hasNextSet}"
+						                  onclick="{!c.getNextPage}"/>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</lightning:layoutItem>
+		</aura:if>
+	</lightning:layout>
+</aura:component>

@@ -1,0 +1,1007 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="true" lightningStylesheets="true"  Controller="GalleryKioskController" id="thePage" docType="html-5.0" applyHTmlTag="false">
+
+<apex:includeScript value="{!URLFOR($Resource.JQDateTime, '/datetimepicker-master/jquery.js')}"/>
+<header>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</header>
+<apex:includeScript value="{!URLFOR($Resource.BSDateTime, '/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js')}"/>
+<apex:includeScript value="{!$Resource.cleave}"/>
+<apex:includeScript value="{!$Resource.phoneFormatter}"/>
+
+<script  type="text/javascript" >
+  var leadId;
+  var appointmentId;
+  var visitorFirstName;
+  var visitorPhone;
+  var errorMessage;
+  var recordsSize;
+  var $ = jQuery.noConflict();
+  var inputDateTime;
+  var newGalleryConsultant;
+
+  $(document).ready(function() {
+  
+    console.log('jquery v: ' + $.fn.jquery);
+      var getBootstrapVersion = function () {
+      var deferred = $.Deferred();
+    
+      var script = $('script[src*="bootstrap"]');
+      if (script.length == 0) {
+        return deferred.reject();
+      }
+    
+      var src = script.attr('src');
+      $.get(src).done(function(response) {
+        var matches = response.match(/(?!v)([.\d]+[.\d])/);
+        if (matches && matches.length > 0) {
+          version = matches[0];
+          deferred.resolve(version);
+        }
+      });
+    
+      return deferred;
+    };
+    
+    getBootstrapVersion().done(function(version) {
+      console.log('bootstrap v: ' + version); // '3.3.4'
+    });          
+    //search button click
+    $('#searchCon').click(function(){   
+      console.log('search clicked: ');
+      $('#thumRow').empty();
+      fetchContact();
+    });
+    
+    //Save button click       
+    $('#saveContact').click(function(){ 
+      console.log('saveContact + inputFirstName: ' + $('#inputFirstName').val());
+      if ( $('#inputFirstName').val( ) == '' ) {
+          str = 'Please enter a First Name'
+          document.getElementById('textError').innerHTML = str;   
+          console.log('error: ' + str);               
+          $('#modalConfirm').modal('hide')
+          $('#modalError').modal('show')
+      } else if ( $('#inputLastName').val() == '' ) {
+          str = 'Please enter a Last Name'
+          document.getElementById('textError').innerHTML = str;   
+          console.log('error: ' + str);               
+          $('#modalConfirm').modal('hide')
+          $('#modalError').modal('show')
+      } else {
+          $('#modalNewVisitor').modal('hide');   
+          $('#modalConfirm').modal('show');        
+          createLead();            
+      }     
+    });
+    
+    //Delete button click    
+    $('#delete').click(function(){ 
+      var delCon = new SObjectModel.cont({
+                    Id : $('#inputId').val()
+                    });
+      $('.bs-example-modal-sm').modal('hide');     
+      delCon.del(updateCallback);
+    });
+    
+    //New Contact button click    
+    $('#new').click(function(){ 
+      clearfieldValues();
+    });
+        
+    $('#date').datetimepicker({
+        defaultDate: new Date()
+    });
+
+  }); 
+  
+  //Function to clear filed values in the form      
+  function clearfieldValues(){
+    $('#inputFirstName').val(''); 
+    $('#inputLastName').val(''); 
+    $('#inputTitle').val('');    
+    $('#inputPhone').val('');
+    $('#inputEmail').val('');
+    $('#inputId').val('');        
+    $('#inputphone').val('');
+    $('#inputDateTime').val('');
+    
+  }
+
+    function noenter(e){               
+        if(window.event){                    
+            key = window.event.keyCode;     //IE               
+        } else {                    
+            key = e.which;     //firefox               
+        }               
+        if(key == 13) {   
+          console.log('hit the enter key...');
+        fetchContact();
+            return false;               
+        } else{                    
+            return true;               
+        }          
+    }    
+    
+    function noenterLead(e){               
+        if(window.event){                    
+            key = window.event.keyCode;     //IE               
+        } else {                    
+            key = e.which;     //firefox               
+        }               
+        if(key == 13) {   
+          console.log('hit the enter key...');
+        validateLead();
+            return false;               
+        } else{                    
+            return true;               
+        }          
+    }    
+  
+  
+  
+  function validateLead(){
+    console.log('saveContact + inputFirstName: ' + $('#inputFirstName').val());
+    if ( $('#inputFirstName').val( ) == '' ) {
+        str = 'Please enter a First Name'
+        document.getElementById('textError').innerHTML = str;   
+        console.log('error: ' + str);               
+        $('#modalConfirm').modal('hide')
+        $('#modalError').modal('show')
+    } else if ( $('#inputLastName').val() == '' ) {
+        str = 'Please enter a Last Name'
+        document.getElementById('textError').innerHTML = str;   
+        console.log('error: ' + str);               
+        $('#modalConfirm').modal('hide')
+        $('#modalError').modal('show')
+    } else {
+        $('#modalNewVisitor').modal('hide');   
+        $('#modalConfirm').modal('show');        
+        createLead();            
+    }     
+  }
+  
+  //Function to Create/Update contact       
+  function Createcontact(){
+    var updateCon = new SObjectModel.cont({
+        FirstName : $('#inputFirstName').val(),
+        LastName : $('#inputLastName').val(),
+        Title : $('#inputTitle').val(),
+        Phone : $('#inputPhone').val(),
+        Email : $('#inputEmail').val()
+    });
+    var cId = $('#inputId').val();
+    //If cId is null then Create new Contact
+    if(!cId){
+      updateCon.create(updateCallback);
+    }else{
+    //Id cId has value then update the Contact record
+      updateCon .set('Id',cId);
+      updateCon.update(updateCallback);
+    }
+  }    
+
+  var today = new Date();
+  
+  function fixTime(time){
+      if(time < 10) {time = "0" + time};
+      return time;
+  }
+  
+  function fixDate(date){
+    var Month = fixTime(date.getMonth() + 1);
+    var Day = fixTime(date.getDate());
+    var UTC = date.toUTCString();
+    var Time = UTC.substring(UTC.indexOf(':')-2, UTC.indexOf(':')+6);
+    var Minutes = fixTime(date.getMinutes());
+    var Seconds = fixTime(date.getSeconds());
+    console.log('timeCheckIn + today: ' + today);
+    console.log('timeCheckIn + UTC: ' + UTC);
+    console.log('timeCheckIn + Time: ' + Time);
+    console.log('timeCheckIn + Minutes: ' + Minutes);
+    console.log('timeCheckIn + Seconds: ' + Seconds);
+    console.log('timeCheckIn + fixDate(today): ' +  date.getFullYear() + "-" + Month + "-" + Day + "T" + Time);
+    return date.getFullYear() + "-" + Month + "-" + Day + "T" + Time;
+  }
+
+  //Function to Create the Lead and Appointment      
+  function createLead(){
+    
+    var updateCon = new SObjectModel.ld({
+        FirstName : $('#inputFirstName').val(),
+        LastName : $('#inputLastName').val(),
+        Title : $('#inputTitle').val(),
+        Phone : $('#inputPhone').val(),
+        Email : $('#inputEmail').val(),
+        Company : '{!myGalleryName}',
+        RecordTypeId : '{!galleryLeadRT}',
+        Status : 'Gallery Visitation'
+    });
+    var lId = $('#inputId').val();
+    
+    //If lId is null then Create new Contact
+    if(!lId){
+      updateCon.create(updateLeadCallback);
+      var str = 'An appointment has been scheduled for ' + $('#inputFirstName').val() + '.';
+      document.getElementById('confirmLine1').innerHTML = str;      
+    }else{
+    //Id lId has value then update the Contact record
+      updateCon .set('Id',lId);
+      updateCon.update(updateLeadCallback);
+    }
+  }    
+
+  function createAppointment() {
+    
+  }
+
+  // Callback to handle DML Remote Objects calls
+  function updateCallback(err, ids){
+    if (err) { 
+        alert(err); 
+    } else {
+      console.log('updateCallback + ids: ' + ids);
+       $('#thumRow').empty();
+       fetchContact();
+       $('#myModal').modal('hide')
+    }
+  }
+
+  // Callback to handle DML Remote Objects calls
+  function updateLeadCallback(err, ids){
+    if (err) { 
+        alert(err); 
+    } else {
+      console.log('updateCallback + ids: ' + ids);
+      leadId = ids[0];
+
+            var visitPreScheduled;
+            if (!dtp_input1) {
+              visitPreScheduled = false;
+            } else {
+              visitPreScheduled = true;
+            }
+      var updateApt = new SObjectModel.apt({
+          Visitor_First_Name__c : $('#inputFirstName').val(),
+          Visitor_Last_Name__c : $('#inputLastName').val(),
+          Visitor__c : leadId,
+          Status__c : 'Checked In',
+          Visitor_Time_In__c : fixDate(today),
+          Daltile_Location__c : '{!galleryAccountId}',
+          Appointment_Time__c : fixDate(today),          
+          Consultant__c : $('[id$=newGalleryConsultant]').val(),
+          Prescheduled__c : visitPreScheduled
+      });
+      updateApt.create(updateAppointmentCallback);                
+      var aId = $('#inputId').val();
+      console.log('updateApt: ' + (JSON.stringify(updateApt)));
+      console.log('aId: ' + (JSON.stringify(aId)));
+      //If aId is null then Create new Contact
+      if(!aId){
+        // setTimeout(function(){ location.reload(); }, 5000);
+      }else{
+      //Id aId has value then update the Contact record
+        updateApt .set('Id',aId);
+        updateApt.update(updateCallback);
+      }
+       $('#thumRow').empty();
+       $('#myModal').modal('hide')
+    }
+  }
+
+  // Callback to handle DML Remote Objects calls
+  function updateAppointmentCallback(err, ids){
+    if (err) { 
+        alert(err); 
+    } else {
+      appointmentId = ids[0];
+      console.log('updateAppointmentCallback + appointmentId: ' + appointmentId);
+      var str = 'An appointment has been scheduled for ' + $('#inputFirstName').val() + '.';
+      document.getElementById('confirmLine1').innerHTML = str;      
+      $('#thumRow').empty();
+      $('#myModal').modal('hide')
+    }
+  }
+  
+  
+  // Callback to handle DML Remote Objects calls
+  function errorCallback(){
+      console.log('inputphone: ' + $('#inputphone').val());
+      visitorPhone =  $('#inputphone').val();
+      console.log('inputphone length: ' + visitorPhone.length);
+      if (visitorPhone.length == 13) {
+        $('#modalConfirm').modal('hide');
+        fetchContact();
+      } else {
+        var str = '<strong>Error</strong>: Please enter a valid phone number';
+        document.getElementById('textError').innerHTML = str;   
+        console.log('error: ' + str);   
+        $('#thumRow').empty();
+        $('#modalConfirm').modal('hide')
+        $('#modalError').modal('show')
+      }
+  }  
+  
+  //Function to fetch contact      
+  function fetchContact(){
+      console.log('inputphone: ' + $('#inputphone').val());
+      visitorPhone =  $('#inputphone').val();
+      console.log('inputphone length: ' + visitorPhone.length);
+      var inputDateTime = $('#inputDateTime').val();
+      console.log('inputDateTime : ' + inputDateTime);
+      var inputDateTimeSystem = $('#dtp_input1').val().replace(/ /g,"T");
+      console.log('inputDateTimeSystem : ' + inputDateTimeSystem);
+      console.log('#newGalleryConsultant : ' +  $('[id$=newGalleryConsultant]').val());
+      
+      console.log('newGalleryConsultant : ' + newGalleryConsultant);
+      if (visitorPhone.length != 0 ) {
+        $('#modalSearch').modal('show');
+        var inputPhone = $('#inputphone').val();
+        inputPhone = inputPhone.replace(/\D/g,'');
+        recordsSize = 0;
+        searchContacts(inputPhone);    
+        searchLeads(inputPhone);
+        console.log('fetchContact + recordsSize: ' + recordsSize);
+      } else {
+        var str = 'Error: Please enter a valid search';
+        document.getElementById('textError').innerHTML = str;   
+        console.log('error: ' + str);   
+        $('#thumRow').empty();
+        $('#modalConfirm').modal('hide');
+        $('#modalError').modal('show');
+    }
+  }
+  
+  
+  function searchContacts () {
+    if (isNaN($('#inputphone').val())) {    
+      searchContactsByAccount();
+      searchContactsByName();
+    } else {
+      searchContactsByPhone();
+    }
+  }
+
+  function searchContactsByAccount () {
+    var inputDateTimeSystem = $('#dtp_input1').val().replace(/ /g,"T");
+    console.log('inputDateTimeSystem : ' + inputDateTimeSystem);
+    var inputSearch = $('#inputphone').val();
+    var searchContact = new SObjectModel.cont();
+    searchContact.retrieve({
+      where: {
+        Account_Name__c: { like:inputSearch+'%'},
+      },
+      limit: 100
+      },function(err, records){
+        if(err) alert(err.message);
+        else {
+          var conRecordsSize = Object.keys(records).length;
+          console.log('searchContacts + conRecordsSize: ' + conRecordsSize);
+          if (conRecordsSize > 0) {
+          recordsSize = recordsSize + conRecordsSize;
+          console.log('searchContacts + recordsSize: ' + recordsSize);
+          records.forEach(function(record) {       
+            var divCol = $('<div class="col-sm-5 col-md-6">');
+            var divThub = $('<div class="thumbnail">');
+            var h3 = $('<h5>'+record.get("Name")+'</h5>');
+            var visitorEmail = record.get("Email");
+            var vistiorAccount = record.get("Account_Name__c");
+            if (visitorEmail === undefined) {
+              visitorEmail = 'No Email';
+            }
+            var visitPreScheduled;
+            if (!dtp_input1) {
+              visitPreScheduled = false;
+            } else {
+              visitPreScheduled = true;
+            }
+            var detail = $('<p>'+vistiorAccount+'<br/>'+record.get("Phone")+'<br/>'+visitorEmail+'</p>');
+            var link1 = $('<p><br/><button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalConfirm" data-backdrop="static" data-keyboard="false" id="edit">Thats Me!</button> </p> ');
+            link1.click(function(){
+              $('#inputFirstName').val(record.get("FirstName"));
+              $('#inputLastName').val(record.get("LastName"));
+              $('#inputPhone').val(record.get("Phone"));
+              $('#inputEmail').val(record.get("Email"));
+              $('#inputId').val(record.get("Id"));
+              visitorFirstName = record.get("FirstName");
+              var updateApt = new SObjectModel.apt({
+                        Visitor_First_Name__c : $('#inputFirstName').val(),
+                        Visitor_Last_Name__c : $('#inputLastName').val(),
+                        Account__c : record.get("AccountId"),
+                        Contact__c : record.get("Id"),
+                        Status__c : 'Checked In',
+                        Visitor_Time_In__c : fixDate(today),
+                        Daltile_Location__c : '{!galleryAccountId}',
+                        Appointment_Time__c : fixDate(today),
+                        Consultant__c : $('[id$=newGalleryConsultant]').val(),
+                        Prescheduled__c : visitPreScheduled
+                    });
+            updateApt.create(updateAppointmentCallback);                
+            });
+            detail.append(link1);
+            h3.append(detail); 
+            divThub.append(h3);
+            divCol.append(divThub);
+            divCol.appendTo('#thumRow');
+          });
+        } 
+      }    
+    });       
+  }
+  
+  function searchContactsByName () {
+    var inputDateTimeSystem = $('#dtp_input1').val().replace(/ /g,"T");
+    console.log('inputDateTimeSystem : ' + inputDateTimeSystem);
+    var inputSearch = $('#inputphone').val();
+    var searchContact = new SObjectModel.cont();
+    searchContact.retrieve({
+      where: {
+        Name: { like:inputSearch+'%'},
+      },
+      limit: 100
+      },function(err, records){
+        if(err) alert(err.message);
+        else {
+          var conRecordsSize = Object.keys(records).length;
+          console.log('searchContacts + conRecordsSize: ' + conRecordsSize);
+          if (conRecordsSize > 0) {
+          recordsSize = recordsSize + conRecordsSize;
+          console.log('searchContacts + recordsSize: ' + recordsSize);
+          records.forEach(function(record) {       
+            var divCol = $('<div class="col-sm-5 col-md-6">');
+            var divThub = $('<div class="thumbnail">');
+            var h3 = $('<h5>'+record.get("Name")+'</h5>');
+            var visitorEmail = record.get("Email");
+            var vistiorAccount = record.get("Account_Name__c");
+            if (visitorEmail === undefined) {
+              visitorEmail = 'No Email';
+            }
+            var visitPreScheduled;
+            if (!dtp_input1) {
+              visitPreScheduled = false;
+            } else {
+              visitPreScheduled = true;
+            }
+            var detail = $('<p>'+vistiorAccount+'<br/>'+record.get("Phone")+'<br/>'+visitorEmail+'</p>');
+            var link1 = $('<p><br/><button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalConfirm" data-backdrop="static" data-keyboard="false" id="edit">Thats Me!</button> </p> ');
+            link1.click(function(){
+              $('#inputFirstName').val(record.get("FirstName"));
+              $('#inputLastName').val(record.get("LastName"));
+              $('#inputPhone').val(record.get("Phone"));
+              $('#inputEmail').val(record.get("Email"));
+              $('#inputId').val(record.get("Id"));
+              visitorFirstName = record.get("FirstName");
+              var updateApt = new SObjectModel.apt({
+                        Visitor_First_Name__c : $('#inputFirstName').val(),
+                        Visitor_Last_Name__c : $('#inputLastName').val(),
+                        Account__c : record.get("AccountId"),
+                        Contact__c : record.get("Id"),
+                        Status__c : 'Checked In',
+                        Visitor_Time_In__c : fixDate(today),
+                        Daltile_Location__c : '{!galleryAccountId}',
+                        Appointment_Time__c : fixDate(today),
+                        Consultant__c : $('[id$=newGalleryConsultant]').val(),
+                        Prescheduled__c : visitPreScheduled
+                    });
+            updateApt.create(updateAppointmentCallback);                
+            });
+            detail.append(link1);
+            h3.append(detail); 
+            divThub.append(h3);
+            divCol.append(divThub);
+            divCol.appendTo('#thumRow');
+          });
+        } 
+      }    
+    });       
+  }
+    
+    function searchContactsByPhone () {
+    var inputDateTimeSystem = $('#dtp_input1').val().replace(/ /g,"T");
+    console.log('inputDateTimeSystem : ' + inputDateTimeSystem);
+    var inputSearch = $('#inputphone').val();
+    var searchContact = new SObjectModel.cont();
+    searchContact.retrieve({
+      where: {
+            Phone_Lookup__c: { like:inputSearch+'%'},
+      },
+      limit: 100
+      },function(err, records){
+        if(err) alert(err.message);
+        else {
+          var conRecordsSize = Object.keys(records).length;
+          console.log('searchContacts + conRecordsSize: ' + conRecordsSize);
+          if (conRecordsSize > 0) {
+          recordsSize = recordsSize + conRecordsSize;
+          console.log('searchContacts + recordsSize: ' + recordsSize);
+          records.forEach(function(record) {       
+            var divCol = $('<div class="col-sm-5 col-md-6">');
+            var divThub = $('<div class="thumbnail">');
+            var h3 = $('<h5>'+record.get("Name")+'</h5>');
+            var visitorEmail = record.get("Email");
+            var vistiorAccount = record.get("Account_Name__c");
+            if (visitorEmail === undefined) {
+              visitorEmail = 'No Email';
+            }
+            var visitPreScheduled;
+            if (!dtp_input1) {
+              visitPreScheduled = false;
+            } else {
+              visitPreScheduled = true;
+            }
+            var detail = $('<p>'+vistiorAccount+'<br/>'+record.get("Phone")+'<br/>'+visitorEmail+'</p>');
+            var link1 = $('<p><br/><button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalConfirm" data-backdrop="static" data-keyboard="false" id="edit">Thats Me!</button> </p> ');
+            link1.click(function(){
+              $('#inputFirstName').val(record.get("FirstName"));
+              $('#inputLastName').val(record.get("LastName"));
+              $('#inputPhone').val(record.get("Phone"));
+              $('#inputEmail').val(record.get("Email"));
+              $('#inputId').val(record.get("Id"));
+              visitorFirstName = record.get("FirstName");
+              var updateApt = new SObjectModel.apt({
+                        Visitor_First_Name__c : $('#inputFirstName').val(),
+                        Visitor_Last_Name__c : $('#inputLastName').val(),
+                        Account__c : record.get("AccountId"),
+                        Contact__c : record.get("Id"),
+                        Status__c : 'Checked In',
+                        Visitor_Time_In__c : fixDate(today),
+                        Daltile_Location__c : '{!galleryAccountId}',
+                        Appointment_Time__c : fixDate(today),
+                        Consultant__c : $('[id$=newGalleryConsultant]').val(),
+                        Prescheduled__c : visitPreScheduled
+                    });
+            updateApt.create(updateAppointmentCallback);                
+            });
+            detail.append(link1);
+            h3.append(detail); 
+            divThub.append(h3);
+            divCol.append(divThub);
+            divCol.appendTo('#thumRow');
+          });
+        } 
+      }    
+    });       
+  }
+
+  function searchLeads () {
+    if (isNaN($('#inputphone').val())) { 
+      searchLeadsByName();
+    } else {
+      searchLeadsByPhone();
+    }
+  }
+  
+  function searchLeadsByPhone() {
+    var inputDateTimeSystem = $('#dtp_input1').val().replace(/ /g,"T");
+    console.log('inputDateTimeSystem : ' + inputDateTimeSystem);
+    var inputSearch = $('#inputphone').val();
+    var searchLead = new SObjectModel.ld();
+    searchLead.retrieve({
+      where:{
+        Phone_Lookup__c: { like:inputSearch+'%'}
+        },limit: 10
+      },function(err, records){
+        if(err) {
+          alert(err.message); 
+        } else {
+          var leadRecordsSize = Object.keys(records).length;
+          if (leadRecordsSize > 0) {
+            recordsSize  = recordsSize + leadRecordsSize;
+            records.forEach(function(record) {       
+              var divCol = $('<div class="col-sm-5 col-md-6">');
+              var divThub = $('<div class="thumbnail">');
+              var h3 = $('<h5>'+record.get("Name")+'</h5>');
+              var visitorEmail = record.get("Email");
+              if (visitorEmail === undefined) {
+                visitorEmail = 'No Email';
+              }
+              if (!dtp_input1) {
+                visitPreScheduled = false;
+              } else {
+                visitPreScheduled = true;
+              }
+              var detail = $('<p>'+record.get("Phone")+'<br/>'+visitorEmail+'</p>');
+              var link1 = $('<p><br/><button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalConfirm" data-backdrop="static" data-keyboard="false" id="edit">Thats Me!</button> </p> ');
+              link1.click(function(){
+                $('#inputFirstName').val(record.get("FirstName"));
+                $('#inputLastName').val(record.get("LastName"));
+                $('#inputPhone').val(record.get("Phone"));
+                $('#inputEmail').val(record.get("Email"));
+                $('#inputId').val(record.get("Id"));
+                visitorFirstName = record.get("FirstName");
+                var updateApt = new SObjectModel.apt({
+                          Visitor_First_Name__c : $('#inputFirstName').val(),
+                          Visitor_Last_Name__c : $('#inputLastName').val(),
+                          Visitor__c : record.get("Id"),
+                          Status__c : 'Checked In',
+                          Visitor_Time_In__c : fixDate(today),
+                          Daltile_Location__c : '{!galleryAccountId}',
+                          Appointment_Time__c : fixDate(today),
+                          Consultant__c : $('[id$=newGalleryConsultant]').val(),
+                          Prescheduled__c : visitPreScheduled
+                      });
+              updateApt.create(updateAppointmentCallback);                
+              });
+              detail.append(link1);
+              h3.append(detail); 
+              divThub.append(h3);
+              divCol.append(divThub);
+              divCol.appendTo('#thumRow');
+            });
+          } else {
+            if (recordsSize == 0) {
+              $('#thumRow').empty();
+              $('#modalSearch').modal('hide');
+              $('#modalNewVisitor').modal('show');
+            }                    
+          }
+        }    
+    });     
+  }
+
+  function searchLeadsByName() {
+    var inputDateTimeSystem = $('#dtp_input1').val().replace(/ /g,"T");
+    console.log('inputDateTimeSystem : ' + inputDateTimeSystem);
+    var inputSearch = $('#inputphone').val();
+    var searchLead = new SObjectModel.ld();
+    searchLead.retrieve({
+      where:{
+        Name: { like:inputSearch+'%'}
+        },limit: 10
+      },function(err, records){
+        if(err) {
+          alert(err.message); 
+        } else {
+          var leadRecordsSize = Object.keys(records).length;
+          if (leadRecordsSize > 0) {
+            recordsSize  = recordsSize + leadRecordsSize;
+            records.forEach(function(record) {       
+              var divCol = $('<div class="col-sm-5 col-md-6">');
+              var divThub = $('<div class="thumbnail">');
+              var h3 = $('<h5>'+record.get("Name")+'</h5>');
+              var visitorEmail = record.get("Email");
+              if (visitorEmail === undefined) {
+                visitorEmail = 'No Email';
+              }
+              var detail = $('<p>'+record.get("Phone")+'<br/>'+visitorEmail+'</p>');
+              var link1 = $('<p><br/><button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalConfirm" data-backdrop="static" data-keyboard="false" id="edit">Thats Me!</button> </p> ');
+              link1.click(function(){
+                $('#inputFirstName').val(record.get("FirstName"));
+                $('#inputLastName').val(record.get("LastName"));
+                $('#inputPhone').val(record.get("Phone"));
+                $('#inputEmail').val(record.get("Email"));
+                $('#inputId').val(record.get("Id"));
+                visitorFirstName = record.get("FirstName");
+                var updateApt = new SObjectModel.apt({
+                          Visitor_First_Name__c : $('#inputFirstName').val(),
+                          Visitor_Last_Name__c : $('#inputLastName').val(),
+                          Visitor__c : record.get("Id"),
+                          Status__c : 'Checked In',
+                          Visitor_Time_In__c : fixDate(today),
+                          Daltile_Location__c : '{!galleryAccountId}',
+                          Appointment_Time__c : fixDate(today),
+                          Consultant__c : $('[id$=newGalleryConsultant]').val(),
+                          Prescheduled__c : visitPreScheduled
+                      });
+              updateApt.create(updateAppointmentCallback);                
+              });
+              detail.append(link1);
+              h3.append(detail); 
+              divThub.append(h3);
+              divCol.append(divThub);
+              divCol.appendTo('#thumRow');
+            });
+          } else {
+            if (recordsSize == 0) {
+              $('#thumRow').empty();
+              $('#modalSearch').modal('hide');
+              $('#modalNewVisitor').modal('show');
+            }                     
+          }
+        }    
+    });     
+  }
+
+  function clearSearch() {
+    console.log('clearSearch: ' + clearSearch);
+    $('#inputphone').val('');
+  }
+
+  function clearSearchReload() {
+    console.log('clearSearch & reload: ' + appointmentId);
+    $('#modalConfirm').modal('hide');        
+    clearfieldValues();
+    // location.reload();
+  }
+
+  function clearGoToWaitlist() {
+    console.log('clearGoToWaitlist + appointmentId: ' + appointmentId);
+    console.log('clearGoToAppointment + sforce: ' + JSON.stringify(sforce));
+    console.log('clearGoToAppointment + sforce.one: ' + JSON.stringify(sforce.one));
+    
+    clearfieldValues();
+      if ( (typeof sforce != 'undefined') && (sforce != null) ) {
+          sforce.one.navigateToList('00B0G000008t1Su', 'Waitlist', 'Appointment__c');                
+      } else {
+          window.location.href = '{!$Page.AppointmentWaitlist}';
+      }
+  }
+  
+  function clearGoToAppointment() {
+    console.log('clearGoToAppointment + sforce: ' + sforce);
+
+        // if ( (typeof sforce != 'undefined') && (sforce != null) &&  ({!$User.UIThemeDisplayed == 'Theme4t'}) ) {
+        if ( (typeof sforce != 'undefined') && (sforce != null) ) {
+          console.log('clearGoToAppointment + appointmentId: ' + appointmentId);
+          sforce.one.navigateToSObject(appointmentId);                
+        } else {
+          window.location.href = '/' + appointmentId;
+        }
+    clearfieldValues();
+  }  
+
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+<apex:stylesheet value="{!$Resource.CSSDateTime}"/>
+
+<!-- Visualforce Remote object coponent -->
+<apex:remoteObjects >
+<apex:remoteObjectModel name="Contact" jsShorthand="cont" fields="Name,Id,FirstName,LastName,Phone,Email,Title,AccountId,Account_Name__c,Phone_Lookup__c">
+</apex:remoteObjectModel>
+<apex:remoteObjectModel name="Lead" jsShorthand="ld" fields="Name,Id,FirstName,LastName,Phone,Email,Title,Phone_Lookup__c">
+</apex:remoteObjectModel>
+<apex:remoteObjectModel name="Appointment__c" jsShorthand="apt" fields="Name,Id,Daltile_Location__c,Visitor_First_Name__c,Visitor_Last_Name__c,Status__c,Visitor_Time_In__c,Visitor_Phone_Number__c,Visitor_Email__c,Contact__c,Account__c,Appointment_Time__c,Prescheduled__c">
+</apex:remoteObjectModel>
+</apex:remoteObjects>   
+<apex:slds />
+
+<html>
+<body class="  ext-webkit ext-chrome" style="padding-top: 0px;">
+
+<form role="search">
+<apex:pageMessages />   
+    <!-- REQUIRED SLDS WRAPPER -->
+    <div class="slds-scope" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" >
+    <div class="slds-grid slds-grid--frame slds-grid--vertical-align-center slds-grid--align-center ">
+        <!-- form wrapper -->
+        <div>
+            <article class="slds-card" style="-webkit-box-shadow: 10px 10px 29px -1px rgba(0,0,0,0.75);-moz-box-shadow: 10px 10px 29px -1px rgba(0,0,0,0.75);box-shadow: 10px 10px 29px -1px rgba(0,0,0,0.75);background-color: #f4f6f9;padding-left: 20px;padding-right: 20px;">
+                <div class="slds-grid slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div >
+                            <h2>
+                                <span class="slds-text-heading_large" style="font-size: 4rem;">Schedule An Appointment</span>
+                            </h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner">
+                    <div class="slds-form-element__control">
+            <div class="container">
+              <apex:form >            
+                <form action="" class="form-horizontal"  role="form">
+                <fieldset>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <label for="newGalleryConsultant" style="font-size: 2rem;">Gallery Consultant</label>
+                        <!--<apex:outputLabel value="Gallery Consultant" for="newGalleryConsultant"/>-->
+                        <apex:selectList id="newGalleryConsultant" size="1" value="{!galleryContact}" readonly="false" styleClass="slds-select" style="font-size: 2rem;" > 
+                          <apex:selectOptions value="{!galleryContacts}"/>
+                        </apex:selectList>      
+                      </div>
+                      <div class="col-sm-6">      
+                        <div class="form-group">         
+                          <label for="dtp_input1" style="font-size: 2rem;" >Select a Date and Time</label>
+                          <div class="input-group date form_datetime " useCurrent="true" data-date-format="MM dd yyyy - HH:ii p" data-link-field="dtp_input1">
+                            <input class="form-control" size="16" type="text" value="" readonly="true" style="font-size: 2rem;" id="inputDateTime"/>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                          </div>
+                                <input type="hidden" id="dtp_input1" value="" /><br/>
+                        </div>
+                      </div>
+                    </div>  
+              </fieldset>
+              </form>
+                </apex:form> 
+            </div>   
+                    </div>
+                    <br/>
+                    <div class="slds-form-element__control">
+                        <span/>
+                        <div class="slds-form-element slds-hint-parent">
+                            <div class="slds-form-element__control slds-hint-parent slds-align_absolute-center">
+                                <input type="text" class="form-control" style="width: 95%;font-size: 2rem;.form-control {display: block;width: 75%;height: 60px;" onkeypress="return noenter(event);" placeholder="Search By Account Name, Contact Name or Phone Number " id="inputphone" />
+                            </div>
+                        </div>
+                    </div>
+                    <br/> 
+                </div>
+                <footer class="slds-card__footer">
+                    <div class="slds-form-element__control slds-align_absolute-center">
+                        <div class="slds-form-element slds-hint-parent">
+                            <button type="button" class="btn btn-primary" style="font-size: 1.5rem;line-height: 2.875rem;padding-left: 50px;padding-right: 50px;color: white"  id="searchCon" >Next</button>
+                        </div>
+                    </div>                      
+                </footer>
+            </article>
+        </div>
+        <!-- /form wrapper -->
+    </div>      
+    </div> 
+</form>
+
+<!-- Pop-up window will display when we click search -->
+<div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-login">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="avatar">                
+                  <div class="icon-box-success">
+            <i class="material-icons-search">&#xe7fe;</i>
+                  </div>                
+                </div>              
+                <h4 class="modal-title">Did We Find You?</h4>   
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+        <div class="container-fluid" aria-hidden="true">
+          <div class="row" id="thumRow" >
+        
+          </div>
+        </div>
+            </div>
+            <div class="modal-footer">
+        <h5 class="modal-title" id="myModalLabel">...Or if not found, please enter your information</h5>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal" data-target="#modalNewVisitor" id="new">Enter Info</button>              
+            </div>
+        </div>
+    </div>
+</div>     
+
+<!-- Pop-up window will display to log new visitor info -->
+<div class="modal fade" id="modalNewVisitor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-login">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="avatar">                
+                  <div class="icon-box-success">
+            <i class="material-icons-search">&#xe7fe;</i>
+                  </div>                
+                </div>          
+        <h1><span class="slds-text-heading_large" style="font-size: 2rem;padding-left: 10px;padding-top: 15px;" id="myModalLabel">Not found? Please enter your inforamtion.</span></h1>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+
+      <form class="form-horizontal">
+        
+            <div class="slds-form-element__control">
+                <span/>
+                <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                        <span class="slds-form-element__label">First Name</span>
+                            <input type="text" class="form-control" id="inputFirstName" onkeypress="return noenterLead(event);" />
+                    </div> 
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                        <span class="slds-form-element__label">Last Name</span>
+                            <input type="text" class="form-control" id="inputLastName" onkeypress="return noenterLead(event);"/>
+                    </div>  
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                        <span class="slds-form-element__label">Email</span>
+                            <input type="text" class="form-control" id="inputEmail" onkeypress="return noenterLead(event);"/>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                        <span class="slds-form-element__label">Phone</span>
+                            <input type="tel" class="form-control" id="inputPhone" onkeypress="return noenterLead(event);"/>
+                    </div>  
+                </div>    
+            </div>
+            <br/>
+                            
+      </form>   
+            <input type="hidden" class="form-control" id="inputId" />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onClick="clearSearch();">Close</button>
+                <button type="button" class="btn btn-primary" id="saveContact" >Save changes</button>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+                
+
+<!-- Pop-up window will display when Appointment is created to confirm -->
+<div class="modal fade" id="modalConfirm" tabindex="-3" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="">
+  <div class="modal-dialog modal-confirm" style="width:60%;height:50%;">
+  <div class="modal-dialog" style="width: 100%;">
+    <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box-success">
+                    <i style="font-size: 60px;" class="material-icons">&#xE876;</i>
+                </div>              
+                <h4 class="modal-title" style="text-align: center;" id="confirmLine1"></h4>
+            </div>      
+      <div class="modal-body">
+                <div stye="margin: auto;display: inline;float: none;">
+        <div class="alert alert-success" aria-hidden="true">
+                <div class="row text-center">
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-primary" id="buttonToScheduler" onClick="clearSearchReload();">Schedule Another</button>
+          </div>                
+                <div class="col-sm-4">
+                  <button type="button" class="btn btn-primary" id="buttonWaitlistr" onClick="clearGoToWaitlist();">Go To Waitlist</button>
+                  </div>                
+                <div class="col-sm-4">
+                  <button type="button" class="btn btn-primary" id="buttonToAppointmentr" onClick="clearGoToAppointment();">View Appointment</button>
+          </div>                                  
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>  
+
+<!-- Pop-up window will display when error searching -->
+<div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box-error">
+                    <i class="material-icons">&#xE5CD;</i>
+                </div>              
+                <h4 class="text-center" >Sorry!</h4>    
+            </div>
+            <div class="modal-body">
+                <p class="text-center" id="textError"></p>
+            </div>
+        </div>
+    </div>
+</div>  
+
+<script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
+    $('.form_date').datetimepicker({
+        language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+    $('.form_time').datetimepicker({
+        language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 1,
+        minView: 0,
+        maxView: 1,
+        forceParse: 0
+    });
+    
+</script>
+
+</body>
+</html>
+</apex:page>

@@ -1,0 +1,11 @@
+<design:component label="7S Featured User">
+    <design:attribute name="title" label="Title"/>
+	<design:attribute name="userId" label="Featured User ID"/>
+    <design:attribute name="intro" label="Intro Paragraph" />
+    <design:attribute name="ctaText" label="Call to Action Text" />
+    <design:attribute name="ctaLink" label="Call to Action Link"/>
+    <design:attribute name="displayType" label="Display Type" dataSource="Plain,Banner" />
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

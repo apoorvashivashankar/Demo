@@ -1,0 +1,14 @@
+<!--
+ - Created by ranja on 23-01-2019.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderHideGlobalSearch" access="global"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+    <!--INIT-->
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+
+    <!--Event-->
+    <aura:registerevent name="createOrderGlobalSearch" type="c:Dal_SSC_CreateOrderHideGSearchEvent"/>
+
+</aura:component>

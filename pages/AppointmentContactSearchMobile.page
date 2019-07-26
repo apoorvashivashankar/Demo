@@ -1,0 +1,132 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="true" Controller="VisitorCheckinController" applyHTmlTag="false" docType="html-5.0" >
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+        <apex:includeScript value="{!$Resource.cleave}"/>
+        <apex:includeScript value="{!$Resource.phoneFormatter}"/>
+
+        <script src="cleave.min.js"></script>
+        <script src="cleave-phone.{country}.js"></script>
+
+        <style>
+            div#header {
+                background-image: url(http://www.daltile.com/Content/images/navigation/header_background.png);
+                background-repeat: repeat-y;
+                padding: 0px;
+                height: 137px;
+                width: 100%;
+                position: relative;
+            }  
+            div#headercontainer {
+                background-image: url(http://www.daltile.com/Content/images/navigation/header-container_background.png);
+                background-repeat: repeat-x;
+                height: 146px;
+                position: static;
+                z-index: 200;
+                min-width: 980px;
+                width: 100%;            
+            }
+            a.logo {
+                width: 530px;
+                height: 46px;
+                background-position: -137px -100px;
+                text-indent: -10000px;
+                float: left;
+                background-image: url(http://www.daltile.com/Content/images/sprites.png);
+                background-repeat: no-repeat;
+                display: inline-block;
+                margin-top: 29px;
+                margin-left: 16px;
+            }
+            .dateFormat {
+                visibility:hidden;
+            }
+            .center-div {
+                position: absolute;
+                margin: auto;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                width: 100px;
+                height: 100px;
+                background-color: #ccc;
+                border-radius: 3px;
+            }   
+        </style>
+        <script>
+        function HideMsg(istrue) {
+            var checkval = document.getElementById("msg")
+            if(istrue.checked ) {   
+                var checkval = document.getElementById("date").style.display='block';
+                var checkval = document.getElementById("time").style.display='block';
+            } else {
+                var checkval = document.getElementById("date").style.display='none';
+                var checkval = document.getElementById("time").style.display='none';
+            }
+        }
+        </script>        
+        <head>
+            <apex:slds />
+        </head>
+        <apex:form >
+            <body class="slds-scope" >
+            
+                <input type="hidden" name="currentvfpage" value="{!$CurrentPage.Name}"/>
+                    <div class="slds-grid ">
+
+                            <div class="slds-container--center slds-container--large">
+                                    <apex:pageblock id="allcons" >
+                                        <apex:pageblocktable id="allcons" value="{!AllContacts}" var="allcon" title="Select a Contact" style="line-height: 3;">
+                                            <apex:column >
+                                                <apex:commandLink value="This Is Me!" action="{!selectVisitor}" styleClass="slds-button slds-button--brand slds-align_absolute-center" style="background-color: #0070d2;border: 1px solid #0070d2;color: #fff;"   >
+                                                    <apex:param name="conid" value="{!allcon.Id}"></apex:param>
+                                                </apex:commandLink>
+                                            </apex:column>  
+                                            <apex:column headervalue="Id" rendered="false">
+                                                <apex:param name="conid" value="{!allcon.Id}"/>
+                                                <apex:outputfield value="{!allcon.id}">
+                                                </apex:outputfield></apex:column> 
+                                            <apex:column headervalue="Last Name">
+                                                <apex:outputfield value="{!allcon.LastName}">
+                                                </apex:outputfield></apex:column> 
+                                            <apex:column headervalue="First Name">
+                                                <apex:outputfield value="{!allcon.FirstName}">
+                                                </apex:outputfield></apex:column>  
+                                            <apex:column headervalue="Email">
+                                                <apex:outputfield value="{!allcon.Email}">
+                                                </apex:outputfield></apex:column>  
+                                            <apex:column headervalue="Phone">
+                                                <apex:outputfield value="{!allcon.Phone}">
+                                                </apex:outputfield></apex:column>  
+                                            <apex:column headervalue="Account">
+                                                <apex:outputfield value="{!allcon.Account.Name}">
+                                                </apex:outputfield></apex:column>  
+                                        </apex:pageblocktable>
+                                        <apex:pageBlockButtons location="bottom">
+                                        </apex:pageBlockButtons>    
+                                    </apex:pageblock>   
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element slds-hint-parent">
+                                            <apex:commandButton styleClass="slds-button slds-button-space-left slds-button--neutral" value="Cancel" action="{!backToSchedulerMobile}" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element slds-hint-parent">
+                                            <apex:commandButton styleClass="slds-button slds-button-space-right slds-button--brand" value="Not Found" action="{!goCreateContact}" />
+                                        </div>
+                                    </div>  
+                                </div>                               
+                            </div>   
+                    </div>      
+            </body>
+        </apex:form>
+    </html>
+    <script>
+        var cleavePhone = new Cleave('.input-custom', {
+            numericOnly: true,
+            delimiters: ['(',') ','-','-'],
+            blocks: [0,3, 3, 4]            
+        });
+    </script> 
+</apex:page>

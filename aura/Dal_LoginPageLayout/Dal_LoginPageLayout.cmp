@@ -1,0 +1,16 @@
+<!--
+ - Created by 7Summits on 2/23/18.
+ -->
+
+<aura:component description="Dal_LoginPageLayout" implements="forceCommunity:layout">
+    <aura:attribute name="header" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="content" type="Aura.Component[]" required="false"/>
+
+    <section class="dal_lead-banner">
+        <section class="slds-container_x-large slds-container_center slds-p-around_large">
+            <div class="slds-p-around_medium">{!v.header}</div>
+            <div class="slds-p-around_medium loginContent">{!v.content}</div>
+        </section>
+    </section>
+
+</aura:component>

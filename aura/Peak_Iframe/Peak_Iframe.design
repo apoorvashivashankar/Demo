@@ -1,0 +1,8 @@
+<design:component label="7S iFrame">
+	<design:attribute name="URL" label="Web Address (https)"/>
+    <design:attribute name="height" label="Height (px/%)"/>
+    <design:attribute name="width" label="Width (px/%)"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

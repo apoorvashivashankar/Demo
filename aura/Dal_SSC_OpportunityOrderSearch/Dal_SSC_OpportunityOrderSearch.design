@@ -1,0 +1,10 @@
+<!--
+ - Created by presh on 05-12-2018.
+ -->
+
+<design:component>
+    <design:attribute name="communityType" label="Community Type" datasource="Distributor, SSC"/>
+    <design:attribute name="hasPagination" label="Enable Pagination" />
+    <design:attribute name="paginationItemsPerPage" label="Number of Items Per Page" />
+    <design:attribute name="listMaximum" label="Maximum number of records retrieved" />
+</design:component>

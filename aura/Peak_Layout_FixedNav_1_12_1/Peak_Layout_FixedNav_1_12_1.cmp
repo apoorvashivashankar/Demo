@@ -1,0 +1,25 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ -->
+
+<aura:component implements="forceCommunity:layout" description="1 Column, Fixed Nav 1:2, 1 Column" access="global">
+    <aura:attribute name="row1" description="Content" type="Aura.Component[]" required="false" />
+    <aura:attribute name="column1" description="Content" type="Aura.Component[]" required="false" />
+    <aura:attribute name="column2" description="Sidebar" type="Aura.Component[]" required="false" />
+    <aura:attribute name="row2" description="Content" type="Aura.Component[]" required="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div class="container">
+        <div class="contentPanel" aura:id="scrollContainer">
+
+            <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                <div class="slds-p-horizontal_small slds-p-bottom_large slds-size_1-of-1 slds-order_2 slds-medium-order_1">{!v.row1}</div>
+                <div class="slds-p-horizontal_small slds-p-bottom_large slds-size_1-of-1 slds-medium-size_4-of-12 slds-order_1 slds-medium-order_2 fixed-col" aura:id="scrollItem">{!v.column1}</div>
+                <div class="slds-p-horizontal_small slds-p-bottom_large slds-size_1-of-1 slds-medium-size_8-of-12 slds-order_3">{!v.column2}</div>
+                <div class="slds-p-horizontal_small slds-p-bottom_large slds-size_1-of-1 slds-order_4">{!v.row2}</div>
+            </div>
+
+        </div>
+    </div>
+</aura:component>

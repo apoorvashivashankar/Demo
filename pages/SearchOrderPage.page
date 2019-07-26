@@ -1,0 +1,161 @@
+<apex:page standardController="Case" extensions="SearchOrderExtension">
+	<link type="text/css" rel="stylesheet" href="https://www.lightningdesignsystem.com/assets/styles/slds.css"/>
+    <!-- <apex:includeScript value="/lightning/lightning.out.js"/> -->
+	<apex:includeLightning />
+	<style type="text/css">
+		body {
+			background: #F3F3EC;
+			padding-top: 15px;
+        	height : 350px !important;
+		}
+        .slds-scope button, .slds-scope input, .slds-scope optgroup, .slds-scope select, .slds-scope textarea {margin-right: 87px !important;}
+	</style>
+	<script>
+		function setFocusOnLoad() {}
+		function reLoadPage(){
+			console.log('In reLoad');
+		}
+
+      var _caseId = "{!Case.id}";
+
+      function loadOrderDetails(){
+        $Lightning.use("c:OrderDetailsOnCaseContainer", function() {
+        $Lightning.createComponent(
+            "c:OrderDetailsOnCase",
+            { caseId : _caseId },
+            "orderDetails",
+            function(component) {
+                console.log('component created');
+                console.log('_cmp',component);
+            });
+        });
+      }
+
+	</script>
+	<head>
+		<apex:slds />
+	</head>
+	<apex:form >
+
+		<apex:pageMessages id="pageMessages"/>
+		<br></br>
+		<apex:outputPanel id="SearchPanel" rendered="{!OR(showSearch,invalidOrderNo)}">
+			<div class="slds-grid slds-wrap slds-scrollable_y" style="height: 250px; width:100%;">
+				<div class="slds-form slds-form_horizontal slds-col slds-size_12-of-12">
+					<div class="slds-form-element">
+						<label class="slds-form-element__label" for="lookup--search-value">Enter Search Value:</label>
+						<div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+							<svg class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" aria-hidden="true">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#search')}"></use>
+							</svg>
+							<apex:inputText styleClass="slds-input" id="searchString" value="{!searchString}" tabindex="-1"/>
+						</div>
+						<br/>
+						<div class="slds-col slds-no-flex slds-align-right">
+							<apex:commandButton value="Search" action="{!doSearch}" rerender="resultsBlock,pageMessages,noResultsPanel" status="status"/>
+						</div>
+					</div>
+				</div>
+				<apex:actionStatus id="status" startText="Searching... please wait..."/>
+
+				<apex:outputPanel styleclass="slds-p-top_medium slds-p-bottom_medium" id="resultsBlock" layout="block">
+					<apex:outputPanel id="resultsPanel" layout="block" rendered="{!searchResultsWrap.size > 0}">
+						<table class="slds-table slds-table_bordered slds-table_resizable-cols slds-table_fixed-layout" role="grid">
+							<thead>
+								<tr class="slds-line-height_reset">
+									<th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Name" scope="col">
+										<a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+											<span class="slds-truncate" title="Name">Action</span>
+										</a>
+									</th>
+									<th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Name" scope="col">
+										<a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+											<span class="slds-truncate" title="Name">Custome PO NO</span>
+										</a>
+									</th>
+									<th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Account Name" scope="col">
+										<a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+											<span class="slds-truncate" title="Name">SalesOrder</span>
+										</a>
+									</th>
+									<th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Close Date" scope="col">
+										<a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+											<span class="slds-truncate" title="Name">Host System</span>
+										</a>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<apex:repeat value="{!searchResultsWrap}" var="rec">
+									<tr class="slds-hint-parent">
+										<td class="slds-text-align_right" role="gridcell">
+											<span class="slds-button">
+												<apex:commandButton value="CopyToCase" action="{!copyToCase}" reRender="SalesOrderHeaderPanel,SearchPanel" oncomplete="reLoadPage();">
+													<apex:param name="selectedOrder" value="{!rec.salesOrder}" assignTo="{!selectedSalesOrder}"/>
+													<apex:param name="selectedPoNo" value="{!rec.customerPo}" assignTo="{!selectedCustomerPo}"/>
+												</apex:commandButton>
+											</span>
+										</td>
+										<th scope="row" tabindex="0">
+											<div class="slds-truncate" title="">
+												<a href="javascript:void(0);" tabindex="-1">{!rec.customerPo}</a>
+											</div>
+										</th>
+										<td role="gridcell">
+											<div class="slds-truncate" title="Acme">{!rec.salesOrder}</div>
+										</td>
+										<td role="gridcell">
+											<div class="slds-truncate" title="4/10/15">{!rec.hostSystem}</div>
+										</td>
+									</tr>
+								</apex:repeat>
+							</tbody>
+						</table>
+					</apex:outputPanel>
+				</apex:outputPanel>
+				<apex:outputPanel id="ErrorPanel">
+					<apex:outputPanel id="noResultsPanel" rendered="{!noRecords}">
+						<label class="slds-form-element__label">No Results Found Could You refine your Search</label>
+					</apex:outputPanel>
+				</apex:outputPanel>
+			</div>
+		</apex:outputPanel>
+
+		<apex:outputPanel id="SalesOrderHeaderPanel">
+			<apex:outputPanel id="detailsPanel" rendered="{!AND(NOT(showSearch),NOT(invalidOrderNo))}">
+				<div id="orderDetails">
+				  <script>
+				    loadOrderDetails();
+				  </script>
+				</div>
+				<!--<div class="demo-only slds-grid slds-wrap slds-scrollable_y">
+					<div class="slds-page-header slds-page-header_horizontal">
+						<div class="slds-grid slds-grid_header_horizontal">
+							<div>
+								<div class="slds-media slds-no-space slds-has-divider_bottom-space slds-media_center">
+									<div class="slds-media__body">
+										<h1 class="slds-page-header__title slds-align-middle">SalesOrderHeader</h1>
+									</div>
+								</div>
+							</div>
+						</div>
+						<ul class="slds-list_header_horizontal-space-medium slds-m-left_xx-small">
+							<li class="slds-item">
+								<div class="slds-text-title slds-m-bottom_xx-small">SalesOrder Number</div>
+								<div class="slds-text-body_regular" title="SalesOrder Number">{!existingOrder.SalesOrder__c}</div>
+							</li>
+							<li class="slds-item">
+								<div class="slds-text-title slds-m-bottom_xx-small">Customer PO No</div>
+								<div class="slds-text-body_regular" title="Customer PO">{!existingOrder.CustomerPONo__c}</div>
+							</li>
+							<li class="slds-item">
+								<div class="slds-text-title slds-m-bottom_xx-small">HostSystem</div>
+								<div class="slds-truncate" title="Host System">{!existingOrder.HostSystem__c}</div>
+							</li>
+						</ul>
+					</div>
+				</div> -->
+			</apex:outputPanel>
+		</apex:outputPanel>
+	</apex:form>
+</apex:page>

@@ -1,0 +1,30 @@
+.THIS .ForWrap{
+    overflow-wrap: break-word;
+}
+.THIS lightning-input.slds-truncate.slds-size--1-of-1.slds-form-element{
+    width: 4rem;
+}
+
+.THIS .dal-field-error{
+    color : rgb(194, 57, 52);
+    font-size: small;
+
+}
+
+.THIS .productsku-width {
+    width : 20rem;
+}
+
+.THIS .productqty-width {
+    width : 8rem;
+}
+/*
+.THIS.dal-scheduleLineItem-tabContent {
+   padding-left: 14px;
+   padding-right: 14px;
+   padding-bottom: 14px;
+   border: 10px solid rgb(241, 242, 243);
+   border-top: none;
+   border-bottom : none;
+
+}*/

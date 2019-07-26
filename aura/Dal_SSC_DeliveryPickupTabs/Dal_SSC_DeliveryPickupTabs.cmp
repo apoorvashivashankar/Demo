@@ -1,0 +1,39 @@
+<!--
+ - Created by 7Summits on 3/1/18.
+ -->
+
+<aura:component extends="c:Dal_Base" description="Dal_SSC_DeliveryPickupTabs" controller="Dal_DashboardController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="pickupDeliveryToBeScheduledLabel" type="String" default="Pickups &amp; Deliveries to be Scheduled"/>
+    <aura:attribute name="scheduledPickupLabel" type="String" default="Scheduled Pickups"/>
+    <aura:attribute name="scheduledDeliveryLabel" type="String" default="Scheduled Deliveries"/>
+
+    <aura:attribute name="pickupDeliveryCount" type="String" default=""/>
+    <aura:attribute name="scheduledPickupCount" type="String" default=""/>
+    <aura:attribute name="scheduledDeliveryCount" type="String" default=""/>
+
+    <lightning:tabset class="slds-p-around_medium">
+        <lightning:tab >
+            <aura:set attribute="label">
+                {!v.pickupDeliveryCount}&nbsp;{!v.pickupDeliveryToBeScheduledLabel}
+            </aura:set>
+            <c:Dal_SSC_PickDelToBeSched />
+        </lightning:tab>
+        <lightning:tab >
+            <aura:set attribute="label">
+                {!v.scheduledPickupCount}&nbsp;{!v.scheduledPickupLabel}
+            </aura:set>
+            <c:Dal_SSC_ScheduledPickup />
+        </lightning:tab>
+        <lightning:tab >
+            <aura:set attribute="label">
+                {!v.scheduledDeliveryCount}&nbsp;{!v.scheduledDeliveryLabel}
+            </aura:set>
+            <c:Dal_SSC_ScheduledDelivery />
+        </lightning:tab>
+    </lightning:tabset>
+
+</aura:component>

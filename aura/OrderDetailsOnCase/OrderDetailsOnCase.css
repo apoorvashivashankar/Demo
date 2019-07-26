@@ -1,0 +1,1162 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  /* Common CSS here */
+}
+.THIS .slds-button_brand,
+.THIS .slds-button_neutral,
+.THIS .slds-button_inverse {
+  /*
+	slds-button--neutral
+	slds-button--brand
+	slds-button--inverse
+	*/
+  font-size: 100%;
+  padding: .375rem 2.25rem;
+  transition: all .25s;
+  border-radius: token(borderRadiusMedium);
+}
+.THIS .slds-button_brand {
+  border: none;
+}
+.THIS .slds-button_inverse:link,
+.THIS .slds-button_inverse:visited {
+  color: token(colorTextInverse);
+}
+.THIS .slds-button_inverse:hover,
+.THIS .slds-button_inverse:active {
+  color: token(colorTextInverse);
+}
+.THIS .CCEVENTSLCSVNSUMMITS_Events_Header .slds-button,
+.THIS .CCEVENTSLCSVNSUMMITS_Event_Filter .slds-button,
+.THIS .CCNEWSLCSVNSUMMITS_News_DisplayMode .slds-button {
+  line-height: 2rem;
+  padding: 4px 16px;
+}
+.THIS .slds-button.btn-small {
+  padding: .125rem 1.875rem;
+}
+.THIS .slds-button.slds-button_neutral {
+  color: #231f20;
+}
+.THIS .slds-button.slds-button_neutral.btn-light {
+  color: #555759;
+}
+.THIS h1 {
+  font-size: 2rem;
+}
+.THIS h2 {
+  font-size: 1.875rem;
+}
+.THIS h3 {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 1.25rem;
+}
+.THIS h4 {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 1.125rem;
+    color: rgb(35, 31, 32) !important;
+}
+.THIS h5 {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 0.875rem;
+}
+.THIS h6 {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 0.625rem;
+}
+.THIS h1,
+.THIS h2,
+.THIS h3,
+.THIS h4,
+.THIS h5,
+.THIS h6 {
+  font-weight: normal;
+  color: token(colorTextBrand);
+}
+.THIS a:link,
+.THIS a:visited {
+  transition: all .33s;
+}
+.THIS a:link svg,
+.THIS a:visited svg {
+  fill: token(colorTextLink);
+}
+.THIS .dal-minHeight_medium {
+  min-height: 150px;
+}
+.THIS .block {
+  display: block;
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .slds-large-grid_align-end {
+    justify-content: flex-end;
+  }
+  .THIS .slds-large-grid_align-start {
+    justify-content: flex-start;
+  }
+  .THIS .slds-large-text-align_right {
+    text-align: right;
+  }
+  .THIS .dal-large-inlineBlock {
+    display: inline-block;
+  }
+}
+@media only screen and (min-width: 48em) and (max-width: 64em) {
+  .THIS .slds-medium-grid_align-end {
+    justify-content: flex-end;
+  }
+  .THIS .slds-medium-text-align_right {
+    text-align: right;
+  }
+  .THIS .dal-medium-inlineBlock {
+    display: inline-block;
+  }
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-small-fullWidth {
+    width: 100%;
+  }
+}
+.THIS .newsContainer .featuredNews {
+  border: 1px solid #f1f2f3;
+  border-radius: 4px;
+  background-color: #f1f2f3;
+}
+.THIS .newsContainer .featuredNews .featuredImage {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.THIS .newsContainer .featuredNews .content .topic a {
+  font-weight: 200;
+  color: #606060;
+}
+.THIS .newsContainer .featuredNews .content .topic a:hover {
+  text-decoration: none;
+}
+.THIS .newsContainer .featuredNews .content .newsName a {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  color: #231f20;
+}
+.THIS .newsContainer .featuredNews .content .newsName a:hover {
+  text-decoration: none;
+}
+.THIS .listView .featuredImage {
+  height: 100% !important;
+  border-radius: 4px 4px 0 0;
+}
+.THIS .CCEVENTSLCSVNSUMMITS_Event_Filter,
+.THIS .CCNEWSLCSVNSUMMITS_News_Filter {
+  margin-top: 0;
+}
+.THIS .dal_theme_headerTop {
+  max-height: 38px;
+  border-bottom: 1px solid rgba(204, 204, 204, 0.2);
+}
+.THIS .dal_theme_headerTop > div.headerTop_wrapper {
+  display: flex;
+  width: 100%;
+  height: 38px;
+  align-items: center;
+}
+.THIS .dal_theme_headerTop > div.headerTop_wrapper > div.headerTop_wrapperCol {
+  height: 38px;
+}
+.THIS .dal_theme_headerTop > div.headerTop_wrapper > div.headerTop_wrapperCol.left > div,
+.THIS .dal_theme_headerTop > div.headerTop_wrapper > div.headerTop_wrapperCol.right > div {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+.THIS .dal_theme_headerTop > div.headerTop_wrapper > div.headerTop_wrapperCol.right {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+}
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.left > div,
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.right > div {
+  padding: 0 1rem;
+  border-right: 1px solid rgba(204, 204, 204, 0.2);
+  border-left: 1px solid rgba(204, 204, 204, 0.2);
+}
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.left > div.dalProfileMenu .trigger-link,
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.right > div.dalProfileMenu .trigger-link {
+  padding: 0;
+}
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.left > div .slds-icon,
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.right > div .slds-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  fill: #c7c8ca;
+}
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.left > div .fa,
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.right > div .fa {
+  font-size: 1.4em;
+  vertical-align: middle;
+  color: #c7c8ca;
+}
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.left > div .text,
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.right > div .text {
+  display: none;
+}
+@media (min-width: 64.0625em) {
+  .THIS .dal_theme_headerTop .headerTop_wrapperCol.left > div .text,
+  .THIS .dal_theme_headerTop .headerTop_wrapperCol.right > div .text {
+    display: inline-block;
+  }
+}
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.left > div a,
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.right > div a {
+  color: inherit;
+}
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.left > div a:hover,
+.THIS .dal_theme_headerTop .headerTop_wrapperCol.right > div a:hover {
+  text-decoration: none;
+}
+@media only screen and (max-width: 64em) {
+  .THIS .headerBottom_wrapper {
+    padding-right: .75rem;
+    padding-left: .75rem;
+  }
+}
+.THIS .dal_theme_header .dal_theme_header_content {
+  padding-top: 23px;
+  padding-bottom: 23px;
+  align-items: center;
+}
+.THIS .dal_theme_headerNav {
+  border-top: 1px solid rgba(204, 204, 204, 0.2);
+  border-bottom: 1px solid rgba(204, 204, 204, 0.2);
+}
+.THIS .dal_theme_headerNav .slds-list_horizontal > li > .slds-is-nested {
+  min-width: 250px;
+}
+.THIS .dal_theme_headerNav .slds-list_horizontal > li .slds-button:hover,
+.THIS .dal_theme_headerNav .slds-list_horizontal > li a:hover,
+.THIS .dal_theme_headerNav .slds-list_horizontal > li .slds-button:active,
+.THIS .dal_theme_headerNav .slds-list_horizontal > li a:active {
+  background-color: rgba(199, 200, 202, 0.2);
+}
+.THIS .dal_theme_headerNav .slds-list_horizontal > li .slds-button:focus,
+.THIS .dal_theme_headerNav .slds-list_horizontal > li a:focus {
+  outline: 0;
+  box-shadow: 0 0 3px #949596;
+}
+.THIS .dal_theme_headerNav .slds-list_horizontal a.slds-is-active:not([data-type='home']),
+.THIS .dal_theme_headerNav .slds-list_horizontal .slds-list__item button:not([disabled]).slds-is-active:not([data-type='home']) {
+  background-color: transparent;
+}
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-is-nested a,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-is-nested button,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-list__item a,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-list__item button {
+  font-size: 15px;
+  line-height: normal;
+  padding: 10px 1rem;
+  border: 0;
+}
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-is-nested a:hover,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-is-nested button:hover,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-list__item a:hover,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-list__item button:hover {
+  background-color: transparent;
+}
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-is-nested a:focus,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-is-nested button:focus,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-list__item a:focus,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-list__item button:focus {
+  box-shadow: none;
+}
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal li.slds-list__item:first-child > a,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal li.slds-list__item:first-child > button {
+  padding-left: 0;
+}
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-is-active > a,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .slds-is-active > button {
+  font-weight: 700;
+}
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .dal-sub-menu li.slds-list__item:first-child > a,
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation ul.slds-list_horizontal .dal-sub-menu li.slds-list__item:first-child > button {
+  padding-left: 1rem;
+}
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation .slds-button--icon-bare {
+  color: token(colorTextLink);
+}
+.THIS .dal_theme_headerNav .forceCommunityGlobalNavigation .slds-button--icon-bare:after {
+  font-size: 0.875rem;
+  content: '  Menu';
+  color: token(colorTextLink);
+}
+.THIS .siteforceServiceBody .cBrandingLogo {
+  position: relative;
+  display: block;
+  width: 50%;
+  max-width: 200px;
+  height: 3rem;
+  outline: 0;
+  background-image: t('url(' + brandLogoImage + ')');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position-x: left;
+  background-size: contain;
+}
+.THIS .siteforceServiceBody .cBrandingLogo:focus {
+  box-shadow: none;
+}
+.THIS .cBrandingProfile {
+  display: flex;
+  align-items: center;
+}
+.THIS .cBrandingProfile .decorLogo {
+  display: block;
+}
+.THIS .cBrandingProfile .decorLogo img {
+  max-width: 90px;
+}
+.THIS .cBrandingProfile .communityName {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  color: token(colorTextLabel);
+}
+@media (min-width: 64.0625em) {
+  .THIS .cBrandingProfile .communityName {
+    padding: 1rem 0;
+  }
+}
+.THIS .cBrandingProfile .separator {
+  font-size: 1.1rem;
+  display: block;
+  padding: 1rem 12px 1rem 1rem;
+  color: token(colorTextLink);
+}
+@media (max-width: 47.9375em) {
+  .THIS .cBrandingProfile .communityName {
+    font-size: .875rem;
+    margin: 1rem 0 1rem;
+  }
+}
+@media (max-width: 64.0625em) {
+  .THIS .search {
+    padding: 0 token(spacingSmall);
+  }
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .search {
+    padding: 0;
+  }
+}
+@media (min-width: 48em) {
+  .THIS .forceCommunitySearchBox .search-field {
+    font-size: .8125rem;
+    width: 100%;
+    height: 40px;
+    border-radius: 6px;
+    background-color: #f1f2f3;
+  }
+  .THIS .forceCommunitySearchBox .search-button {
+    display: none;
+  }
+  .THIS .forceCommunitySearchBox .search-wrapper {
+    text-align: right;
+  }
+  .THIS .forceCommunitySearchBox.big-search-container {
+    float: right;
+    max-width: 500px;
+  }
+  .THIS .forceCommunitySearchBox .body-search {
+    z-index: 2000;
+  }
+  .THIS .forceCommunitySearchBox .mobile-search-icon {
+    display: block;
+    float: right;
+    margin-top: -2.25rem;
+    padding: 0 1rem 0 ;
+    pointer-events: none;
+    border: none;
+    background-color: transparent;
+  }
+  .THIS .forceCommunitySearchBox .mobile-search-icon .slds-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+@media (max-width: 47.9375em) {
+  .THIS .forceCommunitySearchBox .search-input-group .mobile-search-icon {
+    float: right;
+    margin-right: .25rem;
+    padding: .55rem 1.25rem;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #eee;
+  }
+  .THIS .forceCommunitySearchBox .search-input-group .mobile-search-icon .slds-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+}
+@media (max-width: 29.94rem) {
+  .THIS .forceCommunitySearchBox .search-input-group .mobile-search-icon {
+    margin: 0;
+    padding: 6px 14px;
+  }
+}
+.THIS .selfServiceUserProfileMenu .selfServiceProfileMenuTrigger {
+  text-align: left;
+}
+.THIS .selfServiceUserProfileMenu .selfServiceProfileMenuTrigger a {
+  color: token(colorTextDefault);
+  text-shadow: none;
+}
+.THIS .selfServiceUserProfileMenu .selfServiceProfileMenuTrigger .trigger-link:focus {
+  border-radius: 0;
+  box-shadow: none;
+}
+.THIS .selfServiceUserProfileMenu .selfServiceProfileMenuTrigger .profileIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+.THIS .selfServiceUserProfileMenu .selfServiceProfileMenuTrigger .profileName {
+  font-size: inherit;
+  font-weight: normal;
+  max-width: 140px;
+}
+@media (min-width: 48em) {
+  .THIS .selfServiceUserProfileMenu .uiMenuList {
+    z-index: 5002;
+    min-width: 233px;
+    margin-top: 0;
+  }
+}
+.THIS .footerWrapper {
+  min-height: 40vh;
+  background-color: #eeeeee;
+}
+.THIS .footerWrapper .footerLogo img {
+  max-width: 160px;
+}
+@media (max-width: 47.9375em) {
+  .THIS .footerWrapper .footerLogo {
+    text-align: center;
+  }
+  .THIS .footerWrapper .footerLogo img {
+    max-width: 280px;
+  }
+}
+.THIS .dal-form .dal-form_header {
+  border-bottom: 10px solid token(colorBorder);
+}
+.THIS .dal-form .desc {
+  font-size: 0.625rem;
+  color: red;
+}
+.THIS .dal-form h4,
+.THIS .dal-form .slds-form-element__label {
+  color: #231f20;
+}
+.THIS .orderContainer {
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+}
+.THIS .dal-form-order .slds-form-element__label,
+.THIS .dal-form-order .form-element__label {
+  font-family: helvetica, arial, sans-serif;
+  font-size: .75rem;
+  font-weight: bold;
+  display: block;
+  margin-right: .75rem;
+  margin-bottom: .125rem;
+  color: #231f20;
+  }
+@media only screen and (min-width: 48em) {
+  .THIS .dal-form-order .slds-form-element__label,
+  .THIS .dal-form-order .form-element__label {
+    white-space: nowrap;
+  }
+}
+.THIS .dal-form-order .label-lg .slds-form-element__label,
+.THIS .dal-form-order .label-lg .form-element__label {
+  font-size: .9375rem;
+}
+.THIS.slds-scope{overflow-y :scroll !important; }
+.THIS .dal-form-order input,
+.THIS .dal-form-order .faux-input {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.THIS .dal-form-order .faux-disabled {
+  border-color: #c4c6ca;
+  background-color: #e9eaec;
+}
+.THIS .dal-form-order .uiInputDate .datePicker-openIcon {
+  top: 10px;
+}
+.THIS .dal-form-order select {
+  height: 36px;
+}
+.THIS .dal-form-order .slds-select_container select {
+  width: 100%;
+}
+.THIS .dal-form-order button {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.THIS .dal-form-order button .lightningPrimitiveIcon {
+  position: relative;
+  top: -1px;
+}
+.THIS .dal-form-order .btnSaveContinue {
+  width: 100%;
+}
+.THIS .dal-form-order .btnSaveContinue .slds-button + .slds-button {
+  margin-left: 0;
+}
+@media only screen and (max-width: 64em) {
+  .THIS .dal-form-order .btnSaveContinue .slds-button + .slds-button {
+    margin-top: token(spacingSmall);
+  }
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .dal-form-order .btnSaveContinue {
+    justify-content: flex-end;
+  }
+  .THIS .dal-form-order .btnSaveContinue .slds-button + .slds-button {
+    margin-left: token(spacingSmall);
+  }
+}
+.THIS .dal-form-order .dal-buttonGroup {
+  display: flex;
+}
+.THIS .dal-form-order .dal-buttonGroup button {
+  margin: token(spacingSmall);
+}
+.THIS .dal-form-order .dal-buttonGroup.dal-buttonGroup-2 button {
+  width: 50%;
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .dal-form-order .dal-buttonGroup.dal-buttonGroup-2 button {
+    width: auto;
+  }
+}
+.THIS .dal-form-order .backButton svg {
+  position: relative;
+  top: -1px;
+  width: .9375rem;
+  height: .9375rem;
+  fill: #231f20;
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-form-order input,
+  .THIS .dal-form-order select {
+    width: 100%!important;
+  }
+}
+.THIS .dal-form-order h1,
+.THIS .dal-form-order h2,
+.THIS .dal-form-order h3,
+.THIS .dal-form-order h4,
+.THIS .dal-form-order h5,
+.THIS .dal-form-order h6 {
+  color: #231f20;
+}
+.THIS .dal-form-order .section-border-bottom {
+  border-bottom: 10px solid token(colorBorder);
+}
+.THIS .dal-form-order .slds-required,
+.THIS .dal-form-order .required {
+  display: none;
+}
+.THIS .dal-form-order ul.uiInputDefaultError {
+  margin-top: .5rem;
+}
+.THIS .dal-form-order ul.uiInputDefaultError,
+.THIS .dal-form-order ul.uiInputDefaultError li {
+  border: 0;
+  background: transparent none;
+}
+.THIS .dal-form-order ul.uiInputDefaultError li {
+  min-width: auto;
+  margin: 0;
+  text-align: left;
+}
+.THIS .dal-form-order .productSku {
+  position: relative;
+}
+.THIS .dal-form-order .productSku .slds-form-element {
+  width: 100%;
+}
+.THIS .dal-form-order .productSku .productSearch a {
+  position: relative;
+  top: 18px;
+  left: -10px;
+  display: inline-block;
+  padding: 6px;
+}
+.THIS .dal-form-order .productSku .productSearch a svg {
+  width: 18px;
+  height: 18px;
+  fill: #555759;
+}
+.THIS .dal-form-order .productSku .dal-btn-sku-search {
+  top: 24px;
+}
+.THIS .dal-form-order .defaultPriceRecord-cta-label {
+  position: relative;
+}
+.THIS .dal-form-order .defaultPriceRecord-cta-label .label-cta {
+  font-size: .6875rem;
+  position: absolute;
+  top: 14px;
+  right: 15px;
+}
+.THIS .dal-form-order .defaultPriceRecord-cta-label .slds-select_container {
+  width: 275px;
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-form-order .defaultPriceRecord-cta-label .slds-select_container {
+    width: 100%;
+  }
+}
+.THIS .dal-form-order .rowStriped > div:nth-child(even) {
+  background: #f1f2f3;
+}
+.THIS .dal-form-order .rowInfo .shippingStatus {
+  font-family: helvetica, arial, sans-serif;
+  font-size: .9375rem;
+  font-weight: bold;
+  color: #05911a;
+}
+.THIS .dal-form-order .rowInfo .shippingStatus svg {
+  position: relative;
+  top: -2px;
+  width: 15px;
+  height: 15px;
+  fill: #05911a;
+}
+.THIS .dal-form-order .rowInfo .shippingStatus.warning {
+  color: #cf740a;
+}
+.THIS .dal-form-order .rowInfo .shippingStatus.warning svg {
+  fill: #cf740a;
+}
+.THIS .dal-form-order .rowInfo .shippingStatus a,
+.THIS .dal-form-order .rowInfo .shippingStatus .shippingStatus-info {
+  font-family: token(fontFamily);
+  font-size: .75rem;
+  display: inline-block;
+  color: #5f5f5f;
+}
+.THIS .dal-form-order .rowInfo .newWindow {
+  position: relative;
+  top: -2px;
+  display: inline-block;
+}
+.THIS .dal-form-order .rowInfo .newWindow svg {
+  width: 15px;
+  height: 15px;
+  fill: #555759;
+}
+.THIS .dal-form-order .orderStats {
+  display: flex;
+  flex-wrap: wrap;
+}
+.THIS .dal-form-order .orderStats dl {
+  position: relative;
+  top: 2px;
+}
+.THIS .dal-form-order .orderStats dl dt {
+  font-size: .75rem;
+  text-transform: uppercase;
+  color: #5f5f5f;
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .dal-form-order .orderStats dl dt {
+    text-align: right;
+  }
+}
+.THIS .dal-form-order .orderStats dl dd {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 1.125rem;
+  font-weight: bold;
+  line-height: 1.375;
+  text-align: right;
+  color: #231f20;
+}
+.THIS .dal-form-order .orderStats dl dd.price {
+  color: #05911a;
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .dal-form-order .orderStats.orderStats-textLeftLarge dt,
+  .THIS .dal-form-order .orderStats.orderStats-textLeftLarge dd {
+    text-align: left;
+  }
+  .THIS .dal-form-order .orderStats.orderStats-textLeftLarge dl + dl {
+    padding-left: token(spacingLarge);
+  }
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-form-order .orderStats {
+    display: block;
+  }
+  .THIS .dal-form-order .orderStats dl {
+    padding-left: 0;
+  }
+  .THIS .dal-form-order .orderStats dl dt,
+  .THIS .dal-form-order .orderStats dl dd {
+    display: inline-block;
+    width: 50%;
+    text-align: left;
+  }
+  .THIS .dal-form-order .orderStats dl dd {
+    text-align: right;
+  }
+}
+@media only screen and (min-width: 48em) and (max-width: 64em) {
+  .THIS .dal-form-order .orderStats.orderStats-medium {
+    display: block;
+  }
+  .THIS .dal-form-order .orderStats.orderStats-medium dl {
+    padding-left: 0;
+  }
+  .THIS .dal-form-order .orderStats.orderStats-medium dl dt,
+  .THIS .dal-form-order .orderStats.orderStats-medium dl dd {
+    display: inline-block;
+    width: 50%;
+    text-align: left;
+  }
+  .THIS .dal-form-order .orderStats.orderStats-medium dl dd {
+    text-align: right;
+  }
+}
+.THIS .dal-form-order .productSupply table {
+  border-top: 0;
+  background-color: transparent;
+}
+.THIS .dal-form-order .productSupply table thead th {
+  font-size: .75rem;
+  text-transform: uppercase;
+  background-color: transparent;
+}
+.THIS .dal-form-order .productSupply table tbody td {
+  font-size: .9375rem;
+}
+@media only screen and (max-width: 64em) {
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter > div {
+    padding-top: 0;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dl,
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dt,
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dd {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dt,
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dd {
+    font-size: .75rem;
+    width: auto;
+    text-align: left;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats > dl:last-child,
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dd {
+    padding-left: token(spacingSmall);
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .btnSaveContinue {
+    justify-content: flex-end;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .btnSaveContinue button {
+    width: 50%;
+    margin-top: 0;
+    flex: 1;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .btnSaveContinue button:last-child {
+    margin-left: token(spacingSmall);
+  }
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-form-order .sticky-saveFooter .orderStats {
+    display: none;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .btnSaveContinue button {
+    font-size: .75rem;
+    width: auto;
+    padding: .5rem;
+  }
+}
+.THIS .dal-form-order .input-xx-small input,
+.THIS .dal-form-order .input-xx-small .faux-input,
+.THIS .dal-form-order .input-xx-small .slds-select_container {
+  width: 70px;
+}
+.THIS .dal-form-order .input-x-small input,
+.THIS .dal-form-order .input-x-small .slds-select_container {
+  width: 100px;
+}
+.THIS .dal-form-order .input-small input,
+.THIS .dal-form-order .input-small .faux-input,
+.THIS .dal-form-order .input-small .slds-select_container {
+  width: 130px;
+}
+.THIS .dal-form-order .input-small .datePicker-openIcon {
+  right: 1.125rem;
+}
+.THIS .dal-form-order .input-medium input,
+.THIS .dal-form-order .input-medium .faux-input,
+.THIS .dal-form-order .input-medium .slds-select_container {
+  width: 100%;
+}
+@media only screen and (min-width: 48em) {
+  .THIS .dal-form-order .input-medium input,
+  .THIS .dal-form-order .input-medium .faux-input,
+  .THIS .dal-form-order .input-medium .slds-select_container {
+    width: 160px;
+  }
+}
+.THIS .dal-form-order .infoInlineWithList {
+  font-size: .9375rem;
+  color: #555759;
+}
+.THIS .dal-form-order .infoInlineWithList span {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  color: #231f20;
+}
+.THIS .dal-form-order dl.orderOutputDataStacked dt,
+.THIS .dal-form-order .orderOutputDataLabel {
+  font-size: .75rem;
+  color: #5f5f5f;
+}
+.THIS .dal-form-order dl.orderOutputDataStacked dd {
+  font-family: helvetica, arial, sans-serif;
+}
+.THIS .dal-form-order div.orderOutputData > label {
+  font-size: .75rem;
+  padding: .125rem 0;
+  color: #5f5f5f;
+}
+.THIS .dal-form-order div.orderOutputData > span {
+  font-family: helvetica, arial, sans-serif;
+  font-size: .9375rem;
+  padding-left: token(spacingXSmall);
+}
+.THIS .dal-form-order div.orderOutputData.orderOutputData-stacked > span {
+  display: block;
+  padding-left: 0;
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-form-order div.orderOutputData.orderOutputData-inline_mobile {
+    display: flex;
+  }
+  .THIS .dal-form-order div.orderOutputData.orderOutputData-inline_mobile > label {
+    width: 35%;
+  }
+}
+.THIS .dal-form-order .highlight {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 1.5rem;
+  color: #05911a;
+}
+.THIS .dal-form-order .slds-list_horizontal.slds-has-block-links_space {
+  margin: 0 -0.75rem;
+}
+.THIS .dal-form-order .slds-list_horizontal.slds-has-block-links_space li {
+  border-left: 1px solid token(colorBorder);
+}
+.THIS .dal-form-order .slds-list_horizontal.slds-has-block-links_space li:first-child {
+  border-left: 0;
+}
+.THIS .dal-form-order .slds-list_horizontal.slds-has-block-links_space li a {
+  font-family: token(fontFamily);
+  font-size: .75rem;
+  padding-top: 0;
+  padding-bottom: 0;
+  text-decoration: underline;
+  color: #5f5f5f;
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .dal-form-order .dal-orderDetailProductFocusAttr {
+    min-height: 38px;
+    margin-top: -1.25rem;
+  }
+}
+.THIS .dal-uiMessage {
+  font-size: 1rem;
+  padding: token(spacingSmall) token(spacingLarge);
+  border-color: transparent;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.19);
+}
+.THIS .bkg-transparent {
+  background: transparent;
+}
+.THIS .dal-button-color_darkGray {
+  color: #231f20;
+}
+.THIS .dal-button-color_darkGray svg {
+  fill: #231f20;
+}
+.THIS dl.dal-bullet-list-horizontal dt,
+.THIS dl.dal-bullet-list-horizontal dd {
+  display: inline-block;
+}
+.THIS dl.dal-bullet-list-horizontal dd {
+  padding-left: token(spacingXSmall);
+}
+.THIS dl.dal-bullet-list-horizontal dt:not(:first-child):before {
+  position: relative;
+  top: -1px;
+  display: inline-block;
+  width: .375rem;
+  height: .375rem;
+  margin: 0 .5rem;
+  content: '';
+  border-radius: 50%;
+  background-color: #555759;
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .dal-title-col {
+    max-width: 350px;
+  }
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .dal-price-col dl {
+    max-width: 160px;
+  }
+}
+@media only screen and (min-width: 48em) and (max-width: 64em) {
+  .THIS .dal-medium-inputFull input,
+  .THIS .dal-medium-inputThird input,
+  .THIS .dal-medium-inputFull button,
+  .THIS .dal-medium-inputThird button,
+  .THIS .dal-medium-inputFull .slds-select_container,
+  .THIS .dal-medium-inputThird .slds-select_container {
+    width: 100%;
+  }
+  .THIS .dal-medium-fullWidth,
+  .THIS .dal-medium-inputFull {
+    width: 100%;
+  }
+  .THIS .dal-medium-inputThird {
+    width: 33.33%;
+  }
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-small-inputFull input,
+  .THIS .dal-small-inputHalf input,
+  .THIS .dal-small-inputFull button,
+  .THIS .dal-small-inputHalf button,
+  .THIS .dal-small-inputFull .slds-select_container,
+  .THIS .dal-small-inputHalf .slds-select_container {
+    width: 100%;
+  }
+  .THIS .dal-small-inputFull {
+    width: 100%;
+  }
+  .THIS .dal-small-inputHalf {
+    width: 50%;
+  }
+}
+.THIS .bold {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+}
+.THIS .bkg-transparent {
+  background: transparent none;
+}
+.THIS .icon-daltile {
+  display: inline-block;
+  width: 125px;
+  height: 37px;
+  background-image: url('/sfsites/c/resource/dal_daltile_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-daltile {
+    background-image: url('/sfsites/c/resource/dal_daltile_logo_2x');
+    background-size: 125px 37px;
+  }
+}
+.THIS .icon-marazzi {
+  display: inline-block;
+  width: 156px;
+  height: 37px;
+  background-image: url('/sfsites/c/resource/dal_marazzi_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-marazzi {
+    background-image: url('/sfsites/c/resource/dal_marazzi_logo_2x');
+    background-size: 156px 37px;
+  }
+}
+.THIS .icon-ao {
+  display: inline-block;
+  width: 200px;
+  height: 38px;
+  background-image: url('/sfsites/c/resource/dal_ao_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-ao {
+    background-image: url('/sfsites/c/resource/dal_ao_logo_2x');
+    background-size: 200px 38px;
+  }
+}
+.THIS .icon-ragno {
+  display: inline-block;
+  width: 154px;
+  height: 37px;
+  background-image: url('/sfsites/c/resource/dal_ragno_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-ragno {
+    background-image: url('/sfsites/c/resource/dal_ragno_logo_2x');
+    background-size: 154px 37px;
+  }
+}
+.THIS lightning-input {
+  display: inline-block;
+}
+.THIS .slds-button {
+  border-radius: 4px;
+}
+.THIS .uiTabset--default .tabs__item > a {
+  border-bottom: 4px solid transparent;
+}
+.THIS .uiTabset--default .tabs__item > a:hover {
+  color: token(colorTextBrand);
+  border-color: #555759;
+}
+.THIS .uiTabset--default .tabs__item.active > a {
+  color: token(colorTextDefault);
+  border-color: #555759;
+}
+.THIS .uiTabset--default .tabs__nav {
+  display: block;
+}
+.THIS .uiTabset--default .tabs__nav .tabHeader {
+  display: inline-flex;
+}
+.THIS .slds-dropdown {
+  border: none;
+  border-radius: 0;
+  box-shadow: rgba(0, 0, 0, 0.16) 0 2px 3px 0;
+}
+.THIS .forceCommunityTopArticleList .title {
+  font-size: 1.875rem;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .topicHeader {
+  margin-bottom: 0;
+  padding-bottom: token(spacingXSmall);
+  border-bottom: 2px solid #fafafa;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .topicHeader .topicHeaderLink {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 1.125rem !important;
+  font-weight: bold;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .topicHeader .topicHeaderLink:hover {
+  text-decoration: none;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .forceCommunityTopArticleItem {
+  padding: .25rem 0 !important;
+  border-bottom: 2px solid #fafafa;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .forceCommunityTopArticleItem .article-title {
+  font-size: .85rem;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .forceCommunityTopArticleItem .article-title-link:focus {
+  box-shadow: none;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .forceCommunityTopArticleItem .article-title-link:hover {
+  text-decoration: none;
+}
+.THIS .uiMessage {
+  margin-right: 0;
+  margin-left: 0;
+  padding: token(spacingMedium);
+}
+.THIS .forceTopicFeaturedTopics .topicContent {
+  background-color: rgba(241, 242, 243, 0.69);
+}
+.THIS .forceTopicFeaturedTopics .topicContent:hover {
+  background-color: rgba(241, 242, 243, 0.88);
+}
+.THIS .forceTopicFeaturedTopics .topicLabel {
+  font-size: 1.25rem;
+  color: #231f20;
+}
+.THIS .topicHierarchy-topBox .topicHierarchy-child {
+  font-size: 1.125rem;
+  color: token(colorTextBrand);
+}
+.THIS .comm-topic-trending-articles li a span {
+  font-size: 0.875rem;
+}
+.THIS .comm-topic-trending-articles li a:focus {
+  box-shadow: none;
+}
+.THIS .selfServiceBaseCaseCreation .caseHeader,
+.THIS .selfServiceCaseCreate .caseHeader {
+  display: none;
+}
+.THIS .selfServiceBaseCaseCreation .mdp-container,
+.THIS .selfServiceCaseCreate .mdp-container {
+  margin-top: 0;
+}
+.THIS .selfServiceBaseCaseCreation .mdp-container .mdpContainer,
+.THIS .selfServiceCaseCreate .mdp-container .mdpContainer {
+  padding-bottom: 20px;
+}
+.THIS .selfServiceBaseCaseCreation .mdp-container .submitButtonContainer,
+.THIS .selfServiceCaseCreate .mdp-container .submitButtonContainer {
+  padding-top: 20px;
+  text-align: center;
+}
+.THIS .selfServiceBaseCaseCreation .mdp-container .submitButtonContainer button.slds-button,
+.THIS .selfServiceCaseCreate .mdp-container .submitButtonContainer button.slds-button {
+  line-height: 1.875rem;
+  display: inline-block;
+  width: auto;
+  min-width: 200px;
+  max-width: 200px;
+  /*
+	slds-button--neutral
+	slds-button--brand
+	slds-button--inverse
+	*/
+  font-size: 100%;
+  padding: .375rem 2.25rem;
+  transition: all .25s;
+  border-radius: token(borderRadiusMedium);
+}
+.THIS .selfServiceBaseCaseCreation .mdp-container .submitButtonContainer button.slds-button > span,
+.THIS .selfServiceCaseCreate .mdp-container .submitButtonContainer button.slds-button > span {
+  display: inline-block;
+}
+.THIS .selfServiceBaseCaseCreation .forceRecordLayout .mdp.forcePageBlockSectionEdit:first-of-type .forcePageBlockSectionRow:first-child .forcePageBlockItem:first-child,
+.THIS .selfServiceCaseCreate .forceRecordLayout .mdp.forcePageBlockSectionEdit:first-of-type .forcePageBlockSectionRow:first-child .forcePageBlockItem:first-child {
+  padding-top: 8px;
+}
+.THIS .forceCommunityRecordListStandard .listTitle {
+  font-size: 1.875rem;
+  font-weight: normal;
+  text-transform: capitalize;
+}
+.THIS .slds-container_x-large {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.THIS .slds-list_horizontal > li:nth-child(2) .slds-button {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  color: token(colorTextLink);
+}
+.THIS .slds-list_horizontal > li:nth-child(2) .slds-button:after {
+  margin-right: -0.75rem;
+  padding-left: token(spacingXSmall);
+  content: '|';
+}

@@ -1,0 +1,37 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francoiskorb on 10/5/16.
+ -->
+
+<design:component label="7S Ideas Featured">
+	<design:attribute name="zoneName"
+	                  label="Zone Name:"
+	                  description="Ideas Zone Name"/>
+	<design:attribute name="displayImages"
+	                  label="Display Images"
+	                  description="Display idea images"/>
+	<design:attribute name="displayPostDateAuthor"
+	                  label="Display Post Date and Author"
+	                  description="Display the idea post date and author name"/>
+	<design:attribute name="displayViewMore"
+	                  label='Display "View More" button'
+	                  description="Display the View More button"/>
+
+	<design:attribute name="recordId1"
+	                  label="Position 1 featured idea ID:"
+	                  description="Enter the idea ID for position 1"/>
+	<design:attribute name="recordId2"
+	                  label="Position 2 featured idea ID:"
+	                  description="Enter the idea ID for position 2"/>
+	<design:attribute name="recordId3"
+	                  label="Position 3 featured idea ID:"
+	                  description="Enter the idea ID for position 3"/>
+
+	<design:attribute name="ideasListURL"
+	                  label="Ideas List URL"
+	                  description="URL for Ideas List page"/>
+	<design:attribute name="ideaDetailURL"
+	                  label="Idea Detail URL"
+	                  description="URL for Idea detail page"/>
+
+</design:component>

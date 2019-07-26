@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 4/23/18.
+ -->
+<aura:component description="Dal_DraftOrderList" extends="c:Dal_ListBase" controller="Dal_DraftOrderListController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:attribute name="headerText" type="String" default="Saved orders have been started, but not submitted yet. Select “Resume Order” to complete the order. Orders created more than 7 days ago are automatically deleted from the system." />
+</aura:component>

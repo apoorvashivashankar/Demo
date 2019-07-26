@@ -1,0 +1,9 @@
+<design:component >
+	<design:attribute name="Link" label="" default=""  description=""/>
+	<design:attribute name="Text" label="" default=""  description=""/>
+	<design:attribute name="IsButton" label="" default=""  description=""/>
+    <design:attribute name="OpenInNewPage" label="" default="" description=""/>
+	<design:attribute name="CustomClassName" label="Custom Class name" description=""/>
+    <design:attribute name="IsFormModal" label="Will link open a form modal?" description=""/>
+    <design:attribute name="FormModalContent" label="Link form modal component name" description="The lightning component name that will appear in the modal ex:(c:Dal_Dist_RequestUser)" />
+</design:component>

@@ -1,0 +1,10 @@
+<!--
+ - Created by 7Summits on 3/6/18.
+ -->
+
+<design:component label="Dal Dist Quick Order Process">
+    <design:attribute name="labelHeaderInfo" label="Instructional Header text for page 2"/>
+    <design:attribute name="labelCanShipSmallPackage" label="Small Package available instructional text"/>
+    <design:attribute name="labelPage3HeaderInfo" label="Instructional Header text for page 3"/>
+    <design:attribute name="savedOrdersUrl" label="URL to navigate for Saved Orders"/>
+</design:component>

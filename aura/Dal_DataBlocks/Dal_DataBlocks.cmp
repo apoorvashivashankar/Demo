@@ -1,0 +1,86 @@
+<!--
+ - Created by 7Summits on 2/19/18.
+ -->
+
+<aura:component description="Dal_DataBlocks" extends="c:Dal_Base">
+    <!-- attributes passed in -->
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="isSSC" type="Boolean" default="false"/>
+    <aura:attribute name="blocks" type="Object[]" default="[]"/>
+    <aura:attribute name="hasHeader" type="Boolean" default="false"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="showInnerComponentBlock" type="Boolean" default="true"/>
+    <aura:attribute name="innerComponentBlockLoading" type="Boolean" default="true"/>
+    <aura:attribute name="innerComponentBody" type="Object" />
+    <aura:attribute name="activeDetailId" type="String" default=""/>
+    <aura:attribute name="pageInit" type="Boolean" default="true" />
+
+
+    <!-- Events -->
+    <aura:handler name="toggleDetailEvt" event="c:Dal_DataBlocks_ToggleDetailEvt" action="{!c.handleToggleDetail}"/>
+
+    <lightning:layout class="{!'dal-dataBlocks slds-grid_pull-padded-xx-small dal-dataBlocks-' + v.blocks.length}" multipleRows="true">
+
+        <!-- create the blocks -->
+        <aura:iteration items="{!v.blocks}" var="block" indexVar="index">
+          
+            <lightning:layoutItem class="dal-dataBlockWrapper slds-p-around_xx-small" size="12">
+                <c:Dal_DataBlock id="{!index}"
+                                 valueLabel="{!block.label}"
+                                 value="{!block.value}"
+                                 valueFontSize="{!block.valueFontSize}"
+                                 valueType="{!block.valueType}"
+                                 ctaLabel="{!block.ctaLabel}"
+                                 ctaUrl="{!block.ctaUrl}"
+                                 cta2Label="{!block.cta2Label}"
+                                 cta2Url="{!block.cta2Url}"
+                                 labelTopLeft="{!block.labelTopLeft}"
+                                 labelTopRight="{!block.labelTopRight}"
+                                 hasInnerComponent="{!block.hasInnerComponent}"
+                                 innerComponentLabelOpen="{!block.innerComponentLabelOpen}"
+                                 innerComponentLabelClose="{!block.innerComponentLabelClose}"
+                                 innerComponentName="{!block.innerComponentName}"
+                                 isInnerComponentActive="{!(v.activeDetailId == index)}"
+                                 iconType="{!block.iconType}"
+                                 hasHeader="{!v.hasHeader}"
+                                 showInnerComponentBlock = "{!v.showInnerComponentBlock}"
+                />
+            </lightning:layoutItem>
+        </aura:iteration>
+
+        <!-- drop down section containing a custom component provided by configuration -->
+        <!--<aura:if isTrue="{!v.showInnerComponentBlock == true}">
+            <lightning:layoutItem class="dal-dataBlock-comp slds-p-left_xx-small slds-p-right_xx-small slds-p-bottom_small" size="12">
+                <div class="dal-dataBlock-compWrapper">
+                    <div aura:id="compContent" class="dal-dataBlock-compContent">
+                        <aura:if isTrue="{!v.innerComponentBlockLoading ==false}">
+                        	{!v.innerComponentBody}
+                        	<aura:set attribute="else">
+                                <lightning:spinner variant="brand" size="medium"/>
+                        	</aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+            </lightning:layoutItem>
+        </aura:if>-->
+
+        <aura:if isTrue="{!v.showInnerComponentBlock == true}">
+            <aura:iteration items="{!v.blocks}" var="block" indexVar="index">
+                <aura:if isTrue="{!block.label == 'Orders for Pickup and Delivery'}">
+                    <aura:if isTrue="{!v.isSSC == true}">
+                        <lightning:layoutItem class="dal-dataBlock-comp slds-p-left_xx-small slds-p-right_xx-small slds-p-bottom_small" size="12">
+                            <div class="dal-dataBlock-compWrapper">
+                                <div class="dal-dataBlock-compContent">
+                                    <c:Dal_SSC_DeliveryPickupTabs />
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+                    </aura:if>
+                </aura:if>
+            </aura:iteration>
+        </aura:if>
+    </lightning:layout>
+
+
+</aura:component>

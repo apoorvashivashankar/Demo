@@ -1,0 +1,196 @@
+<!--
+ - Created by 7Summits on 4/30/18.
+ -->
+<aura:component description="Dal_SSC_SchedulePickupDeliveryConfirm" extends="c:Dal_ModalBase">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <!-- passed in attributes -->
+    <aura:attribute name="store" type="Map" default="{}" required="true"/>
+    <aura:attribute name="currentOrderPos" type="String" default="" required="true"/>
+    <aura:attribute name="type" type="String" default="" required="true"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="isLastOrder" type="Boolean" default="false"/>
+    <aura:attribute name="hasSavingError" type="Boolean" default="false"/>
+    <aura:attribute name="submittedType" type="String" default=""/>
+    <aura:attribute name="submittedSkus" type="List" default="[]"/>
+
+    <aura:attribute name="typePickup" type="String" default=""/>
+    <aura:attribute name="typeDelivery" type="String" default=""/>
+    <aura:attribute name="typeScheduleByItem" type="String" default=""/>
+
+    <!-- labels -->
+    <aura:attribute name="title" type="String" default="Saving Appointment"/>
+    <aura:attribute name="labelSavingError" type="String"
+                    default="There was an error saving your order. Please try saving again."/>
+    <aura:attribute name="labelClose" type="String" default="Close"/>
+    <aura:attribute name="labelPickup" type="String" default="Scheduled for Pickup"/>
+    <aura:attribute name="labelDelivery" type="String" default="Scheduled for Delivery"/>
+    <aura:attribute name="labelNotScheduled" type="String" default="Not Scheduled"/>
+    <aura:attribute name="labelLastOrder" type="String"
+                    default="This was the last order you selected to schedule, after closing you will be redirected to your orders page."/>
+    <aura:attribute name="labelPrefixPickupDelivery" type="String"
+                    default="Your order has been successfully submitted for"/>
+    <aura:attribute name="labelScheduleByItem" type="String"
+                    default="Your order has been successfully submitted. View the status of each line item below."/>
+    <aura:attribute name="labelReschedule" type="String" default="Your order has been rescheduled successfully."/>
+    <aura:attribute name="labelNotReschedule" type="String" default="Failed to rescheduled the order."/>
+
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.title}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+
+    <lightning:layout class="dal-form dal-form-order slds-p-vertical_small" multipleRows="true">
+
+        <aura:if isTrue="{!v.isLoading == false}">
+
+            <!-- ******************** -->
+            <!-- success no errors -->
+            <!-- ******************** -->
+            <aura:if isTrue="{!v.hasSavingError == false}">
+
+                <!-- ******************** -->
+                <!-- success message -->
+                <!-- ******************** -->
+                <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12">
+                    <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="confirm"
+                                closable="false">
+
+                        <aura:if isTrue="{!!(v.isReschedule)}">
+                            <aura:if isTrue="{!or(v.submittedType == v.typePickup, v.submittedType == v.typeDelivery)}">
+                                {!v.labelPrefixPickupDelivery + ' ' + ((v.submittedType == v.typePickup) ? 'pickup' :
+                                'delivery') + '.'}
+                            </aura:if>
+                            <aura:if isTrue="{!v.submittedType == v.typeScheduleByItem}">
+                                {!v.labelScheduleByItem}
+                            </aura:if>
+                            <aura:if isTrue="{!v.isLastOrder == true}">
+                                {!' ' + v.labelLastOrder}
+                            </aura:if>
+
+                            <aura:set attribute="else">
+                                {!v.labelReschedule}
+                            </aura:set>
+                        </aura:if>
+                    </ui:message>
+                </lightning:layoutItem>
+                <!-- ******************** -->
+                <!-- end success message -->
+                <!-- ******************** -->
+
+                <!-- ******************** -->
+                <!-- sku table -->
+                <!-- ******************** -->
+                <lightning:layoutItem class="slds-p-top_x-large" size="12">
+
+                    <aura:if isTrue="{!v.submittedSkus.length > 0}">
+                        <table class="dal-item-table slds-table slds-table_bordered slds-table_cell-buffer slds-no-row-hover slds-max-medium-table_stacked-horizontal">
+                            <thead>
+                            <tr class="slds-text-title_caps">
+                                <th scope="col" class="slds-cell-wrap">
+                                    <div class="slds-truncate" title="Line #">Line #</div>
+                                </th>
+                                <th scope="col" class="slds-cell-wrap">
+                                    <div class="slds-truncate" title="Product/Sku #">Product/Sku #</div>
+                                </th>
+                                <th scope="col" class="slds-cell-wrap">
+                                    <div class="slds-truncate" title="Quantity">Quantity</div>
+                                </th>
+                                <th scope="col" class="slds-cell-wrap">
+                                    <div class="slds-truncate" title="Item Status">Item Status</div>
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <!-- ******************** -->
+                            <!-- items rows -->
+                            <!-- ******************** -->
+                            <aura:iteration items="{!v.submittedSkus}" var="sku" indexVar="index">
+                                <tr>
+                                    <td class="slds-cell-wrap" data-label="Line #">
+                                        <div class="slds-truncate" title="{!sku.lineNumber}"><h4>{!sku.lineNumber}</h4>
+                                        </div>
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="PRODUCT/SKU #">
+                                        <div class="slds-truncate" title="{!sku.description}">
+                                            <h4>{!sku.description}</h4>
+                                            <p>{!sku.sku}</p>
+                                        </div>
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="Quantity">
+                                        <div class="slds-truncate" title="{!sku.quantity + ' ' + sku.uom}">
+                                            {!sku.quantity + ' ' + sku.uom}
+                                        </div>
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="Item Status">
+                                        <div class="slds-truncate" title="{!sku.status}">{!sku.status}</div>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                            <!-- ******************** -->
+                            <!-- end items rows -->
+                            <!-- ******************** -->
+
+                            </tbody>
+                        </table>
+                    </aura:if>
+                </lightning:layoutItem>
+                <!-- ******************** -->
+                <!-- end sku table -->
+                <!-- ******************** -->
+            </aura:if>
+            <!-- ******************** -->
+            <!-- end success no errors -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- save error -->
+            <!-- ******************** -->
+            <aura:if isTrue="{!v.hasSavingError == true}">
+                <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12">
+                    <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="error"
+                                closable="false">
+                        {!v.labelSavingError}
+                    </ui:message>
+                </lightning:layoutItem>
+            </aura:if>
+            <!-- ******************** -->
+            <!-- end save error -->
+            <!-- ******************** -->
+
+            <lightning:layoutItem size="12">
+                <lightning:layout
+                        class="footer-bar slds-m-top_medium slds-border_top slds-p-top_small slds-p-horizontal_large"
+                        horizontalAlign="end" multipleRows="true">
+                    <lightning:button class="dal-small-fullWidth" variant="neutral" label="{!v.labelClose}"
+                                      onclick="{!c.handleClose}"/>
+                </lightning:layout>
+            </lightning:layoutItem>
+
+        </aura:if>
+
+        <!-- ******************** -->
+        <!-- loading -->
+        <!-- ******************** -->
+        <aura:if isTrue="{!v.isLoading == true}">
+            <lightning:layoutItem size="12" class="slds-is-relative slds-p-around_xx-large">
+                <lightning:spinner class="bkg-transparent" variant="brand"/>
+            </lightning:layoutItem>
+        </aura:if>
+        <!-- ******************** -->
+        <!-- end loading -->
+        <!-- ******************** -->
+
+    </lightning:layout>
+
+</aura:component>

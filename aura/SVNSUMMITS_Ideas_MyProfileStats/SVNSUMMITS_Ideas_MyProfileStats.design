@@ -1,0 +1,10 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S My Profile Stats">
+	<design:attribute name="zoneName" label="Zone Name" description="Ideas Zone Name" />
+	<design:attribute name="title" label="Title" description="Title of Component" />
+	<design:attribute name="myIdeasURL" label="Link to My Ideas Page" description="Link to page that displays logged in user's ideas. Link will ONLY populate on logged in user's self-profile." />
+	<design:attribute name="myIdeasDescription" label="My Ideas Description Text" description="Description text of section" />
+	<design:attribute name="myVotedOnIdeasURL" label="My Voted On Ideas Page" description="Link to page that displays logged in user's voted on ideas. Link will ONLY populate on logged in user's self-profile." />
+	<design:attribute name="myVotedOnIdeasDescription" label="My Voted On Ideas Description Text" description="Description text of section" />
+    <design:attribute name="doNotLink" label="Do Not Link to URL" description="If checked, the component will not be linked to a page." />
+</design:component>

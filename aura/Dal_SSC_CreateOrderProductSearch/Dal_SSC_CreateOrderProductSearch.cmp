@@ -1,0 +1,208 @@
+<!--
+ - Created by ranja on 26-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderProductSearch" controller="Dal_InventorySearchController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" extends="c:Dal_SSC_CreateOrderBase">
+
+    <!--INIT HANDLER-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!--Internal Attribute-->
+    <aura:attribute name="isCartProduct" type="Boolean" default="false"/>
+
+
+    <!--BODY-->
+    <div>
+        <div class="slds-grid slds-wrap">
+
+            <aura:if
+                    isTrue="{!or(v.createOrderWrapper.pageOrderCreate == 1,v.createOrderWrapper.pageOrderCreate == '1')}">
+
+                <div class="slds-grid slds-wrap slds-m-bottom_small slds-large-size_3-of-12 slds-medium-3-of-12 slds-small-size_3-of-12
+                            slds-size_1-of-1">
+                    <c:Dal_SSC_CreateOrderProductSearchFilter divisionCode="{!v.divisionCode}" totalPages="{!v.totalPages}"
+                                                              pageNumber="{!v.pageNumber}" disableNext="{!v.disableNext}"
+                                                              finalResponseWrapper="{!v.finalResponseWrapper}"
+                                                              responseFromSearchResult="{!v.responseFromSearchResult}"
+                                                              createOrderWrapper="{!v.createOrderWrapper}" displayProdList="{!v.displayProdList}"
+                                                              listOfSelectedProducts="{!v.listOfSelectedProducts}"
+                                                              count="{!v.count}" perPageCount="{!v.perPageCount}"/>
+                </div>
+
+            </aura:if>
+
+            <!-- Body -->
+            <div class="slds-grid slds-wrap slds-large-size_9-of-12 slds-size_1-of-1 slds-medium-9-of-12 slds-small-size_9-of-12">
+
+                <aura:if
+                        isTrue="{!or(v.createOrderWrapper.pageOrderCreate == 1,v.createOrderWrapper.pageOrderCreate == '1')}">
+
+                    <!--Top Search-->
+                    <div class="custom-box-top slds-size_1-of-1 slds-grid slds-wrap">
+
+                        <!--<div class="slds-m-top_large slds-m-bottom_small slds-size_1-of-1 ">-->
+                        <div class="slds-large-size_10-of-12 slds-size_1-of-1">
+                            <lightning:input aura:id="skuSearch" name="Search Sku's"
+                                             label="Keyword (SKU or product name)"
+                                             value="{!v.createOrderWrapper.skuKeyword}"
+                                             placeholder="Search by Keyword"
+                                             class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_1-of-1
+                                                    slds-size_1-of-1"/>
+                        </div>
+                        <div class="slds-large-size_2-of-12 slds-size_1-of-1 create-order-search-order-div">
+                            <lightning:button onclick="{!c.searchSkuWithKeyword}" label="SEARCH" name="SEARCH"
+                                              variant="brand" class="create-order-search-order-div-button"/>
+                        </div>
+                        <!--</div>-->
+                    </div>
+
+
+                    <!--Search Results-->
+                    <div class="slds-size_1-of-1 slds-m-vertical_large">
+                        <c:Dal_SSC_CreateOrderProductSearchProdList divisionCode="{!v.divisionCode}" disableNext="{!v.disableNext}"
+                                                                    finalResponseWrapper="{!v.finalResponseWrapper}"
+                                                                    pageNumber="{!v.pageNumber}" count="{!v.count}"
+                                                                    responseFromSearchResult="{!v.responseFromSearchResult}"
+                                                                    createOrderWrapper="{!v.createOrderWrapper}" displayProdList="{!v.displayProdList}"
+                                                                    totalPages="{!v.totalPages}" perPageCount="{!v.perPageCount}"
+                                                                    listOfSelectedProducts="{!v.listOfSelectedProducts}"/>
+                    </div>
+                </aura:if>
+            </div>
+
+        </div>
+
+        <div class="slds-size_1-of-1">
+            <aura:if
+                    isTrue="{!or(v.createOrderWrapper.pageOrderCreate == 2,v.createOrderWrapper.pageOrderCreate == '2')}">
+
+                <c:Dal_SSC_CreateOrderDetailPage createOrderWrapper="{!v.createOrderWrapper}" displayProdList="{!v.displayProdList}"
+                                                 finalResponseWrapper="{!v.finalResponseWrapper}" profile="{!v.profileName}"/>
+            </aura:if>
+
+            <aura:if
+                    isTrue="{!or(v.createOrderWrapper.pageOrderCreate == 3,v.createOrderWrapper.pageOrderCreate == '3')}">
+                <c:Dal_SSC_CreateOrderSkuDetailPage createOrderWrapper="{!v.createOrderWrapper}" listOfSelectedProducts="{!v.listOfSelectedProducts}"
+                                                    finalResponseWrapper="{!v.finalResponseWrapper}" profile="{!v.profileName}"/>
+            </aura:if>
+
+        </div>
+
+
+        <!--Footer-->
+
+        <aura:if
+                isTrue="{!not(or(v.createOrderWrapper.pageOrderCreate > 2,v.createOrderWrapper.pageOrderCreate == '3'))}">
+
+
+            <!--Footer Sticky Navigation-->
+            <lightning:layout class="orderContainer">
+                <div class="sticky slds-grid slds-wrap slds-size_12-of-12 section-border-top">
+
+                    <div class="btnSaveContinue slds-large-size_4-of-12 slds-size_1-of-1 slds-grid slds-wrap "></div>
+
+                    <div class=" slds-grid slds-wrap slds-large-size_8-of-12 slds-size_1-of-1 slds-wrap slds-grid_align-center">
+
+                        <aura:if
+                                isTrue="{!or(v.createOrderWrapper.pageOrderCreate == 1,v.createOrderWrapper.pageOrderCreate == '1')}">
+                            <div class=" product-selected-description slds-grid_align-center">
+                                {!v.listOfSelectedProducts.length}
+                                <aura:if isTrue="{!(v.createOrderWrapper.pageOrderCreate == 1)}">
+                                    <aura:if isTrue="{!v.listOfSelectedProducts.length == 1}">
+                                        Product Selected
+                                        <aura:set attribute="else">
+                                            Products Selected
+                                        </aura:set>
+                                    </aura:if>
+
+                                    <aura:set attribute="else">
+                                        <aura:if isTrue="{!v.listOfSelectedProducts.length == 1}">
+                                            Product
+                                            <aura:set attribute="else">
+                                                Products
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+
+
+                            <aura:set attribute="else">
+                                <div class=" product-selected-description slds-grid_align-center">
+                                    {!v.finalResponseWrapper.length}
+                                    <aura:if isTrue="{!(v.createOrderWrapper.pageOrderCreate == 1)}">
+                                        <aura:if isTrue="{!v.finalResponseWrapper.length == 1}">
+                                            Product Selected
+                                            <aura:set attribute="else">
+                                                Products Selected
+                                            </aura:set>
+                                        </aura:if>
+
+                                        <aura:set attribute="else">
+
+                                            <aura:if isTrue="{!v.finalResponseWrapper.length == 1}">
+                                                Product
+                                                <aura:set attribute="else">
+                                                    Products
+                                                </aura:set>
+                                            </aura:if>
+
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+
+                        <div class="">
+                            <aura:if
+                                    isTrue="{!or(v.createOrderWrapper.pageOrderCreate == 1,v.createOrderWrapper.pageOrderCreate == '1')}">
+                                <lightning:button variant="brand"
+                                                  label="{!(v.createOrderWrapper.pageOrderCreate == 1) ? 'CREATE PRODUCT LIST' : 'ADD TO CART'}"
+                                                  onclick="{!c.goToCreateOrderDetailPage}"
+                                                  disabled="{!not((v.listOfSelectedProducts.length>0))}"
+                                                  class="dal-small-fullWidth dal-medium-fullWidth"/>
+
+                                <aura:set attribute="else">
+
+                                    <aura:if isTrue="{! or(v.profileName == 'SSC Accounting',
+                                                         or(v.profileName == 'SSC Customer Service',
+                                                         or(v.profileName == 'SSC Sales Rep',
+                                                         v.profileName == 'SSC Statement Dealer Sales Rep')))}">
+
+                                            <lightning:button variant="brand"
+                                                              label="BACK TO PRODUCT SEARCH"
+                                                              onclick="{!c.handleBackToProduct}"
+                                                              disabled="{!not((v.listOfSelectedProducts.length>0))}"
+                                                              class="dal-small-fullWidth dal-medium-fullWidth"/>
+
+                                        <aura:set attribute="else">
+                                            <lightning:button variant="brand"
+                                                              label="{!(v.createOrderWrapper.pageOrderCreate == 1) ? 'CREATE PRODUCT LIST' : 'ADD TO CART'}"
+                                                              onclick="{!c.goToCreateOrderDetailPage}"
+                                                              disabled="{!not(v.finalResponseWrapper.length>0)}"
+                                                              class="dal-small-fullWidth dal-medium-fullWidth"/>
+                                        </aura:set>
+
+                                    </aura:if>
+                                </aura:set>
+
+                            </aura:if>
+                        </div>
+                    </div>
+
+
+                </div>
+            </lightning:layout>
+
+        </aura:if>
+
+    </div>
+
+
+</aura:component>

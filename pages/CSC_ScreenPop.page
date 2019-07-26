@@ -1,0 +1,2116 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="true" lightningStylesheets="true" controller="OpenCTI_SFDCScriptController"
+  id="thePage" docType="html-5.0" applyHTmlTag="false">
+
+  <!-- JavaScript Libraries -->
+  <apex:includeScript value="/support/console/22.0/integration.js" />
+  <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" />
+  <apex:includeScript value="{!URLFOR($Resource.svg4everybody)}" />
+  <apex:includeScript value="{!URLFOR($Resource.bootstrap3, 'js/bootstrap.min.js')}" />
+  <apex:includeScript value="{!URLFOR($Resource.jqDataTables, 'datatables.min.js')}" />
+  <apex:includeScript value="{!URLFOR($Resource.jQueryMask)}" />
+  <apex:includeScript value="/support/console/45.0/integration.js"/>
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+  <header>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </header>
+
+  <script>
+    //
+    //  @DOM Ready
+    //
+    $(document).ready(function () {
+      render_page_header();
+      console.log('**** recovering ssc...');
+      console.log('jquery v: ' + $.fn.jquery);
+      var getBootstrapVersion = function () {
+        var deferred = $.Deferred();
+
+        var script = $('script[src*="bootstrap"]');
+        if (script.length == 0) {
+          return deferred.reject();
+        }
+
+        var src = script.attr('src');
+        $.get(src).done(function (response) {
+          var matches = response.match(/(?!v)([.\d]+[.\d])/);
+          if (matches && matches.length > 0) {
+            version = matches[0];
+            deferred.resolve(version);
+          }
+        });
+
+        return deferred;
+      };
+      getBootstrapVersion().done(function (version) {
+        console.log('bootstrap v: ' + version); // '3.3.4'
+      });
+      getSSCData();
+      getContactAccountData();
+      svg4everybody();
+
+      var inputSearch = document.getElementById("inputCallerSearch");
+      inputSearch.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("searchCon").click();
+        }
+      });    
+
+    });
+
+    var ds_SSC = [];
+    var SSC_No;
+    var SSC_Id;
+    var ds_accounts = [];
+    var ds_accountsMatched = [];
+    var ds_contacts = [];
+    var screen_pop_ani = '';
+    var screen_pop_vdn = '';
+    var screen_pop_dnis = '';
+    var accountId;
+    var accountName;
+    var contactId;
+    var contactName;
+    var theAccountId;
+    var theAccountName;
+    var theContactId;
+    var theContactName;
+    var theContactFirstName;
+    var theContactLastName;
+    var theContactEmailName;
+    var theContactPhoneName;
+    var theSSCId;
+    var theCaseStatus;
+    var theCaseType;
+    var theCaseOrderNumber;
+    var theCaseCSRHandoff;
+    var theCaseSubject;
+    var theCaseComments;
+    var theCaseDescription;
+    var theCaseTypeOfChange;
+    var labelCaseRecordTypeId = '{!($Label.CaseRecordTypeId)}';
+    console.log('labelCaseRecordTypeId: ' + labelCaseRecordTypeId);
+    var on_ssc_info_pulled = function (result, event) {
+      if (event.status) {
+        ds_SSC.length = 0;
+        if (result.length > 0) {
+          for (i = 0; i < result.length; i++) {
+            var ssc = result[i];
+            ds_SSC.push([ssc.Name, ssc.SSC_Phone_Number__c, ssc.VDN__c]);
+            SSC_Id = ssc.Id;
+          }
+          SSC_No = ds_SSC[0][0];
+          console.log(ds_SSC);
+          console.log('SSC_Id:...' + SSC_Id);
+          console.log('#### saving...SSC_No=' + SSC_No);
+          $('#script--sscname').html(SSC_No);
+          $('#script--sscphone').html(ds_SSC[0][1]);
+        }
+        else {
+          $('#script--sscname').html('No Matching Record for SSC found.');
+          SSC_No = url_param.DNIS;
+        }
+      } else if (event.type === 'exception') {
+        alert(event.message + ' ' + event.where);
+      } else {
+        alert(event.message);
+      }
+    };
+
+    var on_ani_lookup_completed = function (result, event) {
+      if (event.status) {
+        var showSection = result.showSection;
+        //------------------------------------------------------------------
+        //  accounts (ANI found in contacts)
+        //------------------------------------------------------------------
+        if (result.accounts && result.accounts.length > 0) {
+          ds_accounts.length = 0;
+          for (i = 0; i < result.accounts.length; i++) {
+            var a = result.accounts[i];
+            var dt_a = {
+              "ID": a.Id,
+              "Name": a.Name,
+              "DW_ID": ((a.DW_ID__c) ? a.DW_ID__c : ""),
+              "CustomerType": ((a.SSC__r) ? a.SSC__r.Name : ""),
+              "ShippingStreet": ((a.ShippingStreet) ? a.ShippingStreet : ""),
+              "ShippingCity": ((a.ShippingCity) ? a.ShippingCity : ""),
+              "ShippingState": ((a.ShippingState) ? a.ShippingState : ""),
+              "ShippingPostalCode": ((a.ShippingPostalCode) ? a.ShippingPostalCode : ""),
+              "ShippingCountry": ((a.ShippingCountry) ? a.ShippingCountry : ""),
+              "Phone": ((a.Phone) ? a.Phone : ""),
+              "Owner": a.Owner.Name
+            };
+            ds_accounts.push(dt_a);
+          }
+          $("#acc-lookup1").show();
+          $("#account-lookup1-grid").show();
+          $('#account-lookup1-grid').DataTable({
+            data: ds_accounts,
+            retrieve: true,
+            paging: false,
+            columns: [
+              {
+                render: function (data, type, row) {
+                  var theRowId = row.ID;
+                  // theAccountId = row.ID;
+                  // theAccountName = row.Name;   
+                  return '<a href="#" onclick="showCallerCreate(\'' + row.ID + '\',\'' + row.Name + '\')" >Create Contact</a>';
+                }, title: "", "orderable": false
+              },
+              { "data": "Name", title: "Name" },
+              { "data": "DW_ID", title: "Account" },
+              { "data": "CustomerType", title: "SSC Name" },
+              {
+                render: function (data, type, row) {
+                  return row.ShippingStreet + ",  " + row.ShippingCity + " " + row.ShippingState + " " + row.ShippingPostalCode + " " + row.ShippingCountry;
+                }, title: "Address"
+              },
+              { "data": "Phone", title: "Phone" },
+              { "data": "Owner", title: "Owner" }
+            ]
+          });
+        } else {
+          $("#account-lookup1-grid").hide();
+        }
+        //------------------------------------------------------------------
+
+        //------------------------------------------------------------------
+        //  accounts matched (Contact Not matched and Account matched)
+        //------------------------------------------------------------------
+        if (result.accountsMatched && result.accountsMatched.length > 0) {
+          ds_accountsMatched.length = 0;
+          for (i = 0; i < result.accountsMatched.length; i++) {
+            var a = result.accountsMatched[i];
+            var dt_a = {
+              "ID": a.Id,
+              "Name": a.Name.replace(/&amp;/, "AND"),
+              "DW_ID": ((a.DW_ID__c) ? a.DW_ID__c : ""),
+              "CustomerType": ((a.SSC__r) ? a.SSC__r.Name : ""),
+              "ShippingStreet": ((a.ShippingStreet) ? a.ShippingStreet : ""),
+              "ShippingCity": ((a.ShippingCity) ? a.ShippingCity : ""),
+              "ShippingState": ((a.ShippingState) ? a.ShippingState : ""),
+              "ShippingPostalCode": ((a.ShippingPostalCode) ? a.ShippingPostalCode : ""),
+              "ShippingCountry": ((a.ShippingCountry) ? a.ShippingCountry : ""),
+              "Phone": ((a.Phone) ? a.Phone : ""),
+              "Contacts": a.Contacts
+            };
+            ds_accountsMatched.push(dt_a);
+          }
+          $("#acc-lookup2").show();
+          var account_lookup2_grid_table = $('#account-lookup2-grid').DataTable({
+            "order": [[1, "asc"]],
+            retrieve: true,
+            paging: false,
+            data: ds_accountsMatched,
+            columns: [
+              {
+                render: function (data, type, row) {
+                  // theAccountId = row.ID;
+                  // theAccountName = row.Name;   
+                  return '<a href="#" onclick="showCallerCreate(\'' + row.ID + '\',\'' + row.Name + '\')" >Create Contact</a>';
+                }, title: "", "orderable": false
+              },
+              {
+                "className": 'details-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
+              },
+              { "data": "Name", title: "Name" },
+              { "data": "DW_ID", title: "Account" },
+              { "data": "CustomerType", title: "SSC Name" },
+              {
+                render: function (data, type, row) {
+                  return row.ShippingStreet + ",  " + row.ShippingCity + " " + row.ShippingState + " " + row.ShippingPostalCode + " " + row.ShippingCountry;
+                }, title: "Address"
+              },
+              { "data": "Phone", title: "Phone" }
+            ]
+          });
+        }
+        // Add event listener for opening and closing details
+        $('#account-lookup2-grid tbody').on('click', 'td.details-control', function () {
+          var tr = $(this).closest('tr');
+          var row = account_lookup2_grid_table.row(tr);
+          if (row.child.isShown()) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+          }
+          else {
+            // Open this row
+            row.child(contact_related_list(row.data())).show();
+            tr.addClass('shown');
+          }
+        });
+        //------------------------------------------------------------------
+
+        //------------------------------------------------------------------
+        //  contacts
+        //------------------------------------------------------------------
+        if (result.contacts && result.contacts.length > 0) {
+          ds_contacts.length = 0;
+          for (i = 0; i < result.contacts.length; i++) {
+            var c = result.contacts[i];
+            ds_contacts.push({
+              "Id": c.Id,
+              "Name": c.Name,
+              "AltAccountName": ((c.Company_Name__c) ? c.Company_Name__c : ""),
+              "FirstName": ((c.FirstName) ? c.FirstName : ""),
+              "LastName": ((c.LastName) ? c.LastName : ""),
+              "Email": ((c.Email) ? c.Email : ""),
+              "Phone": ((c.Phone) ? c.Phone : ""),
+              "AccountName": ((c.Actual_Account_Name__c) ? c.Actual_Account_Name__c : ""),
+              "AccountId": ((c.AccountId) ? c.AccountId : ""),
+              "MobilePhone": ((c.MobilePhone) ? c.MobilePhone : ""),
+              "OtherPhone": ((c.OtherPhone) ? c.OtherPhone : ""),
+              "Owner": c.Owner.Name
+            });
+          }
+          console.log('2 SSC_Id:...' + SSC_Id);
+          $("#contact-grid").show();
+
+          // theContactId = c.ID;
+          // theContactName = c.Name;
+          // console.log('in contact-grid + theContactName:...' + theContactName);
+          // console.log('in contact-grid + theContactId:...' + theContactId);
+          // theAccountId = c.AccountId;
+          // theAccountName = c.Account.Name;          
+          $('#contact-grid').DataTable({
+            retrieve: true,
+            paging: false,
+            data: ds_contacts,
+            columns: [
+              {
+                render: function (data, type, row) {
+                  console.log('in create case render-grid + row.Name:...' + row.Name);
+                  console.log('in create case render-grid + row.Id:...' + row.Id);
+                  console.log('in create case render-grid + row.Actual_Account_Name__c:...' + row.Actual_Account_Name__c);
+                  // theContactId = row.Id;
+                  // theContactName = row.Name;
+                  var showCaseCreateOptions = '\'' + row.Id + '\',\'' + row.Name + '\',\'' + row.AccountId + '\',\'' + row.AccountName + '\'';
+                  console.log('in create case render-grid + showCaseCreateOptions:...' + showCaseCreateOptions);
+                  // theAccountId = row.AccountId;
+                  // theAccountName = row.Account.Name;      
+                  return '<a href="#" onclick="showCallerEdit(\'' + row.AccountId + '\',\'' + row.AccountName + '\',\'' + row.Id + '\',\'' + row.Name + '\',\'' + row.FirstName + '\',\'' + row.LastName + '\',\'' + row.Email+ '\',\'' + row.Phone + '\')" >Edit</a>' + '<a> / </a>' + '<a href="#" onclick="showCaseCreate(' + showCaseCreateOptions + ');" >Create Case</a>';
+                }, title: "", "orderable": false
+              },
+              { "data": "Id",  "visible": false },
+              { "data": "Name", title: "Contact Name" },
+              { "data": "AccountName", title: "Account Name" },
+              { "data": "Phone", title: "Phone" },
+              { "data": "MobilePhone", title: "Mobile Phone" },
+              { "data": "OtherPhone", title: "Other Phone" },
+              { "data": "Email", title: "Email" },
+              { "data": "Owner", title: "Owner" }
+            ]
+          });
+          console.log('result.contacts.length:...' + result.contacts.length);
+        }
+        else {
+          $("#contact-grid").hide();
+          $("#contact-lookup-result").html("No Matching Contacts found." );
+        }
+        //------------------------------------------------------------------
+
+        if (showSection === true) {
+          register_pagination_controls();
+          register_search_action();
+        }
+      } else if (event.type === 'exception') {
+        alert(event.message + ' ' + event.where);
+      } else {
+        alert(event.message);
+      }
+
+    };
+
+    var escape_string = function (str) {
+      var eStr = str.replace(/'/g, "\\'");
+      eStr = str.replace(/&#39;/g, "\\'");
+      return eStr;
+    };
+
+    /* Formatting function for row details - modify as you need */
+    var contact_related_list = function (d) {
+      // `d` is the original data object for the row
+      var acc_row_id = d.ID;
+      var acc_con_list = [];
+      var contact_table = '<table style="border: 1px solid #606160;"><tr><td colspan="6" style="background-color: #606160; color: #fff;text-align: center;">Related Contacts</td></tr>'
+        + '<tr><td>&nbsp;</td><td>Contact Name</td><td>Phone</td><td>Mobile Phone</td><td>Other Phone</td><td>Email</td></tr>';
+      var has_contacts = false;
+      for (i = 0; i < ds_accountsMatched.length; i++) {
+        var a_row = ds_accountsMatched[i];
+        if (a_row.ID === acc_row_id) {
+          has_contacts = true;
+          for (i = 0; i < a_row.Contacts.length; i++) {
+            // theContactId = c_row.ID;
+            // theContactName = c_row.Name;
+            // theAccountId = c_row.AccountId;
+            // theAccountName = c_row.Account.Name;
+            console.log('in contact_table + theContactName:...' + theContactName);
+            var c_row = a_row.Contacts[i];
+            console.log(c_row);
+
+            contact_table += '<tr>';
+            contact_table += '<td><a href="#" onclick="showCaseCreate(\'' + row.Id + '\',\'' + row.Name + '\',\'' + c.AccountId + '\',\'' + c.Account.Name + '\')">Create Case</a> <a href="#" onclick="showCallerCreate(\'' + c.AccountId + '\',\'' + c.Account.Name + '\')" >Edit Contact</a></td>';
+            contact_table += '<td>' + ((c_row.Name) ? c_row.Name : '') + '</td>';
+            contact_table += '<td>' + ((c_row.Phone) ? c_row.Phone : '') + '</td>';
+            contact_table += '<td>' + ((c_row.MobilePhone) ? c_row.MobilePhone : '') + '</td>';
+            contact_table += '<td>' + ((c_row.OtherPhone) ? c_row.OtherPhone : '') + '</td>';
+            contact_table += '<td>' + ((c_row.Email) ? c_row.Email : '') + '</td>';
+            contact_table += '</tr>';
+          }
+          break;
+        }
+      }
+      if (has_contacts === false) {
+        contact_table += '<td colspan="6">No Contact Records Related to Account.</td>';
+
+      }
+      contact_table += '</table>';
+      return contact_table;
+    };
+
+    var getSSCData = function () {
+      // looking up the SSC record using the DNIS
+      console.log('** inside getSSCData()');
+      console.log('DNIS->' + screen_pop_dnis);
+
+      Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.OpenCTI_SFDCScriptController.getSSCData}',
+        screen_pop_dnis,
+        on_ssc_info_pulled,
+        { escape: true }
+      );
+
+    };
+
+    var getContactAccountData = function () {
+      console.log('ANI->' + $('[id$=ANI]').val());
+      Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.OpenCTI_SFDCScriptController.getUpdatedContactAccountData}',
+        $('[id$=ANI]').val(),
+        on_ani_lookup_completed,
+        { escape: true }
+      );
+    };
+
+    var getUpdatedContactAccountData = function () {
+      console.log('inputCallerSearch: ' + $('#inputCallerSearch').val());
+      varCallerSearch = $('#inputCallerSearch').val();
+      if ($.fn.dataTable.isDataTable('#account-lookup1-grid')) {
+        console.log('getUpdatedContactAccountData + account lookup there: ');
+        tableAccount = $('#account-lookup1-grid').DataTable();
+        tableAccount.destroy();
+      }
+      if ($.fn.dataTable.isDataTable('#account-lookup2-grid')) {
+        console.log('getUpdatedContactAccountData + account2 lookup there: ');
+        tableAccount2 = $('#account-lookup2-grid').DataTable();
+        tableAccount2.destroy();
+
+      }
+      if ($.fn.dataTable.isDataTable('#contact-grid')) {
+        console.log('getUpdatedContactAccountData + contact lookup there: ');
+        tableContact = $('#contact-grid').DataTable();
+        tableContact.destroy();
+
+      }
+      Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.OpenCTI_SFDCScriptController.getUpdatedContactAccountData}',
+        varCallerSearch,
+        on_ani_lookup_completed,
+        { escape: true }
+      );
+    };
+
+    var get_url_vars = function () {
+      var p = {};
+      var URL = decodeURI(window.location.href);
+      URL = URL.replace(/%24/g, '$')
+      var parts = URL.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+        function (m, key, value) {
+          if (p[key]) {
+            if (p[key] instanceof Array) {
+              p[key].push(value);
+            }
+            else {
+              p[key] = [p[key], value];
+            }
+          }
+          else {
+            p[key] = value;
+          }
+        });
+      return p;
+    };
+
+    var render_page_header = function () {
+      url_param = get_url_vars();
+      // normalize ANI
+      if (url_param && url_param.ANI) {
+        url_param.ANI = url_param.ANI.replace(/\D/g, '');
+        if (url_param.ANI.length == 11) {
+          //url_param.ANI = url_param.ANI.substring(1, url_param.ANI.length);
+          url_param.ANI = $("<span />").html(url_param.ANI).mask('+0 (000) 000-0000').text();
+        }
+        else {
+          url_param.ANI = $("<span />").html(url_param.ANI).mask('(000) 000-0000').text();
+        }
+        if (sforce.console.isInConsole()) {
+          var set_enclosingtab_label = function (r) {
+            var tabId = r.id;
+            sforce.console.setTabTitle(url_param.ANI, tabId);
+          };
+          sforce.console.getEnclosingPrimaryTabId(set_enclosingtab_label);
+        }
+        else {
+          window.document.title = 'Ph: ' + url_param.ANI;
+        }
+        $("#script--ani").html(url_param.ANI);
+        $("#inbound--ani").html(url_param.ANI);
+      }
+      // not supporting VDN
+      //if( url_param && url_param.VDN ){
+      //  $("#script--vdn").html( url_param.VDN );
+      //}
+      if (url_param && url_param.DNIS) {
+        $("#script--DNIS").html(url_param.DNIS);
+      }
+
+      screen_pop_ani = url_param.ANI;
+      screen_pop_vdn = url_param.VDN;
+      screen_pop_dnis = url_param.DNIS;
+    };
+
+    var on_account_search_click = function (e) {
+      e.preventDefault();
+      searchAccountContactsJS($("#lookup--search-value").val());
+    };
+
+    var register_search_action = function () {
+      $("#account--lookup-searchbtn").on('click', on_account_search_click);
+    };
+
+    var register_pagination_controls = function () {
+      //next--btn
+      $("#next--btn").on('click', function (e) {
+        e.preventDefault();
+        nextJS();
+      });
+      //prev--btn
+      $("#prev--btn").on('click', function (e) {
+        e.preventDefault();
+        previousJS();
+      });
+    };
+
+    var on_grid_render_complete = function (hasPrevious, hasNext) {
+      $("#next--btn").prop("disabled", !hasNext);
+      $("#prev--btn").prop("disabled", !hasPrevious);
+      register_pagination_controls();
+    };
+
+    var hideRelatedList = function (currentElm) {
+      //alert(currentElm.parentElement.parentElement.nextSibling.tagName);
+      currentElm.parentElement.parentElement.parentElement.nextSibling.style.display = 'none';
+      currentElm.nextElementSibling.style.display = 'inline';
+      currentElm.style.display = 'none';
+    }
+
+    var showRelatedList = function (currentElm) {
+      //alert(currentElm.parentElement.parentElement.nextSibling.tagName);
+      currentElm.parentElement.parentElement.parentElement.nextSibling.style.display = 'table-row';
+      currentElm.previousElementSibling.style.display = 'inline';
+      currentElm.style.display = 'none';
+    }
+
+    //Open case in a new tab
+    function openSuccess(result) {
+      if (!result.success) {
+        alert('Case cannot be opened');
+      }
+    }
+
+    //Open case in a new tab
+    var createNewCase = function (contactName, accountName, phoneNo, sscName) {
+
+      console.log('**** createNewCase + contactName:...>' + contactName);
+      console.log('**** createNewCase + accountName:...>' + accountName);
+      console.log('**** createNewCase + phoneNo:...>' + phoneNo);
+      console.log('**** createNewCase + sscName:...>' + sscName);
+      var caseUrl = '/500/e?{!$Label.SSCLookupFieldId}=' + sscName +
+        '&{!$Label.SSCLookupFieldText}=' + SSC_No +
+        '&{!$Label.ContactLookupFieldName}=' + contactName +
+        '&{!$Label.CaseFieldAccountName}=' + accountName +
+        '&{!$Label.CaseCallerIDNameAttr}=' + phoneNo;
+
+      sforce.console.openPrimaryTab(null, caseUrl, true, '', openSuccess, 'salesforceTab');
+    }
+
+    var open_primary_tab = function (url, uid) {
+      var open_success = function (result) {
+        if (!result.success) {
+          alert('Cannot open new tab');
+        }
+      };
+      sforce.console.openPrimaryTab(null, url, true, '', open_success, 'salesforceTab' + uid);
+    };
+
+    var createNewContact = function (accountId) {
+      console.log('in createNewContact: ' + accountId);
+      var createNewUrl = '/apex/CreateContactAndCase?ANI=' + $('[id$=ANI]').val() + '&VDN=' + url_param.DNIS + '&accId=' + accountId;
+      sforce.console.openPrimaryTab(null, createNewUrl, true, '', openSuccess, 'salesforceTab');
+    }
+
+    //search button click
+    $('#searchCon').click(function () {
+      console.log('search clicked: ');
+      $('#thumRow').empty();
+      fetchContact();
+    });
+
+    // Callback to handle DML Remote Objects calls
+    function updateCallback(err, ids) {
+      if (err) {
+        alert(err);
+      } else {
+        console.log('updateCallback + ids: ' + ids);
+        $('#thumRow').empty();
+        fetchContact();
+        $('#myModal').modal('hide')
+      }
+    }
+
+    //Function to fetch contact      
+    function fetchContact() {
+      console.log('inputCallerSearch: ' + $('#inputCallerSearch').val());
+      varCallerSearch = $('#inputCallerSearch').val();
+      console.log('inputCallerSearch length: ' + varCallerSearch.length);
+      if (varCallerSearch.length != 0) {
+        console.log('inputCallerSearch : ' + varCallerSearch);
+        console.log('Is inputCallerSearch a number? : ' + !isNaN(varCallerSearch));
+        console.log('inputCallerSearch : ' + varCallerSearch);
+        console.log('Is inputCallerSearch 10 digits?? : ' + varCallerSearch.length);
+        if (!isNaN(varCallerSearch) && varCallerSearch.length == 10) {
+          console.log('inputCallerSearch: ' + $('#inputCallerSearch').val() + ' is a number and 10 digits');
+          document.getElementById('inputPhone').value = $('#inputCallerSearch').val();
+          inputPhone = $('#inputCallerSearch').val().replace(/\D/g, '');
+        }
+        recordsSize = 0;
+        $('#modalSearch').modal('show');
+        searchContacts(varCallerSearch);
+        console.log('fetchContact + recordsSize: ' + recordsSize);
+      } else {
+        var str = 'Error: Please enter a valid search';
+        document.getElementById('textError').innerHTML = str;
+        console.log('error: ' + str);
+        $('#thumRow').empty();
+        $('#modalConfirm').modal('hide');
+        $('#modalError').modal('show');
+      }
+    }
+
+    function searchContacts(visitorSearch) {
+      console.log('searchContacts...: ');
+      if (isNaN(visitorSearch)) {
+        searchContactsByAccount(visitorSearch);
+        searchContactsByName(visitorSearch);
+      } else {
+        searchContactsByPhone(visitorSearch);
+      }
+    }
+
+    function searchContactsByAccount(visitorSearch) {
+      var searchContact = new SObjectModel.cnt();
+      searchContact.retrieve({
+        where: {
+          Account_Name__c: { like: visitorSearch + '%' },
+        },
+        limit: 100
+      }, function (err, records) {
+        if (err) {
+          alert(err.message);
+        } else {
+          buildContactResults(records);
+        }
+      });
+    }
+
+    function searchContactsByName(visitorSearch) {
+      var searchContact = new SObjectModel.cnt();
+      searchContact.retrieve({
+        where: {
+          Name: { like: visitorSearch + '%' },
+        },
+        limit: 100
+      }, function (err, records) {
+        if (err) {
+          alert(err.message);
+        } else {
+          buildContactResults(records);
+        }
+      });
+    }
+
+    function searchContactsByPhone(visitorSearch) {
+      var searchContact = new SObjectModel.cnt();
+      searchContact.retrieve({
+        where: {
+          Phone_Lookup__c: { like: visitorSearch + '%' },
+        },
+        limit: 100
+      }, function (err, records) {
+        if (err) {
+          alert(err.message);
+        } else {
+          buildContactResults(records);
+        }
+      });
+    }
+
+    function buildContactResults(records) {
+      var conRecordsSize = Object.keys(records).length;
+      console.log('searchContacts + conRecordsSize: ' + conRecordsSize);
+      if (conRecordsSize > 0) {
+        recordsSize = recordsSize + conRecordsSize;
+        console.log('searchContacts + recordsSize: ' + recordsSize);
+        records.forEach(function (record) {
+          var divCol = $('<div class="col-sm-5 col-md-6">');
+          var divThub = $('<div class="thumbnail" style="font-size: 2em;">');
+          var h3 = $('<h5>' + record.get("Name") + '</h5>');
+          var visitorEmail = record.get("Email");
+          var vistiorAccount = record.get("Account_Name__c");
+          if (visitorEmail === undefined) {
+            visitorEmail = 'No Email';
+          }
+
+          var detail = $('<p>' + vistiorAccount + '<br/>' + record.get("Phone") + '<br/>' + visitorEmail + '</p>');
+          var link1 = $('<p><br/><button type="button" class="btn" data-toggle="modal" data-dismiss="modal" data-target="#modalVisitorConfirm" data-backdrop="static" data-keyboard="false" id="edit">Thats Me!</button> </p> ');
+          link1.click(function () {
+            visitorRecord = record;
+            verifyVisitor(record);
+          });
+          detail.append(link1);
+          h3.append(detail);
+          divThub.append(h3);
+          divCol.append(divThub);
+          divCol.appendTo('#thumRow');
+        });
+      }
+    }
+
+    function showCallerCreate(theAccountId, theAccountName) {
+      console.log('in showCallerCreate + theAccountId:...' + theAccountId);
+      accountId = theAccountId;
+      accountName = theAccountName;
+      document.getElementById('{!$Component.thePage:theNewCallerForm:contactPhone}').value = {!ANI};
+      document.getElementById('{!$Component.thePage:theNewCallerForm:caseAccount}' + '_lkid').value = accountId;
+      document.getElementById('{!$Component.thePage:theNewCallerForm:caseAccount}' + '_lkold').value = accountName;
+      document.getElementById('{!$Component.thePage:theNewCallerForm:caseAccount}' + '_mod').value = 1;
+      document.getElementById('{!$Component.thePage:theNewCallerForm:caseAccount}').value = accountName;
+      $('#modalNewCaller').modal('show'); 
+    }
+
+  function showCallerEdit(theAccountId, theAccountName, theContactId, theContactName, theContactFirstName, theContactLastName, theContactEmailName, theContactPhoneName ) {
+    console.log('in showCallerEdit + theAccountId:...' + theAccountId);
+    console.log('in showCallerEdit + theContactId:...' + theContactId);
+    accountId = theAccountId;
+    accountName = theAccountName;
+    theContactId = theContactId;
+    document.getElementById('{!$Component.thePage:theEditCallerForm:caseAccount}' + '_lkid').value = accountId;
+    document.getElementById('{!$Component.thePage:theEditCallerForm:caseAccount}' + '_lkold').value = accountName;
+    document.getElementById('{!$Component.thePage:theEditCallerForm:caseAccount}' + '_mod').value = 1;
+    document.getElementById('{!$Component.thePage:theEditCallerForm:caseAccount}').value = accountName;
+    document.getElementById('{!$Component.thePage:theEditCallerForm:contactIdHidden}').value = theContactId;
+    document.getElementById('{!$Component.thePage:theEditCallerForm:contactFirstName}').value = theContactFirstName;
+    document.getElementById('{!$Component.thePage:theEditCallerForm:contactLastName}').value = theContactLastName;
+    document.getElementById('{!$Component.thePage:theEditCallerForm:contactEmail}').value = theContactEmailName;
+    document.getElementById('{!$Component.thePage:theEditCallerForm:contactPhone}').value = theContactPhoneName;
+    $('#modalEditCaller').modal('show'); 
+  }
+    function showCallerCreateGeneric(){
+      console.log('in showCallerCreateGeneric :...');
+      // showCallerCreate();
+      // clearAll();
+      document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:contactPhone}').value = {!ANI};
+      $('#modalNewCallerGeneric').modal('show'); 
+    }
+
+    function showCallerUpdate() {
+      console.log('in showCallerUpdate');
+      $('modalCallInfoUpdate').modal('show');
+    }
+
+
+
+    function showCaseCreateCloseNewContact() {
+      console.log('showCaseCreateCloseNewContact');
+
+      theContactFirstName = document.getElementById('{!$Component.thePage:theNewCallerForm:contactFirstName}').value;
+      theContactLastName = document.getElementById('{!$Component.thePage:theNewCallerForm:contactLastName}').value;
+      theContactEmailName = document.getElementById('{!$Component.thePage:theNewCallerForm:contactEmail}').value;
+      theContactPhoneName = document.getElementById('{!$Component.thePage:theNewCallerForm:contactPhone}').value;      
+      theContactName = theContactFirstName + ' ' + theContactLastName;
+
+      if ( theContactFirstName == '' ) {
+          str = 'Please enter a First Name'
+          document.getElementById('textError').innerHTML = str;   
+          console.log('error: ' + str);               
+          $('#modalConfirm').modal('hide');
+          $('#modalError').modal('show');
+      } else if ( theContactLastName == '' ) {
+          str = 'Please enter a Last Name'
+          document.getElementById('textError').innerHTML = str;   
+          console.log('error: ' + str);               
+          $('#modalConfirm').modal('hide');
+          $('#modalError').modal('show');
+      } else {
+        $('#modalNewCaller').modal('hide');
+        $('#modalNewCallerGeneric').modal('hide');
+        showCaseCreate(theContactId, theContactName, theAccountId, theAccountName);
+      }
+      
+    }
+
+    function showCaseCreateCloseNewContactGeneric() {
+      console.log('showCaseCreateCloseNewContact');
+
+      theAccountName = document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:caseCompanyName}').value;
+      theContactFirstName = document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:contactFirstName}').value;
+      theContactLastName = document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:contactLastName}').value;
+      theContactEmailName = document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:contactEmail}').value;
+      theContactPhoneName = document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:contactPhone}').value;      
+      theContactName = theContactFirstName + ' ' + theContactLastName;
+      
+      if ( theContactFirstName == '' ) {
+          str = 'Please enter a First Name'
+          document.getElementById('textError').innerHTML = str;   
+          console.log('error: ' + str);               
+          $('#modalConfirm').modal('hide');
+          $('#modalError').modal('show');
+      } else if ( theContactLastName == '' ) {
+          str = 'Please enter a Last Name'
+          document.getElementById('textError').innerHTML = str;   
+          console.log('error: ' + str);               
+          $('#modalConfirm').modal('hide');
+          $('#modalError').modal('show');
+      } else if ( theAccountName == '' ) {
+          str = 'Please enter an Account Name'
+          document.getElementById('textError').innerHTML = str;   
+          console.log('error: ' + str);               
+          $('#modalConfirm').modal('hide');
+          $('#modalError').modal('show');
+      } else {
+        $('#modalNewCaller').modal('hide');
+        $('#modalNewCallerGeneric').modal('hide');
+        showCaseCreate(theContactId, theContactName, theAccountId, theAccountName);
+      }
+
+
+    }
+    
+    function showCaseCreate (theContactId, theContactName, theAccountId, theAccountName) {
+      console.log('in showCaseCreate + theAccountId:...' + theAccountId);
+      console.log('in showCaseCreate + theAccountName:...' + theAccountName);
+      console.log('in showCaseCreate + theContactId:...' + theContactId);
+      console.log('in showCaseCreate + theContactName:...' + theContactName);
+      console.log('in showCaseCreate + accountId:...' + accountId);
+      console.log('in showCaseCreate + accountName:...' + accountName);
+      console.log('in showCaseCreate + contactId:...' + contactId);
+      console.log('in showCaseCreate + contactName:...' + contactName);
+      if (theAccountId) {
+        accountId = theAccountId;
+      } else if (!accountId) {
+        accountId = '';
+      }
+      
+      if (theAccountName) {
+        accountName = theAccountName;
+      } else if (!accountName) {
+        accountName = '';
+      }
+      
+      if (theContactId) {
+        contactId = theContactId;
+        theContactFirstName = '';
+        theContactLastName = '';
+        theContactPhoneName = '';
+        theContactEmailName = '';
+      } else if (!contactId) {
+        contactId = '';
+      }
+      
+      if (theContactName) {
+        contactName = theContactName;
+      } else if (!contactName) {
+        contactName = '';
+      }
+      
+      document.getElementById('{!$Component.thePage:theCaseForm:caseCallerID}').value = url_param.ANI;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseActualPhone}').value = url_param.ANI;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseStatus}').value = 'Closed';
+
+      document.getElementById('{!$Component.thePage:theCaseForm:caseSSC}' + '_lkid').value = SSC_Id;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseSSC}' + '_lkold').value = SSC_No;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseSSC}' + '_mod').value = 1;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseSSC}').value = SSC_No;
+
+      document.getElementById('{!$Component.thePage:theCaseForm:caseAccount}' + '_lkid').value = accountId;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseAccount}' + '_lkold').value = accountName;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseAccount}' + '_mod').value = 1;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseAccount}').value = accountName;     
+
+      document.getElementById('{!$Component.thePage:theCaseForm:caseContact}' + '_lkid').value = contactId;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseContact}' + '_lkold').value = contactName;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseContact}' + '_mod').value = 1;
+      document.getElementById('{!$Component.thePage:theCaseForm:caseContact}').value = contactName;     
+
+      $(modalNewCase).modal('show');
+    }
+
+    function createCase() {
+
+        theAccountId = document.getElementById('{!$Component.thePage:theCaseForm:caseAccount}_lkid').value;
+        theContactId = document.getElementById('{!$Component.thePage:theCaseForm:caseContact}_lkid').value;
+        theSSCId = document.getElementById('{!$Component.thePage:theCaseForm:caseSSC}_lkid').value;
+        theCaseStatus = document.getElementById('{!$Component.thePage:theCaseForm:caseStatus}').value;
+        theCaseType = document.getElementById('{!$Component.thePage:theCaseForm:caseType}').value;
+        theCaseOrderNumber = document.getElementById('{!$Component.thePage:theCaseForm:caseOasisNumber}').value;
+        theCaseCSRHandoff = document.getElementById('{!$Component.thePage:theCaseForm:caseCsrHandoff}').value;
+        theCaseSubject = document.getElementById('{!$Component.thePage:theCaseForm:caseSubject}').value;
+        theCaseComments = document.getElementById('{!$Component.thePage:theCaseForm:caseComments}').value;
+        theCaseDescription = document.getElementById('{!$Component.thePage:theCaseForm:caseDescription}').value;
+
+        if (theCaseSubject == '') {
+          str = 'Please enter a Subject for the Case'
+          document.getElementById('textError').innerHTML = str;   
+          console.log('error: ' + str);               
+          $('#modalConfirm').modal('hide');
+          $('#modalError').modal('show');        
+        } else if (theCaseType == '') {
+          str = 'Please enter a Type for the Case'
+          document.getElementById('textError').innerHTML = str;   
+          console.log('error: ' + str);               
+          $('#modalConfirm').modal('hide');
+          $('#modalError').modal('show');    
+        } else {
+          if (theContactFirstName && theContactLastName) {
+            theCaseTypeOfChange = 'Add Contact';
+          } else {
+            theCaseTypeOfChange = '';
+          }
+          
+          console.log('in createCase + theAccountId:...' + theAccountId);
+          console.log('in createCase + theContactId:...' + theContactId);
+          console.log('in createCase + theSSCId:...' + theSSCId);
+          console.log('in createCase + theCaseStatus:...' + theCaseStatus);
+          console.log('in createCase + theCaseType:...' + theCaseType);
+          console.log('in createCase + theCaseOrderNumber:...' + theCaseOrderNumber);
+          console.log('in createCase + theCaseCSRHandoff:...' + theCaseCSRHandoff);
+          console.log('in createCase + theCaseSubject:...' + theCaseSubject);
+          console.log('in createCase + theCaseComments:...' + theCaseComments);
+          console.log('in createCase + theCaseDescription:...' + theCaseDescription);
+          $('#modalSaving').modal('show');
+          var newCase = new SObjectModel.cse({
+            RecordTypeId : '{!varSupportCasesRecordType}',
+            AccountId : theAccountId,
+            AccountName__c : theAccountName,
+            First_Name__c : theContactFirstName,
+            Last_Name__c : theContactLastName,
+            Phone_Number__c : theContactPhoneName,
+            Email_Address__c : theContactEmailName,
+            Caller_ID__c : url_param.ANI,
+            SSC__c : SSC_Id,
+            ContactId : theContactId,
+            Status : theCaseStatus,
+            Type : theCaseType,
+            OASIS_Order_Number__c : theCaseOrderNumber,
+            CSR_Handoff__c : theCaseCSRHandoff,
+            Subject : theCaseSubject,
+            Comments : theCaseComments,
+            Type_of_change__c : theCaseTypeOfChange,
+            Description : theCaseDescription         
+        });
+        newCase.create(createCaseCallback);
+      }  
+    }
+
+    function editContactOnly() {
+      var contactOption = 'Update Contact';
+      editContact(contactOption);
+    }
+
+    function editContactCreateCase() {
+      var contactOption = 'Create Case';
+      editContact(contactOption);
+    }
+
+    function editContact(contactOption) {
+
+      theContactId = document.getElementById('{!$Component.thePage:theEditCallerForm:contactIdHidden}').value;
+      theContactFirstName = document.getElementById('{!$Component.thePage:theEditCallerForm:contactFirstName}').value;
+      theContactLastName = document.getElementById('{!$Component.thePage:theEditCallerForm:contactLastName}').value;
+      theContactEmailName = document.getElementById('{!$Component.thePage:theEditCallerForm:contactEmail}').value;
+      theContactPhoneName = document.getElementById('{!$Component.thePage:theEditCallerForm:contactPhone}').value;      
+      theContactName = theContactFirstName + ' ' + theContactLastName;
+
+      console.log('in editContact + theContactFirstName:...' + theContactFirstName);
+      console.log('in editContact + theContactLastName:...' + theContactLastName);
+      console.log('in editContact + theContactEmailName:...' + theContactEmailName);
+      console.log('in editContact + theContactPhoneName:...' + theContactPhoneName);
+      console.log('in editContact + theContactId:...' + theContactId);
+      console.log('in editContact + contactOption:...' + contactOption);
+
+      $('#modalSaving').modal('show');
+      var updatingContact = new SObjectModel.cnt({
+          Id : theContactId,
+          FirstName : theContactFirstName,
+          LastName : theContactLastName,
+          Phone : theContactPhoneName,
+          Email : theContactEmailName
+      });
+      if (contactOption == 'Update Contact') {
+        updatingContact.update(editContactCallback);
+      } else {
+        updatingContact.update(editContactCaseCallback);
+      }
+      
+    }
+
+    // Callback to handle DML Remote Objects calls
+    function editContactCallback(err, ids){
+      if (err) { 
+          alert(err); 
+      } else {
+        caseId = ids;
+        console.log('editContactCallback + ids: ' + ids);
+        var str = theContactName + ' has been updated.';
+        document.getElementById('confirmLine1').innerHTML = str;      
+        $('#modalEditCaller').modal('hide');
+        $('#modalSaving').modal('hide');
+
+        $('#modalConfirm').modal('show');   
+        setTimeout(function(){ location.reload(); }, 2000);
+      }
+    }    
+
+    // Callback to handle DML Remote Objects calls
+    function editContactCaseCallback(err, ids){
+      if (err) { 
+          alert(err); 
+      } else {
+        caseId = ids;
+        console.log('editContactCallback + ids: ' + ids);
+        var str = theContactName + ' has been updated.';
+        document.getElementById('confirmLine1').innerHTML = str;      
+        $('#modalEditCaller').modal('hide');        
+        $('#modalSaving').modal('hide');
+        showCaseCreate (theContactId, theContactName, theAccountId, theAccountName);
+        // $('#modalConfirm').modal('show');   
+        // setTimeout(function(){ 
+        //   $('#modalConfirm').modal('hide');  
+        // }, 1000);
+      }
+    }    
+
+    // Callback to handle DML Remote Objects calls
+    function createCaseCallback(err, ids){
+      if (err) { 
+          alert(err); 
+      } else {
+        caseId = ids;
+        console.log('createCaseCallback + ids: ' + ids);
+        var str = 'Case logged for  ' + contactName;
+        document.getElementById('confirmLine1').innerHTML = str;      
+        $('#modalNewCase').modal('hide');
+        $('#modalSaving').modal('hide');
+        $('#modalConfirm').modal('show');   
+        setTimeout(function(){ location.reload(); }, 2000);
+
+      }
+    }    
+
+    function clearNewContact() {
+
+      document.getElementById('{!$Component.thePage:theNewCallerForm:caseCompanyName}').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerForm:contactFirstName}').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerForm:contactLastName}').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerForm:contactEmail}').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerForm:contactPhone}').value = ''; 
+
+      accountId = '';
+      accountName = '';
+      document.getElementById('{!$Component.thePage:theNewCallerForm:contactPhone}').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerForm:caseAccount}' + '_lkid').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerForm:caseAccount}' + '_lkold').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerForm:caseAccount}' + '_mod').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerForm:caseAccount}').value = '';
+
+      theAccountName = ''; 
+      theContactFirstName = ''; 
+      theContactLastName = ''; 
+      theContactEmailName = ''; 
+      theContactPhoneName = ''; 
+      theContactName = ''; 
+    }
+
+    function clearNewGenericContact() {
+      document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:caseCompanyName}').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:contactFirstName}').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:contactLastName}').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:contactEmail}').value = '';
+      document.getElementById('{!$Component.thePage:theNewCallerFormGeneric:contactPhone}').value = ''; 
+
+      theAccountName = ''; 
+      theContactFirstName = ''; 
+      theContactLastName = ''; 
+      theContactEmailName = ''; 
+      theContactPhoneName = ''; 
+      theContactName = ''; 
+    }
+
+    function clearContactEdit() {
+      accountId = '';
+      accountName  = '';
+      theContactId = '';
+      document.getElementById('{!$Component.thePage:theEditCallerForm:caseAccount}' + '_lkid').value = '';
+      document.getElementById('{!$Component.thePage:theEditCallerForm:caseAccount}' + '_lkold').value = '';
+      document.getElementById('{!$Component.thePage:theEditCallerForm:caseAccount}' + '_mod').value = '';
+      document.getElementById('{!$Component.thePage:theEditCallerForm:caseAccount}').value = '';
+      document.getElementById('{!$Component.thePage:theEditCallerForm:contactIdHidden}').value = '';
+      document.getElementById('{!$Component.thePage:theEditCallerForm:contactFirstName}').value = '';
+      document.getElementById('{!$Component.thePage:theEditCallerForm:contactLastName}').value = '';
+      document.getElementById('{!$Component.thePage:theEditCallerForm:contactEmail}').value = '';
+      document.getElementById('{!$Component.thePage:theEditCallerForm:contactPhone}').value = '';
+      
+      theContactFirstName = '';
+      theContactLastName = '';
+      theContactEmailName = '';
+      theContactPhoneName = '';
+        
+      $('#modalEditCaller').modal('hide'); 
+      
+    }
+    
+    function clearNewCase() {
+      document.getElementById('{!$Component.thePage:theCaseForm:caseSSC}' + '_lkid').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseSSC}' + '_lkold').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseSSC}' + '_mod').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseSSC}').value = '';
+
+      document.getElementById('{!$Component.thePage:theCaseForm:caseAccount}' + '_lkid').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseAccount}' + '_lkold').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseAccount}' + '_mod').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseAccount}').value = '';
+
+      document.getElementById('{!$Component.thePage:theCaseForm:caseContact}' + '_lkid').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseContact}' + '_lkold').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseContact}' + '_mod').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseContact}').value = '';
+      accountId = '';
+      accountName  = '';
+      contactId = '';
+      theContactId = '';
+      contactName = '';
+      
+      document.getElementById('{!$Component.thePage:theCaseForm:caseOasisNumber}').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseCsrHandoff}').value = '';
+      document.getElementById('{!$Component.thePage:thePage:theCaseForm:caseSubject}').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseComments}').value = '';
+      document.getElementById('{!$Component.thePage:theCaseForm:caseDescription}').value = '';
+
+      
+    }
+
+    function clearAll() {
+      clearNewContact();
+      clearContactEdit();
+      clearNewCase();
+    }
+    
+  </script>
+
+
+  <!-- CSS -->
+
+  <link rel="stylesheet" href="{!URLFOR($Resource.bootstrap3, 'css/bootstrap-sfdc.css')}" media="all" />
+  <link rel="stylesheet" href="{!URLFOR($Resource.jqDataTables, 'dataTables.bootstrap.min.css')}" media="all" />
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+    crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <apex:stylesheet value="{!$Resource.CSSDateTime}" />
+
+  <style>
+    /*! ========================================================================
+     * Bootstrap Toggle: bootstrap-toggle.css v2.2.0
+     * http://www.bootstraptoggle.com
+     * ========================================================================
+     * Copyright 2014 Min Hur, The New York Times Company
+     * Licensed under MIT
+     * ======================================================================== */
+
+    .checkbox label .toggle,
+    .checkbox-inline .toggle {
+      margin-left: -20px;
+      margin-right: 5px
+    }
+
+    .toggle {
+      position: relative;
+      overflow: hidden
+    }
+
+    .toggle input[type=checkbox] {
+      display: none
+    }
+
+    .toggle-group {
+      position: absolute;
+      width: 200%;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      transition: left .35s;
+      -webkit-transition: left .35s;
+      -moz-user-select: none;
+      -webkit-user-select: none
+    }
+
+    .toggle.off .toggle-group {
+      left: -100%
+    }
+
+    .toggle-on {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 50%;
+      margin: 0;
+      border: 0;
+      border-radius: 0
+    }
+
+    .toggle-off {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      right: 0;
+      margin: 0;
+      border: 0;
+      border-radius: 0
+    }
+
+    .toggle-handle {
+      position: relative;
+      margin: 0 auto;
+      padding-top: 0;
+      padding-bottom: 0;
+      height: 100%;
+      width: 0;
+      border-width: 0 1px
+    }
+
+    .toggle.btn {
+      min-width: 100%;
+      min-height: 34px
+    }
+
+    .toggle-on.btn {
+      padding-right: 24px
+    }
+
+    .toggle-off.btn {
+      padding-left: 24px
+    }
+
+    /* Rounded sliders */
+
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    .btn-primary {
+      color: azure;
+    }
+
+    .slds-scope .slds-text-title {
+      font-size: 1.75rem;
+    }
+
+    .slds-scope .slds-text-body--regular {
+      font-size: 1.25rem;
+    }
+
+    .slds-scope .slds-text-heading--small {
+      font-size: 1.85rem;
+      line-height: 1.25;
+    }
+
+    .btn-updated {
+      color: azure;
+    }
+
+    .h2 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+    }
+
+    .slds-scope .slds-text-title--caps {
+      font-size: 1.75rem;
+    }
+
+    .slds-scope .slds-form-element__label {
+      font-size: 1.5rem;
+    }
+
+    body {
+      margin: 0px !important;
+      padding: 5px !important;
+      background-color: #fff;
+    }
+
+    body .lookupInput .lookupIconOn,
+    body .lookupInput .lookupIcon,
+    .slds-vf-scope .lookupInput .lookupIconOn,
+    .slds-vf-scope .lookupInput .lookupIcon {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    body .lookupInput, .slds-vf-scope .lookupInput {
+      width: 100%;
+    }
+
+    .slds-scope.noSidebarCell {
+      padding: 0px;
+    }
+
+    .form-css {
+      padding: 15px 10px
+    }
+
+    .force-bs .pagination {
+      margin: 0px;
+    }
+
+    .pbs-account--search {
+      margin: 0px 15px;
+    }
+
+    .contact-related-list--container {
+      background: #f4f6f9;
+    }
+
+    #acc-lookup1 {
+      display: none;
+    }
+
+    #acc-lookup2 {
+      display: none;
+    }
+
+    td.details-control {
+      background: url('/img/colTitle_downarrow.gif') no-repeat center center;
+      background-size: 12px;
+      cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+      background: url('/img/colTitle_uparrow.gif') no-repeat center center;
+      background-size: 12px;
+    }
+
+    div.dataTables_wrapper div.dataTables_filter label {
+      font-size: 1.5rem;
+    }
+
+    ::placeholder {
+      /* Chrome, Firefox, Opera, Safari 10.1+ */
+      font-size: 1.5rem;
+      opacity: 1;
+      /* Firefox */
+    }
+  </style>
+
+  <!-- Import the Design System style sheet -->
+  <apex:slds />
+
+  <!-- Visualforce Remote object coponent -->
+  <apex:remoteObjects >
+    <apex:remoteObjectModel name="Contact" jsShorthand="cnt" fields="Name,Id,FirstName,LastName,Phone,Email,Title,AccountId,Account_Name__c,Phone_Lookup__c">
+    </apex:remoteObjectModel>
+    <apex:remoteObjectModel name="Case" jsShorthand="cse" fields="Id,RecordTypeId,AccountId,AccountName__c,First_Name__c,Last_Name__c,Phone_Number__c,Email_Address__c,Caller_ID__c,SSC__c,ContactId,Status,Type,OASIS_Order_Number__c,CSR_Handoff__c,Subject,Comments,Description">
+    </apex:remoteObjectModel>
+  </apex:remoteObjects>
+
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds-scope" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- PAGE HEADER -->
+    <div class="slds-page-header" id="cti-script-pheader">
+      <div class="slds-grid">
+        <div class="slds-col slds-has-flexi-truncate">
+          <div class="slds-media slds-no-space slds-grow">
+            <div class="slds-media__figure">
+              <svg class="slds-icon slds-icon-custom-custom22" aria-hidden="true">
+                <use xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/custom-sprite/svg/symbols.svg#custom22')}"></use>
+              </svg>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-title--caps slds-line-height--reset">Inbound Call</p>
+              <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate" id="inbound--ani">--</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="slds-grid slds-page-header__detail-row" style="padding-left: 50px;padding-top: 20px;">
+        <li class="slds-page-header__detail-block">
+          <p class="slds-text-title  slds-truncate slds-m-bottom--xx-small" title="Script">DNIS</p>
+          <p class="slds-text-body--regular" id="script--DNIS">--</p>
+        </li>
+        <li class="slds-page-header__detail-block">
+          <p class="slds-text-title  slds-truncate slds-m-bottom--xx-small" title="Script">SSC</p>
+          <p class="slds-text-body--regular" id="script--sscname">--</p>
+        </li>
+        <li class="slds-page-header__detail-block">
+          <p class="slds-text-title  slds-truncate slds-m-bottom--xx-small" title="Script">SSC Phone</p>
+          <p class="slds-text-body--regular" id="script--sscphone">--</p>
+        </li>
+        <li class="slds-page-header__detail-block">
+          <p class="slds-text-title slds-truncate slds-m-bottom--xx-small" title="ANI">ANI</p>
+          <p class="slds-text-body--regular">
+            <svg class="slds-button__icon slds-button__icon--small" aria-hidden="true">
+              <use xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#call')}"></use>
+            </svg>
+            <span id="script--ani">--</span>
+          </p>
+        </li>
+        <li class="slds-page-header__detail-block" style="max-width: 65%; padding-left: 20rem;">
+          <div class="modal-body" style="padding: 0px;">
+            <div class="slds-form-element__control">
+              <span/>
+              <div class="slds-form-element slds-hint-parent">
+                <div class="slds-form-element__control slds-hint-parent slds-align_absolute-center">
+                  <input type="text" style="font-size: 2rem; width: 80rem; height: 4rem;" placeholder="Search By Name, Account Number or Phone "
+                    id="inputCallerSearch" />
+                  <button type="button" class="btn" style="margin-left: 20px; height: 40px; font-size: medium;" id="searchCon" onCLick="getUpdatedContactAccountData();">Search</button>
+                </div>
+              </div>
+            </div>
+            <br/>
+            <input type="hidden" class="form-control" id="inputId" />
+          </div>
+        </li>
+
+      </ul>
+
+      <!-- custom dynamic scripting -->
+
+    </div>
+    <!-- / PAGE HEADER -->
+
+    <!-- PAGE FORM -->
+    <apex:form styleClass="form-css">
+
+      <!-- Shared info -->
+      <apex:inputHidden value="{!sscName}" id="sscName" />
+      <apex:inputHidden value="{!VDN}" id="VDN" />
+      <apex:inputHidden value="{!DNIS}" id="DNIS" />
+      <apex:inputHidden value="{!ANI}" id="ANI" />
+      <apex:outputPanel layout="block">
+        <!-- Account Lookup1 Results -->
+        <article class="slds-card" id="acc-lookup1">
+          <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+              <div class="slds-media__figure">
+                <span class="slds-icon_container slds-icon-standard-contact">
+                  <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS,'/assets/icons/standard-sprite/svg/symbols.svg#account')}"></use>
+                  </svg>
+                </span>
+              </div>
+              <div class="slds-media__body">
+                <h1>
+                  <span style="font-size: 2rem;" class="slds-text-heading_small">Accounts</span>
+                </h1>
+              </div>
+            </header>
+          </div>
+          <div class="slds-card__body slds-card__body_inner bootstrap3-sfdc" style="background-color: white;padding-top:0px;">
+            <!-- Select ssc Repeater -->
+            <div class="custom-left-grid-section">
+              <table id="account-lookup1-grid" class="slds-table slds-table--bordered slds-table--cell-buffer" cellspacing="0" width="100%"></table>
+            </div>
+            <!-- /Select ssc Repeater -->
+          </div>
+        </article>
+        <!-- /Account Lookup1 Results -->
+
+        <!-- Account Lookup2 Results -->
+        <article class="slds-card" id="acc-lookup2">
+          <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+              <div class="slds-media__figure">
+                <span class="slds-icon_container slds-icon-standard-contact">
+                  <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS,'/assets/icons/standard-sprite/svg/symbols.svg#account')}"></use>
+                  </svg>
+                </span>
+              </div>
+              <div class="slds-media__body">
+                <h1>
+                  <span class="slds-text-heading_small">Accounts (Contact Not matched and Account matched)</span>
+                </h1>
+              </div>
+            </header>
+          </div>
+          <div class="slds-card__body slds-card__body_inner bootstrap3-sfdc" style="background-color: white;padding-top:15px;">
+            <!-- Select ssc Repeater -->
+            <div class="custom-left-grid-section">
+              <table id="account-lookup2-grid" class="slds-table slds-table--bordered slds-table--cell-buffer" cellspacing="0" width="100%"></table>
+            </div>
+            <!-- /Select ssc Repeater -->
+          </div>
+        </article>
+        <!-- /Account Lookup2 Results -->
+
+
+        <!-- Account Lookup Results -->
+        <apex:outputPanel styleClass="pbs-account--search" Style="display:none;">
+
+          <!-- section header -->
+          <div class="demo-only" style="padding:0.5rem;background:#16325c;">
+            <div class="slds-text-color_inverse">
+              <div class="slds-text-heading_medium">Lookup Account</div>
+            </div>
+          </div>
+          <!-- /section header -->
+
+          <table cellpadding="0" cellspacing="0" width="100%" style="border-left: 1px solid #d8dde6;border-right: 1px solid #d8dde6;">
+            <tr>
+              <td width="75%" height="100">
+                <div class="slds-form slds-form_horizontal">
+                  <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="lookup--search-value">Enter Search Value:</label>
+                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                      <svg class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" aria-hidden="true">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#search')}"></use>
+                      </svg>
+                      <input type="text" class="slds-input" placeholder="Search Value" id="lookup--search-value" autocomplete="off" />
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td width="25%">
+                <button class="slds-button slds-button_brand" style="margin-left:1rem" id="account--lookup-searchbtn">Search</button>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <!-- results grid -->
+                <apex:outputPanel id="accountLookupRepeater">
+                  <table class="slds-table slds-table_bordered slds-no-row-hover">
+                    <thead>
+                      <tr class="slds-text-title_caps">
+                        <th scope="col">
+                          <div class="slds-truncate" title="Action">&nbsp;</div>
+                        </th>
+                        <th scope="col">
+                          <div class="slds-truncate" title="Action">Action</div>
+                        </th>
+                        <th scope="col">
+                          <div class="slds-truncate" title="Name">Name</div>
+                        </th>
+                        <th scope="col">
+                          <div class="slds-truncate" title="Account">Account</div>
+                        </th>
+                        <th scope="col">
+                          <div class="slds-truncate" title="SSC Name">SSC Name</div>
+                        </th>
+                        <th scope="col">
+                          <div class="slds-truncate" title="Address">Address</div>
+                        </th>
+                        <th scope="col">
+                          <div class="slds-truncate" title="Phone">Phone</div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <!-- Account section -->
+                      <apex:repeat value="{!searchedAccounts}" var="account">
+                        <tr>
+                          <td data-label="toogle">
+                            <div class="slds-truncate" title="toogle">
+                              <span class="slds-icon_container slds-icon-utility-dash" onclick="hideRelatedList(this);">
+                                <svg class="slds-icon slds-icon--small slds-icon-text-default" aria-hidden="true">
+                                  <!-- /assets/icons/utility-sprite/svg/symbols.svg#case -->
+                                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#dash')}"></use>
+                                </svg>
+                              </span>
+
+                              <span class="slds-icon_container slds-icon-utility-dash" onclick="showRelatedList(this);" style="display: none">
+                                <svg class="slds-icon slds-icon--small slds-icon-text-default" aria-hidden="true">
+                                  <!-- /assets/icons/utility-sprite/svg/symbols.svg#case -->
+                                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#add')}"></use>
+                                </svg>
+                              </span>
+                            </div>
+                          </td>
+                          <td data-label="Create Contact">
+                            <div class="slds-truncate" title="Create contact">
+                              <a href="javascript:void(0);" onclick="showCallerCreate({!account.Id});">Create contact</a>
+                            </div>
+                          </td>
+                          <td data-label="Name">
+                            <div class="slds-truncate" title="{!account.Name}">{!account.Name}</div>
+                          </td>
+                          <td data-label="Account">
+                            <div class="slds-truncate" title="{!account.DW_ID__c}">{!account.DW_ID__c}</div>
+                          </td>
+                          <td data-label="SSC Name">
+                            <div class="slds-truncate" title="{!account.SSC__r.Name}">{!account.SSC__r.Name}</div>
+                          </td>
+                          <td data-label="Address">
+                            <div class="slds-truncate" title="Address">
+                              {!account.ShippingStreet} &nbsp; {!account.ShippingCity}
+                              <br/> {!account.ShippingState}&nbsp; {!account.ShippingPostalCode}
+                              <br/> {!account.ShippingCountry}
+                            </div>
+                          </td>
+                          <td data-label="Phone">
+                            <div class="slds-truncate" title="{!account.Phone}">{!account.Phone}</div>
+                          </td>
+                        </tr>
+                        <!-- contact related list -->
+                        <tr class="contact-related-list--container">
+                          <td>&nbsp;</td>
+                          <td colspan="6">
+
+                            <apex:outputPanel rendered="{!account.Contacts.size>0}">
+                              <table class="slds-table slds-no-row-hover">
+                                <thead>
+                                  <tr class="slds-text-title_caps" style="background-color: #6182C5; color: #fff;">
+                                    <th scope="col">
+                                      <div class="slds-truncate" title="Action">Action</div>
+                                    </th>
+                                    <th scope="col">
+                                      <div class="slds-truncate" title="Name">Contact Name</div>
+                                    </th>
+                                    <th scope="col">
+                                      <div class="slds-truncate" title="Account">Account Name</div>
+                                    </th>
+                                    <th scope="col">
+                                      <div class="slds-truncate" title="SSC Name">Phone</div>
+                                    </th>
+                                    <th scope="col">
+                                      <div class="slds-truncate" title="Address">Mobile</div>
+                                    </th>
+                                    <th scope="col">
+                                      <div class="slds-truncate" title="Phone">Other Phone</div>
+                                    </th>
+                                    <th scope="col">
+                                      <div class="slds-truncate" title="Phone">Email</div>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <!-- Contact section -->
+                                  <apex:repeat value="{!account.Contacts}" var="relatedContact">
+                                    <tr>
+                                      <td data-label="Contact">
+                                        <div class="slds-truncate" title="Create contact">
+                                          <a href="javascript:void(0);" onclick="showCaseCreate(123);">Create Case</a>
+                                        </div>
+                                      </td>
+                                      <td data-label="Name">
+                                        <div class="slds-truncate" title="{!relatedContact.Name}">{!relatedContact.Name}</div>
+                                      </td>
+                                      <td data-label="Account">
+                                        <div class="slds-truncate" title="{!relatedContact.Account.Name}">{!relatedContact.Account.Name}</div>
+                                      </td>
+                                      <td data-label="Phone">
+                                        <div class="slds-truncate" title="{!relatedContact.Phone}">{!relatedContact.Phone}</div>
+                                      </td>
+                                      <td data-label="Mobile">
+                                        <div class="slds-truncate" title="{!relatedContact.MobilePhone}">{!relatedContact.MobilePhone}</div>
+                                      </td>
+                                      <td data-label="Other Phone">
+                                        <div class="slds-truncate" title="{!relatedContact.OtherPhone}">{!relatedContact.OtherPhone}</div>
+                                      </td>
+                                      <td data-label="Email">
+                                        <div class="slds-truncate" title="{!relatedContact.Email}">{!relatedContact.Email}</div>
+                                      </td>
+                                    </tr>
+                                  </apex:repeat>
+                                  <!-- /Contact section -->
+
+                                </tbody>
+                              </table>
+                            </apex:outputPanel>
+
+                          </td>
+                        </tr>
+                      </apex:repeat>
+                      <!-- contact related list -->
+                      <!-- /Account section -->
+
+                    </tbody>
+                  </table>
+                  <div class="slds-card__footer slds-grid" style="padding: .5rem; background-color: #f4f6f9;margin-top: 0px; border-bottom-left-radius: .25rem; border-bottom-right-radius: .25rem; border: 1px solid #d8dde6;">
+                    <div class="slds-col slds-size--1-of-2" style="text-align:left">Showing {!(pageNumber * size)+1-size} - {!IF((pageNumber * size)>noOfRecords, noOfRecords,(pageNumber
+                      * size))} of {!noOfRecords} records</div>
+                    <div class="slds-col slds-size--1-of-2">
+                      <button class="slds-button slds-button--brand " id="prev--btn">Previous</button>
+                      <button class="slds-button slds-button--brand " id="next--btn">Next</button>
+                    </div>
+                  </div>
+                </apex:outputPanel>
+                <!-- results grid -->
+              </td>
+            </tr>
+          </table>
+
+        </apex:outputPanel>
+        <!-- /Account Lookup Results -->
+
+        <!-- Contact Lookup Results -->
+        <article class="slds-card" style="margin-top: 1rem">
+          <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+              <div class="slds-media__figure">
+                <span class="slds-icon_container slds-icon-standard-contact">
+                  <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS,'/assets/icons/standard-sprite/svg/symbols.svg#contact')}"></use>
+                  </svg>
+                </span>
+              </div>
+              <div class="slds-media__body">
+                <h1>
+                  <span class="slds-text-heading_small" style="font-size: 2rem;">Contacts</span>
+                 <!--><button type="button" class="btn" style="margin-left: 20px; height: 40px; font-size: medium;position: absolute;right: 2rem;top: 5px;" id="newCon" onCLick="showCallerCreateGeneric();">New Contact</button> -->
+                </h1>
+                <div class="slds-truncate" title="Create Contact">
+                  
+                </div>                    
+              </div>
+            </header>
+          </div>
+          <div class="slds-card__body slds-card__body_inner bootstrap3-sfdc" style="background-color: white;padding-top:0px;">
+            <!-- Select ssc Repeater -->
+            <div class="custom-left-grid-section">
+              <div id="contact-lookup-result" style="padding-bottom: .75rem;"></div>
+              <table id="contact-grid" class="slds-table slds-table--bordered slds-table--cell-buffer" cellspacing="0" width="100%" style="display:none;"></table>
+            </div>
+            <!-- /Select ssc Repeater -->
+          </div>
+        </article>
+        <!-- Contact Lookup Results -->
+      </apex:outputPanel>
+      <!-- Page actions -->
+      <apex:actionFunction name="searchAccountContactsJS" action="{!searchAccountContacts}" reRender="accountLookupRepeater" onComplete="on_grid_render_complete({!hasPrevious}, {!hasNext})">
+        <apex:param name="searchParam" value="" assignTo="{!searchParam}" />
+      </apex:actionFunction>
+
+      <apex:outputPanel id="paginationActions">
+        <apex:actionFunction name="previousJS" action="{!previous}" reRender="paginationActions,accountLookupRepeater" onComplete="on_grid_render_complete({!hasPrevious}, {!hasNext})"
+        />
+        <apex:actionFunction name="nextJS" action="{!next}" reRender="paginationActions,accountLookupRepeater" onComplete="on_grid_render_complete({!hasPrevious}, {!hasNext})"
+        />
+      </apex:outputPanel>
+
+
+      <!-- /Page actions -->
+
+    </apex:form>
+    <!-- / PAGE FORM -->
+
+    <!-- Pop-up window will display to log new caller info to existing account -->
+    <div class="modal fade" id="modalNewCaller" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-login">
+        <div class="modal-content">
+          <apex:form id="theNewCallerForm">
+            <div class="modal-header">
+              <div class="avatar">
+                <div class="icon-box-success">
+                  <i class="material-icons-search">&#xe7fe;</i>
+                </div>
+              </div>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <span class="slds-form-element__label">Could I please have your first name, last name and email if possible?</span>
+            <div class="modal-header">
+              <div class="slds-p-horizontal--small slds-col slds-size_1-of-1">
+                <span class="slds-form-element__label">Account</span>
+                <apex:inputField value="{!theCase.AccountId}" label="Account" style="font-size: 2.75rem;width: 45rem;padding-right: 5rem;"
+                  id="caseAccount" onkeypress="return noenterLead(event);" html-disabled="true"/>
+              </div>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal">
+                <div class="slds-form-element__control">
+                  <span/>
+                  <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">First Name</span>
+                      <br></br>
+                      <apex:inputField value="{!theCase.First_Name__c}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactFirstName"
+                        onkeypress="return noenterLead(event);" />
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">Last Name</span>
+                      <br></br>
+                      <apex:inputField value="{!theCase.Last_Name__c}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactLastName"
+                        onkeypress="return noenterLead(event);" />
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">Email</span>
+                      <br></br>
+                      <apex:inputField value="{!theCase.Email_Address__c}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactEmail" onkeypress="return noenterLead(event);"
+                      />
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">Phone</span>
+                      <br></br>
+                      <apex:inputField value="{!theCase.Phone_Number__c}" type="tel" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactPhone"
+                        onkeypress="return noenterLead(event);" />
+                    </div>
+                    <br/>
+                  </div>
+                </div>
+                <br/>
+              </form>
+              <input type="hidden" class="form-control" id="inputId" />
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onClick="clearNewContact();">Close</button>
+                <button type="button" class="btn btn-primary .btn-updated" style="color: azure;" id="saveContact" onCLick="showCaseCreateCloseNewContact();">Save &amp; New Case</button>
+              </div>
+            </div>
+          </apex:form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pop-up window will display to edit  caller info  -->
+    <div class="modal fade" id="modalEditCaller" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-login">
+        <div class="modal-content">
+          <apex:form id="theEditCallerForm">
+            <div class="modal-header">
+              <div class="avatar">
+                <div class="icon-box-success">
+                  <i style="font-size: 6.5rem;" class="material-icons">contact_mail</i>
+                </div>
+              </div>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <apex:inputhidden value="{!theContact.Id}" id="contactIdHidden"/>
+            <div class="modal-header">
+              <div class="slds-p-horizontal--small slds-col slds-size_1-of-1">
+                <span class="slds-form-element__label">Account</span>
+                <apex:inputField value="{!theContact.AccountId}" label="Account" style="font-size: 2.75rem;width: 45rem;padding-right: 5rem;" html-disabled="true" 
+                  id="caseAccount" onkeypress="return noenterLead(event);" />
+              </div>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal">
+                <div class="slds-form-element__control">
+                  <span/>
+                  <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">First Name</span>
+                      <br></br>
+                      <apex:inputField value="{!theContact.FirstName}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactFirstName"
+                        onkeypress="return noenterLead(event);" />
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">Last Name</span>
+                      <br></br>
+                      <apex:inputField value="{!theContact.LastName}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactLastName"
+                        onkeypress="return noenterLead(event);" />
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">Email</span>
+                      <br></br>
+                      <apex:inputField value="{!theContact.Email}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactEmail" onkeypress="return noenterLead(event);"
+                      />
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">Phone</span>
+                      <br></br>
+                      <apex:inputField value="{!theContact.Phone}" type="tel" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactPhone"
+                        onkeypress="return noenterLead(event);" />
+                    </div>
+                    <br/>
+                  </div>
+                </div>
+                <br/>
+              </form>
+              <input type="hidden" class="form-control" id="contactId" />
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onClick="clearContactEdit();">Close</button>
+                <button type="button" class="btn btn-primary .btn-updated" style="color: azure;" id="buttonEditContactOnly" onCLick="editContactOnly();">Save</button>
+                <button type="button" class="btn btn-primary .btn-updated" style="color: azure;" id="buttonEditContactCreateCase" onCLick="editContactCreateCase();">Save &amp; New Case</button>
+              </div>
+            </div>
+          </apex:form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pop-up window will display to log new caller info to generic account -->
+    <div class="modal fade" id="modalNewCallerGeneric" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-login">
+        <div class="modal-content">
+          <apex:form id="theNewCallerFormGeneric">
+            <div class="modal-header">
+              <div class="avatar">
+                <div class="icon-box-success">
+                  <i class="material-icons-search">&#xe7fe;</i>
+                </div>
+              </div>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <span class="slds-form-element__label">Could I please have your companies name, your first name, last name and email if possible?</span>
+            <div class="modal-header">
+              <div class="slds-p-horizontal--small slds-col slds-size_1-of-1">
+                <span class="slds-form-element__label">Account</span>
+                <apex:inputField value="{!theCase.AccountName__c}" label="Account" style="font-size: 2.75rem;width: 75%;"
+                  id="caseCompanyName" onkeypress="return noenterLead(event);" />
+              </div>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal">
+                <div class="slds-form-element__control">
+                  <span/>
+                  <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">First Name</span>
+                      <br></br>
+                      <apex:inputField value="{!theCase.First_Name__c}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactFirstName"
+                        onkeypress="return noenterLead(event);" />
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">Last Name</span>
+                      <br></br>
+                      <apex:inputField value="{!theCase.Last_Name__c}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactLastName"
+                        onkeypress="return noenterLead(event);" />
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">Email</span>
+                      <br></br>
+                      <apex:inputField value="{!theCase.Email_Address__c}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactEmail" onkeypress="return noenterLead(event);"
+                      />
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                      <span class="slds-form-element__label">Phone</span>
+                      <br></br>
+                      <apex:inputField value="{!theCase.Phone_Number__c}" type="tel" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="contactPhone"
+                        onkeypress="return noenterLead(event);" />
+                    </div>
+                    <br/>
+                  </div>
+                </div>
+                <br/>
+              </form>
+              <input type="hidden" class="form-control" id="inputId" />
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onClick="clearNewGenericContact();">Close</button>
+                <button type="button" class="btn btn-primary .btn-updated" style="color: azure;" id="saveContact" onCLick="validateLead();">Save</button>
+                <button type="button" class="btn btn-primary .btn-updated" style="color: azure;" id="saveContact" onCLick="showCaseCreateCloseNewContactGeneric();">Save &amp; New Case</button>
+              </div>
+            </div>
+          </apex:form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pop-up window will display to log new case info -->
+    <div class="modal fade bd-example-modal-xl" id="modalNewCase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-login" style="width: 80%;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="avatar">
+              <div class="icon-box-success">
+                <i style="font-size: 6.5rem;" class="material-icons">work_outline</i>
+              </div>
+            </div>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <apex:form id="theCaseForm">
+              <form class="form-horizontal">
+                <div class="slds-form-element__control">
+                  <span/>
+                  <div>
+                    <div class="slds-box">
+                      <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                        <div class="slds-p-horizontal--small slds-col slds-size_1-of-8">
+                          <span class="slds-form-element__label">Caller ID</span>
+                          <br></br>
+                          <apex:inputField type="tel" value="{!theCase.Caller_ID__c}" style="font-size: 1.75rem; width: 100%;height: 3.5rem;" id="caseCallerID" onkeypress="return noenterLead(event);" html-disabled="true" />
+                        </div>
+                        <div class="slds-p-horizontal--small slds-col slds-size_1-of-8">
+                          <span class="slds-form-element__label" >Actual Phone</span>
+                          <br></br>
+                          <apex:inputField type="tel" value="{!theCase.Phone_Number__c}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="caseActualPhone" onkeypress="return noenterLead(event);" />
+                        </div>
+                        <div class="slds-p-horizontal--small slds-col slds-size_1-of-4">
+                          <span class="slds-form-element__label" style="width: 100%;">SSC</span>
+                          <br></br>
+                          <apex:inputField value="{!theCase.SSC__c}" style="font-size: 1.75rem;height: 4rem;width: 100%;" id="caseSSC" onkeypress="return noenterLead(event);"
+                          />
+                        </div>
+                        <div class="slds-p-horizontal--small slds-col slds-size_1-of-4">
+                          <span class="slds-form-element__label" style="width: 100%;">Account Name</span>
+                          <br></br>
+                          <apex:inputField value="{!theCase.AccountId}" style="font-size: 1.75rem;height: 4rem;width: 100%;" id="caseAccount" onkeypress="return noenterLead(event);" html-disabled="true" 
+                          />
+                        </div>
+                        <div class="slds-p-horizontal--small slds-col slds-size_1-of-4">
+                          <span class="slds-form-element__label" style="width: 100%;">Contact Name</span>
+                          <br></br>
+                          <apex:inputField value="{!theCase.ContactId}" style="font-size: 1.75rem;height: 4rem;width: 100%;" id="caseContact" onkeypress="return noenterLead(event);" html-disabled="true" 
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="slds-box">
+                      <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                        <div class="slds-p-horizontal--small slds-col slds-size_1-of-4">
+                          <span class="slds-form-element__label">Status</span>
+                          <br></br>
+                          <apex:inputField value="{!theCase.Status}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="caseStatus" onkeypress="return noenterLead(event);"
+                          />
+                        </div>
+                        <div class="slds-p-horizontal--small slds-col slds-size_1-of-4">
+                          <span class="slds-form-element__label">Type</span>
+                          <br></br>
+                          <apex:inputField value="{!theCase.Type}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="caseType" onkeypress="return noenterLead(event);"
+                          />
+                        </div>
+                        <div class="slds-p-horizontal--small slds-col slds-size_1-of-4">
+                          <span class="slds-form-element__label">Oasis Order Number</span>
+                          <br></br>
+                          <apex:inputField value="{!theCase.OASIS_Order_Number__c}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="caseOasisNumber"
+                            onkeypress="return noenterLead(event);" />
+                        </div>
+                        <div class="slds-p-horizontal--small slds-col slds-size_1-of-4">
+                          <span class="slds-form-element__label">CSR Handoff</span>
+                          <br></br>
+                          <apex:inputField value="{!theCase.CSR_Handoff__c}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="caseCsrHandoff"
+                            onkeypress="return noenterLead(event);" />
+                        </div>
+                        <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                          <span class="slds-form-element__label">Subject</span>
+                          <br></br>
+                          <apex:inputField value="{!theCase.Subject}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;" id="caseSubject" onkeypress="return noenterLead(event);"
+                          />
+                        </div>
+                        <div class="slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                          <span class="slds-form-element__label">Internal Comments</span>
+                          <br></br>
+                          <apex:inputField value="{!theCase.Comments}" style="font-size: 1.75rem;width: 100%;height: 3.5rem;overflow: hidden;" id="caseComments" onkeypress="return noenterLead(event);"
+                          />
+                        </div>
+                        <div class="slds-p-horizontal--large slds-size--1-of-1 ">
+                          <span class="slds-form-element__label">Description</span>
+                          <br></br>
+                          <apex:inputTextarea value="{!theCase.Description}" style="font-size: 1.75rem;width: 100%;height: 10rem;" id="caseDescription"
+                            onkeypress="return noenterLead(event);" />
+                        </div>
+                      </div>
+                    </div>
+                    <br/>
+                  </div>
+                </div>
+                <br/>
+              </form>
+            </apex:form>
+            <input type="hidden" class="form-control" id="inputId" />
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal" onClick="clearNewCase();">Close</button>
+              <button type="button" class="btn btn-primary .btn-updated" style="color: azure;" id="saveCase" onCLick="createCase();">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <!-- Pop-up window will display when Appointment is created to confirm -->
+      <div class="modal fade" id="modalConfirm" tabindex="-3" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="">
+        <div class="modal-dialog modal-confirm" style="width:60%;height:50%;">
+            <div class="modal-dialog" style="width: 100%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="icon-box-success">
+                          <i style="font-size: 6.5rem;" class="material-icons">&#xE876;</i>
+                        </div>              
+                    </div>      
+                    <div class="modal-body">
+                        <div class="alert alert-success" aria-hidden="true">
+                          <span class="slds-form-element__label" id="confirmLine1"></span>
+                          <!-- <h4 class="modal-title" style="text-align: center;" id="confirmLine1"></h4> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>      
+    
+        <!-- Pop-up window will display when saving a contact / case -->
+    <div class="modal fade" id="modalSaving" tabindex="-3" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="">
+        <div class="modal-dialog modal-confirm" style="width:60%;height:50%;">
+            <div class="modal-dialog" style="width: 100%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="icon-box-success">
+                          <i style="font-size: 6.5rem;" class="material-icons">thumb_up_alt</i>
+                        </div>              
+                    </div>      
+                    <div class="modal-body">
+                        <div class="alert alert-success" aria-hidden="true">
+                          <span class="slds-form-element__label" >Thank you for your patience while we are updating your records...</span>
+                          <!-- <h4 class="modal-title" style="text-align: center;" id="confirmLine1"></h4> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>      
+
+  <!-- Pop-up window will display when error  -->
+  <div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header" data-dismiss="modal" aria-label="Close">
+                <div class="icon-box-error">
+                    <i class="material-icons">&#xE5CD;</i>
+                </div>              
+                <h4 class="text-center" >Sorry!</h4>    
+            </div>
+            <div class="modal-body">
+              <span class="slds-form-element__label" id="textError"></span>
+            </div>
+        </div>
+    </div>
+  </div>  
+
+  </div>
+</apex:page>

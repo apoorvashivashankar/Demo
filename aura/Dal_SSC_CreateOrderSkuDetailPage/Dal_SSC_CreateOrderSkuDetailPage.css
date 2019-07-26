@@ -1,0 +1,89 @@
+/**
+ * Created by presh on 28-12-2018.
+ */
+.THIS .icon-color-custom {
+    color : black !important;
+    margin-top: -0.3rem;
+}
+
+.THIS .font-label{
+    font-size: 0.9rem;
+}
+
+.THIS .a-color{
+    color : red;
+}
+
+.THIS .font-to-green {
+    color : #05911a;
+}
+
+.THIS .create-order-price-per-uom-top {
+    font-size: 1.3rem;
+}
+
+.THIS .create-order-titles {
+    font-size: 0.9rem;
+}
+
+.THIS .input-uom .slds-form-element__label{
+    display : none;
+}
+
+.THIS .show-button-custom {
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+
+.THIS .create-order-product-detail-heading {
+    margin-top: 3rem;
+}
+
+.THIS .td {
+    overflow-wrap: break-word;
+    white-space: normal;
+    padding: 1px;
+}
+
+.THIS .sku-child-label-color {
+    color : #a5a5a5;
+}
+
+.THIS .warning-color-green .slds-icon {
+    fill :  #05911a !important;
+    padding-right : 5px;
+}
+
+.THIS .warning-color-orange .slds-icon{
+    fill :  #cf740a !important;
+    padding-right : 5px;
+}
+
+.THIS .warning-color-red .slds-icon{
+    fill : red !important;
+    padding-right : 5px;
+}
+
+.THIS .date-to-green {
+    color : #05911a;
+}
+
+.THIS .date-to-orange {
+    color : #cf740a;
+}
+
+.THIS .date-to-red {
+    color : red;
+}
+
+.THIS .shippingStatus {
+    font-family: helvetica,arial,sans-serif;
+    font-size: .9375rem;
+    font-weight: bold;
+}
+
+.THIS .cal-margin {
+    margin-top: 8px;
+}

@@ -1,0 +1,15 @@
+/**
+ * Created by ranja on 20-11-2018.
+ */
+.THIS {
+}
+
+.THIS .header-lead-button {
+    float : right;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-weight: 800;
+    color: rgb(105, 105, 105)!important;
+}

@@ -1,0 +1,88 @@
+<!--
+ - Created by presh on 28-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderDetailAddToCart" controller="Dal_InventorySearchController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" extends="c:Dal_ModalBase">
+
+
+    <!--Internal Attributes-->
+    <aura:attribute name="finalResponseWrapper" type="Map"/>
+    <aura:attribute name="createOrderWrapper" type="Map"/>
+    <aura:attribute name="showTill" type="Integer" default="3" description="Number of products to show on opening" />
+    <aura:attribute name="addMore" type="Integer" default="3" description="Number of products to show on show more" />
+    <aura:attribute name="isFromIcon" type="Boolean" />
+    <aura:attribute name="myCartResponse" type="Map" />
+
+    <!-- For Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!--Events-->
+    <aura:registerevent name="mycartProductTotal" type="c:Dal_SSC_MyCartQuantityUpdateEvent"/>
+    <aura:registerevent name="createOrderGlobalSearch" type="c:Dal_SSC_CreateOrderHideGSearchEvent"/>
+
+    <!--BODY--> 
+    <div class="">
+        <div class="c-container">
+            <div class="slds-grid slds-text-heading_medium heading slds-p-vertical_medium">
+                {!v.finalResponseWrapper.length}
+                <aura:if isTrue="{!v.finalResponseWrapper.length == 1}">
+                    Product
+                    <aura:set attribute="else">
+                        Products
+                    </aura:set>
+                </aura:if>
+                Added to Cart
+            </div>
+
+            <aura:if isTrue="{!v.finalResponseWrapper.length > 0}">
+                <aura:iteration items="{!v.finalResponseWrapper}" var="resp" indexVar="index">
+                    <div class="{!index lt v.showTill ? '' : 'slds-hide'}">
+                        <div class="slds-border_bottom">
+                            <div class="slds-text-heading_small slds-m-top_large slds-m-bottom_x-small">
+                                {!resp.sku}
+                            </div>
+                            <div class="slds-text-heading_medium slds-m-bottom_medium">
+                                {!resp.Description}
+                            </div>
+
+                            <lightning:layout horizontalAlign="spread">
+                                <lightning:layoutItem padding="around-small">
+                                    <div class="custom-box"><b><lightning:formattedNumber value="{!resp.pricingUOM_NetPrice}" style="currency" currencyCode="USD"/></b>&nbsp;
+                                        / {!resp.BaseUOM}
+                                    </div>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem padding="around-small">
+                                    <div class="custom-box"><lightning:formattedNumber value="{!resp.updatedQuantity}" maximumFractionDigits="2" minimumFractionDigits="2" /> &nbsp; {!resp.updatedBaseUOM}</div>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+                    </div>
+                </aura:iteration>
+
+                <div class="{!((v.finalResponseWrapper.length - v.showTill) > 0) ? '' : 'slds-hide' }">
+                    <a class="" onclick="">
+                        <div class="add-to-cart-show-more">
+                            ... and {!v.finalResponseWrapper.length - v.showTill} more
+                        </div>
+                    </a>
+                </div>
+            </aura:if>
+        </div>
+
+        <div class="view-cart">
+            <div class="">
+                <lightning:button class="slds-align_absolute-center view-cart-button" variant="brand" label="VIEW CART"
+                                  title="VIEW CART" onclick="{!c.handleViewCart}"/>
+            </div>
+            <div class="continue-shopping">
+                <p class="slds-align_absolute-center">
+                    <a onclick="{!c.navigateToBrowseProducts}">Continue Shopping</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</aura:component>

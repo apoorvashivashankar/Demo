@@ -1,0 +1,9 @@
+<!--
+ - Created by ranja on 16-08-2018.
+ -->
+
+<design:component >
+
+    <design:attribute name="headerTitle" label="Sample Order Helper Text" description="Header Text in design attribute" />
+
+</design:component>

@@ -1,0 +1,289 @@
+<apex:page controller="SearchPageController" sidebar="false" showHeader="true" id="searchPage">
+    <style>
+        #filter
+        {
+            display: none;
+            position: fixed;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index:10;
+            opacity:0.6;
+            filter: alpha(opacity=50);
+        }
+        
+        .fontColor
+        {
+            color:black;
+        }
+    </style>
+
+    <script>
+        function startProcess()
+        {
+            document.getElementById('{!$Component.searchPage.form.loadingdetail}').style.display = 'block';
+            document.getElementById('filter').style.display = 'block';
+        }
+    
+        function endProcess()
+        {
+            document.getElementById("{!$Component.searchPage.form.loadingdetail}").style.display = 'none';
+            document.getElementById('filter').style.display = 'none';
+        }
+    </script>    
+    <apex:form id="form">    
+    <div id="filter"></div>
+    <apex:actionStatus id="status" onStart="startProcess();" onStop="endProcess();"/>    
+    <apex:image url="{!URLFOR($Resource.spinner,'')}" id="loadingdetail" style="width:50px;height:50px;display:none;position:fixed;top:50%;left:50%;z-index:10;"/>    
+   <!-- section 1 to display SSC record information  starts--> 
+   <apex:pageBlock title="SSC">
+      <apex:pageBlockSection columns="1" rendered="{!sscObjList == null || sscObjList.size == 0}">
+          <apex:outputText value="No Matching Record for SSC found." />
+      </apex:pageBlockSection>
+             
+      <apex:pageBlockTable value="{!sscObjList}" var="sscObj" rendered="{!sscObjList != null && sscObjList.size >0}">
+         <apex:column headerValue="Name"><a href="/{!sscObj.Id}" target="_blank"><apex:outputText value="{!sscObj.Name}" /></a>
+         </apex:column>
+         <apex:column value="{!sscObj.VDN__c}"/>
+         <apex:column value="{!sscObj.SSC_Phone_Number__c}"/>
+         <apex:column value="{!sscObj.SSC_Extension__c}"/>
+      </apex:pageBlockTable>
+   </apex:pageBlock>
+   <!-- section 1 to display SSC record information  ends-->  
+   
+   <!-- section 3 to display Account records information  starts--> 
+   <apex:pageBlock title="Accounts" rendered="{!accounts != null && accounts.size >0}">
+      <apex:pageBlockSection columns="1" rendered="{!accounts == null || accounts.size == 0}">
+          <apex:outputText value="No Matching Records for Account found." />
+      </apex:pageBlockSection>
+       
+      <apex:pageBlockTable value="{!accounts}" var="account" rendered="{!accounts != null && accounts.size >0}">
+        <apex:column headerValue="Create Contact">
+            <apex:commandLink action="{!redirectToContactAndCasePage}" value="Create Contact" target="_blank">
+                <apex:param name="accountId" value="{!account.Id}" />
+            </apex:commandLink>
+         </apex:column>
+         <apex:column headerValue="Name"><a href="/{!account.Id}" target="_blank"><apex:outputText value="{!account.Name}" /></a>
+         </apex:column>
+         <!-- added fields on April-28-2017 starts --> 
+         <apex:column headerValue="Account"><apex:outputText value="{!account.DW_ID__c}" />
+         </apex:column>
+         <apex:column headerValue="Customer Type"><apex:outputText value="{!account.Customer_Type__r.Name}" />
+         </apex:column> 
+         <!-- added fields on April-28-2017 ends --> 
+         <apex:column headerValue="Address">
+             <apex:outputText value="{!account.BillingStreet}"></apex:outputText> &nbsp;
+             <apex:outputText value="{!account.BillingCity}"></apex:outputText> <br/>
+             <apex:outputText value="{!account.BillingState}"></apex:outputText> &nbsp;
+             <apex:outputText value="{!account.BillingPostalCode}"></apex:outputText> <br/>
+             <apex:outputText value="{!account.BillingCountry}"></apex:outputText>
+         </apex:column>
+         <apex:column value="{!account.Phone}"/>
+      </apex:pageBlockTable>
+   </apex:pageBlock>
+   <!-- section 3 to display Account record information  ends-->
+        
+   <!-- section 4 to display Contact Not matched and Account matched starts--> 
+   <apex:pageBlock title="Accounts" rendered="{!accountsMatched != null && accountsMatched.size >0}">
+      <apex:pageBlockSection columns="1" rendered="{!accountsMatched == null || accountsMatched.size == 0}">
+          <apex:outputText value="No Matching Records for Account found." />
+      </apex:pageBlockSection>
+      
+      <apex:pageBlockSection columns="1" rendered="{!accountsMatched != null && accountsMatched.size >0}">
+          <apex:facet name="header">
+            <span class="fontColor">Accounts</span>
+          </apex:facet>
+          <apex:pageBlockTable value="{!accountsMatched}" var="account" rendered="{!accountsMatched != null && accountsMatched.size >0}" >
+             <apex:column headerValue="Create Contact">
+                 <apex:commandLink action="{!redirectToContactAndCasePage}" value="Create Contact" target="_blank">
+                     <apex:param name="accountId" value="{!account.Id}" />
+                 </apex:commandLink>
+             </apex:column>
+             <apex:column headerValue="Name"><a href="/{!account.Id}" target="_blank"><apex:outputText value="{!account.Name}" /></a>
+             </apex:column>
+             <!-- added fields on April-28-2017 starts --> 
+             <apex:column headerValue="Account"><apex:outputText value="{!account.DW_ID__c}" />
+             </apex:column>
+             <apex:column headerValue="Customer Type"><apex:outputText value="{!account.Customer_Type__r.Name}" />
+             </apex:column> 
+             <!-- added fields on April-28-2017 ends --> 
+             <apex:column headerValue="Address">
+                 <apex:outputText value="{!account.BillingStreet}"></apex:outputText> &nbsp;
+                 <apex:outputText value="{!account.BillingCity}"></apex:outputText> <br/>
+                 <apex:outputText value="{!account.BillingState}"></apex:outputText> &nbsp;
+                 <apex:outputText value="{!account.BillingPostalCode}"></apex:outputText> <br/>
+                 <apex:outputText value="{!account.BillingCountry}"></apex:outputText>
+             </apex:column>
+             <apex:column value="{!account.Phone}"/>
+             
+             <!-- display contact related to account starts -->
+             <apex:column breakBefore="true" colspan="6" style="border-bottom: 2px solid black;"> 
+                 <apex:pageBlock >
+                    <apex:pageblocksection collapsible="true" columns="1" rendered="{!account.Contacts == null || account.Contacts.size == 0}">
+                        <apex:facet name="header">
+                            <span class="fontColor">Related Contacts</span>
+                        </apex:facet>
+                        <apex:outputText value="No Contact Records Related to Account." />
+                     </apex:pageblocksection>    
+                    <apex:pageblocksection collapsible="true" columns="1" rendered="{!account.Contacts != null && account.Contacts.size >0}"> 
+                        <apex:facet name="header">
+                            <span class="fontColor">Related Contacts</span>
+                        </apex:facet>
+                        <apex:pageBlockTable value="{!account.Contacts}" var="relatedContact">
+                            <apex:column headerValue="Create Case">
+                                <apex:commandLink action="{!redirectToCreateCasePage}" value="Create Case" target="_blank">
+                                    <apex:param name="accountName" value="{!relatedContact.Account.Name}" />
+                                    <apex:param name="contactName" value="{!relatedContact.Name}" />
+                                </apex:commandLink>
+                            </apex:column>
+                            <apex:column headerValue="ContactName" value="{!relatedContact.Name}" />
+                            <apex:column value="{!relatedContact.Account.Name}"/>
+                            <apex:column value="{!relatedContact.Phone}"/>
+                            <apex:column value="{!relatedContact.MobilePhone}"/>
+                            <apex:column value="{!relatedContact.OtherPhone}"/>
+                            <apex:column value="{!relatedContact.Email}"/>
+                        </apex:pageBlockTable>    
+                    </apex:pageblocksection>    
+                 </apex:pageBlock> 
+             </apex:column>
+             <!-- display contact related to account ends --> 
+          </apex:pageBlockTable>
+       </apex:pageBlockSection>    
+   </apex:pageBlock>
+   <!-- section 4 to display Contact Not matched and Account matched ends-->      
+        
+   <!-- section 5 - Contact Phone not Matched Account Phone not Matched starts -->
+   <apex:pageBlock title="Accounts" rendered="{!showSection}">
+       <apex:pageMessages id="showMessage"></apex:pageMessages>
+        <apex:pageBlockSection columns="1">
+           Enter Search Value: <apex:inputText value="{!searchParam}" />
+        </apex:pageBlockSection>                    
+        &nbsp;&nbsp;&nbsp;
+        <apex:commandButton value="Search" action="{!searchAccountContacts}" reRender="form,showMessage" status="status" />
+        <br/><br/>
+        <apex:outputPanel id="displayAccountContacts" >
+            <apex:pageblocksection collapsible="true" columns="1" rendered="{!searchedAccounts != null && searchedAccounts.size == 0}">
+                <apex:facet name="header">
+                    <span class="fontColor">Matched Accounts</span>
+                </apex:facet>
+                <apex:outputText value="No Accounts found for your searchText." />
+            </apex:pageblocksection> 
+            <apex:pageBlockSection rendered="{!searchedAccounts != null && searchedAccounts.size >0}" columns="1" id="accountsTable">
+                  <apex:facet name="header" >
+                    <span class="fontColor">Matched Accounts</span>
+                 </apex:facet>  
+                  <apex:pageBlockTable value="{!searchedAccounts}" var="account">
+                     <apex:column headerValue="Create Contact">
+                         <apex:commandLink action="{!redirectToContactAndCasePage}" value="Create Contact" target="_blank">
+                             <apex:param name="accountId" value="{!account.Id}" />
+                         </apex:commandLink>
+                     </apex:column> 
+                     <apex:column headerValue="Name"><a href="/{!account.Id}" target="_blank"><apex:outputText value="{!account.Name}" /></a>
+                     </apex:column>
+                     <!-- added fields on April-28-2017 starts --> 
+                     <apex:column headerValue="Account"><apex:outputText value="{!account.DW_ID__c}" />
+                     </apex:column>
+                     <apex:column headerValue="Customer Type"><apex:outputText value="{!account.Customer_Type__r.Name}" />
+                     </apex:column> 
+                     <!-- added fields on April-28-2017 ends -->  
+                     <apex:column headerValue="Address">
+                         <apex:outputText value="{!account.BillingStreet}"></apex:outputText> &nbsp;
+                         <apex:outputText value="{!account.BillingCity}"></apex:outputText> <br/>
+                         <apex:outputText value="{!account.BillingState}"></apex:outputText> &nbsp;
+                         <apex:outputText value="{!account.BillingPostalCode}"></apex:outputText> <br/>
+                         <apex:outputText value="{!account.BillingCountry}"></apex:outputText>
+                     </apex:column>
+                     <apex:column value="{!account.Phone}"/>
+                     
+                     <!-- display contact related to account starts -->
+                     <apex:column breakBefore="true" colspan="6" style="border-bottom: 2px solid black;"> 
+                         <apex:pageBlock >
+                            <apex:pageblocksection collapsible="true" columns="1" rendered="{!account.Contacts == null || account.Contacts.size == 0}">
+                                <apex:facet name="header">
+                                    <span class="fontColor">Related Contacts</span>
+                                </apex:facet>
+                                <apex:outputText value="No Contact Records Related to Account." />
+                             </apex:pageblocksection>    
+                            <apex:pageblocksection collapsible="true" columns="1" rendered="{!account.Contacts != null && account.Contacts.size >0}"> 
+                                <apex:facet name="header">
+                                    <span class="fontColor">Related Contacts</span>
+                                </apex:facet>
+                                <apex:pageBlockTable value="{!account.Contacts}" var="relatedContact">
+                                    <apex:column headerValue="Create Case">
+                                        <apex:commandLink action="{!redirectToCreateCasePage}" value="Create Case" target="_blank">
+                                            <apex:param name="accountName" value="{!relatedContact.Account.Name}" />
+                                            <apex:param name="contactName" value="{!relatedContact.Name}" />
+                                        </apex:commandLink>
+                                    </apex:column>
+                                    <apex:column headerValue="ContactName" value="{!relatedContact.Name}" />
+                                    <apex:column value="{!relatedContact.Account.Name}"/>
+                                    <apex:column value="{!relatedContact.Phone}"/>
+                                    <apex:column value="{!relatedContact.MobilePhone}"/>
+                                    <apex:column value="{!relatedContact.OtherPhone}"/>
+                                    <apex:column value="{!relatedContact.Email}"/>
+                                </apex:pageBlockTable>    
+                            </apex:pageblocksection>    
+                         </apex:pageBlock> 
+                     </apex:column>
+                     <!-- display contact related to account ends --> 
+                  </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            <br/><br/>
+            <apex:outputPanel id="pagination" rendered="{!searchedAccounts != null && searchedAccounts.size >0}">
+                <div style="float:left;">
+                    <apex:outputText rendered="{!NOT(CEILING(noOfRecords /size)==0)}">Page {!pageNumber} of {!CEILING(noOfRecords /size)}</apex:outputText>
+                </div>
+                <div style="float:right;">
+                    <apex:outputText rendered="{!NOT(CEILING(noOfRecords /size)==0)}">Record &nbsp;{!(pageNumber * size)+1-size} - {!IF((pageNumber * size)>noOfRecords, noOfRecords,(pageNumber * size))} of {!noOfRecords}</apex:outputText>
+                </div>
+                <div style="text-align:center;">
+                    &lt;&nbsp;&nbsp;
+                    <apex:commandLink status="status" rerender="displayAccountContacts,pagination" rendered="{!hasPrevious}"  value="First" action="{!first}"  title="First Page"/>
+                    <apex:outputtext value="First" rendered="{!NOT(!!hasPrevious)}"/>
+                    |&nbsp;&nbsp;
+            
+                    <apex:commandLink status="status" rerender="displayAccountContacts,pagination" rendered="{!hasPrevious}"  value="Previous" action="{!previous}"  title="Previous Page"/>
+                    <apex:outputtext value="Previous" rendered="{!NOT(!!hasPrevious)}"/>
+                    |&nbsp;&nbsp;
+            
+                    <apex:commandLink status="status" rerender="displayAccountContacts,showMessage" rendered="{!hasNext}"  value="Next" action="{!next}"  title="Next Page"/>
+                    <apex:outputtext value="Next" rendered="{!NOT(!!hasNext)}"/>
+                    |&nbsp;&nbsp;
+            
+                    <apex:commandLink status="status" rerender="displayAccountContacts,pagination" rendered="{!hasNext}"  value="Last" action="{!last}"  title="Last Page"/>
+                    <apex:outputtext value="Last" rendered="{!NOT(!!hasNext)}"/>
+                    &nbsp;&nbsp;&gt;
+                </div>
+            </apex:outputPanel>
+        </apex:outputPanel> 
+        
+   </apex:pageBlock>     
+   <!-- section 5 - Contact Phone not Matched Account Phone not Matched ends -->   
+   
+   <!-- section 2 to display Contact records information  starts-->    
+   <apex:pageBlock title="Contacts">
+      <apex:pageBlockSection columns="1" rendered="{!contacts == null || contacts.size == 0}">
+          <apex:outputText value="No Matching Records for Contact found." />
+      </apex:pageBlockSection>
+      
+      <apex:pageBlockTable value="{!contacts}" var="contact" rendered="{!contacts != null && contacts.size >0}">
+         <apex:column headerValue="Case">
+             <apex:commandLink action="{!redirectToCreateCasePage}" value="Create Case" target="_blank">
+                 <apex:param name="contactName" value="{!contact.Name}" />
+                 <apex:param name="accountName" value="{!contact.Account.Name}" />
+             </apex:commandLink>
+         </apex:column> 
+         <apex:column headerValue="Name"><a href="/{!contact.Id}" target="_blank"><apex:outputText value="{!contact.Name}" /></a>
+         </apex:column>
+         <apex:column value="{!contact.Account.Name}"/>
+         <apex:column value="{!contact.Phone}"/>
+         <apex:column value="{!contact.MobilePhone}"/>
+         <apex:column value="{!contact.OtherPhone}"/>
+         <apex:column value="{!contact.Email}"/> 
+      </apex:pageBlockTable>
+   </apex:pageBlock>
+   <!-- section 2 to display Contact records information  ends-->      
+   </apex:form>
+</apex:page>

@@ -1,0 +1,35 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francois korb on 9/21/16.
+ -->
+
+<aura:component controller="SVNSUMMITS_IdeaFiltersController" access="global">
+    <c:SVNSUMMITS_Include_SemanticUI />
+
+    <aura:attribute name="debugMode" type="Boolean" default="false" access="global" />
+    <aura:attribute name="sortBy" type="String" default="Popular Ideas" access="global"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.initializeFilters}" />
+    <aura:handler event="c:SVNSUMMITS_Ideas_Filter_Sort_Event" action="{!c.setInitialSort}" />
+
+	<aura:registerEvent name="appEvent" type="c:SVNSUMMITS_Ideas_Filters_Event" />
+
+    <ui:inputSelect aura:id="sortByInput"
+                    multiple="false"
+                    value="{!v.sortBy}"
+                    class="slds-input-select ui dropdown sortByOptions"
+                    change="{!c.handleSortChange}">
+        <ui:inputSelectOption text="Popular Ideas"
+                              label="{!$Label.c.ss_idea_label_PopularIdeas}"
+                              value="{!if(v.sortBy == 'Popular Ideas','true','false')}" />
+        <ui:inputSelectOption text="Recent Ideas"
+                              label="{!$Label.c.ss_idea_label_RecentIdeas}"
+                              value="{!if(v.sortBy == 'Recent Ideas','true','false')}" />
+        <ui:inputSelectOption text="Top All-Time"
+                              label="{!$Label.c.ss_idea_label_TopAllTime}"
+                              value="{!if(v.sortBy == 'Top All-Time','true','false')}" />
+        <ui:inputSelectOption text="Recent Comments"
+                              label="{!$Label.c.ss_idea_label_RecentComments}"
+                              value="{!if(v.sortBy == 'Recent Comments','true','false')}" />
+    </ui:inputSelect>
+</aura:component>

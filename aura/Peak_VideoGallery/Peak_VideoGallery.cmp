@@ -1,0 +1,126 @@
+<!--Copyright © 2016-2018 7Summits, Inc. All rights reserved.-->
+<aura:component description="Display multiple videos from YouTube and configure related display settings in a single component." access="global" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    
+    <aura:attribute name="Title" access="global" type="String" default="Video Gallery" />
+    
+    <aura:attribute name="videoType1" access="global" type="String" default="YouTube" />
+    <aura:attribute name="VideoURL1" access="global" type="String" default="" />
+    <aura:attribute name="VideoTitle1" access="global" type="String" default="First Video" />
+    <aura:attribute name="VideoDescription1" access="global" type="String" default="Some great first content!" />
+    
+    <aura:attribute name="videoType2" access="global" type="String" default="YouTube" />
+    <aura:attribute name="VideoURL2" access="global" type="String" default="" />
+    <aura:attribute name="VideoTitle2" access="global" type="String" default="Second Video" />
+    <aura:attribute name="VideoDescription2" access="global" type="String" default="Some great second content!" />
+    
+    <aura:attribute name="videoType3" access="global" type="String" default="YouTube" />
+    <aura:attribute name="VideoURL3" access="global" type="String" default="" />
+    <aura:attribute name="VideoTitle3" access="global" type="String" default="Third Video" />
+    <aura:attribute name="VideoDescription3" access="global" type="String" default="Some great third content!" />
+    
+    <aura:attribute name="hideDescriptions" access="global" type="Boolean" default="false" />
+    <aura:attribute name="descriptionLineLength" access="global" type="String" default="3" />
+    <aura:attribute name="hasBorder" access="global" type="Boolean" default="false" />
+    
+    <aura:attribute name="align" access="global" type="String" default="center" />
+    
+    <section class="slds-container_x-large slds-container_center">
+        <h2 class="{!'slds-text-heading_medium slds-text-align_'+v.align}">{!v.Title}</h2>
+        <aura:set attribute="videosPerRow" value="1"/>
+        <div class="slds-grid slds-wrap slds-grid_pull-padded no-medium-pull slds-grid_vertical-stretch">
+            <aura:renderIf isTrue="{!and(and((v.VideoURL1.length != 0), (v.VideoURL2.length != 0)), (v.VideoURL3.length != 0))}">
+                    <div class="slds-p-horizontal_small slds-size--1-of-1 slds-medium-size_1-of-3 slds-p-vertical_medium hasBorder">
+                        <article data-hasBorder="{!v.hasBorder}">
+                            <div class="video-wrap">
+                                <aura:renderIf isTrue="{!v.videoType1 == 'YouTube'}">
+                                    <iframe src="{!'https://www.youtube.com/embed/'+v.VideoURL1+'?rel=0&amp;showinfo=0'}" frameborder="0"></iframe>
+                                </aura:renderIf>
+                                <aura:renderIf isTrue="{!v.videoType1 == 'Vimeo'}">
+                                    <iframe src="{!'https://player.vimeo.com/video/'+v.VideoURL1+'?title=0&amp;byline=0&amp;portrait=0'}" frameborder="0"></iframe>
+                                </aura:renderIf>  
+                            </div>
+                        	<div class="slds-text-heading_small slds-p-top_small">{!v.VideoTitle1}</div>
+                        	<aura:if isTrue="{!v.hideDescriptions != true}"><div class="slds-text-body_regular description" style="{!'-webkit-line-clamp:'+v.descriptionLineLength}">{!v.VideoDescription1}</div></aura:if>
+                    	</article>
+                    </div>
+                	<div class="slds-p-horizontal_small slds-size--1-of-1 slds-medium-size_1-of-3 slds-p-vertical_medium hasBorder">
+                        <article data-hasBorder="{!v.hasBorder}">
+                            <div class="video-wrap">
+                                <aura:renderIf isTrue="{!v.videoType2 == 'YouTube'}">
+                                    <iframe src="{!'https://www.youtube.com/embed/'+v.VideoURL2+'?rel=0&amp;showinfo=0'}" frameborder="0"></iframe>
+                                </aura:renderIf>
+                                <aura:renderIf isTrue="{!v.videoType2 == 'Vimeo'}">
+                                    <iframe src="{!'https://player.vimeo.com/video/'+v.VideoURL2+'?title=0&amp;byline=0&amp;portrait=0'}" frameborder="0"></iframe>
+                                </aura:renderIf>  
+                            </div>
+                        	<div class="slds-text-heading_small slds-p-top_small">{!v.VideoTitle2}</div>
+                        	<aura:if isTrue="{!v.hideDescriptions != true}"><div class="slds-text-body_regular description" style="{!'-webkit-line-clamp:'+v.descriptionLineLength}">{!v.VideoDescription2}</div></aura:if>
+                        </article>
+                    </div>
+                	<div class="slds-p-horizontal_small slds-size--1-of-1 slds-medium-size_1-of-3 slds-p-vertical_medium hasBorder">
+                        <article data-hasBorder="{!v.hasBorder}">
+                            <div class="video-wrap">
+                                <aura:renderIf isTrue="{!v.videoType3 == 'YouTube'}">
+                                    <iframe src="{!'https://www.youtube.com/embed/'+v.VideoURL3+'?rel=0&amp;showinfo=0'}" frameborder="0"></iframe>
+                                </aura:renderIf>
+                                <aura:renderIf isTrue="{!v.videoType3 == 'Vimeo'}">
+                                    <iframe src="{!'https://player.vimeo.com/video/'+v.VideoURL3+'?title=0&amp;byline=0&amp;portrait=0'}" frameborder="0"></iframe>
+                                </aura:renderIf>  
+                            </div>
+                            <div class="slds-text-heading_small slds-p-top_small">{!v.VideoTitle3}</div>
+                            <aura:if isTrue="{!v.hideDescriptions != true}"><div class="slds-text-body_regular description" style="{!'-webkit-line-clamp:'+v.descriptionLineLength}">{!v.VideoDescription3}</div></aura:if>
+                        </article>
+                    </div>
+    			<aura:set attribute="else">
+                     <aura:renderIf isTrue="{!and((v.VideoURL1.length != 0), (v.VideoURL2.length != 0))}">
+                            <div class="slds-p-horizontal_small slds-size--1-of-1 slds-medium-size_1-of-2 slds-p-vertical_medium hasBorder">
+                                <article data-hasBorder="{!v.hasBorder}">
+                                    <div class="video-wrap">
+                                        <aura:renderIf isTrue="{!v.videoType1 == 'YouTube'}">
+                                        	<iframe src="{!'https://www.youtube.com/embed/'+v.VideoURL1+'?rel=0&amp;showinfo=0'}" frameborder="0"></iframe>
+                                        </aura:renderIf>
+                                        <aura:renderIf isTrue="{!v.videoType1 == 'Vimeo'}">
+                                            <iframe src="{!'https://player.vimeo.com/video/'+v.VideoURL1+'?title=0&amp;byline=0&amp;portrait=0'}" frameborder="0"></iframe>
+                                        </aura:renderIf>  
+                                  </div>
+                                    <div class="slds-text-heading_small slds-p-top_small">{!v.VideoTitle1}</div>
+                                    <aura:if isTrue="{!v.hideDescriptions != true}"><div class="slds-text-body_regular description" style="{!'-webkit-line-clamp:'+v.descriptionLineLength}">{!v.VideoDescription1}</div></aura:if>
+                                </article>
+                            </div>
+                         	<div class="slds-p-horizontal_small slds-size--1-of-1 slds-medium-size_1-of-2 slds-p-vertical_medium hasBorder">
+                                <article data-hasBorder="{!v.hasBorder}">
+                                    <div class="video-wrap">
+                                        <aura:renderIf isTrue="{!v.videoType2 == 'YouTube'}">
+                                            <iframe src="{!'https://www.youtube.com/embed/'+v.VideoURL2+'?rel=0&amp;showinfo=0'}" frameborder="0"></iframe>
+                                        </aura:renderIf>
+                                        <aura:renderIf isTrue="{!v.videoType2 == 'Vimeo'}">
+                                            <iframe src="{!'https://player.vimeo.com/video/'+v.VideoURL2+'?title=0&amp;byline=0&amp;portrait=0'}" frameborder="0"></iframe>
+                                        </aura:renderIf>  
+                                    </div>
+                                    <div class="slds-text-heading_small slds-p-top_small">{!v.VideoTitle2}</div>
+                                    <aura:if isTrue="{!v.hideDescriptions != true}"><div class="slds-text-body_regular description" style="{!'-webkit-line-clamp:'+v.descriptionLineLength}">{!v.VideoDescription2}</div></aura:if>
+                                </article>
+                            </div>
+                        <aura:set attribute="else">
+                            <div class="slds-p-horizontal_small slds-size--1-of-1 slds-medium-size_1-of-1 slds-p-vertical_medium hasBorder">
+                                <article data-hasBorder="{!v.hasBorder}">
+                                   <div class="video-wrap">
+                                    <aura:renderIf isTrue="{!v.videoType1 == 'YouTube'}">
+                                        <iframe src="{!'https://www.youtube.com/embed/'+v.VideoURL1+'?rel=0&amp;showinfo=0'}" frameborder="0"></iframe>
+                                    </aura:renderIf>
+                                    <aura:renderIf isTrue="{!v.videoType1 == 'Vimeo'}">
+                                        <iframe src="{!'https://player.vimeo.com/video/'+v.VideoURL1+'?title=0&amp;byline=0&amp;portrait=0'}" frameborder="0"></iframe>
+                                    </aura:renderIf> 
+                                    </div>
+                                    <div class="slds-text-heading_small slds-p-top_small">{!v.VideoTitle1}</div>
+                                    <aura:if isTrue="{!v.hideDescriptions != true}"><div class="slds-text-body_regular description" style="{!'-webkit-line-clamp:'+v.descriptionLineLength}">{!v.VideoDescription1}</div></aura:if>
+                                </article>
+                           </div>
+                        </aura:set>
+                    </aura:renderIf>
+    			</aura:set>
+  			</aura:renderIf>
+        </div>
+        <!--<div id="attr">Powered by&nbsp;<a href="http://www.7summitsinc.com/">7Summits</a></div>-->
+    </section>
+</aura:component>

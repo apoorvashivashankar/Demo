@@ -1,0 +1,36 @@
+.THIS {
+}
+
+.THIS.button-add-sku {
+    margin-right: 30px;
+    padding-bottom: 4px;
+}
+
+.THIS.button-save-continue {
+    padding-top: 1.5px;
+    padding-bottom: 1.5px;
+}
+
+.THIS .date-to-green {
+    color : #05911a;
+}
+
+.THIS .shippingStatus {
+    font-family: helvetica,arial,sans-serif;
+    font-size: .9375rem;
+    font-weight: bold;
+    color: #05911a;
+}
+
+.THIS .btn-product-clear {
+    font-size: .8125rem;
+    font-weight: normal;
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    text-transform: capitalize;
+    color: #888a8b;
+}
+.THIS .show-different-color:nth-child(even){
+    background-color : #F3F0F0;
+}

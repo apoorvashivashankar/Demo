@@ -1,0 +1,63 @@
+<apex:page standardController="Account" extensions="newPersonAccountExt">
+
+<apex:includeScript value="/soap/ajax/10.0/connection.js"/>
+<apex:includeScript value="/soap/ajax/10.0/apex.js"/>
+
+    <!-- Salesforce Classic "Aloha" theme -->
+    <apex:outputPanel rendered="{!$User.UITheme == 'Theme3'}">
+        <apex:stylesheet value="{!URLFOR($Resource.slds, 
+                                         'classic-styling.css')}" />
+    <apex:sectionHeader title="Account" subtitle="New Person Account" />
+    <apex:form >
+    <apex:pageBlock title="New Account Info">
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton value="Add Account" action="{!save}" />
+            <apex:commandButton value="Cancel" action="{!cancel}" />
+        </apex:pageBlockButtons>
+        <apex:messages />
+
+        <apex:pageBlockSection title="Account Info">
+
+                <apex:inputField value="{!Account.Name}" required="true" />
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Account Type" />
+                <apex:selectList value="{!Account.RecordTypeID}"  >
+                    <apex:selectOptions value="{!RecordTypes}" />
+                </apex:selectList>    
+            </apex:pageBlockSectionItem>  
+                <apex:inputField value="{!Account.Customer_Class__c}" required="true" />
+                <apex:inputField value="{!Account.Business_Type__c}"  required="true" />
+                <apex:inputField value="{!Account.SSC__c}" required="true" />   
+
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection title="Address Details">
+        <apex:inputField value="{!Account.BillingStreet}" required="false" />
+        <apex:inputField value="{!Account.BillingCity}" required="false" />
+        <apex:inputField value="{!Account.BillingState}"  required="false" />
+        <apex:inputField value="{!Account.BillingPostalCode}"  required="false" />
+        <apex:inputField value="{!Account.BillingCountry}" required="false" />
+        </apex:pageBlockSection>
+        <apex:pageBlockButtons location="bottom">
+            <apex:commandButton value="Add Account" action="{!save}" />
+            <apex:commandButton value="Cancel" action="{!cancel}" />
+        </apex:pageBlockButtons>        
+    </apex:pageBlock>
+     </apex:form>
+    </apex:outputPanel>
+
+    <!-- Lightning Desktop theme -->
+    <apex:outputPanel rendered="{!$User.UITheme != 'Theme3'}">
+        <apex:stylesheet value="{!URLFOR($Resource.slds, 
+                                         'lightning-styling.css')}" />
+
+    <script>   
+{
+    sforce.connection.sessionId = "{!$Api.Session_ID}";
+    sforce.one.createRecord("Account","012A0000000BgbM");
+}  
+
+   </script> 
+    </apex:outputPanel>
+    
+</apex:page>

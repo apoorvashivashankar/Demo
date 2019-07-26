@@ -1,0 +1,78 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS a:hover {
+  text-decoration: none;
+  color: token(colorTextDefault);
+}
+.THIS .slds-card {
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.19);
+}
+.THIS .slds-card svg {
+  fill: white !important;
+}
+.THIS .slds-card h2 {
+  font-size: 1.65rem;
+}
+@media (max-width: 68.75rem) {
+  .THIS .slds-card h2 h2 {
+    font-size: 1.55rem;
+  }
+}
+.THIS .slds-card h2,
+.THIS .slds-card p {
+  padding: 0 token(spacingSmall);
+  text-align: left;
+  color: token(colorTextDefault);
+}
+@media (max-width: 64.0625em) {
+  .THIS .slds-card {
+    margin: .5rem auto;
+  }
+}
+.THIS .small .infoPanelIcon,
+.THIS .large .infoPanelIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.THIS .small .infoPanelIcon .slds-icon_container,
+.THIS .large .infoPanelIcon .slds-icon_container {
+  padding: 0;
+}
+.THIS .small p {
+  font-size: 0.625rem;
+}
+.THIS .small h2 {
+  font-size: 1rem;
+}
+.THIS .small .infoPanelIcon {
+  width: 47px;
+  height: 47px;
+}
+.THIS .small .slds-icon_container {
+  padding: .25rem;
+}
+.THIS .large {
+  width: 100%;
+  min-width: 310px;
+  max-width: 360px;
+}
+.THIS .large .infoPanelIcon {
+  width: 68px;
+  height: 68px;
+}
+.THIS .large .slds-icon_container {
+  padding: 1rem;
+}
+.THIS .rightLink {
+  font-size: 0.625rem;
+  margin-top: 1.4rem;
+  color: token(colorTextLink);
+}

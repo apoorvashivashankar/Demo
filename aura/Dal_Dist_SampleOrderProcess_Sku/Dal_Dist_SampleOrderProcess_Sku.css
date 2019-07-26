@@ -1,0 +1,40 @@
+/**
+ * Created by ranja on 07-08-2018.
+ */
+.THIS {
+}
+
+.THIS.top-heading {
+       font-family: Helvetica;
+       color : #00416a;
+}
+
+.THIS .top-search-button {
+    margin-top: 35px;
+    line-height : 22px;
+}
+
+.THIS .sticky {
+    position:  fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    background:  white;
+    z-index: 10000;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+    transition: top 0.3s;
+    padding: 25px;
+}
+
+.THIS .spinner-fixed {
+    position: fixed;
+}
+
+.THIS .field-required {
+    color : red;
+}
+
+.THIS .input-required {
+    color :   #b30000;
+}

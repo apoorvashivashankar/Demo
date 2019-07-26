@@ -1,0 +1,52 @@
+<!--
+ - Created by 7Summits on 2/19/18.
+ -->
+<aura:component description="Dal_InfoPanelItem">
+    <aura:attribute name="icon" type="String"
+                    default="utility:questions_and_answers" />
+    <aura:attribute name="iconBG" type="String"
+                    default="" />
+    <aura:attribute name="subText" type="String"
+                    default="" />
+    <aura:attribute name="mainText" type="String"
+                    default="" />
+    <aura:attribute name="panelURL" type="String"
+                    default=""  />
+    <aura:attribute name="isLink" type="String"
+                    default="false"  />
+    <aura:attribute name="size" type="String"
+                    default=""  />
+    <aura:attribute name="OpenInNewTab" type="Boolean"
+                    default="false" />
+    <aura:attribute name="className" type="String"  />
+
+    <div class="{!'slds-text-align--center ' + v.className}">
+        <aura:if isTrue="{!v.panelURL != ''}">
+            <a href="{!v.panelURL}"  target="{!v.OpenInNewTab  ? '_blank' : ''}">
+                <div class="{!'slds-card slds-grid ' + v.size}">
+                    <div class="slds-size_3-of-12"
+                         style="{!'background-color:' + v.iconBG }">
+                        <lightning:icon iconName="{!v.icon}" />
+                    </div>
+                    <div class="slds-size_9-of-12">
+                        <p>{!v.subText}</p>
+                        <h2>{!v.mainText}</h2>
+                    </div>
+                </div>
+            </a>
+            <aura:set attribute="else">
+                <div class="{!'slds-card slds-grid ' + v.size}">
+                    <div class="slds-size_3-of-12"
+                         style="{!'background-color:' + v.iconBG }">
+                        <lightning:icon iconName="{!v.icon}" />
+                    </div>
+                    <div class="slds-size_9-of-12">
+                        <p>{!v.subText}</p>
+                        <h2>{!v.mainText}</h2>
+                    </div>
+                </div>
+            </aura:set>
+        </aura:if>
+    </div>
+
+</aura:component>

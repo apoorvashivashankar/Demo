@@ -1,0 +1,8 @@
+<!--
+ - Created by 7Summits on 4/5/18.
+ -->
+
+<design:component label="Dal Order Search">
+    <design:attribute name="listType" label="List Type" datasource="Orders List, History List"/>
+    <design:attribute name="communityType" label="Community Type" datasource="Distributor, SSC"/>
+</design:component>

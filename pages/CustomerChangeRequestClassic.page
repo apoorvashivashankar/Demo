@@ -1,0 +1,1035 @@
+<apex:page standardStylesheets="true" lightningStylesheets="true" id="thePage" standardController="Account" extensions="CustomerRequestNewLightningExtension" >
+
+    <apex:stylesheet value="{!URLFOR($Resource.slds, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    
+    <head>
+      <!--Import Google Icon Font-->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+      
+        <link rel="stylesheet" href="https://cdn.rawgit.com/mailtoharshit/ForceSpinner/master/src/css/forcespinner.css" media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    
+    <script type='text/javascript' src='/canvas/sdk/js/publisher.js'/>
+    <script>
+    
+        // setup variables used in functions
+        var theResults;
+        var theNewCRId;
+        var theShipToError;
+        var theBillToError;
+        var theError;
+        var updateAccount;
+        var newCRId;
+        var hasError;
+        var errorMessage;
+        var updateAll;
+        var updateRep;
+        var updateNewRep;
+        var updateNewRegion;
+        var updateNewRep;
+        var updateClass;
+        var updateNewCusClass;
+        var updateNewReasonForClass;
+        var updateNewRegion;
+        var updateSSC;
+        var updateNewSSC;
+        var updateName;
+        var updateNameChange;
+        var updateDBANameChange;
+        var updateAddress;
+        var updateBillto;
+        var updateBillToCountryChange;
+        var updateBillToAddress1Change;
+        var updateBillToAddress2Change;
+        var updateBillToCityChange;
+        var updateBillToZip;
+        var updateBillToState;
+        var updateCopyBillto;
+        var updateContact;
+        var updatePhone;
+        var updatePhone;
+        var phoneNum;
+        var updateFax;
+        var updateShipto;
+        var updateShipToCountryChange;
+        var updateShipToAddress1Change;
+        var updateShipToAddress2Change;
+        var updateShipToCityChange;
+        var updateShipToZip;
+        var updateShipToState;
+        var updateNewShiptoAccount;
+        var updateNewExtendShipTo;
+        var updateNewShipToReason;
+        var updateNewCusType;
+        var updatePoRequired;
+        var updateWebsite;
+        var updateComments;
+        var updateAccount;
+        var newCRId;
+        var updateAll;
+        var theResultsError;
+
+        // on inition launch, enable the publisher window save and cancel buttons
+        Sfdc.canvas.publisher.subscribe({
+            name: "publisher.showPanel",
+            onData: function(e) {
+                console.log('enable the publisher window save and cancel buttons')
+                Sfdc.canvas.publisher.publish({
+                    name: "publisher.setValidForSubmit",
+                    payload: "true"
+                });
+            }
+        });
+
+        // Create the CR
+        // launch the submitted request
+        // close the publisher window
+        Sfdc.canvas.publisher.subscribe({
+            name: "publisher.post",
+            onData: function(e) {
+                resetError();
+                disableButtons();
+                window.scrollTo(0,0);
+                alert('Validating and Creating Your Request.  This may take a moment, please do not hit Save again...')
+                console.log('now to create the request')
+                validateAndCreateRequest();
+                console.log('now to launch it')
+                closeWindow();
+            }
+        });
+
+
+        // sets the fields from the VF page into javascript, and validates the checkboxes have their designated fields with values in them.  other validations (region / addres...) done in apoex controller
+        function validateAndCreateRequest() {
+            updateAccount = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theAccount}_lkid').value;
+            newCRId = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theCrId}').value;
+            console.log('updateRequest theNewCRId: ' + theNewCRId);
+            console.log('updateRequest updateAccount: ' + updateAccount);
+            theResults = '';
+            hasError = false;
+            errorMessage = '';
+            
+            updateAll = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:allChange}').checked;
+            updateRep = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:repChange}').checked;
+            console.log('updateRequest updateRep: ' + updateRep);
+            if (updateRep == true) {
+                updateNewRep = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:newRep}_lkid').value;
+                updateNewRegion = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:newRegion}_lkid').value;
+                console.log('updateRequest updateNewRep: ' + updateNewRep);
+                if (!updateNewRep || updateNewRep == '000000000000000') {
+                    hasError = true;
+                    errorMessage = errorMessage + ' a New Rep';
+                }               
+            } else {
+                updateNewRep = '';
+            }
+            updateClass = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:classChange}').checked;
+            if (updateClass == true) {
+                updateNewCusClass = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:newCusClass}_lkid').value;
+                updateNewReasonForClass = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:newReasonForClass}').value;
+                updateNewRegion = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:newRegion}_lkid').value;
+                if (!updateNewCusClass || updateNewCusClass == '000000000000000') {
+                    hasError = true;
+                    errorMessage = errorMessage + ' a New Customer Class';
+                } else if (!updateNewReasonForClass) {
+                    hasError = true;
+                    errorMessage = errorMessage + ' a Reason for the New Customer Class';
+                }               
+            } else {
+                updateNewCusClass = '';
+                updateNewReasonForClass = '';
+            }
+            updateSSC = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:sscChange}').checked;
+            if (updateSSC == true) {
+                updateNewSSC = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:newSSC}_lkid').value;
+                updateNewRegion = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:newRegion}_lkid').value;
+                if (!updateNewSSC || updateNewSSC == '000000000000000') {
+                    hasError = true;
+                    errorMessage = errorMessage + ' a New SSC';
+                }               
+            } else {
+                updateNewSSC = '';
+            }
+            updateName = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:nameChange}').checked;
+            if (updateName == true) {
+                updateNameChange = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:accountNameChange}').value;
+                updateDBANameChange = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:dbaNameChange}').value;
+                if (!updateNameChange && !updateDBANameChange) {
+                    hasError = true;
+                    errorMessage = errorMessage + ' a New Name';
+                }               
+            } else {
+                updateNameChange = '';
+                updateDBANameChange = '';
+            }
+            updateType = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:typeChange}').checked;
+            if (updateType == true) {
+                updateNewCusType = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:newCusType}_lkid').value;
+                if (!updateNewCusType || updateNewCusType == '000000000000000') {
+                    hasError = true;
+                    errorMessage = errorMessage + ' a New Customer Type';
+                }
+                if (!updateNewRegion) {
+                    updateNewRegion = ''
+                }
+            } else {
+                updateNewCusType = '';
+            }
+            updateOther = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:otherChange}').checked;
+            if (updateOther == true) {
+                updateContact = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:updateContact}').value;
+                if (!updateContact) {
+                    updateContact = '';
+                }
+                updatePhone = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:updatePhone}').value;
+                console.log('updatePhone 2: '+updatePhone);
+                if (!updatePhone) {
+                    updatePhone = '';
+                } else {
+                    phone = updatePhone;
+                    phoneNum = phone.replace(/[^\d]/g, '');
+                    console.log('phoneNum 2: '+phoneNum);
+                    if(phoneNum.length > 6 && phoneNum.length < 11 && phoneNum > 1) {  
+                        updatePhone = phoneNum;  
+                        console.log('updatePhone 3: '+updatePhone);
+                    } else {  
+                        hasError = true;
+                        errorMessage = errorMessage + ' ' + updatePhone + ' is an invalid phone number';
+                    }
+                }    
+                updateFax = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:updateFax}').value;
+                console.log('updateFax 2: '+updateFax);
+                if (!updateFax) {
+                    updateFax = '';
+                } 
+                // else {
+    //                 fax = updateFax;
+    //                 faxNum = fax.replace(/[^\d]/g, '');
+    //                 if(faxNum.length > 6 && faxNum.length < 11) {  
+    //                     return true;  
+    //                 } else {  
+                //      hasError = true;
+                //      errorMessage = errorMessage + ' ' + updateFax + ' is an invalid fax number';
+    //              }
+    //                 console.log('pt 2.2 check updateFax 2: '+updateFax);
+    //          }    
+                updatePoRequired = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:updatePoRequired}').checked;
+                updateWebsite = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:updateWebsite}').value;        
+                if (!updateContact && !updatePhone && !updateFax && updatePoRequired == false && !updateWebsite) {
+                    hasError = true;
+                    errorMessage = errorMessage + ' a New Contact/Phone/Fax/Website';                   
+                }
+            } else {
+                updateContact = '';
+                updatePhone = '';
+                updateFax = '';             
+                updatePoRequired = '';
+                updateWebsite = '';
+            }
+            updateAddress = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:addressChange}').checked;
+            if (updateAddress == true) {
+                updateBillto = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:billToAddressChange}').checked;
+                if (updateBillto == true) {
+                    updateBillToCountryChange = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:billToCountryChange}').value;
+                    updateBillToAddress1Change = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:billToAddress1Change}').value;
+                    updateBillToAddress2Change = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:billToAddress2Change}').value;
+                    updateBillToCityChange = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:billToCityChange}').value;
+                    updateBillToZip = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:billToZipChange}').value;
+                    updateBillToState = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:billToStateChange}').value;
+                    updateCopyBillto = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:updateCopyBillto}').checked;
+                    if (!updateBillToCountryChange && !updateBillToAddress1Change && !updateBillToAddress2Change && !updateBillToCityChange && !updateBillToZip && !updateBillToState && updateCopyBillto == false) {
+                        hasError = true;
+                        errorMessage = errorMessage + ' a BillTo Address';
+                    }
+                }
+                updateShipto = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:shipToAddressChange}').checked;
+                if (updateShipto == true) {
+                    updateShipToCountryChange = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:shipToCountryChange}').value;
+                    updateShipToAddress1Change = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:shipToAddress1Change}').value;
+                    updateShipToAddress2Change = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:shipToAddress2Change}').value;
+                    updateShipToCityChange = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:shipToCityChange}').value;
+                    updateShipToZip = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:shipToZipChange}').value;
+                    updateShipToState = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:shipToStateChange}').value;
+                    if (!updateShipToCountryChange && !updateShipToAddress1Change && !updateShipToAddress2Change && !updateShipToCityChange && !updateShipToZip && !updateShipToZip && !updateShipToState && !updateCopyBillto && !updateContact && !updatePhone && !updateFax ) {
+                        hasError = true;
+                        errorMessage = errorMessage + ' a ShipTo Address';
+                    }                   
+                }
+                if (!updateContact && !updatePhone && !updateFax && updateShipto != true && updateBillto != true) {
+                    hasError = true;
+                    errorMessage = errorMessage + ' Address / Contact / Phone Updates';
+                }               
+            } else {
+                updateShipto = false;
+                updateBillto = false;
+            }
+            updateNewShiptoAccount = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:shipToChange}').checked;
+            if (updateNewShiptoAccount == true) {
+                updateNewExtendShipTo = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:newShipToSBU}').checked;
+                updateNewShipToReason = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:newShipToReason}').value;
+                
+                
+                if (!updateNewShipToReason || updateNewShipToReason == '') {
+                    hasError = true;
+                    errorMessage = errorMessage + ' a New ShipTo Reason';               
+                }
+                if (!updateNewExtendShipTo) {
+                    updateNewExtendShipTo = false;
+                } else if ((!updateNewRegion || updateNewRegion == '000000000000000' || updateNewRegion == 'undefined')
+                    && (!updateNewRep || updateNewRep == '000000000000000' || updateNewRep == 'undefined')
+                    && (!updateNewSSC || updateNewSSC == '000000000000000' || updateNewSSC == 'undefined')
+                    && (!updateNewCusType || updateNewCusType == '000000000000000' || updateNewCusType == 'undefined')
+                    && (!updateNewCusClass || updateNewCusClass == '000000000000000' || updateNewCusClass == 'undefined')
+                    ) {
+                    
+                    hasError = true;
+                    errorMessage = errorMessage + ' NEW Details for Extend ShipTo...';
+                }
+                
+            console.log('updateNewShiptoAccount + hasError: ' + hasError);
+            } else {
+                updateNewExtendShipTo = false;
+                updateNewShipToReason = '';
+            }
+
+            if (updateAll == true) {
+                
+                if ((!updateNameChange)
+                    && (!updateDBANameChange)
+                    && (!updateNewShiptoAccount)
+                    && (!updateNewShipToReason)
+                    && (!updateNewRegion || updateNewRegion == '000000000000000' || updateNewRegion == 'undefined')
+                    && (!updateNewRep || updateNewRep == '000000000000000' || updateNewRep == 'undefined')
+                    && (!updateNewSSC || updateNewSSC == '000000000000000' || updateNewSSC == 'undefined')
+                    && (!updateBillto)
+                    && (!updateBillToCountryChange || updateBillToCountryChange == '000000000000000' || updateBillToCountryChange == 'undefined')
+                    && (!updateBillToAddress1Change || updateBillToAddress1Change == '000000000000000' || updateBillToAddress1Change == 'undefined')
+                    && (!updateBillToAddress2Change || updateBillToAddress2Change == '000000000000000' || updateBillToAddress2Change == 'undefined')
+                    && (!updateBillToCityChange || updateBillToCityChange == '000000000000000' || updateBillToCityChange == 'undefined')
+                    && (!updateBillToZip || updateBillToZip == '000000000000000' || updateBillToZip == 'undefined')
+                    && (!updateBillToState || updateBillToState == '000000000000000' || updateBillToState == 'undefined')
+                    && (!updateCopyBillto)
+                    && (!updateShipToCountryChange || updateShipToCountryChange == '000000000000000' || updateShipToCountryChange == 'undefined')
+                    && (!updateShipToAddress1Change || updateShipToAddress1Change == '000000000000000' || updateShipToAddress1Change == 'undefined')
+                    && (!updateShipToAddress2Change || updateShipToAddress2Change == '000000000000000' || updateShipToAddress2Change == 'undefined')
+                    && (!updateShipToCityChange || updateShipToCityChange == '000000000000000' || updateShipToCityChange == 'undefined')
+                    && (!updateShipToZip || updateShipToZip == '000000000000000' || updateShipToZip == 'undefined')
+                    && (!updateShipToState || updateShipToState == '000000000000000' || updateShipToState == 'undefined')
+                    && (!updatePhone || updatePhone == '000000000000000' || updatePhone == 'undefined')
+                    && (!updateFax || updateFax == '000000000000000' || updateFax == 'undefined')
+                    && (!updateNewCusType || updateNewCusType == '000000000000000' || updateNewCusType == 'undefined')
+                    && (!updatePoRequired)
+                    && (!updateWebsite || updateWebsite == '000000000000000' || updateWebsite == 'undefined')
+                    )
+
+                {
+                    hasError = true;
+                    errorMessage = ' anything...at all';    
+                } 
+                
+            } 
+            updateComments = document.getElementById('{!$Component.thePage:theForm:theBlock:sectionCustomerChange:updateComments}').value;
+            
+            if ((!updateNewRep || updateNewRep == '000000000000000' || updateNewRep == 'undefined')
+                && (!updateNewSSC || updateNewSSC == '000000000000000' || updateNewSSC == 'undefined')
+                && (!updateNewCusType || updateNewCusType == '000000000000000' || updateNewCusType == 'undefined')
+                && (!updateNewCusClass || updateNewCusClass == '000000000000000' || updateNewCusClass == 'undefined')) {
+                updateNewRegion = '';
+            } 
+            
+            if (updateNewRegion == 'undefined') {
+                updateNewRegion = ''
+            }
+            
+            console.log('updateNameChange: '+updateNameChange);
+            console.log('updateDBANameChange: '+updateDBANameChange);
+            console.log('updateNewRegion: '+updateNewRegion);
+            console.log('updateNewRep: '+updateNewRep);
+            console.log('updateNewSSC: '+updateNewSSC);
+            console.log('updateNewCusClass: '+updateNewCusClass);
+            console.log('updateNewCusType: '+updateNewCusType);
+            console.log('updateNewShipToReason: '+updateNewShipToReason);
+            console.log('updateNewShiptoAccount: '+updateNewShiptoAccount);
+            console.log('updateBillto : '+updateBillto );
+            console.log('updateBillToCountryChange: '+updateBillToCountryChange);
+            console.log('updateBillToAddress1Change: '+updateBillToAddress1Change);
+            console.log('updateBillToAddress2Change: '+updateBillToAddress2Change);
+            console.log('updateBillToCityChange: '+updateBillToCityChange);
+            console.log('updateBillToZip: '+updateBillToZip);
+            console.log('updateBillToState: '+updateBillToState);
+            console.log('updateCopyBillto: '+updateCopyBillto);
+            console.log('updateShipToCountryChange: '+updateShipToCountryChange);
+            console.log('updateShipToAddress1Change: '+updateShipToAddress1Change);
+            console.log('updateShipToAddress2Change: '+updateShipToAddress2Change);
+            console.log('updateShipToCityChange: '+updateShipToCityChange);
+            console.log('updateShipToZip: '+updateShipToZip);
+            console.log('updateShipToState: '+updateShipToState);
+            console.log('updatePhone: '+updatePhone);
+            console.log('updateFax: '+updateFax);
+            console.log('updatePoRequired: '+updatePoRequired);
+            console.log('updateWebsite: '+updateWebsite);
+            
+
+            if ({!theCr.Error_Messages__c != ''}) {
+                theError = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').value;
+            } else {
+                theError = '';
+            }
+            if (!updateAll 
+                && !updateRep 
+                && !updateClass 
+                && !updateSSC 
+                && !updateName 
+                && !updateAddress 
+                && !updateType
+                && !updateOther
+                && !updateNewShiptoAccount 
+                && !updateComments) 
+            {
+                hasError = true;
+                errorMessage = ' anything...at all';
+            }   
+            console.log('hasError: ' + hasError);
+            if (hasError == true) {
+                alert('There was an issue submitting your request, it looks like you forgot to enter' + errorMessage + '... Please review the type of updates checked, uncheck those that are not needed and try again, or hit cancel to close the window.');
+                console.log('enable the publisher window save and cancel buttons')
+                Sfdc.canvas.publisher.publish({
+                    name: "publisher.setValidForSubmit",
+                    payload: "true"
+                });
+            } else {
+                if ({!$User.UIThemeDisplayed != 'Theme3'}) {
+                    createRequest();
+                } else {       
+                    // nada for you salesforce classic users...
+                }        
+            }
+        }
+        
+        // if passes validation, create the inital request
+        function createRequest() {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.createCR}',
+                updateAccount,
+                function(result, event) {
+                    if (event.status) {
+                        document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theCRId}').innerHTML = result
+                        console.log('createrequest Complete: ' + result);
+                        if (result != null){
+                            if (result.substring(0, 3) == 'a0D') {
+                                theNewCRId = result;
+                                updateRequest();    
+                            } else {
+                                theNewCRId = result;
+                                var errorThrown = 'FIELD_CUSTOM_VALIDATION_EXCEPTION,';
+                                theResultsError = theNewCRId.slice(theNewCRId.indexOf(errorThrown) + errorThrown.length);
+                                document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').innerHTML = theResultsError;
+                                console.log('updateCROptions theNewCRId: ' + theResultsError);
+                                alert('There was an issue submitting your request.  Please check for error messages at the top of the page.')
+                            }
+                        } else {
+                            alert('There was an issue submitting your request.  No Request could be created right now.')
+                        }
+                    } else {
+                        console.log('createrequest Errors: ' + event.message);
+                    }
+                }, {
+                    escape: true,
+                    timeout: 120000
+                });
+            console.log('createrequest newCRId: ' + newCRId);
+        }
+
+        // update the newly created request with the checkboxes selected
+        function updateRequest() {
+            
+            if ({!theCr.Error_Messages__c != ''}) {
+                theError = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').value;            
+            } else {
+                theError = '';
+                var theUpdates = updateNameChange + updateDBANameChange + updateNewRegion + updateNewRegion + updateNewRep + updateNewSSC + updateNewCusClass + updateNewCusType;
+                console.log('theUpdates: ' + theUpdates);
+                Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.CustomerRequestNewLightningExtension.updateCRUpdates}',
+                    theNewCRId,
+                    updateAll,
+                    updateRep,
+                    updateClass,
+                    updateSSC,
+                    updateAddress,
+                    updateName,
+                    updateType,
+                    updateOther,
+                    updateNewShiptoAccount,
+                    updateNewExtendShipTo,
+                    function(result, event) {
+                        if (event.status) {
+                            console.log('updateCRUpdates Complete: ' + result);
+                            if (result) {
+                                theResults = result;
+                                var errorThrown = 'FIELD_CUSTOM_VALIDATION_EXCEPTION,';
+                                theResultsError = theResults.slice(theResults.indexOf(errorThrown) + errorThrown.length);
+                                document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').innerHTML = theResultsError;
+                                console.log('updateCRUpdates theResults: ' + theResultsError);
+                                deleteRequest();
+                            } else {
+                                if (updateAll 
+                                    || updateRep 
+                                    || updateClass 
+                                    || updateSSC 
+                                    || updateName 
+                                    || updateAddress
+                                    || updateNewShiptoAccount
+                                    || updateType
+                                    || updateOther) 
+                                {
+                                updateOptions();
+                                }
+                            }
+                        } else if (event.type === 'exception') {
+                            console.log('updateCROptions Errors: ' + event.message);
+                            alert('There was an issue submitting your request.  Please send a screen shot and the details of your request to salesforce@daltile.com')
+                            deleteRequest();
+                        }                   
+                    } , {
+                        escape: true,
+                        timeout: 120000
+                    });
+            }
+        }
+                
+        // if selected update shipto
+        function updateShipTo() {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.updateCRShipToAddress}',
+                theNewCRId,
+                updateRep,
+                updateClass,
+                updateSSC,
+                updateNewShiptoAccount,
+                updateShipto,
+                updateShipToCountryChange,
+                updateShipToAddress1Change,
+                updateShipToAddress2Change,
+                updateShipToCityChange,
+                updateShipToZip,
+                updateShipToState,
+                updateAccount,
+                function(result, event) {
+                    if (event.status) {
+                        console.log('updateCRShipToAddress results: ' + result);
+                        if (result) {
+                        theShipToError = result;
+                            var theShipToErrorThrown = 'FIELD_CUSTOM_VALIDATION_EXCEPTION,';
+                            if (theShipToError.indexOf(theShipToErrorThrown) >= 0) {
+                                var theShipToResultsError = theShipToError.slice(theShipToError.indexOf(theShipToErrorThrown) + theShipToErrorThrown.length);
+                                document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').innerHTML = theShipToResultsError;
+                                theResults = theResults + theShipToResultsError;
+                            } else {
+                                theResults = theResults + theShipToError;
+                            }
+                            document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').innerHTML = theResults;
+                            deleteRequest();                                                
+                        }
+                    } else if (event.type === 'exception') {
+                        console.log('updateCRShipToAddress Errors: ' + event.message);
+                    } else {
+                        console.log('updateCRShipToAddress Errors...maybe?: ');
+                    }
+                }, {
+                    escape: true,
+                    timeout: 120000
+                });
+            console.log('updateCRShipToAddress complete + theResults' + theResults);
+            console.log('theError + : ' + theError);    
+        }
+
+        // if selected, update billto
+        function updateBillTo() {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.updateCRBillToAddress}',
+                theNewCRId,
+                updateRep,
+                updateClass,
+                updateSSC,
+                updateNewShiptoAccount,
+                updateBillto,
+                updateBillToCountryChange,
+                updateBillToAddress1Change,
+                updateBillToAddress2Change,
+                updateBillToCityChange,
+                updateBillToZip,
+                updateBillToState,
+                updateCopyBillto,
+                updateAccount,
+                function(result, event) {
+                    if (event.status) {
+                        console.log('updateCRBillToAddress results: ' + result);
+                        if (result) {
+                            theBillToError = result;
+                            var theBillToErrorThrown = 'FIELD_CUSTOM_VALIDATION_EXCEPTION,';
+                            if (theBillToError.indexOf(theBillToErrorThrown) >= 0) {
+                                var theBillToResultsError = theBillToError.slice(theBillToError.indexOf(theBillToErrorThrown) + theBillToErrorThrown.length);
+                                document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').innerHTML = theBillToResultsError;
+                                theResults = theResults + theBillToResultsError;
+                            } else {
+                                theResults = theResults + theBillToError;
+                            }
+                            document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').innerHTML = theResults;                   
+                            console.log('2 theResults: ' + theResults);
+                            deleteRequest();                                                    
+                        }
+                    } else if (event.type === 'exception') {
+                        console.log('updateCRBillToAddress Other Issues Errors...: ' + event.message);
+                    } else {
+                        console.log('updateCRBillToAddress Errors...maybe?: ');
+                    }
+                }, {
+                    escape: true,
+                    timeout: 120000
+                });
+            console.log('updateCRBillToAddress complete');
+        }
+        
+        // update with details and final submital
+        function updateDetails() {
+            console.log('updateDetails ...: ');
+            console.log('theNewCRId: '+theNewCRId);
+            console.log('updateContact: '+updateContact);
+            console.log('updatePhone: '+updatePhone);
+            console.log('updateFax: '+updateFax);
+            console.log('updateAccount: '+updateAccount);
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.updateCRDetails}',
+                theNewCRId,
+                updateContact,
+                updatePhone,
+                updateFax,
+                updateAccount,
+                function(result, event) {
+                    if (event.status) {
+                        if (result) {
+                            theResults = result;
+                            var errorThrown = 'FIELD_CUSTOM_VALIDATION_EXCEPTION,';
+                            var theDetailsResultsError = theResults.slice(theResults.indexOf(errorThrown) + errorThrown.length);
+                            document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').innerHTML = theDetailsResultsError;
+                            theResults = theResults + theDetailsResultsError;
+                            console.log('updateCROptions theDetailsResultsError: ' + theDetailsResultsError);
+                            console.log('going to delete theNewCRId: ' + theNewCRId);
+                            deleteRequest()   
+                        } else {
+                            console.log('updateCRDetails complete +theResults' + theResults);        
+                            if (theNewCRId && !theResults) {
+                                console.log('time to close it for theNewCRId: ' + theNewCRId);
+                                // close the window
+                                closeWindow();
+                            } else {
+                                console.log('enable the publisher window save and cancel buttons')
+                                Sfdc.canvas.publisher.publish({
+                                    name: "publisher.setValidForSubmit",
+                                    payload: "true"
+                                });
+                            }
+                        }
+                      
+                    } else if (event.type === 'exception') {
+                        console.log('updateCRDetails Errors: ' + event.message);
+                    } else {
+                        console.log('updateCRDetails Errors...maybe?: ');
+                    }
+                }, {
+                    escape: true,
+                    timeout: 120000
+                });     
+        }
+        
+        // update CR with new approval fields
+        function updateOptions() {
+            console.log('updateCROptions ...: ');
+            console.log('theNewCRId: '+theNewCRId);
+            console.log('updateNewShipToReason: '+updateNewShipToReason);
+            console.log('updateNameChange: '+updateNameChange);
+            console.log('updateDBANameChange: '+updateDBANameChange);
+            console.log('updateNewRegion: '+updateNewRegion);
+            console.log('updateNewRep: '+updateNewRep);
+            console.log('updateNewSSC: '+updateNewSSC);
+            console.log('updateNewCusClass: '+updateNewCusClass);
+            console.log('updateNewReasonForClass: '+updateNewReasonForClass);
+            console.log('updateNewCusType: '+updateNewCusType);
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CustomerRequestNewLightningExtension.updateCROptions}',
+                theNewCRId,
+                updateNewShipToReason,
+                updateNameChange,
+                updateDBANameChange,
+                updateNewRegion,
+                updateNewRep,
+                updateNewSSC,
+                updateNewCusClass,
+                updateNewReasonForClass,
+                updateNewCusType,
+                function(result, event) {
+                    if (event.status) {
+                        console.log('updateCROptions Complete: ' + result);
+                        if (result) {
+                            theResults = result;
+                            var errorThrown = 'FIELD_CUSTOM_VALIDATION_EXCEPTION,';
+                            theResultsError = theResults.slice(theResults.indexOf(errorThrown) + errorThrown.length);
+                            document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').innerHTML = theResultsError;
+                            console.log('updateCROptions theResults: ' + theResultsError);
+                            deleteRequest();
+                        } else {                            
+                            if (updateShipto == true) {
+                                updateShipTo();
+                            }
+                            if (updateBillto == true) {
+                                updateBillTo();
+                            }
+                            updateDetails();
+                        } 
+                    }
+                }, {
+                    escape: true,
+                    timeout: 120000
+                });
+                console.log('updateCROptions complete');
+            
+        }
+        
+        // delete the invalid request
+        function deleteRequest() {
+        console.log('deleteRequest theNewCRId: ' + theNewCRId);
+        enableButtons();
+        alert('There was an issue submitting your request.  Please check for error messages at the top of the page.')
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.CustomerRequestNewLightningExtension.deleteCR}',
+            theNewCRId,
+            function(result, event) {
+                if (event.status) {
+                    console.log('deleteCR results: ' + result);
+                } else {
+                    console.log('deleteCR Errors: ' + event.message);
+                } 
+            }, {
+                escape: true,
+                timeout: 120000
+            });  
+            theNewCRId = '';                                        
+        }
+        
+        // close the window and launch the request
+        function closeWindow() {
+            if ({!theCr.Error_Messages__c != ''}) {
+                theError = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').value;            
+            } else {
+                theError = '';
+            }           
+            if (theNewCRId && !theResults && !theError) {
+                alert('Your Request was submitted.  Once all approvals are final, allow 3 business days for processing. To see the status, please refer back to the original request and check if it is still waiting on someones approval.  After all approvals are complete, please contact Data Management with any questions on the update.')
+                console.log('closeWindow complete + theNewCRId: '+ theNewCRId);
+                if ({!$User.UIThemeDisplayed != 'Theme3'
+                    }) {
+                    sforce.one.navigateToSObject(theNewCRId);
+                } else {
+                    window.open('/' + theNewCRId);
+                }
+                Sfdc.canvas.publisher.publish({
+                    name: "publisher.setValidForSubmit",
+                    payload: "false"
+                });
+                Sfdc.canvas.publisher.publish({
+                    name: "publisher.close",
+                    payload: {
+                        refresh: "true"
+                    }
+                });         
+            } 
+        }
+
+        
+        // disable the publisher window save and cancel buttons
+        function disableButtons() {
+                    console.log('disable the publisher window save and cancel buttons')
+                    Sfdc.canvas.publisher.publish({
+                        name: "publisher.setValidForSubmit",
+                        payload: "false"
+                    });
+        }
+        
+        // enable the publisher window save and cancel buttons
+        function enableButtons() {
+                    console.log('enable the publisher window save and cancel buttons')
+                    Sfdc.canvas.publisher.publish({
+                        name: "publisher.setValidForSubmit",
+                        payload: "true"
+                    });
+        }
+
+        // clears error message
+        function resetError() {
+            theError = document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}');
+            if(theError) {
+                document.getElementById('{!$Component.thePage:theForm:theBlock:theUpdateSection:theError}').innerHTML = '';
+            }
+        }
+
+        // called from salesforce classic save button
+        function getterDone() {
+            resetError();
+            window.scrollTo(0,0);
+            alert('Validating and Creating Your Request.  This may take a moment, please do not hit Save again...')
+            console.log('now to create the request')
+            validateAndCreateRequest();
+            console.log('now to launch it')
+            closeWindow();
+        }
+
+    </script>
+    
+    <style type="text/css">
+        
+    .slds-modal__container{
+        max-width: 70rem !important;
+        width:70% !important;
+    }
+        
+    .dataCol {
+        font-size: .75rem;
+        font-weight: 400;
+    }
+    
+    .errorMessage {
+        position: relative;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        border: 0 !important;
+        width: relative;
+        font-size: .9rem !important;
+        font-weight: 500;
+        text-align: center;
+        background-color: #c23934 !important;       
+        border-radius: 10px;
+        color: white;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+    
+    .errorMessage:empty {
+        padding:0;
+    }    
+    
+    body .autoCompleteBoxScrolling, .slds-scope .autoCompleteBoxScrolling  {
+        max-width: 50% !important;;
+        width: 50% !important;;
+        left: 50% !important;;
+        top: 296px;
+        height: auto;
+        display: block;    
+    }
+    
+    element.style {
+        width: 318px;
+        left: 200px;
+        top: 735px;
+        height: auto;
+    }    
+    
+    </style>
+
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <apex:form id="theForm">
+         <body>
+          <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+          <script src="https://cdn.rawgit.com/mailtoharshit/ForceSpinner/master/src/js/forcespinner.js"></script>             
+            <apex:pageBlock title="Customer Change Request" id="theBlock">
+                
+                <apex:pageMessages />
+                
+                <apex:pageBlockSection title="Customer {!theAccountNumber} Updates" id="theUpdateSection">
+                
+                    <apex:inputField required="false" id="theAccount" value="{!theCR.Account__c}">
+                        <apex:actionsupport event="onchange" action="{!changeAccount}" rerender="CustomerInfo,sectionCustomerChange,sectionNameChange,sectionNewShip" />
+                    </apex:inputField>  
+
+                    <apex:pageBlockSectionItem >
+                    </apex:pageBlockSectionItem>
+
+                    <apex:outputText styleClass="errorMessage" id="theError" rendered="{!isErrorVisiable}">
+                        <div>{!theCr.Error_Messages__c}</div>    
+                    </apex:outputText>     
+                    
+                    <apex:inputHidden value="{!theCr.TheID__c}" id="theCrId">
+                        <apex:actionsupport event="onchange" action="{!changeAccount}" rerender="CustomerInfo,sectionCustomerChange,sectionNameChange,sectionNewShip" />                    
+                    </apex:inputHidden>
+                    
+                    <apex:panelGrid columns="4" border="0" cellpadding="0" cellspacing="1">
+                        <apex:inputCheckbox label="All Updates?" id="allChange" value="{!theCR.All_Updates__c}">
+                            <apex:actionsupport event="onchange"  action="{!changeDetails}" rerender="theUpdateSection,sectionCustomerChange" />
+                        </apex:inputCheckbox>
+                        <apex:outputText >All Updates?</apex:outputText>
+                        <apex:inputCheckbox label="Update Rep?" id="repChange" value="{!theCR.Rep_Change__c}">
+                            <apex:actionsupport event="onchange" rerender="sectionCustomerChange" />
+                        </apex:inputCheckbox>
+                        <apex:outputText >Update Rep?</apex:outputText>
+                        <apex:inputCheckbox label="Update Class?" id="classChange" value="{!theCR.Class_Change__c}">
+                            <apex:actionsupport event="onchange" rerender="sectionCustomerChange" />
+                        </apex:inputCheckbox>
+                        <apex:outputText >Update Class?</apex:outputText>
+                        <apex:inputCheckbox label="Update SSC?" id="sscChange" value="{!theCR.SSC_Change__c}">
+                            <apex:actionsupport event="onchange" rerender="sectionCustomerChange" />
+                        </apex:inputCheckbox>
+                        <apex:outputText >Update SSC?</apex:outputText>
+                        <apex:inputCheckbox label="Update Address?" id="addressChange" value="{!theCR.Address_Change__c}">
+                            <apex:actionsupport event="onchange" action="{!changeAddress}" rerender="theUpdateSection,sectionCustomerChange" />
+                        </apex:inputCheckbox>
+                        <apex:outputText >Update Address?</apex:outputText>
+                        <apex:inputCheckbox label="Update Account Name?" id="nameChange" value="{!theCR.Name_Change__c}">
+                            <apex:actionsupport event="onchange" rerender="sectionCustomerChange" />
+                        </apex:inputCheckbox>
+                        <apex:outputText >Update Account Name?</apex:outputText>
+                        <apex:inputCheckbox label="Update Account Name?" id="typeChange" value="{!theCR.Type_Change__c}">
+                            <apex:actionsupport event="onchange" rerender="sectionCustomerChange" />
+                        </apex:inputCheckbox>
+                        <apex:outputText >Update Customer Type?</apex:outputText>
+                        <apex:inputCheckbox label="Update Account Name?" id="otherChange" value="{!theCR.Other_Change__c}">
+                            <apex:actionsupport event="onchange" rerender="sectionCustomerChange" />
+                        </apex:inputCheckbox>
+                        <apex:outputText >Other Updates...</apex:outputText>
+                    </apex:panelGrid>
+                    <apex:pageMessage title="New ShipTo Account / Extend Current Account" summary="Select Extend Accross SBU if Extending DAL -> AO/MZ or AO/MZ -> DAL" severity="warning" strength="1" id="messagenewShipTo" rendered="{!theCR.New_ShipTo_Request__c}" />    
+                    <apex:panelGrid columns="2" border="0" cellpadding="0" cellspacing="1">
+                    <apex:inputCheckbox label="New ShipTo Account?" id="shipToChange" value="{!theCR.New_ShipTo_Request__c}">
+                        <apex:actionsupport event="onchange" action="{!changeShipTo}" rerender="theUpdateSection,sectionCustomerChange" />
+                    </apex:inputCheckbox>
+                    <apex:outputText >New ShipTo Account?</apex:outputText>
+                    <apex:inputCheckbox label="Extend Account Across Region / SBU?" id="newShipToSBU" value="{!theCR.Cross_SBU_Request__c}" rendered="{!theCR.New_ShipTo_Request__c}">
+                        <apex:actionsupport event="onchange" action="{!changeShipTo}" rerender="theUpdateSection,sectionCustomerChange" />
+                    </apex:inputCheckbox>
+                    <apex:outputText rendered="{!theCR.New_ShipTo_Request__c}">Extend Account Accross Region / SBU?</apex:outputText>
+                    </apex:panelGrid>
+                    <apex:inputField label="New Ship To Reason" id="newShipToReason" value="{!theCR.Reason_for_New_Suffix__c}" rendered="{!theCR.New_ShipTo_Request__c}" />
+                </apex:pageBlockSection>
+
+                <apex:pageBlockSection id="sectionCustomerChange" title="Customer Change Information" columns="2">
+                    <apex:pageMessage summary="Customer Name Change" severity="info" strength="0" rendered="{!(theCR.Name_Change__c) && IF(theCR.New_ShipTo_Request__c = false, true, false)}" />
+                    <apex:pageMessage summary="New ShipTo Customer Name" severity="confirm" strength="1" rendered="{!(theCR.Name_Change__c) && IF(theCR.New_ShipTo_Request__c = true, true, false)}" />
+                    <apex:pageBlockSectionItem rendered="{!(theCR.Name_Change__c)}"></apex:pageBlockSectionItem>                    
+                    <apex:outputtext label="Account Name" value="{!theAccountName}" rendered="{!(theCR.Name_Change__c)}" />
+                    <apex:inputHidden rendered="false" value="{!theAccountName}" />
+                    <apex:inputField label="Name Change" id="accountNameChange" value="{!theCR.Customer_Name_Change__c}" rendered="{!(theCR.Name_Change__c)}" />
+                    <apex:outputField label="DBA Name" value="{!theCR.DBA_Name__c}" rendered="{!(theCR.Name_Change__c)}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.DBA_Name__c}" />
+                    <apex:inputField label="DBA Name Change" id="dbaNameChange" value="{!theCR.DBA_Name_Change__c}" rendered="{!(theCR.Name_Change__c)}" />
+
+                    <apex:pageMessage summary="Customer Details Change" severity="info" strength="0" rendered="{!(theCR.Rep_Change__c || theCR.SSC_Change__c || theCR.Class_Change__c || theCR.All_Updates__c) && IF(theCR.New_ShipTo_Request__c = false, true, false)}" />
+                    <apex:pageMessage summary="Current Customer Details" severity="info" strength="0" rendered="{!(theCR.Rep_Change__c || theCR.SSC_Change__c || theCR.Class_Change__c) && (theCR.New_ShipTo_Request__c)}" />
+                    <apex:pageMessage summary="New ShipTo Customer Details" severity="confirm" strength="1" rendered="{!(theCR.Rep_Change__c || theCR.SSC_Change__c || theCR.Class_Change__c) && (theCR.New_ShipTo_Request__c)}" />
+                    <apex:pageBlockSectionItem rendered="{!(theCR.Rep_Change__c || theCR.SSC_Change__c || theCR.Class_Change__c) && IF(theCR.New_ShipTo_Request__c = false, true, false)}"></apex:pageBlockSectionItem>
+                    <apex:outputtext label="Region" value="{!theRegionName}" rendered="{!theCR.Rep_Change__c || theCR.SSC_Change__c || theCR.Class_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theRegionName}" />
+                    <apex:inputField label="New Region" id="newRegion" value="{!theCR.Region_n__c}" rendered="{!theCR.Rep_Change__c || theCR.SSC_Change__c || theCR.Class_Change__c}" />
+                    <apex:outputtext label="Sales Rep" value="{!theRepName}" rendered="{!theCR.Rep_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Sales_Representative__c}" />
+                    <apex:inputField label="New Sales Rep" id="newRep" value="{!theCR.Sales_Representative_n__c}" rendered="{!theCR.Rep_Change__c}" />
+                    <apex:outputtext label="SSC" value="{!theSSCName}" rendered="{!theCR.SSC_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.SSC_Change__c}" />
+                    <apex:inputField label="New SSC" id="newSSC" value="{!theCR.SSC_N__c}" rendered="{!theCR.SSC_Change__c}" />
+
+                    <apex:outputtext label="Customer Class" value="{!theClassName}" rendered="{!theCR.Class_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theClassName}" />
+                    <apex:inputField label="New Customer Class" id="newCusClass" value="{!theCR.Customer_Class_N__c}" rendered="{!theCR.Class_Change__c}" />
+                    <apex:outputtext label="Customer Class Details" value="{!theClassDetails}" rendered="{!theCR.Class_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theClassDetails}" />
+                    <apex:inputField label="Business Reason for Class" id="newReasonForClass" value="{!theCR.Business_Reason__c}" rendered="{!theCR.Class_Change__c}" />
+                    <apex:outputtext label="Customer Type" value="{!theTypeName}" rendered="{!theCR.All_Updates__c || theCR.Type_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theTypeName}" />
+                    <apex:inputField label="New Customer Type" id="newCusType" value="{!theCR.Customer_Type_N__c}" rendered="{!theCR.All_Updates__c || theCR.Type_Change__c}" />
+
+                    <apex:outputField label="PO # Required?" value="{!theCR.PO_Required__c}" rendered="{!theCR.All_Updates__c || theCR.Other_Change__c}" />
+                    <apex:inputField label="PO # Required (N)?" value="{!theCR.PO_Required_N__c}" id="updatePoRequired" rendered="{!theCR.All_Updates__c || theCR.Other_Change__c}" />                 
+                    <apex:outputtext label="Website" value="{!theCR.Website__c}" rendered="{!theCR.All_Updates__c || theCR.Other_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Website__c}" />
+                    <apex:inputField label="New Website" value="{!theCR.Website_N__c}" id="updateWebsite" rendered="{!theCR.All_Updates__c || theCR.Other_Change__c}" />
+
+                    <apex:pageMessage summary="Address Change" severity="info" strength="0" rendered="{!theCR.Address_Change__c}" />
+                    <apex:pageBlockSectionItem rendered="{!theCR.Address_Change__c}"></apex:pageBlockSectionItem>
+
+                    <apex:inputCheckbox label="Update BillTo Address?" id="billToAddressChange" value="{!theCR.BillTo_Address_Change__c}" rendered="{!theCR.Address_Change__c}">
+                        <apex:actionsupport event="onchange" rerender="sectionCustomerChange" />
+                    </apex:inputCheckbox>
+                    <apex:inputCheckbox label="Update ShipTo Address?" id="shipToAddressChange" value="{!theCR.ShipTo_Address_Change__c}" rendered="{!theCR.Address_Change__c}">
+                        <apex:actionsupport event="onchange" rerender="sectionCustomerChange" />
+                    </apex:inputCheckbox>
+                    <apex:pageMessage title="BillTo Address Changes" severity="confirm" strength="1" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:pageBlockSectionItem rendered="{!(theCR.BillTo_Address_Change__c)}"></apex:pageBlockSectionItem>                    
+                    <apex:outputtext label="Bill Country" value="{!theCR.Bill_Country__c}" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Bill_Country__c}" />
+                    <apex:inputField label="Bill Country (N)" value="{!theCR.New_BillTo_Country__c}" id="billToCountryChange" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:outputtext label="Bill Address 1" value="{!theCR.Bill_Address_1__c}" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Bill_Address_1__c}" />
+                    <apex:inputField label="Bill Address 1 (N)" value="{!theCR.Billing_Street_N__c}" id="billToAddress1Change" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:outputtext label="Billing Address 2" value="{!theCR.Bill_Address_2__c}" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Bill_Address_2__c}" />
+                    <apex:inputField label="Billing Address 2 (N)" value="{!theCR.Address2__c}" id="billToAddress2Change" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:outputtext label="Billing City" value="{!theCR.Billing_City_Account__c}" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Billing_City_Account__c}" />
+                    <apex:inputField label="Billing City (N)" value="{!theCR.Billing_City_N__c}" id="billToCityChange" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:outputtext label="Billing State" value="{!theCR.Billing_State_Account__c}" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Billing_State_Account__c}" />
+                    <apex:inputField label="Billing State (N)" value="{!theCR.New_BillTo_State__c}"  id="billToStateChange" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:outputtext label="Billing Zip" value="{!theCR.Billing_Zip_Account__c}" rendered="{!theCR.BillTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Billing_Zip_Account__c}" />
+                    <apex:inputField label="Billing Zip (N)" value="{!theCR.Billing_Zip_N__c}" id="billToZipChange" rendered="{!theCR.BillTo_Address_Change__c}" />
+
+                    <apex:pageMessage title="ShipTo Address Changes" severity="confirm" strength="1" rendered="{!theCR.ShipTo_Address_Change__c && IF(theCR.New_ShipTo_Request__c = false, true, false)}" />
+                    <apex:pageMessage title="New ShipTo Address" severity="confirm" strength="1" rendered="{!theCR.New_ShipTo_Request__c && theCR.ShipTo_Address_Change__c}" />
+                    <apex:pageBlockSectionItem rendered="{!(theCR.ShipTo_Address_Change__c)}"></apex:pageBlockSectionItem>    
+                    <apex:pageBlockSectionItem rendered="{!theCR.BillTo_Address_Change__c && theCR.ShipTo_Address_Change__c}"></apex:pageBlockSectionItem>    
+                    <apex:inputField label="Copy Bill-To Address" value="{!theCR.Copy_Bill_To_Address__c}" id="updateCopyBillto" rendered="{!theCR.BillTo_Address_Change__c && theCR.ShipTo_Address_Change__c}" />
+                    <apex:outputtext label="Ship Country" value="{!theCR.Billing_Country__c}" rendered="{!(theCR.ShipTo_Address_Change__c)}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Billing_Country__c}" />
+                    <apex:inputField label="Ship Country (N)" value="{!theCR.New_ShipTo_Country__c  }" id="shipToCountryChange" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:outputtext label="Ship Address 1" value="{!theCR.Billing_Street__c}" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Billing_Street__c}" />
+                    <apex:inputField label="Ship Address 1 (N)" value="{!theCR.Shipping_street__c}" id="shipToAddress1Change" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:outputtext label="Ship Address 2 " value="{!theCR.Shipping_Address_2__c}" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Shipping_Address_2__c}" />
+                    <apex:inputField label="Ship Address 2 (N)" value="{!theCR.Shipping_Address_2__c}" id="shipToAddress2Change" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:outputtext label="Shipping City" value="{!theCR.Billing_City__c}" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Billing_City__c}" />
+                    <apex:inputField label="Shipping City (N)" value="{!theCR.Shipping_City__c}" id="shipToCityChange" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:outputtext label="Shipping State" value="{!theCR.Billing_State__c}" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Billing_State__c}" />
+                    <apex:inputField label="Shipping State (N)" value="{!theCR.New_ShipTo_State__c}" id="shipToStateChange" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:outputtext label="Shipping Zip" value="{!theCR.Billing_Zip__c}" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Billing_Zip__c}" />
+                    <apex:inputField label="Shipping Zip (N)" value="{!theCR.Shipping_Zip_N__c}" id="shipToZipChange" rendered="{!theCR.ShipTo_Address_Change__c}" />
+                    <apex:pageBlockSectionItem rendered="{!theCR.Other_Change__c || theCR.All_Updates__c}" ></apex:pageBlockSectionItem>
+                    <apex:inputField value="{!theCR.Contact__c}" id="updateContact" rendered="{!theCR.Other_Change__c || theCR.All_Updates__c}" />
+                    <apex:outputtext label="Phone" value="{!theCR.Phone__c}" rendered="{!theCR.Other_Change__c || theCR.All_Updates__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Phone__c}" />
+                    <apex:inputField label="Phone (N)" value="{!theCR.Ship_To_Phone__c}" id="updatePhone" rendered="{!theCR.Other_Change__c || theCR.All_Updates__c}" />
+                    <apex:outputtext label="Fax" value="{!theCR.Fax__c}" rendered="{!theCR.Other_Change__c || theCR.All_Updates__c}" />
+                    <apex:inputHidden rendered="false" value="{!theCR.Fax__c}" />
+                    <apex:inputField label="Fax (N)" value="{!theCR.Fax_N__c}" id="updateFax" rendered="{!theCR.Other_Change__c || theCR.All_Updates__c}" />
+                    <apex:inputText value="{!theCR.Comments__c}" id="updateComments" />
+                </apex:pageBlockSection>
+
+                <apex:pageBlockButtons location="bottom" rendered="{!$User.UIThemeDisplayed == 'Theme3'}">
+                    <apex:commandButton value="Save" action="{!saveData}" onclick="getterDone();"/>
+                    <apex:commandButton value="Cancel" action="{!cancel}" />
+                </apex:pageBlockButtons>    
+            </apex:pageBlock>
+        </body>
+    </apex:form>
+
+    </html>
+</apex:page>

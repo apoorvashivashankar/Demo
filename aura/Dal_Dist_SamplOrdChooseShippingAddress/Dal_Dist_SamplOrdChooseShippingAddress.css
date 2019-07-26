@@ -1,0 +1,694 @@
+/**
+ * Created by ranja on 20-08-2018.
+ */
+.THIS {
+}
+
+.THIS .dal-minHeight_medium {
+  min-height: 150px;
+}
+
+.THIS .button-small {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.THIS .slds-tile {
+    max-height: 200px !important;
+}
+
+.THIS .fix-height {
+    height : 190px !important;
+}
+
+.THIS .hide-layout {
+    display : none;
+}
+
+.THIS .slds-button slds-button_neutral {
+    padding-bottom: 3px;
+    padding-top: 3px;
+}
+
+.THIS .block {
+  display: block;
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .slds-large-grid_align-end {
+    justify-content: flex-end;
+  }
+  .THIS .slds-large-grid_align-start {
+    justify-content: flex-start;
+  }
+  .THIS .slds-large-text-align_right {
+    text-align: right;
+  }
+  .THIS .dal-large-inlineBlock {
+    display: inline-block;
+  }
+}
+@media only screen and (min-width: 48em) and (max-width: 64em) {
+  .THIS .slds-medium-grid_align-end {
+    justify-content: flex-end;
+  }
+  .THIS .slds-medium-text-align_right {
+    text-align: right;
+  }
+  .THIS .dal-medium-inlineBlock {
+    display: inline-block;
+  }
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-small-fullWidth {
+    width: 100%;
+  }
+}
+.THIS .bold {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+}
+.THIS .bkg-transparent {
+  background: transparent none;
+}
+.THIS .icon-daltile {
+  display: inline-block;
+  width: 125px;
+  height: 37px;
+  background-image: url('/sfsites/c/resource/dal_daltile_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-daltile {
+    background-image: url('/sfsites/c/resource/dal_daltile_logo_2x');
+    background-size: 125px 37px;
+  }
+}
+.THIS .icon-marazzi {
+  display: inline-block;
+  width: 156px;
+  height: 37px;
+  background-image: url('/sfsites/c/resource/dal_marazzi_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-marazzi {
+    background-image: url('/sfsites/c/resource/dal_marazzi_logo_2x');
+    background-size: 156px 37px;
+  }
+}
+.THIS .icon-ao {
+  display: inline-block;
+  width: 200px;
+  height: 38px;
+  background-image: url('/sfsites/c/resource/dal_ao_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-ao {
+    background-image: url('/sfsites/c/resource/dal_ao_logo_2x');
+    background-size: 200px 38px;
+  }
+}
+.THIS .icon-ragno {
+  display: inline-block;
+  width: 154px;
+  height: 37px;
+  background-image: url('/sfsites/c/resource/dal_ragno_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-ragno {
+    background-image: url('/sfsites/c/resource/dal_ragno_logo_2x');
+    background-size: 154px 37px;
+  }
+}
+.THIS .dal-form .dal-form_header {
+  border-bottom: 10px solid token(colorBorder);
+}
+.THIS .dal-form .desc {
+  font-size: 0.625rem;
+  color: red;
+}
+.THIS .dal-form h4,
+.THIS .dal-form .slds-form-element__label {
+  color: #231f20;
+}
+.THIS .orderContainer {
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+}
+.THIS .dal-form-order .slds-form-element__label,
+.THIS .dal-form-order .form-element__label {
+  font-family: helvetica, arial, sans-serif;
+  font-size: .75rem;
+  font-weight: bold;
+  display: block;
+  margin-right: .75rem;
+  margin-bottom: .125rem;
+  white-space: nowrap;
+  color: #231f20;
+}
+.THIS .dal-form-order .label-lg .slds-form-element__label,
+.THIS .dal-form-order .label-lg .form-element__label {
+  font-size: .9375rem;
+}
+.THIS .dal-form-order input,
+.THIS .dal-form-order .faux-input {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.THIS .dal-form-order .faux-disabled {
+  border-color: #c4c6ca;
+  background-color: #e9eaec;
+}
+.THIS .dal-form-order .uiInputDate .datePicker-openIcon {
+  top: 10px;
+}
+.THIS .dal-form-order select {
+  height: 36px;
+}
+.THIS .dal-form-order .slds-select_container select {
+  width: 100%;
+}
+.THIS .dal-form-order button {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.THIS .dal-form-order button .lightningPrimitiveIcon {
+  position: relative;
+  top: -1px;
+}
+.THIS .dal-form-order .btnSaveContinue {
+  width: 100%;
+}
+.THIS .dal-form-order .btnSaveContinue .slds-button + .slds-button {
+  margin-left: 0;
+}
+@media only screen and (max-width: 64em) {
+  .THIS .dal-form-order .btnSaveContinue .slds-button + .slds-button {
+    margin-top: token(spacingSmall);
+  }
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .dal-form-order .btnSaveContinue {
+    justify-content: flex-end;
+  }
+  .THIS .dal-form-order .btnSaveContinue .slds-button + .slds-button {
+    margin-left: token(spacingSmall);
+  }
+}
+.THIS .dal-form-order .dal-buttonGroup {
+  display: flex;
+}
+.THIS .dal-form-order .dal-buttonGroup button {
+  margin: token(spacingSmall);
+}
+.THIS .dal-form-order .dal-buttonGroup.dal-buttonGroup-2 button {
+  width: 50%;
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .dal-form-order .dal-buttonGroup.dal-buttonGroup-2 button {
+    width: auto;
+  }
+}
+.THIS .dal-form-order .backButton svg {
+  position: relative;
+  top: -1px;
+  width: .9375rem;
+  height: .9375rem;
+  fill: #231f20;
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-form-order input,
+  .THIS .dal-form-order select {
+    width: 100%!important;
+  }
+}
+.THIS .dal-form-order h1,
+.THIS .dal-form-order h2,
+.THIS .dal-form-order h3,
+.THIS .dal-form-order h4,
+.THIS .dal-form-order h5,
+.THIS .dal-form-order h6 {
+  color: #231f20;
+}
+.THIS .dal-form-order .section-border-bottom {
+  border-bottom: 10px solid token(colorBorder);
+}
+.THIS .dal-form-order .slds-required,
+.THIS .dal-form-order .required {
+  display: none;
+}
+.THIS .dal-form-order ul.uiInputDefaultError {
+  margin-top: .5rem;
+}
+.THIS .dal-form-order ul.uiInputDefaultError,
+.THIS .dal-form-order ul.uiInputDefaultError li {
+  border: 0;
+  background: transparent none;
+}
+.THIS .dal-form-order ul.uiInputDefaultError li {
+  min-width: auto;
+  margin: 0;
+  text-align: left;
+}
+.THIS .dal-form-order .productSku {
+  position: relative;
+}
+.THIS .dal-form-order .productSku .slds-form-element {
+  width: 100%;
+}
+.THIS .dal-form-order .productSku .productSearch a {
+  position: relative;
+  top: 18px;
+  left: -10px;
+  display: inline-block;
+  padding: 6px;
+}
+.THIS .dal-form-order .productSku .productSearch a svg {
+  width: 18px;
+  height: 18px;
+  fill: #555759;
+}
+.THIS .dal-form-order .productSku .dal-btn-sku-search {
+  top: 24px;
+}
+.THIS .dal-form-order .defaultPriceRecord-cta-label {
+  position: relative;
+}
+.THIS .dal-form-order .defaultPriceRecord-cta-label .label-cta {
+  font-size: .6875rem;
+  position: absolute;
+  top: 14px;
+  right: 15px;
+}
+.THIS .dal-form-order .defaultPriceRecord-cta-label .slds-select_container {
+  width: 275px;
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-form-order .defaultPriceRecord-cta-label .slds-select_container {
+    width: 100%;
+  }
+}
+.THIS .dal-form-order .rowStriped > div:nth-child(even) {
+  background: #f1f2f3;
+}
+.THIS .dal-form-order .rowInfo .shippingStatus {
+  font-family: helvetica, arial, sans-serif;
+  font-size: .9375rem;
+  font-weight: bold;
+  color: #05911a;
+}
+.THIS .dal-form-order .rowInfo .shippingStatus svg {
+  position: relative;
+  top: -2px;
+  width: 15px;
+  height: 15px;
+  fill: #05911a;
+}
+.THIS .dal-form-order .rowInfo .shippingStatus.warning {
+  color: #cf740a;
+}
+.THIS .dal-form-order .rowInfo .shippingStatus.warning svg {
+  fill: #cf740a;
+}
+.THIS .dal-form-order .rowInfo .shippingStatus a,
+.THIS .dal-form-order .rowInfo .shippingStatus .shippingStatus-info {
+  font-family: token(fontFamily);
+  font-size: .75rem;
+  display: inline-block;
+  color: #5f5f5f;
+}
+.THIS .dal-form-order .rowInfo .newWindow {
+  position: relative;
+  top: -2px;
+  display: inline-block;
+}
+.THIS .dal-form-order .rowInfo .newWindow svg {
+  width: 15px;
+  height: 15px;
+  fill: #555759;
+}
+.THIS .dal-form-order .orderStats {
+  display: flex;
+  flex-wrap: wrap;
+}
+.THIS .dal-form-order .orderStats dl {
+  position: relative;
+  top: 2px;
+}
+.THIS .dal-form-order .orderStats dl dt {
+  font-size: .75rem;
+  text-align: right;
+  text-transform: uppercase;
+  color: #5f5f5f;
+}
+.THIS .dal-form-order .orderStats dl dd {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 1.125rem;
+  font-weight: bold;
+  text-align: right;
+  color: #231f20;
+}
+.THIS .dal-form-order .orderStats dl dd.price {
+  color: #05911a;
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .dal-form-order .orderStats.orderStats-textLeftLarge dt,
+  .THIS .dal-form-order .orderStats.orderStats-textLeftLarge dd {
+    text-align: left;
+  }
+  .THIS .dal-form-order .orderStats.orderStats-textLeftLarge dl + dl {
+    padding-left: token(spacingLarge);
+  }
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-form-order .orderStats {
+    display: block;
+  }
+  .THIS .dal-form-order .orderStats dl {
+    padding-left: 0;
+  }
+  .THIS .dal-form-order .orderStats dl dt,
+  .THIS .dal-form-order .orderStats dl dd {
+    display: inline-block;
+    width: 50%;
+    text-align: left;
+  }
+  .THIS .dal-form-order .orderStats dl dd {
+    text-align: right;
+  }
+}
+@media only screen and (min-width: 48em) and (max-width: 64em) {
+  .THIS .dal-form-order .orderStats.orderStats-medium {
+    display: block;
+  }
+  .THIS .dal-form-order .orderStats.orderStats-medium dl {
+    padding-left: 0;
+  }
+  .THIS .dal-form-order .orderStats.orderStats-medium dl dt,
+  .THIS .dal-form-order .orderStats.orderStats-medium dl dd {
+    display: inline-block;
+    width: 50%;
+    text-align: left;
+  }
+  .THIS .dal-form-order .orderStats.orderStats-medium dl dd {
+    text-align: right;
+  }
+}
+.THIS .dal-form-order .productSupply table {
+  border-top: 0;
+  background-color: transparent;
+}
+.THIS .dal-form-order .productSupply table thead th {
+  font-size: .75rem;
+  text-transform: uppercase;
+  background-color: transparent;
+}
+.THIS .dal-form-order .productSupply table tbody td {
+  font-size: .9375rem;
+}
+@media only screen and (max-width: 64em) {
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter > div {
+    padding-top: 0;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dl,
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dt,
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dd {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dt,
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dd {
+    font-size: .75rem;
+    width: auto;
+    text-align: left;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats > dl:last-child,
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .orderStats dd {
+    padding-left: token(spacingSmall);
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .btnSaveContinue {
+    justify-content: flex-end;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .btnSaveContinue button {
+    width: 50%;
+    margin-top: 0;
+    flex: 1;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .saveFooter .btnSaveContinue button:last-child {
+    margin-left: token(spacingSmall);
+  }
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-form-order .sticky-saveFooter .orderStats {
+    display: none;
+  }
+  .THIS .dal-form-order .sticky-saveFooter .btnSaveContinue button {
+    font-size: .75rem;
+    width: auto;
+    padding: .5rem;
+  }
+}
+.THIS .dal-form-order .input-xx-small input,
+.THIS .dal-form-order .input-xx-small .faux-input,
+.THIS .dal-form-order .input-xx-small .slds-select_container {
+  width: 70px;
+}
+.THIS .dal-form-order .input-x-small input,
+.THIS .dal-form-order .input-x-small .slds-select_container {
+  width: 100px;
+}
+.THIS .dal-form-order .input-small input,
+.THIS .dal-form-order .input-small .faux-input,
+.THIS .dal-form-order .input-small .slds-select_container {
+  width: 130px;
+}
+.THIS .dal-form-order .input-small .datePicker-openIcon {
+  right: 1.125rem;
+}
+.THIS .dal-form-order .input-medium input,
+.THIS .dal-form-order .input-medium .faux-input,
+.THIS .dal-form-order .input-medium .slds-select_container {
+  width: 160px;
+}
+.THIS .dal-form-order .infoInlineWithList {
+  font-size: .9375rem;
+  color: #555759;
+}
+.THIS .dal-form-order .infoInlineWithList span {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  color: #231f20;
+}
+.THIS .dal-form-order dl.orderOutputDataStacked dt,
+.THIS .dal-form-order .orderOutputDataLabel {
+  font-size: .75rem;
+  color: #5f5f5f;
+}
+.THIS .dal-form-order dl.orderOutputDataStacked dd {
+  font-family: helvetica, arial, sans-serif;
+}
+.THIS .dal-form-order div.orderOutputData > label {
+  font-size: .75rem;
+  padding: .125rem 0;
+  color: #5f5f5f;
+}
+.THIS .dal-form-order div.orderOutputData > span {
+  font-family: helvetica, arial, sans-serif;
+  font-size: .9375rem;
+  padding-left: token(spacingXSmall);
+}
+.THIS .dal-form-order div.orderOutputData.orderOutputData-stacked > span {
+  display: block;
+  padding-left: 0;
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-form-order div.orderOutputData.orderOutputData-inline_mobile {
+    display: flex;
+  }
+  .THIS .dal-form-order div.orderOutputData.orderOutputData-inline_mobile > label {
+    width: 35%;
+  }
+}
+.THIS .dal-form-order .highlight {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 1.5rem;
+  color: #05911a;
+}
+.THIS .dal-form-order .slds-list_horizontal.slds-has-block-links_space {
+  margin: 0 -0.75rem;
+}
+.THIS .dal-form-order .slds-list_horizontal.slds-has-block-links_space li {
+  border-left: 1px solid token(colorBorder);
+}
+.THIS .dal-form-order .slds-list_horizontal.slds-has-block-links_space li:first-child {
+  border-left: 0;
+}
+.THIS .dal-form-order .slds-list_horizontal.slds-has-block-links_space li a {
+  font-family: token(fontFamily);
+  font-size: .75rem;
+  padding-top: 0;
+  padding-bottom: 0;
+  text-decoration: underline;
+  color: #5f5f5f;
+}
+.THIS .dal-form-order .dal-orderDetailProductFocusAttr {
+  min-height: 38px;
+  margin-top: -1.25rem;
+}
+.THIS .dal-uiMessage {
+  font-size: 1rem;
+  padding: token(spacingSmall) token(spacingLarge);
+  border-color: transparent;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.19);
+}
+.THIS .bkg-transparent {
+  background: transparent;
+}
+.THIS .dal-button-color_darkGray {
+  color: #231f20;
+}
+.THIS .dal-button-color_darkGray svg {
+  fill: #231f20;
+}
+.THIS dl.dal-bullet-list-horizontal dt,
+.THIS dl.dal-bullet-list-horizontal dd {
+  display: inline-block;
+}
+.THIS dl.dal-bullet-list-horizontal dd {
+  padding-left: token(spacingXSmall);
+}
+.THIS dl.dal-bullet-list-horizontal dt:not(:first-child):before {
+  position: relative;
+  top: -1px;
+  display: inline-block;
+  width: .375rem;
+  height: .375rem;
+  margin: 0 .5rem;
+  content: '';
+  border-radius: 50%;
+  background-color: #555759;
+}
+@media only screen and (min-width: 48em) and (max-width: 64em) {
+  .THIS .dal-medium-inputFull input,
+  .THIS .dal-medium-inputThird input,
+  .THIS .dal-medium-inputFull button,
+  .THIS .dal-medium-inputThird button,
+  .THIS .dal-medium-inputFull .slds-select_container,
+  .THIS .dal-medium-inputThird .slds-select_container {
+    width: 100%;
+  }
+  .THIS .dal-medium-fullWidth,
+  .THIS .dal-medium-inputFull {
+    width: 100%;
+  }
+  .THIS .dal-medium-inputThird {
+    width: 33.33%;
+  }
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .dal-small-inputFull input,
+  .THIS .dal-small-inputHalf input,
+  .THIS .dal-small-inputFull button,
+  .THIS .dal-small-inputHalf button,
+  .THIS .dal-small-inputFull .slds-select_container,
+  .THIS .dal-small-inputHalf .slds-select_container {
+    width: 100%;
+  }
+  .THIS .dal-small-inputFull {
+    width: 100%;
+  }
+  .THIS .dal-small-inputHalf {
+    width: 50%;
+  }
+}
+.THIS .slds-tile {
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+  text-decoration: none;
+  color: #231f20;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.19);
+}
+@media only screen and (min-width: 64.0625em) {
+  .THIS .slds-tile > div {
+    padding-left: 2.875rem ;
+  }
+}
+@media only screen and (min-width: 48em) and (max-width: 64em) {
+  .THIS .slds-tile > div {
+    padding-left: 1.5rem;
+  }
+}
+.THIS .slds-tile > div.slds-tile-actions button {
+  position: relative;
+  bottom: -0.25rem;
+}
+@media only screen and (min-width: 64em) {
+  .THIS .slds-tile > div.slds-tile-actions {
+    padding-left: 0;
+    text-align: right;
+  }
+  .THIS .slds-tile > div.slds-tile-actions button {
+    top: -0.25rem;
+    padding-left: 0;
+  }
+}
+.THIS .slds-tile > div > h3,
+.THIS .slds-tile > div > div,
+.THIS .slds-tile > div > button {
+  position: relative;
+  z-index: 1;
+}
+.THIS .slds-tile > div h3 {
+  font-size: .9375rem;
+  font-weight: bold;
+  color: #231f20;
+}
+.THIS .slds-tile > div button {
+  text-decoration: underline;
+}
+.THIS .slds-tile > div button.slds-button--neutral,
+.THIS .slds-tile > div button.slds-button_neutral,
+.THIS .slds-tile > div button.slds-button--brand,
+.THIS .slds-tile > div button.slds-button_brand {
+  margin-top: token(spacingSmall);
+  text-decoration: none;
+}
+.THIS .slds-tile > div .bkg-map {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: -1.5rem;
+  display: block;
+  margin-top: -2.25rem;
+}
+.THIS .slds-tile > div .bkg-map svg {
+  width: 5rem;
+  height: 5rem;
+  opacity: .4;
+  fill: #c7c8ca;
+}
+.THIS .addNew {
+  border: 0;
+}
+.THIS .addNew svg {
+  width: .9375rem;
+  height: .9375rem;
+}
+.THIS .footer-bar {
+  margin-right: -1rem;
+  margin-bottom: -1rem;
+  margin-left: -1rem;
+}
+.THIS .footer-bar-newAddress {
+  margin-right: -0.25rem;
+  margin-bottom: -1rem;
+  margin-left: -0.25rem;
+}
+.THIS .dal-uiMessage {
+  margin-right: 0;
+  margin-left: 0;
+}
+.THIS .addresslabel label {
+    font-size:18px;
+    font-weight:500;
+}

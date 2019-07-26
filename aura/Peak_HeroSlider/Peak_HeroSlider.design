@@ -1,0 +1,51 @@
+<design:component label="7S Hero Slider">
+    
+    <design:attribute name="Background" label="Slide 1: Background Image URL"  description="Slider Background Image URL"/>
+    <design:attribute name="alignItems" label="Slide 1: Text Alignment"  dataSource="Left,Center,Right" description="Choose vertical alignment of left and right column"/>
+    <design:attribute name="Headline" label="Slide 1: Headline"  description="A big heading to show on top"/>
+    <design:attribute name="SubHeadline" label="Slide 1: Sub Headline"  description="A smaller heading beneath"/>
+    <design:attribute name="Paragraph" label="Slide 1: Paragraph Text"  description="Paragraph text to use for messaging."/>
+    <design:attribute name="ButtonText" label="Slide 1: Button Text"  description="The label on the CTA button"/>
+    <design:attribute name="ButtonURL" label="Slide 1: Button URL"  description="The URL for the CTA button"/>
+    <design:attribute name="Button2Text" label="Slide 1: Button 2 Text"  description="The label on the 2nd CTA button"/>
+    <design:attribute name="Button2URL" label="Slide 1: Button 2 URL"  description="The URL for the 2nd CTA button"/>
+    <design:attribute name="darkText" label="Slide 1: Dark Text (if using a light BG)"   />
+    <design:attribute name="show1" label="Show Slide 1?"   />
+    
+    <design:attribute name="Background2" label="Slide 2: Background Image URL"  description="Slider Background Image URL"/>
+    <design:attribute name="alignItems2" label="Slide 2: Text Alignment"  dataSource="Left,Center,Right" description="Choose vertical alignment of left and right column"/>
+    <design:attribute name="Headline2" label="Slide 2: Headline"  description="A big heading to show on top"/>
+    <design:attribute name="SubHeadline2" label="Slide 2: Sub Headline"  description="A smaller heading beneath"/>
+    <design:attribute name="Paragraph2" label="Slide 2: Paragraph Text"  description="Paragraph text to use for messaging."/>
+    <design:attribute name="ButtonText2" label="Slide 2: Button Text"  description="The label on the CTA button"/>
+    <design:attribute name="ButtonURL2" label="Slide 2: Button URL"  description="The URL for the CTA button"/>
+    <design:attribute name="Button2Text2" label="Slide 2: Button 2 Text"  description="The label on the 2nd CTA button"/>
+    <design:attribute name="Button2URL2" label="Slide 2: Button 2 URL"  description="The URL for the 2nd CTA button"/>
+    <design:attribute name="darkText2" label="Dark Text (if using a light BG)"   />
+    <design:attribute name="show2" label="Show Slide 2?"   />
+    
+    <design:attribute name="Background3" label="Slide 3: Background Image URL"  description="Slider Background Image URL"/>
+    <design:attribute name="alignItems3" label="Slide 3: Text Alignment"  dataSource="Left,Center,Right" description="Choose vertical alignment of left and right column"/>
+    <design:attribute name="Headline3" label="Slide 3: Headline"  description="A big heading to show on top"/>
+    <design:attribute name="SubHeadline3" label="Slide 3: Sub Headline"  description="A smaller heading beneath"/>
+    <design:attribute name="Paragraph3" label="Slide 3: Paragraph Text"  description="Paragraph text to use for messaging."/>
+    <design:attribute name="ButtonText3" label="Slide 3: Button Text"  description="The label on the CTA button"/>
+    <design:attribute name="ButtonURL3" label="Slide 3: Button URL"  description="The URL for the CTA button"/>
+    <design:attribute name="Button2Text3" label="Slide 3: Button 2 Text"  description="The label on the 2nd CTA button"/>
+    <design:attribute name="Button2URL3" label="Slide 3: Button 2 URL"  description="The URL for the 2nd CTA button"/>
+    <design:attribute name="darkText3" label="Slide 3: Dark Text (if using a light BG)"   />
+    <design:attribute name="show3" label="Show Slide 3?"   />
+    
+    <design:attribute name="overlayColor" label="Overlay Color"   description="Enter valid web color"/>
+    <design:attribute name="overlayOpacity" label="Overlay Opacity"   description="0 is transparent, .9 is almost solid" datasource="0,.1,.2,.3,.4,.5,.6,.7,.8,.9"/>
+    
+    
+    <design:attribute name="transition" label="Transition"   description="Show we move from slide to slide." datasource="Fade,Slide"/>
+    <design:attribute name="speed" label="Slider Speed"   description="0 = no Autoplay"/>
+    <design:attribute name="showDots" label="Show dots?"   description="Show navigational dots or not."/>
+    <design:attribute name="showArrows" label="Show arrows?"   description="Show navigational arrows or not."/>
+    <design:attribute name="height" label="Slider Height (%, px, vh)"   description="Height of the slider."/>
+    
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

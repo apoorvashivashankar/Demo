@@ -1,0 +1,15 @@
+<!--Copyright © 2016-2018 7Summits, Inc. All rights reserved.-->
+<design:component label="7S Twitter Feed">
+	<design:attribute name="heading" label="Heading" />
+    <design:attribute name="byLine" label="Byline" />
+    <design:attribute name="handle" label="Twitter Username" />
+	<design:attribute name="showHandle" label="Show username in header?" />
+    <design:attribute name="showReplies" label="Show replies?" />
+    <design:attribute name="hasBorder" label="Add border to feed?" />
+    <design:attribute name="tweetLimit" label="Maximum Number of Tweets" />
+    <design:attribute name="theme" datasource="dark,light" label="Theme" />
+    <design:attribute name="linkColor" label="Link Color (hex code)" />
+    <design:attribute name="borderColor" label="Tweet Border Color (hex code)" />
+    <design:attribute name="height" label="Height (px)" />
+    <design:attribute name="align" label="Header Alignment" datasource="center,left,right"/>
+</design:component>

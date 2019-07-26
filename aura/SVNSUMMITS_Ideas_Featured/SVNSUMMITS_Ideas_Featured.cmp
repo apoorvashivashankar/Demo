@@ -1,0 +1,21 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francoiskorb on 10/5/16.
+ -->
+
+<aura:component description="SVNSUMMITS_Ideas_Featured"
+                extends="c:SVNSUMMITS_Ideas_List"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+                access="global">
+
+    <aura:set attribute="displayMode"        value="Featured"/>
+    <aura:set attribute="listSize"           value="3" />
+    <aura:set attribute="displayPagination"  value="true" />
+    <aura:set attribute="paginationPosition" value=""/>
+
+    <!-- PROPERTY EDITOR -->
+    <aura:attribute name="recordId1" type="String" access="global"/>
+    <aura:attribute name="recordId2" type="String" access="global"/>
+    <aura:attribute name="recordId3" type="String" access="global"/>
+
+</aura:component>

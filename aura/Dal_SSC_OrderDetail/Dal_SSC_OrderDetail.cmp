@@ -1,0 +1,16 @@
+<!--
+ - Created by 7Summits on 4/17/18.
+ -->
+
+<aura:component extends="c:Dal_Dist_OrderBase" controller="Dal_OrderProcessController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:if isTrue="{!v.isLoading == false}">
+        <c:Dal_SSC_Order store="{!v.store}" isDetailView="true" />
+        <aura:set attribute="else">
+            <div class="slds-is-relative slds-p-around_xx-large">
+                <lightning:spinner variant="brand" />
+            </div>
+        </aura:set>
+    </aura:if>
+</aura:component>

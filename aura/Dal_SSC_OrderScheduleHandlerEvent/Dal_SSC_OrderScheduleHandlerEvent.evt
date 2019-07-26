@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="Dal_SSC_OrderScheduleHandlerEvent" >
+    
+    
+</aura:event>

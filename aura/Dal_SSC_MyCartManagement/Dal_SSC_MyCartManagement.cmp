@@ -1,0 +1,84 @@
+<!--
+ - Created by ranja on 06-01-2019.
+ -->
+
+<aura:component description="Dal_SSC_MyCartManagement"  access="global" extends="c:Dal_SSC_CreateOrderBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+
+    <!--INIT HANDLER-->
+    <!--<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>-->
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!--Internal Attributes-->
+    <aura:attribute name="myCartPageNumber" type="Integer" default="1" />
+
+
+
+    <!--Header-->
+    <lightning:layout class="slds-m-bottom_xx-large slds-p-bottom_large">
+        <aura:if isTrue="{!or(v.myCartOrderOne.length > 0, v.myCartOrderTwo.length > 0)}">
+            <c:Dal_SSC_MyCartTabSelected myCartPageNumber="{!v.myCartPageNumber}"/>
+        </aura:if>
+    </lightning:layout>
+
+    <!--Body-->
+    <lightning:layout class="slds-wrap">
+        <!--<aura:if isTrue="{!and(or(greaterthan(v.myCartOrderOne.length ,0), greaterthan(v.myCartOrderTwo.length ,0)),lessthanorequal(v.orderSubTotalTotal,0))}">
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> Unable to proceed, pricing error. Please select the My Cart icon at the top of the page to refresh the cart.
+            </div>
+        </aura:if>-->
+        <aura:if isTrue="{!v.isPriceError}">
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> Unable to proceed, pricing error. Please select the My Cart icon at the top of the page to refresh the cart.
+            </div>
+        </aura:if>
+        <!--My Cart-->
+        <aura:if isTrue="{!or(v.myCartPageNumber == 1, v.myCartPageNumber == '1')}">
+            <lightning:layoutItem class="" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="8">
+                <c:Dal_SSC_CreateOrderMyCartDetailPage myCartPageNumber="{!v.myCartPageNumber}" myCartOrderOne="{!v.myCartOrderOne}"
+                                                       myCartResponse="{!v.myCartResponse}" energySurchargeTotal="{!v.energySurchargeTotal}"
+                                                       orderSubTotalTotal="{!v.orderSubTotalTotal}" estimatedTotal="{!v.estimatedTotal}"
+                                                       myCartOrderTwo="{!v.myCartOrderTwo}" isPriceError="{!v.isPriceError}"/>
+            </lightning:layoutItem>
+        </aura:if>
+
+        <!--Checkout-->
+        <aura:if isTrue="{!or(v.myCartPageNumber == 2, v.myCartPageNumber == '2')}">
+            <lightning:layoutItem class="" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="8">
+                <c:Dal_SSC_CreateOrderCheckoutDetailPage myCartPageNumber="{!v.myCartPageNumber}" myCartOrderOne="{!v.myCartOrderOne}"
+                                                         myCartResponsePageTwo="{!v.myCartResponsePageTwo}"
+                                                         myCartOrderTwo="{!v.myCartOrderTwo}" selectedTax="{!v.selectedTax}"
+                                                         isPOEmpty="{!v.isPOEmpty}" showPOError="{!v.showPOError}"
+                                                         isJobNameEmpty ="{!v.isJobNameEmpty}" showJobNameError = "{!v.showJobNameError}" />
+            </lightning:layoutItem>
+        </aura:if>
+
+        <!--Order Review--> 
+        <aura:if isTrue="{!or(v.myCartPageNumber == 3, v.myCartPageNumber == '3')}">
+            <lightning:layoutItem class="" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="8">
+                <c:Dal_SSC_CreateOrderReviewDetailPage myCartPageNumber="{!v.myCartPageNumber}" myCartOrderOne="{!v.myCartOrderOne}"
+                                                       myCartResponsePageTwo="{!v.myCartResponsePageTwo}" myCartOrderTwo="{!v.myCartOrderTwo}"/>
+            </lightning:layoutItem>
+        </aura:if>
+
+        <!--Total Amount-->
+        <lightning:layoutItem class="slds-p-left_large" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="4">
+            <aura:if isTrue="{!or(v.myCartOrderOne.length > 0, v.myCartOrderTwo.length > 0)}">
+                <c:Dal_SSC_MyCartProductTotal myCartPageNumber="{!v.myCartPageNumber}" myCartOrderOne="{!v.myCartOrderOne}"
+                                          myCartResponse="{!v.myCartResponse}" myCartResponsePageTwo="{!v.myCartResponsePageTwo}"
+                                          myCartOrderTwo="{!v.myCartOrderTwo}" energySurchargeTotal="{!v.energySurchargeTotal}"
+                                          orderSubTotalTotal="{!v.orderSubTotalTotal}" estimatedTotal="{!v.estimatedTotal}"
+                                          isPOEmpty="{!v.isPOEmpty}" showPOError="{!v.showPOError}"
+                                          isJobNameEmpty = "{!v.isJobNameEmpty}" showJobNameError = "{!v.showJobNameError}" isPriceError="{!v.isPriceError}" />
+            </aura:if>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+
+</aura:component>

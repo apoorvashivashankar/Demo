@@ -1,0 +1,3 @@
+<design:component label="7S Topics I Follow">
+    <design:attribute name="recordsToShow" label="Number of records to show:" />
+</design:component>

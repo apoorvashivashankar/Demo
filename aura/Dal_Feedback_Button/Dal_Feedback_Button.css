@@ -1,0 +1,24 @@
+.THIS.feedbackButton {
+  /* background-color: rgb(128, 130, 133); */
+  padding: 0px 0px 0px 0px !important;
+  width: 110px;
+  height: 38px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #fff !important;
+  position: fixed;
+  left: -40px;
+  top: 66%;
+  transform: rotate(90deg);
+  transition: background .8s ease;
+  transition-property: background;
+  transition-duration: 0.8s;
+  transition-timing-function: ease;
+  transition-delay: 0s;
+
+  }
+
+
+  .THIS .slds-modal__content  {
+    height:100%;
+  }

@@ -1,0 +1,23 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  border-top: 10px solid #555759;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+}
+.THIS h4 {
+  color: token(colorTextDefault);
+}
+.THIS .slds-button {
+  color: #5f5f5f;
+}
+.THIS .slds-button:hover {
+  text-decoration: underline;
+}
+.THIS .slds-button:focus {
+  box-shadow: none;
+}

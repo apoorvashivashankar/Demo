@@ -1,0 +1,74 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS select.ui.dropdown {
+    width:100%;
+    background:#fff;
+    font-size: token(custom_fontSizeMedium);
+}
+
+.THIS .ideas-views .slds-icon {
+    fill:#888;
+}
+
+.THIS .view-button {
+    display:inline-block;
+    vertical-align:middle;
+    margin-top: 2px;
+    width: 50%;
+    text-align: center;
+}
+
+.THIS .view-button a.active .slds-icon {
+    fill:#000;
+}
+
+.THIS .ideaLabel {
+    float:left;
+    margin-top:4px;
+    margin-right:10px;
+}
+
+.THIS .my-ideas .uiInputCheckbox {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 8px 0px;
+    font-size: token(custom_fontSizeMedium);
+}
+
+@media screen and (min-width:1024px) {
+    .THIS .slds-large-hide {
+        display:none;
+    }
+}
+
+.THIS .filter-toggle {
+    width:100%;
+    text-align:left;
+    text-transform:uppercase;
+    font-weight:700;
+    background:transparent;
+    border:0px;
+    padding:0px;
+    position:relative;
+}
+
+.THIS .icon-expand,
+.THIS .icon-collapse {
+    position:absolute;
+    right:0;
+    top:0;
+}
+
+.THIS .icon-expand svg,
+.THIS .icon-collapse svg {
+    fill:#000;
+}
+
+.THIS .filter-toggle.open .icon-collapse,
+.THIS .filter-toggle .icon-expand {
+    display:block;
+}
+
+.THIS .filter-toggle.open .icon-expand,
+.THIS .filter-toggle .icon-collapse {
+    display:none;
+}

@@ -1,0 +1,15 @@
+<apex:page Controller="VisitorCheckinController" id="thePage"
+            showHeader="false" sidebar="false"             
+            applyHTmlTag="false" docType="html-5.0" 
+            standardStylesheets="true" lightningStylesheets="true" >
+
+    <apex:form >
+        <apex:pageblock id="consel" title="Appointment Scheduled for {!appointment.Visitor_First_Name__c}">
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Create New" action="{!backToSchedulerMobile}" />
+                <apex:commandButton value="Go To Appointment" action="{!goToAppointment}" />
+            </apex:pageBlockButtons>    
+        </apex:pageblock>
+    </apex:form>
+
+</apex:page>

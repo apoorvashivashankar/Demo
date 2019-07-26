@@ -1,0 +1,17 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS .orderheader {
+  border-bottom: 8px solid #c7c8ca;
+}
+.THIS .orderTotal {
+  font-size: 1.2rem;
+}
+.THIS.dal-form-order div.orderOutputData > span {
+  font-size: inherit;
+  font-weight: 600;
+}

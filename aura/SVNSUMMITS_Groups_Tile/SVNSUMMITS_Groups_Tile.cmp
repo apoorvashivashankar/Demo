@@ -1,0 +1,160 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_GroupsController"
+                access="global"
+                implements="force:appHostable,flexipage:availableForAllPageTypes">
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="public"/>
+
+	<aura:attribute name="wrapperGroupsObj" type="SVNSUMMITS_WrapperGroups" access="public"/>
+	<aura:attribute name="group" type="object" access="public"/>
+
+	<aura:attribute name="showAuthor" type="Boolean" default="false" access="public"/>
+	<aura:attribute name="showGroupType" type="Boolean" default="false" access="public"/>
+	<aura:attribute name="showLastActive" type="Boolean" default="true" access="public"/>
+	<aura:attribute name="showJoinButton" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="descriptionLines" type="String" default="2" access="public"/>
+
+	<aura:attribute name="showBackgroundImage" type="Boolean" default="true" access="global"/>
+
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" default="false" access="public"/>
+	<aura:attribute name="lineHeight" type="Integer" default="18" description="line height for alignment"/>
+
+	<aura:attribute name="profileURL" type="String" access="public"/>
+	<aura:attribute name="groupsURL" type="String" access="public"/>
+
+	<aura:attribute name="customClass" type="String" default="" access="public"/>
+	<aura:attribute name="customId" type="String" default="" access="public"/>
+
+	<aura:registerEvent type="c:SVNSUMMITS_Groups_Load_Event" name="loadEvent"/>
+
+	<lightning:layout multipleRows="true"
+	                  verticalAlign="center"
+	                  horizontalAlign="center"
+	                  class="slds-box_border">
+
+		<!-- IMAGE -->
+		<lightning:layoutItem size="12">
+			<div class="featuredImage">
+				<aura:if isTrue="{!v.showBackgroundImage}">
+					<div class="image"
+					     style="{!'background-image:url(' + v.group.FullPhotoUrl + ');'}">
+					</div>
+				</aura:if>
+
+				<div class="slds-align_absolute-center titleImageWrap">
+					<a onclick="{!c.goToRecord}"
+					   data-id="{!v.group.Id}">
+						<img class="tileImage"
+						     style="{! if(v.showBackgroundImage, 'top:-50px;','')}"
+						     src="{!v.group.FullPhotoUrl}"/>
+					</a>
+				</div>
+			</div>
+		</lightning:layoutItem>
+
+		<!-- NAME -->
+		<lightning:layoutItem size="12"
+		                      padding="around-small"
+		                      class="slds-align_absolute-center">
+			<a class="slds-text-heading_medium slds-text-align--center"
+			   style="{! 'min-height: ' + 3 * v.lineHeight + 'px;'}"
+			   href="javascript:void(0);"
+			   onclick="{!c.goToRecord}"
+			   data-id="{!v.group.Id}">{!v.group.Name}</a>
+		</lightning:layoutItem>
+
+		<!-- DESCRIPTION - use min-height for alignment -->
+		<lightning:layoutItem size="12"
+		                      padding="horizontal-small"
+		                      class="slds-align_absolute-center">
+			<div class="slds-text-body_regular slds-text-align--center description"
+			     style="{!'-webkit-line-clamp:'+ v.descriptionLines +';'+
+					     'min-height:' + v.descriptionLines * v.lineHeight + 'px;'}">
+					{!v.group.Description}
+			</div>
+		</lightning:layoutItem>
+
+		<!-- GROUP TYPE AND OWNER -->
+		<lightning:layoutItem size="12"
+		                      padding="around-small"
+		                      class="slds-align-bottom">
+			<lightning:layout multipleRows="true"
+					horizontalAlign="end"
+					verticalAlign="end">
+				<lightning:layoutItem size="12"
+				                      class="slds-text-heading_label-normal slds-align_absolute-center slds-p-bottom--medium">
+					<aura:if isTrue="{!v.showGroupType}">
+					{!v.group.CollaborationType}&nbsp;{!$Label.c.ss_grp_label_groupType}
+						<aura:set attribute="else">
+							&nbsp;
+						</aura:set>
+					</aura:if>
+
+					<aura:if isTrue="{! and(v.showGroupType, v.showAuthor)}">
+						,&nbsp;
+					</aura:if>
+
+					<aura:if isTrue="{!v.showAuthor}">
+					{!$Label.c.ss_grp_label_Owner}&nbsp;
+						<aura:if isTrue="{!v.isNicknameDisplayEnabled}">
+						{!v.group.Owner.CommunityNickname}
+							<aura:set attribute="else">
+									{!v.group.Owner.Name}
+							</aura:set>
+						</aura:if>
+						<aura:set attribute="else">
+							&nbsp;
+						</aura:set>
+					</aura:if>
+				</lightning:layoutItem>
+			</lightning:layout>
+		</lightning:layoutItem>
+
+		<!-- MEMBERSHIP -->
+		<aura:if isTrue="{!v.showJoinButton}">
+			<lightning:layoutItem size="12"
+			                      padding="around-small">
+				<aura:if isTrue="{!v.group.showJoinButton}">
+					<lightning:buttonStateful class="slds-align_absolute-center"
+					                          labelWhenOff="{!$Label.c.ss_grp_button_Join}"
+					                          labelWhenOn="{!$Label.c.ss_mbr_button_Member}"
+					                          labelWhenHover="{!$Label.c.ss_mbr_button_Leave}"
+					                          iconNameWhenOff="utility:add"
+					                          iconNameWhenOn="utility:check"
+					                          iconNameWhenHover="utility:close"
+					                          state="{!v.group.isMember}"
+					                          onclick="{!c.handleMemberClick}"/>
+					<aura:set attribute="else">
+						<p class="slds-p-bottom--small">&nbsp;</p>
+					</aura:set>
+				</aura:if>
+			</lightning:layoutItem>
+		</aura:if>
+
+		<!-- MEMBER COUNT -->
+		<lightning:layoutItem size="12"
+		                      padding="around-small">
+			<lightning:layout multipleRows="false"
+			                  horizontalAlign="spread"
+			                  verticalAlign="end">
+				<lightning:layoutItem class="slds-text-body_small slds-text-color--weak">
+					<aura:if isTrue="{!v.showLastActive}">
+					{!$Label.c.ss_grp_label_lastActive}&nbsp;{!v.group.strTime}
+						<aura:set attribute="else">
+							&nbsp;
+						</aura:set>
+					</aura:if>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem class="slds-text-heading_small">
+					<lightning:icon iconName="utility:people"
+					                class="people-icon"
+					                size="x-small"
+					                alternativeText="people icon"/>
+					&nbsp;{!v.group.MemberCount}
+				</lightning:layoutItem>
+			</lightning:layout>
+		</lightning:layoutItem>
+
+	</lightning:layout>
+</aura:component>

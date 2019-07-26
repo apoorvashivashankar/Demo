@@ -1,0 +1,97 @@
+<apex:page controller="Dal_StatementPDF" sidebar="false" showHeader="false">
+    <apex:includeScript value="{!URLFOR($Resource.PDF_READ, '/build/pdf.js')}"/>
+	<apex:slds />
+    <div id="messageBlock" class="slds-scope">
+        <apex:pageblock >
+            <apex:pageMessages id="showmsg"></apex:pageMessages>
+        </apex:pageblock> 
+    </div>
+    <div id="spinner" class="slds-scope">
+    <apex:form id="form" style="height: 400px;margin-top: 90px">
+        <!-- SPINNER -->
+                <div  class="slds-spinner_container slds-is-relative" >
+                    <div role="status" class="slds-spinner slds-spinner--large" >
+                        <div class="slds-spinner__dot-a" style="{!if(theme =='red','background-color:#CF0A2C!important','background-color:#00416A!important')}"></div>
+                        <div class="slds-spinner__dot-b"></div>                        
+                    </div>
+                </div>
+        <!-- / SPINNER -->
+    </apex:form>
+    </div>
+    <!-- iframe containing pdf, will be 100vh unless browser doesn't support vh, then it will be 800px -->
+    <iframe id="theframe" width="100%" frameBorder="0" style="height: 800px; height: 100vh;" ></iframe>
+
+    <script>
+    var sdate = '{!sdate}';
+    var payer = '{!payer}';
+    var user = '{!username}';
+    var pass = '{!password}';
+    var proxyURL = "https://cors-anywhere.herokuapp.com/";
+	var requestURL = "{!$Label.Dal_PDF_Service_URL}";
+    var xmlHTTP = new XMLHttpRequest();
+    xmlHTTP.open('POST', proxyURL + requestURL, true);
+    xmlHTTP.setRequestHeader( 'Authorization', 'Basic ' + btoa( user + ':' + pass ) );
+    xmlHTTP.setRequestHeader("Content-Type","text/xml; charset=utf-8");
+    xmlHTTP.setRequestHeader("SOAPAction", "http://tempuri.org/IPDFsService/GetPDF_CustomerStatements");    
+    strRequest = "<?xml version='1.0' encoding='utf-8'?>";
+    strRequest = strRequest + "<soapenv:Envelope "+
+        "xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" "+
+        "xmlns:tem=\"http://tempuri.org/\" "+
+        "xmlns:dal=\"http://schemas.datacontract.org/2004/07/DAL_Connect_PDFs.Model\" >";
+    strRequest = strRequest + "<soapenv:Header/>";    
+    strRequest = strRequest + " <soapenv:Body>";
+    strRequest =strRequest + "<tem:GetPDF_CustomerStatements>";
+    strRequest =strRequest + "<tem:request>";
+    strRequest =strRequest + "<dal:Payer>"+payer+"</dal:Payer>";
+    strRequest =strRequest + "<dal:SalesOrganization>"+{!salesorg}+"</dal:SalesOrganization>";
+    strRequest =strRequest + "<dal:StatementDate>"+sdate+"</dal:StatementDate>";
+    strRequest =strRequest + "</tem:request>";
+    strRequest =strRequest + "</tem:GetPDF_CustomerStatements>";
+    strRequest = strRequest + "</soapenv:Body>";
+    strRequest = strRequest + "</soapenv:Envelope>";
+    
+    xmlHTTP.onload = function(e) {
+
+        if (this.status == 200) { 
+            document.getElementById('spinner').className += ' slds-hide';
+            document.getElementById('messageBlock').className += ' slds-hide';
+            if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) //IF IE > 10
+            {                
+                var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                xmlDoc.loadXML(xmlHTTP.responseText);
+            }else{                
+                var xmlDoc = xmlHTTP.responseXML;
+            }
+            var pdfresult = xmlDoc.getElementsByTagName("GetPDF_CustomerStatementsResult");            
+            var pdfstring = pdfresult[0].childNodes[0].nodeValue;           
+            var pdfAsArray = convertDataURIToBinary(pdfstring);
+            var url = '{!URLFOR($Resource.PDF_READ, 'web/viewer.html?file=')}';
+            var binaryData = [];
+            binaryData.push(pdfAsArray);
+            var dataPdf = window.URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}));
+        	document.getElementById('theframe').setAttribute('src',url + encodeURIComponent(dataPdf));
+    	}else{
+            alert('Error: Not able to get statement at the moment. Please try later');
+            document.getElementById('spinner').className += ' slds-hide';
+            }
+    };
+    console.log(strRequest);
+    xmlHTTP.send(strRequest);
+    console.log('sentrequest');
+    
+    function convertDataURIToBinary(base64) {
+        console.log('calling convert');
+        var raw = window.atob(base64);
+        var rawLength = raw.length;
+        console.log('rawLength is '+rawLength);
+        var array = new Uint8Array(new ArrayBuffer(rawLength));
+        for(var i = 0; i < rawLength; i++) {
+            array[i] = raw.charCodeAt(i);
+        }
+        return array;
+    }
+
+
+    </script>
+    
+</apex:page>

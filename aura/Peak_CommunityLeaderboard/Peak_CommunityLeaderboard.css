@@ -1,0 +1,75 @@
+/* Copyright © 2016-2018 7Summits, Inc. All rights reserved. */
+
+
+.THIS .table-wrap{
+    overflow:scroll;
+}
+
+.THIS table{
+    table-layout:fixed;
+}
+
+.THIS th a:after{
+    width: 0; 
+    height: 0;
+    content:"";
+    position:absolute;
+    top: 13px;
+    margin-left: 5px;
+}
+
+.THIS th a.desc:after{
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid black;
+}
+
+.THIS th a.asc:after{
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+}
+
+.THIS .profile-image{
+    border-radius:50%;
+}
+
+.THIS [data-icons="false"] .slds-icon_container{
+    display:none;
+}
+
+.THIS [data-icons="true"] .label{
+    display:none;
+}
+
+.THIS th, .THIS td{
+    text-align:center;
+}
+
+.THIS [data-label="Username"]{
+    text-align:left;
+}
+
+.THIS .slds-icon{
+     width: 20px;
+}
+
+.THIS div#attr a, .THIS div#attr{
+	display: inline-block !important;
+    opacity:1 !important;
+    color:#fff !important;
+    background:#1291C4 !important;
+}
+
+.THIS div#attr{
+    padding:7px 10px !important;
+    margin:5px 0px !important;
+    float:right !important;
+    margin-top:-36px !important;
+    height:auto !important;
+    width:auto !important;
+}
+
+.THIS div#attr a{
+    font-weight:bold !important;
+}

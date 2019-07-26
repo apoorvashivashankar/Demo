@@ -1,0 +1,25 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS .user-tile {
+  border: 1px solid #fff;
+  border-radius: 10px;
+  background: #efefef;
+}
+.THIS .user-tile img.profile-pic {
+  margin: 0 auto;
+}
+.THIS .carousel {
+  display: none;
+}
+.THIS .slick-initialized {
+  display: block;
+}
+.THIS .slick-prev:before,
+.THIS .slick-next:before {
+  color: token(colorTextLink);
+}

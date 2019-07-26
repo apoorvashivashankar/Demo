@@ -1,0 +1,50 @@
+<!--
+ - Created by 7Summits on 4/17/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderDetailHeader" extends="c:Dal_Base" controller="Dal_OrderProcessController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <ltng:require styles="{!$Resource.Dal_Print}"/>
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <!-- internal attributes -->
+    <aura:attribute name="showHeader" type="Boolean" default="false" />
+    <aura:attribute name="orderLabel" type="String" default="Order # " />
+    <aura:attribute name="orderNumber" type="String" default="" />
+    <aura:attribute name="button1Link" type="String" default="/" />
+    <aura:attribute name="button1label" type="String" default="CLONE ORDER" />
+    <aura:attribute name="button1Icon" type="String" default="utility:dock_panel" />
+    <aura:attribute name="quickOrderLink" type="String" default="/quick-order" />
+    <aura:attribute name="button2Link" type="String" default="/" />
+    <aura:attribute name="button2label" type="String" default="SUBMIT A CASE" />
+    <aura:attribute name="button2Icon" type="String" default="" />
+    <aura:attribute name="button3Link" type="String" default="" />
+    <aura:attribute name="button3label" type="String" default="PRINT" />
+    <aura:attribute name="button3Icon" type="String" default="utility:news" />
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="selectOrderType" type="String" default="regular"  description="Tells which order type tab is selected"/>
+
+    <aura:if isTrue="{!v.showHeader}">
+        <lightning:layout class="slds-m-vertical_x-small" horizontalAlign="center" verticalAlign="end" multipleRows="true">
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="5" class="slds-grid slds-p-horizontal_small slds-grid_align-left slds-large-grid_align-start slds-p-vertical_medium">
+                <h1>{!v.orderLabel} {!v.orderNumber}</h1>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="7" class="slds-grid slds-p-horizontal_small slds-grid_align-right slds-large-grid_align-end slds-p-vertical_medium">
+                <div id="btnSaveContinue" class="btnSaveContinue slds-grid slds-wrap slds-grid_align-center">
+                    <aura:if isTrue="{!and(v.button1Link, v.selectOrderType != 'Sample' )}">
+                        <lightning:button variant="neutral" label="{!v.button1label}" iconName="{!v.button1Icon}" class="dal-small-fullWidth dal-medium-fullWidth" onclick="{!c.handleClone}" />
+                    </aura:if>
+                    <!--<aura:if isTrue="{!v.button2Link}">
+                        <lightning:button variant="neutral" label="{!v.button2label}" iconName="{!v.button2Icon}" class="dal-small-fullWidth dal-medium-fullWidth" onclick="{!c.handleLinkClick}" value="{!v.button2Link}"/>
+                    </aura:if>-->
+                    <aura:if isTrue="{!v.button3Link}">
+                        <lightning:button variant="neutral" label="{!v.button3label}" iconName="{!v.button3Icon}" class="dal-small-fullWidth dal-medium-fullWidth" onclick="{!c.print}" value="{!v.button3Link}"/>
+                    </aura:if>
+                </div>
+            </lightning:layoutItem>
+            <aura:if isTrue="{!v.isLoading}">
+                <lightning:spinner variant="brand" size="large" />
+
+            </aura:if>
+        </lightning:layout>
+    </aura:if>
+</aura:component>

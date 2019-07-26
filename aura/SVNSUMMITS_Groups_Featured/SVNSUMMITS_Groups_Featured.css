@@ -1,0 +1,88 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .descriptiveText{
+    padding: 15px 15px 15px 12px!important;
+    font-size: 16px!important;
+    line-height: 20px!important;
+}
+.THIS.featuredBox{
+    box-shadow: 0 0 2px #A7B8D1;
+    border-radius: 2px;
+    padding: 2% 1% 1% 2%!important;
+}
+.THIS .groupImg{
+    border-radius: 7px!important;
+    width: 100px!important;
+    max-width: none;
+    height: auto;
+}
+.THIS ul{
+    list-style: none outside none;
+    padding-left: 0;
+    margin: 0;
+}
+.THIS .demo .item{
+    margin-bottom: 60px;
+}
+.THIS .content-slider li{
+    text-align: center;
+}
+.THIS .content-slider h3 {
+    margin: 0;
+    padding: 70px 0;
+}
+.THIS .demo{
+    width: 100%;
+}
+.THIS .clockSymbol{
+    width:11px;
+    margin: 5px;
+}
+.THIS .sliderCss{
+    margin: 30px 10px 0px 0px!important;
+}
+.THIS .buttonText{
+    color:grey!important;
+    width: 150px;
+}
+.THIS .para1{
+    font-size:18px;
+    width: 50%;
+    margin-left: 25%;
+    line-height: 25px;
+    margin-top: 7px;
+}
+.THIS .para1Span{
+    color: rgba(80, 78, 78, 0.94)!important;
+    font-family:'Open Sans Light', 'Open Sans';
+    font-weight:200;
+    font-size:18px;
+    text-decoration: none;
+}
+.THIS .para2{
+    font-size:12px;
+}
+.THIS .para2Span{
+    font-family:'FontAwesome';
+    font-weight:400;
+    font-size: 14px;
+}
+.THIS .para2Span2{
+    font-family:'Open Sans Light', 'Open Sans';
+    font-weight:200;
+    font-size:12px;
+}
+.THIS .para3{
+    font-size:12px;
+    padding-left: 10px;
+}
+.THIS .para3Span{
+    font-family:'Open Sans Light', 'Open Sans';
+    font-weight:200;
+    font-size:12px;
+}
+.THIS .headerText{
+    font-size: 24px!important;
+}
+.THIS .divslider{
+    height: auto!important;
+}

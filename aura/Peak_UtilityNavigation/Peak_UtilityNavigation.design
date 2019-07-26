@@ -1,0 +1,86 @@
+<design:component label="7S Utility Navigaton">
+    <design:attribute name="MobileHamburger" label="Show Mobile Hamburger?" description="If true hamburger will display on mobile" />
+
+    <design:attribute name="UserLink1" label="User Link 1" />
+    <design:attribute name="UserLink1Text" label="User Link 1 Text" />
+    <design:attribute name="UserLink1IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="UserLink1OpenInNewPage" label="Open User Link 1 in new page?"/>
+
+    <design:attribute name="UserLink2" label="User Link 2" />
+    <design:attribute name="UserLink2Text" label="User Link 2 Text" />
+    <design:attribute name="UserLink2IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="UserLink2OpenInNewPage" label="Open User Link 2 in new page?"/>
+
+    <design:attribute name="UserLink3" label="User Link 3" />
+    <design:attribute name="UserLink3Text" label="User Link 3 Text" />
+    <design:attribute name="UserLink3IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="UserLink3OpenInNewPage" label="Open User Link 3 in new page?"/>
+
+    <design:attribute name="UserLink4" label="User Link 4" />
+    <design:attribute name="UserLink4Text" label="User Link 4 Text" />
+    <design:attribute name="UserLink4IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="UserLink4OpenInNewPage" label="Open User Link 4 in new page?"/>
+
+    <design:attribute name="UserLink5" label="User Link 5" />
+    <design:attribute name="UserLink5Text" label="User Link 5 Text" />
+    <design:attribute name="UserLink5IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="UserLink5OpenInNewPage" label="Open User Link 5 in new page?"/>
+
+    <design:attribute name="UserLink6" label="User Link 6" />
+    <design:attribute name="UserLink6Text" label="User Link 6 Text" />
+    <design:attribute name="UserLink6IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="UserLink6OpenInNewPage" label="Open User Link 6 in new page?"/>
+
+    <design:attribute name="UserLink7" label="User Link 7" />
+    <design:attribute name="UserLink7Text" label="User Link 7 Text" />
+    <design:attribute name="UserLink7IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="UserLink7OpenInNewPage" label="Open User Link 7 in new page?"/>
+
+    <design:attribute name="UserLink8" label="User Link 8" />
+    <design:attribute name="UserLink8Text" label="User Link 8 Text" />
+    <design:attribute name="UserLink8IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="UserLink8OpenInNewPage" label="Open User Link 8 in new page?"/>
+
+    <design:attribute name="GuestLink1" label="Guest Link 1" />
+    <design:attribute name="GuestLink1Text" label="Guest Link 1 Text" />
+    <design:attribute name="GuestLink1IsButton" label="Is button?" description="Checkbox"  />
+    <design:attribute name="GuestLink1OpenInNewPage" label="Open Guest Link 1 in new page?"/>
+
+    <design:attribute name="GuestLink2" label="Guest Link 2" />
+    <design:attribute name="GuestLink2Text" label="Guest Link 2 Text" />
+    <design:attribute name="GuestLink2IsButton" label="Is button?" />
+    <design:attribute name="GuestLink2OpenInNewPage" label="Open Guest Link 2 in new page?"/>
+
+    <design:attribute name="GuestLink3" label="Guest Link 3" />
+    <design:attribute name="GuestLink3Text" label="Guest Link 3 Text" />
+    <design:attribute name="GuestLink3IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="GuestLink3OpenInNewPage" label="Open Guest Link 3 in new page?"/>
+
+    <design:attribute name="GuestLink4" label="Guest Link 4" />
+    <design:attribute name="GuestLink4Text" label="Guest Link 4 Text" />
+    <design:attribute name="GuestLink4IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="GuestLink4OpenInNewPage" label="Open Guest Link 4 in new page?"/>
+
+    <design:attribute name="GuestLink5" label="Guest Link 5" />
+    <design:attribute name="GuestLink5Text" label="Guest Link 5 Text" />
+    <design:attribute name="GuestLink5IsButton" label="Is button?" description="Checkbox" />
+    <design:attribute name="GuestLink5OpenInNewPage" label="Open Guest Link 5 in new page?"/>
+
+    <design:attribute name="GuestLink6" label="Guest Link 6" />
+    <design:attribute name="GuestLink6Text" label="Guest Link 6 Text" />
+    <design:attribute name="GuestLink6IsButton" label="Is button?" description="Checkbox"  />
+    <design:attribute name="GuestLink6OpenInNewPage" label="Open Guest Link 6 in new page?"/>
+
+    <design:attribute name="GuestLink7" label="Guest Link 7" />
+    <design:attribute name="GuestLink7Text" label="Guest Link 7 Text" />
+    <design:attribute name="GuestLink7IsButton" label="Is button?" description="Checkbox"  />
+    <design:attribute name="GuestLink7OpenInNewPage" label="Open Guest Link 7 in new page?"/>
+
+    <design:attribute name="GuestLink8" label="Guest Link 8" />
+    <design:attribute name="GuestLink8Text" label="Guest Link 8 Text" />
+    <design:attribute name="GuestLink8IsButton" label="Is button?" description="Checkbox"  />
+    <design:attribute name="GuestLink8OpenInNewPage" label="Open Guest Link 8 in new page?"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

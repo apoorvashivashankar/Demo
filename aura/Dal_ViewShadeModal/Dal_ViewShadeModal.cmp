@@ -1,0 +1,80 @@
+<!--
+ - Created by 7Summits on 4/11/18.
+ -->
+
+<aura:component description="Dal_ViewShadeModal" extends="c:Dal_ModalBase">
+   <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <!-- attributes passed in -->
+    <aura:attribute name="store" type="Map" default="" required="true" />
+    <aura:attribute name="cartId" type="String" default="" required="true" />
+    <aura:attribute name="sourceOfSupplySelectedName" type="List" default="[]"  />
+    <aura:attribute name="sku" type="String" default="" />
+    <!-- internal attributes -->
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:attribute name="shadeDetails" type="List" default="[]" />
+    <aura:attribute name="showModal" type="Boolean" default="False" access="global" />
+
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="Shade Details" />
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" class="slds-p-vertical_xx-small slds-grid--align-end slds-medium-text-align_right headerRight">
+                <div class="slds-text-title_caps slds-text-align_right slds-p-horizontal_x-small">
+                    <span class="slds-text-color_weak">Source of Supply</span>
+                    <h4>{!v.sourceOfSupplySelectedName}</h4>
+                </div>
+                <div  class="slds-text-title_caps slds-text-align_right slds-p-left_x-large">
+                    <span class="slds-text-color_weak">SKU #</span>
+                    <h4>{!v.sku}</h4>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+
+    <lightning:layout class="slds-p-top_small" multipleRows="true" pullToBoundary="large">
+        <lightning:layoutItem size="12" class="tableWrapper">
+            <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-no-row-hover slds-p-horizontal_large">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate" title="Material">Material</div>
+                        </th>
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate" title="Shade">Shade</div>
+                        </th>
+                   <!--     <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate" title="On Hand Quantity">On Hand Quantity</div>
+                        </th> -->
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate"  title="Available Quantity" >Available Quantity</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                <aura:iteration items="{!v.shadeDetails}" var="row">
+                    <tr>
+                        <td data-label="material">
+                            <div class="slds-truncate" title="{!row.material}">{!row.material}</div>
+                        </td>
+                        <td data-label="shade">
+                            <div class="slds-truncate" title="{!row.shade}">{!row.shade}</div>
+                        </td>
+                  <!--  <td data-label="onHandQty">
+                            <div class="slds-truncate" title="{!row.onHandQty}">{!row.onHandQty}</div>
+                        </td> -->
+                        <td data-label="availableQty">
+                        <!--     <div class="slds-truncate" title="{!row.availableQty}">{!row.availableQty}</div> -->
+                            <div class="slds-truncate" title="{!row.availableQty}"><lightning:formattedNumber value="{!row.availableQty}" maximumFractionDigits="3" /></div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+                </tbody>
+            </table>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" class="slds-grid slds-grid--align-end footer-bar slds-border_top slds-p-top_small">
+            <lightning:button class="slds-float--right slds-m-horizontal_x-large" variant="neutral" label="CLOSE" onclick="{!c.handleClose}" />
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

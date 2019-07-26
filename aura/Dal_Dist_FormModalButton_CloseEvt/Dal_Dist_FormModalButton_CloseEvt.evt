@@ -1,0 +1,2 @@
+<aura:event type="APPLICATION" description="Dal_Dist_FormModalButton_CloseEvt">
+</aura:event>

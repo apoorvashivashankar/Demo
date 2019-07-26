@@ -1,0 +1,52 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  background-color: #ffffff !important;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.19);
+}
+@media (min-width: 62rem) {
+  .THIS {
+    min-width: 900px;
+    margin-left: -16rem;
+  }
+}
+@media (min-width: 30rem) and (max-width: 61.9rem) {
+  .THIS {
+    min-width: 420px;
+  }
+}
+.THIS .communityLogo {
+  width: inherit;
+}
+.THIS .inputContainer {
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 4px;
+}
+.THIS .inputContainer .inputBox {
+  font-family: 'Gotham', sans-serif !important;
+  width: 92%;
+}
+@media (max-width: 47.9375em) {
+  .THIS .inputContainer .inputBox {
+    width: 85%;
+  }
+}
+.THIS .inverseTextColor {
+  font-family: 'Gotham', sans-serif !important;
+  color: token(colorTextBrand);
+}
+.THIS .uiButton {
+  font-family: 'Gotham', sans-serif !important;
+  padding: token(spacingSmall);
+  border-radius: 4px;
+}
+.THIS .loginContent {
+  max-width: 480px;
+  margin: 0 auto;
+}

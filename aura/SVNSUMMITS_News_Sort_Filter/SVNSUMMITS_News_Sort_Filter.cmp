@@ -1,0 +1,28 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component access="global"
+                controller="SVNSUMMITS_NewsController"
+                extends="c:SVNSUMMITS_News_Base">
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_News_BaseReady" action="{!c.setSortOption}"/>
+
+	<aura:attribute name="valueMostRecent" type="String" default="Most Recent" access="public"/>
+	<aura:attribute name="valueOldestFirst" type="String" default="Oldest First" access="public"/>
+	<aura:attribute name="sortBy" type="String" default="Most Recent" access="global"/>
+
+	<lightning:layout horizontalAlign="center">
+		<lightning:layoutItem size="12">
+			<lightning:select name="sortFilterSelect"
+			                  label="{!$Label.c.ss_nws_label_sortBy}"
+			                  value="{!v.sortBy}"
+			                  onchange="{!c.setSortOption}">
+				<option text="{!$Label.c.ss_nws_label_sortMostRecent}"
+				        value="{!v.valueMostRecent}">
+				</option>
+				<option text="{!$Label.c.ss_nws_label_sortOldestFirst}"
+				        value="{!v.valueOldestFirst}">
+				</option>
+			</lightning:select>
+		</lightning:layoutItem>
+	</lightning:layout>
+</aura:component>

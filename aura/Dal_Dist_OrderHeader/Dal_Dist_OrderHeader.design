@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 3/6/18.
+ -->
+
+<design:component label="Dal Dist Order Header">
+    <design:attribute name="selectOrderType" label="Select Order Type" datasource="Create a Quick Order,Create a Sample Order" />
+</design:component>

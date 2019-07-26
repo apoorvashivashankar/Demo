@@ -1,0 +1,13 @@
+<!--
+	- Copyright ©2016-2017 7Summits Inc. All rights reserved.
+	-
+	- Created by francois korb on 9/21/16.
+ -->
+
+<aura:component description="SVNSUMMITS_Include_MomentJS">
+
+    <c:SVNSUMMITS_Include_JQueryJS />
+    <ltng:require scripts="{!$Resource.MomentJS_2_17_1}"
+                  afterScriptsLoaded="{!c.afterScriptsLoaded}"/>
+
+</aura:component>

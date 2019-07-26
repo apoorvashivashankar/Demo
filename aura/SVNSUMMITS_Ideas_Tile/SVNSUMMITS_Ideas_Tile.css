@@ -1,0 +1,180 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .idea {
+    border-bottom: token(borderWidthThin) solid token(colorBorder);
+    overflow:hidden;
+    padding-bottom:20px;
+}
+
+.THIS .topics {
+    min-height: 22px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.THIS .topic-label {
+    font-weight:700;
+    font-size:11px;
+    max-width: 100%;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.THIS .owner-label {
+    margin-bottom:5px;
+    font-size:12px;
+    min-height: 30px;
+    overflow: hidden;
+}
+
+.THIS .statusAndPoints {
+    min-height: 50px;
+    position: relative;
+}
+
+.THIS .idea-status {
+    font-size:16px;
+}
+
+.THIS .points {
+    font-size:20px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.THIS .name {
+    height:70px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    margin:5px 0px 15px;
+    font-size:18px;
+}
+
+.THIS .listView {
+    position:relative;
+}
+
+.THIS .listView .name,
+.THIS .compactView .name {
+    height:auto;
+    line-height:normal;
+    margin:5px 0px;
+}
+
+.THIS .idea .idea-image {
+    width:100%;
+    height:150px;
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position:top center;
+    transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+}
+
+.THIS .idea:hover .idea-image {
+    transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    -ms-transform: scale(1.05); /* IE 9 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=1.05, M12=0, M21=0, M22=1.5, SizingMethod='auto expand')"; /* IE8 */
+    filter: progid:DXImageTransform.Microsoft.Matrix(M11=1.05, M12=0, M21=0, M22=1.5, SizingMethod='auto expand'); /* IE6 and 7 */
+}
+
+.THIS .listView .showingImage .owner-label {
+    position:absolute;
+    bottom:30px;
+
+}
+
+.THIS .listView .showingImage .spacer {
+    margin-bottom:60px;
+}
+
+.THIS .upsideDown {
+    transform: rotateX(180deg);
+}
+
+.THIS .tileView .voteButtons {
+    position: relative;
+    bottom: 0px;
+    right: 0px;
+}
+
+.THIS .ideaVoting {
+    padding-top: 14px;
+    text-align: right;
+}
+
+.THIS .listView .ideaVoting {
+    text-align: left;
+}
+
+.THIS .slds-size--1-of-1.ideaVoting {
+    padding-top: 0;
+}
+
+.THIS .voteButtons .likeButton,
+.THIS .voteButtons .dislikeButton {
+    line-height:normal;
+    background:token(colorBackgroundButtonBrand);
+    border-color:token(colorBorderButtonBrand);
+    text-transform: uppercase;
+    padding:4px 10px;
+}
+
+.THIS .voteButtons .likeButton:hover,
+.THIS .voteButtons .dislikeButton:hover {
+    background:token(colorBackgroundButtonBrandHover);
+}
+
+.THIS .voteButtons .slds-button .slds-icon {
+    width:1rem;
+    height:1rem;
+    line-height:normal;
+}
+
+.THIS .voteButtons .dislikeButton {
+    -moz-transform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1);
+    opacity:0.5;
+}
+
+.THIS .slds-size--1-of-1.compactView .slds-p-horizontal--small {
+    padding:0;
+}
+
+.THIS ul.slick-dots{
+  margin-bottom: -1rem;
+}
+
+.THIS .slick-dots button::before{
+  font-size: 48px;
+}
+
+.THIS .slick-track {
+    width: auto;
+}
+
+@media screen and (max-width:768px) {
+    .THIS .name {
+        height:auto;
+        line-height:normal;
+        margin:5px 0px;
+    }
+    .THIS .listView .showingImage .owner-label {
+        position:static;
+    }
+
+    .THIS .listView .spacer {
+        margin-bottom:0px;
+    }
+
+}

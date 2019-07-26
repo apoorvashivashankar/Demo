@@ -1,0 +1,13 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .btn-primary{
+    background:token(colorBackgroundButtonBrand);
+    border-color:token(colorBorderButtonBrand);
+}
+
+.THIS .btn-link{
+    color:token(colorTextLink);
+}
+
+.THIS .btn{
+    text-transform: uppercase;
+}

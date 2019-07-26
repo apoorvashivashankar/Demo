@@ -1,0 +1,30 @@
+<!--
+ - Created by ranja on 13-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_InventorySearchBrandProdSearch"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" extends="c:Dal_SSC_InventoryBase">
+
+    <!-- Calculate Position -->
+    <aura:attribute name="pos" type="Integer" default="1" />
+
+
+
+    <!-- Inventory Search Brand Product-->
+    <aura:if isTrue="{!v.pos == 1}" >
+        <div class="slds-size_12-of-12">
+            <c:Dal_SSC_InventoryBrandProdSearch responseWrapperData="{!v.responseWrapperData}" pos="{!v.pos}"
+                                                 finalResponseWrapper="{!v.finalResponseWrapper}"
+                                                 listOfSelectedProducts="{!v.listOfSelectedProducts}"/>
+        </div>
+    </aura:if>
+
+    <!-- Inventory List -->
+    <aura:if isTrue="{!v.pos == 2}" >
+        <div class="slds-grid slds-size_12-of-12">
+            <c:Dal_SSC_InventoryList finalResponseWrapper="{!v.finalResponseWrapper}" />
+        </div>
+    </aura:if>
+
+</aura:component>

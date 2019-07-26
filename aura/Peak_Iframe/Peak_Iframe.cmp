@@ -1,0 +1,14 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+	<aura:attribute name="URL"
+                    type="String" default="https://example.com"/>
+   	<aura:attribute name="height"
+                    type="String" default="500"/>
+    <aura:attribute name="width"
+                    type="String" default="100%"/>
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+    
+    <iframe width="{!v.width}" height="{!v.height}" frameborder="0" src="{!v.URL}" class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+    </iframe>
+</aura:component>

@@ -1,0 +1,26 @@
+<!--
+ - Created by 7Summits on 3/6/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderProcess_Sku">
+    <aura:attribute name="store" type="Map" required="true" />
+    <aura:attribute name="checkAvailability" type="Boolean" default="false" />
+    <aura:attribute name="addAllOrder" type="Boolean"/>
+
+    <aura:attribute name="savedOrdersUrl" type="String" default="/my-orders?tabset-b7059=7b1b1"/>
+
+    <!-- internal attribute -->
+    <aura:attribute name="activeTab" type="String" default="products"/>
+
+    <lightning:tabset class="hide-tab-header" >
+        <lightning:tab label="Products" onactive="{!c.handleActive}" id="products">
+           <c:Dal_Dist_OrderProcess_SkuProduct store="{!v.store}" isActive="{!v.activeTab == 'products'}" checkAvailability="{!v.checkAvailability}" savedOrdersUrl="{!v.savedOrdersUrl}" allOrderButton="{!v.addAllOrder}"/>
+
+        </lightning:tab>
+        <lightning:tab label="Samples" onactive="{!c.handleActive}" id="samples">
+            <!--<c:Dal_Dist_SampleOrderProcess isActive="{!v.activeTab == 'Samples'}" />-->
+        </lightning:tab> 
+    </lightning:tabset>
+
+
+</aura:component>

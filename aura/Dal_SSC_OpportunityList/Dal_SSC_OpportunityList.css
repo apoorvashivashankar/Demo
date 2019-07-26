@@ -1,0 +1,19 @@
+/**
+ * Created by presh on 22-11-2018.
+ */
+.THIS {
+}
+
+.THIS .dal-relate-to-order{
+    padding-left: 2rem;
+    margin-bottom : 1rem;   
+}
+
+.THIS .dal-relate-to-order-button{
+    color: rgb(207, 10, 44)!important;
+    font-weight: bold;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 25px;
+    padding-right: 25px;
+}

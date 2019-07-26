@@ -1,0 +1,153 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT 
+ */
+.THIS .componentWrapper h1 {
+  font-size: 1.5rem;
+}
+.THIS .componentWrapper > .baseLayout > a {
+  position: relative;
+  overflow: hidden;
+  color: token(colorTextLink);
+  border-right: 2px solid transparent;
+}
+@media screen and (max-width: 767px) {
+  .THIS .componentWrapper > .baseLayout > a {
+    border-right: none;
+  }
+}
+@media screen and (max-width: 1023px) {
+  .THIS .componentWrapper > .baseLayout > a {
+    border-bottom: 2px solid transparent;
+  }
+  .THIS .componentWrapper > .baseLayout > a.noBorder {
+    border-bottom: none;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .THIS .componentWrapper > .baseLayout > a.medBorder {
+    border-bottom: none;
+  }
+}
+.THIS .componentWrapper > .baseLayout > a div {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  transition: all .5s;
+  background-color: token(colorBrand);
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+.THIS .componentWrapper > .baseLayout > a div .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  opacity: .5;
+}
+.THIS .componentWrapper > .baseLayout > a div .overlay.true {
+  display: block;
+}
+.THIS .componentWrapper > .baseLayout > a p {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  margin: auto;
+}
+.THIS .componentWrapper > .baseLayout > a:hover {
+  text-decoration: none;
+}
+.THIS .componentWrapper > .baseLayout > a:hover div {
+  transition: all .5s;
+  transform: scale(1.2);
+}
+.THIS .componentWrapper > .baseLayout > a:last-child {
+  border: none;
+}
+@media screen and (max-width: 1023px) {
+  .THIS .componentWrapper > .baseLayout > a:nth-child(2),
+  .THIS .componentWrapper > .baseLayout > a:nth-child(4),
+  .THIS .componentWrapper > .baseLayout > a:nth-child(6),
+  .THIS .componentWrapper > .baseLayout > a:nth-child(8) {
+    border-right: none;
+  }
+}
+.THIS .componentWrapper > .baseLayout > a.dark div .overlay {
+  display: block;
+  background-color: #000;
+}
+.THIS .componentWrapper > .baseLayout > a.light div .overlay {
+  display: block;
+  background-color: #fff;
+}
+@media screen and (max-width: 1023px) {
+  .THIS .componentWrapper > .iconLayout {
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+  }
+}
+@media screen and (max-width: 1023px) {
+  .THIS .componentWrapper > .iconLayout .item.medPad {
+    padding-top: 1.25rem;
+  }
+}
+@media screen and (max-width: 767px) {
+  .THIS .componentWrapper > .iconLayout .item.smallPad {
+    padding-top: 1.25rem;
+  }
+}
+.THIS .componentWrapper > .iconLayout .item a {
+  display: inline-block;
+}
+.THIS .componentWrapper > .iconLayout .item a > div {
+  overflow: hidden;
+  margin: auto;
+  border-radius: 50%;
+  background-color: token(colorBrand);
+}
+.THIS .componentWrapper > .iconLayout .item a > div p {
+  font-size: 1em;
+}
+.THIS .componentWrapper > .iconLayout .item a > div .slds-icon,
+.THIS .componentWrapper > .iconLayout .item a > div img {
+  width: 56%;
+  height: 56%;
+  fill: currentColor;
+}
+.THIS .componentWrapper > .iconLayout .item a > div .slds-icon_container {
+  background-color: inherit;
+}
+.THIS .componentWrapper > .iconLayout .item a p {
+  font-size: .875rem;
+}
+.THIS .componentWrapper > .iconLayout .item a:hover {
+  text-decoration: none;
+}
+.THIS .componentWrapper > .iconLayout .item a:hover > p {
+  text-decoration: underline;
+}
+@media screen and (min-width: 64em) {
+  .THIS .componentWrapper > .iconLayout .item.tenItems {
+    width: 10%;
+  }
+}
+@media screen and (min-width: 64em) {
+  .THIS .componentWrapper > .iconLayout .item.nineItems {
+    width: 11.11111111111111%;
+  }
+}
+.THIS .componentWrapper.borderTop {
+  border-top: 2px solid transparent;
+}
+.THIS .componentWrapper.borderBottom {
+  border-bottom: 2px solid transparent;
+}

@@ -1,0 +1,14 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:documentation>
+    <aura:description>
+        <h1>Name</h1>
+        <p>Ideas Preview Tile</p>
+        <h2>User Story</h2>
+        <p>As a community user, on the idea grid view, I can view preview tiles of each idea to quickly learn about the idea and support if I want to.</p>
+        <h3>Notes</h3>
+        <p>Use svg4everybody to render the icons in IE11</p>
+    </aura:description>
+    <aura:example name="SVNSUMMITS_Ideas_View" ref="CCIDEASLC:SVNSUMMITS_Ideas_View" label="Using the Ideas component">
+        <p>Add the component to the Napili template to display a view of an Idea</p>
+    </aura:example>
+</aura:documentation>

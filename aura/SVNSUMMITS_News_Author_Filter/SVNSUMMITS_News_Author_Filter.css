@@ -1,0 +1,22 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+
+.THIS .authorPicklist {
+	width: 100%;
+}
+
+.THIS .authorPicklist .ui.multiple.dropdown {
+	padding-right: 1.6em;
+}
+
+.THIS .authorPicklist a.ui.label i.delete.icon:before {
+	content: "x";
+	padding-left: 5px;
+	color: #666;
+	font-style: normal;
+	font-weight: 600;
+	vertical-align: top;
+}
+
+.THIS .authorPicklist a.ui.label:hover i.delete.icon:before {
+	color: #333;
+}

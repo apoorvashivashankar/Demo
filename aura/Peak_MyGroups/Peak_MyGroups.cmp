@@ -1,0 +1,48 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" controller="Peak_MyGroupsController">
+    <aura:attribute name="inGroup" type="Boolean" default="false" />
+    <aura:attribute name="GroupsUrl" type="String" default="" />
+    <aura:attribute name="RecommendedGroup" type="String" default="" />
+    <aura:attribute name="isInit" type="Boolean" default="false" />
+    <aura:attribute name="numberOfResults" type="String" default="3" />
+    <aura:attribute name="peakResponse" type="Peak_Response" default="" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <aura:handler name="init" action="{!c.initPeakMyGroups}" value="{!this}"/>
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <aura:if isTrue="{!v.isInit}">
+            <!-- Header -->
+            <aura:if isTrue="{!v.inGroup}">
+                <!-- In Group header -->
+                <h5>{!$Label.c.X7S_My_Groups}</h5>
+
+                <!-- Not in Group header -->
+                <aura:set attribute="else">
+                    <h5>{!$Label.c.X7S_No_Groups_Joined}</h5>
+                    <h3 class="font-specialty slds-m-vertical_x-small">{!$Label.c.X7S_Groups_Intro}</h3>
+                </aura:set>
+            </aura:if>
+
+            <!-- Group results - same list regardless of in or not in groups -->
+            <aura:iteration items="{!v.peakResponse.results}" var="group">
+                <c:Peak_GroupAvatarTile group="{!group}" inGroup="{!v.inGroup}"/>
+            </aura:iteration>
+
+            <!-- Footer -->
+            <footer>
+                <aura:if isTrue="{!v.inGroup}">
+                    <!-- In Group footer -->
+                    <p class="slds-m-top_small">
+                        <a href="" onclick="{!c.linkClick}" data-link="{!v.GroupsUrl}">{!$Label.c.X7S_More_Groups}&nbsp;<lightning:icon iconName="utility:forward" size="x-small"/></a>
+                    </p>
+                    <!-- Not in Group footer -->
+                    <aura:set attribute="else">
+                        <p class="slds-m-top_small"><a href="" onclick="{!c.linkClick}" data-link="{!v.GroupsUrl}" class="slds-button_brand">{!$Label.c.X7S_Explore_More_Groups}</a></p>
+                    </aura:set>
+                </aura:if>
+            </footer>
+        </aura:if>
+    </section>
+</aura:component>

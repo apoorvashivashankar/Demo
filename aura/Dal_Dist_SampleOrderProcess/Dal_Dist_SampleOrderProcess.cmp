@@ -1,0 +1,63 @@
+<!--
+ - Created by ranja on 07-08-2018.
+ -->
+
+<aura:component description="Dal_Dist_SampleOrderProcess" extends="c:Dal_Dist_SampleOrderBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <aura:attribute name="view" type="Object" description="getting data for series and products..." />
+    <aura:handler name="init"  value="{!this}" action="{!c.initMethodCalling}"/>
+    <aura:attribute name="savedSampleOrdersUrl" type="String" default=""/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:attribute name="isActive" type="Boolean" default="false"/>
+    <aura:attribute name="sampleOrderHeaderInstructionalTextPageOne" type="String" access="global"
+                    default="Add Products by Searching for available sample SKUs based on series and product."/>
+    <aura:attribute name="sampleOrderHeaderTextPageOne" type="String" access="global" default="Search For Product SKUs" />
+
+    <aura:attribute name="sampleOrderHeaderInstructionalTextPageTwo" type="String" access="global"
+                    default="Please fill out shipping info and details for this order."/>
+    <aura:attribute name="sampleOrderHeaderTextPageTwo" type="String" access="global" default="Enter Order Details" />
+
+    <aura:attribute name="listOfSeries" type="Object" description="List of series for products" />
+    <aura:attribute name="baseModal" type="Map" />
+    <aura:attribute name="currentPosition" type="Integer" default="1" />
+
+    <aura:registerEvent name="orderProcessEvt" type="c:Dal_Dist_OrderProcessStepEvt"/>
+
+    <!-- Contain aura:if statement for navigating to page 3 pages-->
+    <!--<aura:if isTrue="{!v.isLoadedInit}" >-->
+        <aura:if isTrue="{!v.currentPosition == 1}" >
+            <c:Dal_Dist_SampleOrderProcess_Sku listOfSeries="{!v.listOfSeries}"  currentPosition="{!v.currentPosition}" listOfProducts="{!v.listOfProducts}"
+                                               productOrderLines="{!v.productOrderLines}" cumulativeOrderWeight="{!v.cumulativeOrderWeight}"
+                                               selectedProduct="{!v.selectedProduct}" selectedSeries="{!v.selectedSeries}"
+                                               freightTerms="{!v.freightTerms}" carrier="{!v.carrier}" poNumber="{!v.poNumber}" jobName="{!v.jobName}"
+                                               isShipComplete="{!v.isShipComplete}" isSmallPackage="{!v.isSmallPackage}" listOfIdsOfOrderLine="{!v.listOfIdsOfOrderLine}"
+                                               selectedAddress = "{!v.selectedAddress}" wrapperData = "{!v.wrapperData}"
+                                               sampleOrderHeaderInstructionalTextPageOne="{!v.sampleOrderHeaderInstructionalTextPageOne}" isMore="{!v.isMore}"
+            />
+        </aura:if>
+
+        <aura:if isTrue="{!v.currentPosition == 2}" >
+            <c:Dal_Dist_SampleOrderProcess_Details currentPosition="{!v.currentPosition}" productOrderLines="{!v.productOrderLines}"
+                                                   cumulativeOrderWeight="{!v.cumulativeOrderWeight}" selectedProduct="{!v.selectedProduct}"
+                                                   selectedSeries="{!v.selectedSeries}" listOfSeries="{!v.listOfSeries}" listOfProducts="{!v.listOfProducts}"
+                                                   selectedAddress="{!v.selectedAddress}" freightTerms="{!v.freightTerms}" carrier="{!v.carrier}"
+                                                   poNumber="{!v.poNumber}" jobName="{!v.jobName}" isShipComplete="{!v.isShipComplete}" isSmallPackage="{!v.isSmallPackage}"
+                                                   listOfIdsOfOrderLine="{!v.listOfIdsOfOrderLine}" wrapperData = "{!v.wrapperData}" sampleOrderHeaderTextPageTwo="{!v.sampleOrderHeaderTextPageTwo}"
+                                                   sampleOrderHeaderInstructionalTextPageTwo="{!v.sampleOrderHeaderInstructionalTextPageTwo}" isMore="{!v.isMore}"
+            />
+        </aura:if>
+
+        <aura:if isTrue="{!v.currentPosition == 3}" >
+            <c:Dal_Dist_SampleOrder currentPosition="{!v.currentPosition}" productOrderLines="{!v.productOrderLines}"  carrier="{!v.carrier}" isMore="{!v.isMore}"
+                                    cumulativeOrderWeight="{!v.cumulativeOrderWeight}" selectedProduct="{!v.selectedProduct}" wrapperData = "{!v.wrapperData}"
+                                    selectedSeries="{!v.selectedSeries}" listOfSeries="{!v.listOfSeries}" listOfProducts="{!v.listOfProducts}"
+                                    selectedAddress="{!v.selectedAddress}"  poNumber="{!v.poNumber}" jobName="{!v.jobName}" freightTerms="{!v.freightTerms}"
+                                    isShipComplete="{!v.isShipComplete}" isSmallPackage="{!v.isSmallPackage}" listOfIdsOfOrderLine="{!v.listOfIdsOfOrderLine}"
+
+            />
+        </aura:if>
+
+    <!--</aura:if>-->
+
+</aura:component>

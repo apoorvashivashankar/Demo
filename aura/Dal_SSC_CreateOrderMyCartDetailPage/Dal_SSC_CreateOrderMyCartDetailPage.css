@@ -1,0 +1,113 @@
+/**
+ * Created by presh on 28-12-2018.
+ */
+.THIS .order-option{
+    background-color: gray;
+    color: white;
+}
+
+.THIS .button-color{
+    color: #DB4B64;
+}
+
+.THIS .body-font-size {
+    font-size: 1rem;
+}
+
+.THIS .dal-my-cart-radio-button label span:last-child {
+    color : white;
+    font-size: 1rem;
+}
+
+.THIS .dal-radio-button {
+    height: 1.25rem;
+}
+
+.THIS .dal-header-order-prod {
+    font-size: 1rem;
+}
+
+.THIS .font-label {
+    font-size: 0.9rem;
+}
+
+.THIS .input-uom label {
+    display : none;
+}
+
+.THIS .dal-bottom-heading {
+    font-size: 0.9rem;
+}
+
+.THIS td {
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+@media only screen and (min-width: 800px) {
+    .THIS .dal-sku-detail {
+        padding-left: 4rem;
+        padding-right: 3rem;
+    }
+}
+
+.THIS .dal-my-cart-change-button:hover,
+ .THIS .dal-my-cart-change-button:active,
+  .THIS .dal-my-cart-change-button:focus,
+  .THIS .dal-my-cart-change-button{
+    max-height: 2rem;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-top: 1rem;
+    color: red !important;
+    font-weight: 700;
+    background-color: white;
+}
+
+.THIS .dal-sku-border {
+    border-bottom: 1px solid black;
+}
+
+.THIS .create-order-order-number {
+    font-size: 1.2rem;
+}
+
+.THIS .create-order-titles {
+    font-size: 0.9rem;
+}
+
+.THIS .create-order-address {
+    color : #d9d9d9;
+    min-height: 3rem;
+}
+
+.THIS .create-order-mode-name {
+    font-size : 0.9rem;
+}
+
+.THIS .create-order-format-number lightning-formatted-number{
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    width: 14rem !important;
+}
+
+.THIS .create-order-format-number {
+    font-weight: 600;
+    display: block;
+}
+
+.THIS .empty-cart-text {
+    font-weight : 800;
+}
+.THIS .cal-margin {
+    margin-top: .5rem;
+}
+.THIS .icon-color-custom {
+    color : black !important; 
+    margin-top: -0.3rem;
+}
+.THIS .date-to-orange {
+    color : #cf740a;
+}

@@ -1,0 +1,11 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .expCss {
+	text-align: left !important;
+	font-size: 12px !important;
+}
+
+
+.THIS  .slds-modal__container {
+	width: 60%!important;
+	max-width: 60rem;
+}

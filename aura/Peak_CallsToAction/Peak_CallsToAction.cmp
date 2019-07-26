@@ -1,0 +1,224 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="totalItems" type="string" default="1"/>
+    <aura:attribute name="total" type="integer"/>
+    <aura:attribute name="horizontalAlign" type="string"/>
+    <aura:attribute name="isInit" type="boolean" default="false"/>
+    <aura:attribute name="endOdd" type="boolean" default="false"/>
+    <aura:attribute name="itemList" type="string[]"/>
+    <aura:attribute name="iconFont" type="string"/>
+
+
+    <aura:attribute name="layout" type="string" default="Base Layout"/>
+
+    <aura:attribute name="title" type="string" default="Title"/>
+    <aura:attribute name="titleColor" type="string"/>
+
+
+    <aura:attribute name="ctaText1" type="string" default="Item 1 Text"/>
+    <aura:attribute name="ctaURL1" type="string" default="http://www.example.com"/>
+    <aura:attribute name="ctaImage1" type="string" default="Item 1 Image"/>
+    <aura:attribute name="useText1" type="boolean" default="false"/>
+    <aura:attribute name="ctaBackgroundSize1" type="string" default="Cover"/>
+    <aura:attribute name="ctaBackgroundColor1" type="string" default=""/>
+    <aura:attribute name="ctaTextColor1" type="string"/>
+    <aura:attribute name="iconColor1" type="string"/>
+    <aura:attribute name="ctaOverlay1" type="boolean" default="false"/>
+
+    <aura:attribute name="ctaText2" type="string" default="Item 2 Text"/>
+    <aura:attribute name="ctaURL2" type="string" default="http://www.example.com"/>
+    <aura:attribute name="ctaImage2" type="string" default="Item 2 Image"/>
+    <aura:attribute name="useText2" type="boolean" default="false"/>
+    <aura:attribute name="ctaBackgroundSize2" type="string" default="Cover"/>
+    <aura:attribute name="ctaBackgroundColor2" type="string" default=""/>
+    <aura:attribute name="ctaTextColor2" type="string"/>
+    <aura:attribute name="iconColor2" type="string"/>
+    <aura:attribute name="ctaOverlay2" type="boolean" default="false"/>
+
+    <aura:attribute name="ctaText3" type="string" default="Item 3 Text"/>
+    <aura:attribute name="ctaURL3" type="string" default="http://www.example.com"/>
+    <aura:attribute name="ctaImage3" type="string" default="Item 3 Image"/>
+    <aura:attribute name="useText3" type="boolean" default="false"/>
+    <aura:attribute name="ctaBackgroundColor3" type="string" default=""/>
+    <aura:attribute name="ctaBackgroundSize3" type="string" default="Cover"/>
+    <aura:attribute name="ctaTextColor3" type="string"/>
+    <aura:attribute name="iconColor3" type="string"/>
+    <aura:attribute name="ctaOverlay3" type="boolean" default="false"/>
+
+    <aura:attribute name="ctaText4" type="string" default="Item 4 Text"/>
+    <aura:attribute name="ctaURL4" type="string" default="http://www.example.com"/>
+    <aura:attribute name="ctaImage4" type="string" default="Item 4 Image"/>
+    <aura:attribute name="useText4" type="boolean" default="false"/>
+    <aura:attribute name="ctaBackgroundSize4" type="string" default="Cover"/>
+    <aura:attribute name="ctaBackgroundColor4" type="string" default=""/>
+    <aura:attribute name="ctaTextColor4" type="string"/>
+    <aura:attribute name="iconColor4" type="string"/>
+    <aura:attribute name="ctaOverlay4" type="boolean" default="false"/>
+
+    <aura:attribute name="ctaText5" type="string" default="Item 5 Text"/>
+    <aura:attribute name="ctaURL5" type="string" default="http://www.example.com"/>
+    <aura:attribute name="ctaImage5" type="string" default="Item 5 Image"/>
+    <aura:attribute name="useText5" type="boolean" default="false"/>
+    <aura:attribute name="ctaBackgroundSize5" type="string" default="Cover"/>
+    <aura:attribute name="ctaBackgroundColor5" type="string" default=""/>
+    <aura:attribute name="ctaTextColor5" type="string"/>
+    <aura:attribute name="iconColor5" type="string"/>
+    <aura:attribute name="ctaOverlay5" type="boolean" default="false"/>
+
+    <aura:attribute name="ctaText6" type="string" default="Item 6 Text"/>
+    <aura:attribute name="ctaURL6" type="string" default="http://www.example.com"/>
+    <aura:attribute name="ctaImage6" type="string" default="Item 6 Image"/>
+    <aura:attribute name="useText6" type="boolean" default="false"/>
+    <aura:attribute name="ctaBackgroundSize6" type="string" default="Cover"/>
+    <aura:attribute name="ctaBackgroundColor6" type="string" default=""/>
+    <aura:attribute name="ctaTextColor6" type="string"/>
+    <aura:attribute name="iconColor6" type="string"/>
+    <aura:attribute name="ctaOverlay6" type="boolean" default="false"/>
+
+    <aura:attribute name="ctaText7" type="string" default="Item 7 Text"/>
+    <aura:attribute name="ctaURL7" type="string" default="http://www.example.com"/>
+    <aura:attribute name="ctaImage7" type="string" default="Item 7 Image"/>
+    <aura:attribute name="useText7" type="boolean" default="false"/>
+    <aura:attribute name="ctaBackgroundSize7" type="string" default="Cover"/>
+    <aura:attribute name="ctaBackgroundColor7" type="string" default=""/>
+    <aura:attribute name="ctaTextColor7" type="string"/>
+    <aura:attribute name="iconColor7" type="string"/>
+    <aura:attribute name="ctaOverlay7" type="boolean" default="false"/>
+
+    <aura:attribute name="ctaText8" type="string" default="Item 8 Text"/>
+    <aura:attribute name="ctaURL8" type="string" default="http://www.example.com"/>
+    <aura:attribute name="ctaImage8" type="string" default="Item 8 Image"/>
+    <aura:attribute name="useText8" type="boolean" default="false"/>
+    <aura:attribute name="ctaBackgroundSize8" type="string" default="Cover"/>
+    <aura:attribute name="ctaBackgroundColor8" type="string" default=""/>
+    <aura:attribute name="ctaTextColor8" type="string"/>
+    <aura:attribute name="iconColor8" type="string"/>
+    <aura:attribute name="ctaOverlay8" type="boolean" default="false"/>
+
+    <aura:attribute name="ctaText9" type="string" default="Item 9 Text"/>
+    <aura:attribute name="ctaURL9" type="string" default="http://www.example.com"/>
+    <aura:attribute name="ctaImage9" type="string" default="Item 9 Image"/>
+    <aura:attribute name="useText9" type="boolean" default="false"/>
+    <aura:attribute name="ctaBackgroundColor9" type="string" default=""/>
+    <aura:attribute name="ctaTextColor9" type="string"/>
+    <aura:attribute name="iconColor9" type="string"/>
+
+    <aura:attribute name="ctaText10" type="string" default="Item 10 Text"/>
+    <aura:attribute name="ctaURL10" type="string" default="http://www.example.com"/>
+    <aura:attribute name="ctaImage10" type="string" default="Item 10 Image"/>
+    <aura:attribute name="useText10" type="boolean" default="false"/>
+    <aura:attribute name="ctaBackgroundColor10" type="string" default=""/>
+    <aura:attribute name="ctaTextColor10" type="string"/>
+    <aura:attribute name="iconColor10" type="string"/>
+
+    <aura:attribute name="verticalAlign" type="string" default="Top"/>
+    <aura:attribute name="textAlign" type="string" default="Left"/>
+    <aura:attribute name="textTransform" type="string" default="None"/>
+    <aura:attribute name="fontSize" type="string"/>
+
+    <aura:attribute name="ctaHeight" type="string" default="150px"/>
+    <aura:attribute name="ctaDefaultBack" type="string"/>
+    <aura:attribute name="ctaDefaultColor" type="string"/>
+    <aura:attribute name="ctaDefaultIconColor" type="string"/>
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+
+        <div aura:id="componentID" class="componentWrapper">
+            <aura:if isTrue="{!v.isInit}">
+                <aura:if isTrue="{!v.title != ''}">
+                    <div class="slds-grid slds-grid_align-center slds-p-vertical_x-large">
+                        <h1 style="{!v.titleColor != '' ? 'color:' + v.titleColor : ''}">
+                            <c:Peak_Base labelText="{!v.title}"/>
+                        </h1>
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.layout == 'Base Layout'}">
+                    <div class="baseLayout slds-grid slds-wrap slds-grid_vertical-stretch">
+                        <aura:iteration items="{!v.itemList}" var="item" indexVar="index">
+                            <aura:if isTrue="{!and(v.total == index + 1, v.endOdd)}">
+                                <a href="{!item.url}" class="{!'item noBorder slds-size_1-of-1 slds-large-size_1-of-' + v.totalItems}" style="{!'height:' + v.ctaHeight +';color:' + item.textColor}">
+                                    <div style="{!'background-image:url(' + item.image + ');background-color:' + item.backColor + ';background-size:' + item.backSize}">
+                                        <div class="{!item.overlay == true ? 'overlay true' : 'overlay'}" style="{!'background-color:' + item.backColor}"></div>
+                                    </div>
+                                    <p class="{!'slds-grid slds-p-around_small slds-grid_vertical-align-' + v.verticalAlign + ' slds-grid_align-' + v.horizontalAlign}" style="{!'text-align:' + v.textAlign + ';text-transform:' + v.textTransform + ';font-size:' + v.fontSize}">
+                                        <c:Peak_Base labelText="{!item.ctaText}"/>
+                                    </p>
+                                </a>
+                                <aura:set attribute="else">
+                                    <a href="{!item.url}" class="{!if(and(v.total == index + 2, !v.endOdd), 'item medBorder slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-' + v.totalItems, 'item slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-' + v.totalItems)}" style="{!'height:' + v.ctaHeight +';color:' + item.textColor}">
+                                        <div style="{!'background-image:url(' + item.image + ');background-color:' + item.backColor + ';background-size:' + item.backSize}">
+                                            <div class="{!item.overlay == true ? 'overlay true' : 'overlay'}" style="{!'background-color:' + item.backColor}"></div>
+                                        </div>
+                                        <p class="{!'slds-grid slds-p-around_small slds-grid_vertical-align-' + v.verticalAlign + ' slds-grid_align-' + v.horizontalAlign}" style="{!'text-align:' + v.textAlign + ';text-transform:' + v.textTransform + ';font-size:' + v.fontSize}">
+                                            <c:Peak_Base labelText="{!item.ctaText}"/>
+                                        </p>
+                                    </a>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </div>
+                    <aura:set attribute="else">
+                        <div class="iconLayout slds-grid slds-grid_align-center slds-wrap slds-grid_vertical-stretch">
+                            <aura:if isTrue="{!v.total >= 9}">
+                                <aura:iteration items="{!v.itemList}" var="item" indexVar="index">
+                                    <div class="{!if(v.total == 9,'nineItems', 'tenItems') + if(index + 1 > 4,' medPad', '') +  if(index + 1 == 4,' smallPad', '') + ' item slds-size_1-of-3 slds-medium-size_1-of-4 slds-text-align_center'}" style="{!'color:' + item.textColor}">
+                                        <a href="{!item.url}">
+                                            <div class="slds-grid slds-grid_align-center slds-grid_vertical-align-center" style="{!'background-color:' + item.backColor + ';color:' + item.iconColor + ';width:' + v.ctaHeight + ';height:' + v.ctaHeight + ';font-size:' + v.iconFont}">
+                                                <aura:if isTrue="{!item.text != ''}">
+                                                    <p style="{!'font-size:' + v.iconFont}">{!item.text}</p>
+                                                    <aura:set attribute="else">
+                                                        <aura:if isTrue="{!item.icon}">
+                                                            <lightning:icon iconName="{!item.category + ':' + item.image}" size="large"/>
+                                                            <aura:set attribute="else">
+                                                                <aura:if isTrue="{!item.image != ''}">
+                                                                    <img src="{!item.image}" alt="Call to Action Image"/>
+                                                                </aura:if>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                            <p class="slds-grid slds-p-around_small slds-grid_align-center" style="{!'text-align:center;text-transform:' + v.textTransform + ';font-size:' + v.fontSize + ';color:' + item.textColor}">
+                                                <c:Peak_Base labelText="{!item.ctaText}"/>
+                                            </p>
+                                        </a>
+                                    </div>
+                                </aura:iteration>
+                                <aura:set attribute="else">
+                                    <aura:iteration items="{!v.itemList}" var="item" indexVar="index">
+                                        <div  class="{!if(index + 1 > 4,' medPad', '') +  if(index + 1 == 4,' smallPad', '') + ' item slds-size_1-of-3 slds-medium-size_1-of-4 slds-large-size_1-of-' + v.total + ' slds-text-align_center'}" style="{!'color:' + item.textColor}">
+                                            <a href="{!item.url}">
+                                                <div class="slds-grid slds-grid_align-center slds-grid_vertical-align-center" style="{!'background-color:' + item.backColor + ';color:' + item.iconColor + ';width:' + v.ctaHeight + ';height:' + v.ctaHeight}">
+                                                    <aura:if isTrue="{!item.text != ''}">
+                                                        <p style="{!'font-size:' + v.iconFont}">{!item.text}</p>
+                                                        <aura:set attribute="else">
+                                                            <aura:if isTrue="{!item.icon}">
+                                                                <lightning:icon iconName="{!item.category + ':' + item.image}" size="large"/>
+                                                                <aura:set attribute="else">
+                                                                    <aura:if isTrue="{!item.image != ''}">
+                                                                        <img src="{!item.image}" alt="Call to Action Image"/>
+                                                                    </aura:if>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <p class="slds-grid slds-p-around_small slds-grid_align-center" style="{!'text-align:center;text-transform:' + v.textTransform + ';font-size:' + v.fontSize + ';color:' + item.textColor}">
+                                                    <c:Peak_Base labelText="{!item.ctaText}"/>
+                                                </p>
+                                            </a>
+                                        </div>
+                                    </aura:iteration>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </aura:set>
+                </aura:if>
+            </aura:if>
+        </div>
+    </section>
+</aura:component>

@@ -1,0 +1,12 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ -->
+
+<design:component label="7s HTML Blockquote">
+    <design:attribute name="blockquoteText" label="Quote Text"/>
+    <design:attribute name="blockquoteAuthor" label="Quote Author"/>
+    <design:attribute name="blockquoteAttribution" label="Attribution"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

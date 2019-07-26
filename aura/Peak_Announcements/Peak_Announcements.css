@@ -1,0 +1,4 @@
+.THIS .slick-dots li button:before,.THIS .slick-next:before,.THIS .slick-prev:before{color:token(colorTextLink)}
+.THIS .uiMessage.hide{
+    display: none !important;
+}

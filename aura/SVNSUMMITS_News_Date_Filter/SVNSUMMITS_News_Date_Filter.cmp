@@ -1,0 +1,29 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component description="SVNSUMMITS_News_Date_Filter"
+                access="global">
+
+	<aura:registerEvent name="appEvent" type="c:SVNSUMMITS_News_Date_Filter_Event"/>
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="startDate" type="Date" access="global"/>
+	<aura:attribute name="endDate"   type="Date" access="global"/>
+
+	<lightning:layout multipleRows="false"
+	                  verticalAlign="start">
+		<lightning:layoutItem class="slds-p-right--x-small"
+		                      flexibility="grow">
+			<lightning:input type="date"
+			                 name="startDate"
+			                 value="{!v.startDate}"
+			                 onchange="{!c.dateChange}"
+			                 label="{!$Label.c.ss_nws_label_startDate}"/>
+		</lightning:layoutItem>
+		<lightning:layoutItem flexibility="grow">
+			<lightning:input type="date"
+			                 name="endDate"
+			                 value="{!v.endDate}"
+			                 onchange="{!c.dateChange}"
+			                 label="{!$Label.c.ss_nws_label_endDate}"/>
+		</lightning:layoutItem>
+	</lightning:layout>
+</aura:component>

@@ -1,0 +1,8 @@
+<design:component label="7S My Groups">
+    <design:attribute name="numberOfResults" label="Number of 'My Groups' results"/>
+    <design:attribute name="RecommendedGroup" label="Recommended Group ID"/>
+    <design:attribute name="GroupsUrl" label="Groups URL"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

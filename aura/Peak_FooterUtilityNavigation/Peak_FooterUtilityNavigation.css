@@ -1,0 +1,51 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  color: #fff;
+  background: token(colorBrand);
+}
+.THIS .slds-p-vertical_large {
+  padding-top: 0;
+}
+.THIS .copyright {
+  border-right: 1px solid #fff;
+}
+@media screen and (max-width: 649px) {
+  .THIS .copyright {
+    width: 100%;
+    border-right: none;
+  }
+}
+@media screen and (max-width: 479px) {
+  .THIS .copyright span {
+    display: none;
+  }
+}
+@media screen and (max-width: 767px) {
+  .THIS .slds-col_bump-left {
+    width: 100%;
+    margin-left: .75rem;
+  }
+}
+.THIS hr {
+  margin: 0;
+  margin-bottom: token(spacingLarge);
+}
+.THIS a:link,
+.THIS a:visited {
+  color: #fff;
+}
+.THIS a:hover,
+.THIS a:active {
+  color: #fff;
+}
+@media screen and (max-width: 767px) {
+  .THIS a {
+    font-size: .85rem;
+  }
+}

@@ -1,0 +1,17 @@
+<!--
+ - Created by ranja on 13-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_InventorySearchNavigation"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" extends="c:Dal_SSC_InventoryBase">
+
+
+    <h2>Select Product Category </h2>
+
+
+    
+
+
+
+</aura:component>

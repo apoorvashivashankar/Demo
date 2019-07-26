@@ -1,0 +1,53 @@
+<!--
+ - Created by abdoundure on 4/9/18.
+ -->
+
+<aura:component description="Dal_PricingTabs" extends="c:Dal_Base" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="activeTab" type="String" default="priceRecords"/>
+    <aura:attribute name="promotionDescriptionText" type="String" default=""/>
+    <aura:attribute name="priceBySkuDescriptionText" type="String" default=""/>
+
+    <aura:attribute name="hasPagination" type="Boolean" default="false" />
+    <aura:attribute name="paginationItemsPerPage" type="Integer" default="30" />
+    <aura:attribute name="paginationStartPage" type="Integer" default="0" />
+    <aura:attribute name="listMaximum" type="Integer" default="300" />
+    <aura:attribute name="isSSC" type="Boolean" default="false"/>
+    <aura:attribute name="addAllOrderButton" type="Boolean" access="global"/>
+    <lightning:tabset  variant="scoped" class="dal-tab-header">
+         <aura:if isTrue="{!v.isSSC}">
+            <lightning:tab  label="Price By SKU" onactive="{!c.handleActive}" id="priceSKU">
+                <div class="">
+                    <p>{!v.priceBySkuDescriptionText}</p>
+                    <c:Dal_PriceBySku activeTab="{!v.activeTab}"  />
+                </div>
+            </lightning:tab>
+            <lightning:tab label="Price Books" onactive="{!c.handleActive}" id="priceBook" >
+                <div class="content ">
+                    <p>{!v.priceBySkuDescriptionText}</p>
+                    <c:Dal_PriceBook activeTab="{!v.activeTab}"  />
+                </div>
+            </lightning:tab>
+            <lightning:tab label="Special Pricing" onactive="{!c.handleActive}" id="priceRecords">
+                <div class="content">
+                    <p>{!v.promotionDescriptionText}</p>
+                </div>
+                <c:Dal_PricingSearch hasPagination="{!v.hasPagination}" paginationItemsPerPage="{!v.paginationItemsPerPage}" paginationStartPage="{!v.paginationStartPage}"/>
+            </lightning:tab>
+           <aura:set attribute="else">
+                <lightning:tab label="Special Pricing" onactive="{!c.handleActive}" id="priceRecords">
+                    <div class="content">
+                        <p>{!v.promotionDescriptionText}</p>
+                    </div>
+                    <c:Dal_PricingSearch hasPagination="{!v.hasPagination}" paginationItemsPerPage="{!v.paginationItemsPerPage}" paginationStartPage="{!v.paginationStartPage}"/>
+                </lightning:tab>
+                <lightning:tab  label="Price By SKU" onactive="{!c.handleActive}" id="priceSKU">
+                    <div class="">
+                        <p>{!v.priceBySkuDescriptionText}</p>
+                        <c:Dal_PriceBySku activeTab="{!v.activeTab}" addOrderButton="{!v.addAllOrderButton}" />
+                    </div>
+                </lightning:tab>
+            </aura:set>
+    </aura:if>
+    </lightning:tabset>
+</aura:component>

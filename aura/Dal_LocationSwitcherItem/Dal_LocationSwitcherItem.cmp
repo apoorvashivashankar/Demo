@@ -1,0 +1,24 @@
+<!--
+ - Created by 7Summits on 2/16/18.
+ -->
+
+<aura:component description="Dal_LocationSwitcherItem">
+    <aura:attribute name="name" type="String" default=""/>
+    <aura:attribute name="id" type="String" default=""/>
+    <aura:attribute name="selected" type="Boolean" default="false"/>
+
+    <!-- events -->
+    <aura:registerEvent name="locationSelectedEvt" type="c:Dal_LocationSwitcherEvt"/>
+
+    <li class="{!'slds-dropdown__item' + ((v.selected == true) ? ' slds-is-selected' : '')}" >
+        <a href="javascript:void(0)" role="menuitemcheckbox" onclick="{!c.handleClick}">
+            <span class="slds-truncate">
+                 <span class="lightningPrimitiveIcon">
+                     <lightning:icon iconName="utility:check" size="x-small" class="slds-icon--selected slds-m-right_x-small" />
+                 </span>
+                {!v.name}
+            </span>
+        </a>
+    </li>
+
+</aura:component>

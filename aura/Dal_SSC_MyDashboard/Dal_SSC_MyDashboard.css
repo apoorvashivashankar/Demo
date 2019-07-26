@@ -1,0 +1,51 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+@media only screen and (max-width: 64em) {
+  .THIS .dal-dataBlockWrapper {
+    order: 2;
+  }
+  .THIS .dal-dataBlockWrapper:first-child {
+    order: 0;
+  }
+  .THIS .dal-dataBlockWrapper:last-child {
+    order: 1;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+    .THIS .dismiss-button{
+        font-size: .7125rem;
+        cursor: pointer;
+        margin-top: -11px !important;
+    }
+}
+.THIS .alert-warning {
+    background-color: #FCF8C8;
+    border-color: #FCF8C8;
+}
+.THIS .alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: Arial;
+}
+.THIS .dismiss-button{
+    font-size: .7125rem;
+    cursor: pointer;
+    margin-top: -25px;
+}
+.THIS .icon-color{
+    color: black !important;
+    padding-bottom: 2px;
+}
+.THIS .font-style{
+    font-size: 12px;
+
+}

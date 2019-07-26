@@ -1,0 +1,32 @@
+<!--
+ - Created by ajith on 14/09/18.
+ -->
+
+<apex:page id="NewCaseWizardPage" title="New Case">
+    <link type="text/css" rel="stylesheet" href="https://www.lightningdesignsystem.com/assets/styles/slds.css"/>
+    <apex:includeLightning />
+    <script>
+      function init(){
+        $Lightning.use("c:NewCaseWizardContainer", function() {
+        $Lightning.createComponent(
+            "c:NewCaseWizard",
+            {},
+            "newCaseWizard",
+            function(component) {
+                console.log('component created');
+                console.log('_cmp',component);
+            });
+        });
+      }
+      init();
+
+	</script>
+    <head>
+        <apex:slds />
+    </head>
+
+
+    <div id="newCaseWizard" class="slds-p-top--small">
+        <!-- Lightning Component Goes Here -->
+    </div>
+</apex:page>

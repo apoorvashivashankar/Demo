@@ -1,0 +1,20 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francoiskorb on 2/3/17.
+ -->
+
+<aura:component description="SVNSUMMITS_News_Base"
+                controller="SVNSUMMITS_NewsBaseController"
+                abstract="true"
+                extensible="true">
+
+	<ltng:require scripts="{!join(',',
+					$Resource.svg4everybodyMod,
+					$Resource.SVNSUMMITS_Forcetk)}"
+			afterScriptsLoaded="{!c.doInit}"/>
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="public"/>
+	<aura:registerEvent name="baseReady" type="c:SVNSUMMITS_News_BaseReady"/>
+
+		{!v.body}
+</aura:component>

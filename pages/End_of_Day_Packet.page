@@ -1,0 +1,64 @@
+<apex:page sidebar="false" showHeader="false" standardController="Account" >
+
+<style>
+
+table.fancy {
+margin: 1em 1em 1em 0;
+background: whitesmoke;
+border-collapse: collapse;
+}
+table.fancy tr:hover {
+background: lightsteelblue !important;
+}
+table.fancy th, table.fancy td {
+border: 1px silver solid;
+padding: 0.2em;
+}
+table.fancy th {
+background: gainsboro;
+text-align: left;
+}
+table.fancy caption {
+margin-left: inherit;
+margin-right: inherit;
+}
+
+</style>
+
+ <apex:pageBlock >
+ <apex:form >
+
+    <table class="fancy" align="center">
+    <tr>
+    <th>End of Day Packet Consists of the following</th>
+    </tr>
+    <tr>
+    <td>Daily Void Report - signed by management</td>
+    </tr>
+    <tr>
+    <td>End of Day adjustment report - signed by management</td>
+    </tr>
+    <tr>
+    <td>All golden rods for that day of business</td>
+    </tr>
+    <tr>
+    <td>All signed BOL (Bill of Ladings ) for that day of business</td>
+    </tr>    
+    <tr>
+    <td>Credit Card Authorization Forms* Bank Deposit Slips</td>
+    </tr>    
+    <tr>
+    <td>Credit Card Closeout</td>
+    </tr>    
+    <tr>
+    <td>Proof of Cash box reconciliation tape or worksheet</td>
+    </tr>     
+
+    
+    </table>
+    </apex:form>
+      
+  </apex:pageBlock>
+ 
+
+</apex:page>

@@ -1,0 +1,7 @@
+<!--
+ - Created by ranja on 29-11-2018.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_LeadMgmtOpp_BreadCrumbEvent">
+    <aura:attribute name="pageName" type="String" />
+</aura:event>

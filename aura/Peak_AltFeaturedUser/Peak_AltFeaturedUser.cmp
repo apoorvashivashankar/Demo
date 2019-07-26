@@ -1,0 +1,70 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="Peak_FeaturedUserController">
+    <aura:attribute name="userId" type="string" default="Featured User Id"/>
+    <aura:attribute name="user" type="User" default=""/>
+    <aura:attribute name="title" type="string"/>
+    <aura:attribute name="description" type="string"/>
+    <aura:attribute name="customBackground" type="boolean" default="false"/>
+    <aura:attribute name="customBackgroundImage" type="string"/>
+    <aura:attribute name="ctaLinkText" type="string" default="View Profile >"/>
+    <aura:attribute name="ctaLinkURL" type="string"/>
+    <aura:attribute name="borderColor" type="string"/>
+    <aura:attribute name="descriptionLabel" type="string"/>
+    <aura:attribute name="isInit" type="boolean"/>
+
+    <aura:attribute name="CustomClassName" type="String" default=""/>
+    <aura:attribute name="CustomIdName" type="String" default=""/>
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:if isTrue="{!v.isInit}">
+        <aura:if isTrue="{!!v.isError}">
+            <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+                <div class="slds-m-bottom_large" style="{!if(v.borderColor != '', 'border-color:' + v.borderColor, '')}">
+                    <div class="componentWrapper slds-grid slds-wrap">
+                        <div class="backgroundImageWrapper">
+                            <aura:if isTrue="{!v.customBackground == true}">
+                                <div class="backgroundImage slds-size_1-of-1" style="{!'background-image:url(' + v.customBackgroundImage + ')'}"></div>
+                                <aura:set attribute="else">
+                                    <div class="backgroundImage slds-size_1-of-1" style="{!'background-image:url(' + v.user.MediumPhotoUrl + ')'}"></div>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                        <div class="userImageWrapper slds-size_1-of-1">
+                            <div>
+                                <div>
+                                    <div class="slds-grid userImageBackground">
+                                        <div class="userImage" style="{!'background-image:url(' + v.user.MediumPhotoUrl + ')'}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="textWrapper slds-size_1-of-1 slds-p-around_large">
+                            <p>{!v.user.Name}</p>
+                            <aura:if isTrue="{!v.user.Title != null}">
+                                <p>{!v.user.Title}</p>
+                                <aura:set attribute="else">
+                                    <aura:if isTrue="{!v.title != ''}">
+                                        <p><c:Peak_Base labelText="{!v.title}"/></p>
+                                    </aura:if>
+                                </aura:set>
+                            </aura:if>
+                            <aura:if isTrue="{!v.description != ''}">
+                                <p class="description"><c:Peak_Base labelText="{!v.description}"/></p>
+                            </aura:if>
+                        </div>
+                        <aura:if isTrue="{!v.ctaLinkText != ''}">
+                            <div class="customLink slds-p-horizontal_large slds-p-bottom_large">
+                                <a href="" data-cta="{!v.ctaLinkURL}" onclick="{!c.ctaClick}"><c:Peak_Base labelText="{!v.ctaLinkText}"/></a>
+                            </div>
+                        </aura:if>
+                    </div>
+                </div>
+            </section>
+            <aura:set attribute="else">
+                <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+                    <h3>7s Alt Featured User</h3>
+                    <p>{!v.userId}</p>
+                </section>
+            </aura:set>
+        </aura:if>
+    </aura:if>
+</aura:component>

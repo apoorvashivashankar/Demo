@@ -1,0 +1,79 @@
+<!--
+ - Created by Preshit on 17-01-2019.
+ -->
+
+<aura:component description="Dal_AccountOpenItemSearch" extends="c:Dal_Base" controller="Dal_AccountOpenItemsController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <aura:attribute name="invoiceNumber" type="String" default=""/>
+    <aura:attribute name="purchaseOrder" type="String" default=""/>
+    <aura:attribute name="divisionName" type="String" default=""/>
+    <aura:attribute name="invoiceDateStart" type="Date" default=""/>
+    <aura:attribute name="invoiceDateEnd" type="Date" default=""/>
+    <aura:attribute name="lineStatus" type="String" default=""/>
+    <aura:attribute name="lineStatusSelected" type="String" />
+    <aura:attribute name="searchButton" type="String" default=""/>
+    <aura:attribute name="communityType" type="String" default="Distributor" />
+    <aura:attribute name="brandlist" type="List" default="[]" />
+
+    <aura:attribute name="hasPagination" type="Boolean" default="false" />
+    <aura:attribute name="paginationItemsPerPage" type="Integer" default="30" />
+    <aura:attribute name="paginationStartPage" type="Integer" default="0" />
+    <aura:attribute name="listMaximum" type="Integer" default="300" />
+
+    <aura:attribute name="filterTabType" type="String" default="Current Due" />
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+    <lightning:layout pullToBoundary="small" multipleRows="true">
+        <lightning:layoutItem size="12" class="slds-p-vertical--large">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem class="slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <ui:inputText aura:id="invoiceNumber" label="Invoice/Payment No"
+                                  class="slds-p-around_small input-x-small"
+                                  value="{!v.invoiceNumber}"
+                                  required="false"
+                                  maxlength="11"
+                    />
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <ui:inputText aura:id="purchaseOrder" label="PO Number"
+                                  class="slds-p-around_small input-x-small"
+                                  value="{!v.purchaseOrder}"
+                                  required="false"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="orderDate slds-p-around_x-small" size="12" mediumDeviceSize="6"
+                                      largeDeviceSize="4">
+                    <label class="uiLabel">Transaction Date Between</label>
+                    <div>
+                        <ui:inputDate aura:id="orderStartDate" displayDatePicker="true"
+                                      value="{!v.invoiceDateStart}"
+                                      format="MM/DD/YYYY"
+                                      required="true"/>
+                        <span class="dateSeparator">-</span>
+                        <ui:inputDate aura:id="orderEndDate" displayDatePicker="true"
+                                      value="{!v.invoiceDateEnd}"
+                                      format="MM/DD/YYYY"
+                                      required="true"/>
+                    </div>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem class="orderStatus slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <lightning:select name="divisionName" label="Brand" aura:id="divisionName" value="{!v.lineStatus}"
+                                      class="input-x-small" onchange="{!c.onLineStatusChange}">
+                        <option value="" label="" selected="selected">-None-</option>
+                        <aura:iteration items="{!v.brandlist}" var="lineStatus">
+                            <option value="{!lineStatus.value}" selected="{!lineStatus.selected}" label="{!lineStatus.label}"></option>
+                        </aura:iteration>
+                    </lightning:select>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="searchButton slds-align-content-center  slds-p-horizontal_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <lightning:button variant="neutral" label="Search" onclick="{!c.searchInvoices}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+         <lightning:layoutItem size="12">
+            <c:Dal_AccountOpenItems aura:id="invoiceListComponent" userType="{!v.communityType}" 
+                               hasPagination="{!v.hasPagination}" paginationItemsPerPage="{!v.paginationItemsPerPage}" paginationStartPage="{!v.paginationStartPage}" listMaximum="{!v.listMaximum}"/>
+
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

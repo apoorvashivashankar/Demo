@@ -1,0 +1,66 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  /* Common CSS here */
+}
+.THIS .peak-intro-banner {
+  position: relative;
+}
+.THIS .peak-intro-banner h1 {
+  font-size: 1.75rem;
+}
+@media (min-width: 48em) {
+  .THIS .peak-intro-banner h1 {
+    font-size: 3.75rem;
+  }
+}
+.THIS .peak-intro-banner h2 {
+  font-size: 1.2rem;
+}
+@media (min-width: 48em) {
+  .THIS .peak-intro-banner h2 {
+    font-size: 2.75rem;
+  }
+}
+.THIS .peak-intro-banner .peak-banner-overlay {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  content: ' ';
+}
+.THIS .peak-intro-banner .slds-grid {
+  position: relative;
+  z-index: 1;
+}
+.THIS .peak-intro-banner .banner-top p {
+  font-size: 1.25rem;
+}
+.THIS .peak-intro-banner .html-holder {
+  max-width: 100%;
+  padding: token(spacingSmall) 0 token(spacingXSmall) token(spacingSmall);
+}
+.THIS .peak-intro-banner .html-holder ul {
+  font-size: 1.125rem;
+  list-style: disc !important;
+}
+.THIS .peak-intro-banner .cta-button {
+  padding: token(spacingXSmall) token(spacingSmall);
+}
+.THIS .peak-intro-banner .cta-button a {
+  font-size: 1.25rem;
+  font-weight: 600;
+  min-width: 100%;
+  border-radius: token(borderRadiusMedium);
+}
+.THIS .peak-intro-banner .cta-button a.cta-button-custom {
+  padding-top: token(spacingXSmall);
+  padding-bottom: token(spacingXSmall);
+}

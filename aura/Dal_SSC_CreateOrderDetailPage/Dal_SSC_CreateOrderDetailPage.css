@@ -1,0 +1,142 @@
+/**
+ * Created by presh on 28-12-2018.
+ */
+
+.THIS.slds-text-body_regular {
+    font-size : 14px;
+}
+
+.THIS .icon-color-custom {
+    color : black !important;
+
+}
+
+.THIS .font-label{
+    margin-top: 24px;
+}
+
+.THIS .unit-label{
+    margin-top: 28px;
+    font-size : 14px;
+}
+
+.THIS .a-color{
+    color : black;
+}
+
+.THIS .check-nearby-color {
+    color : red;
+}
+
+.THIS .font-to-green {
+    color : #05911a;
+}
+
+.THIS .input-uom {
+    margin-top: 0.3rem;
+}
+
+.THIS .calc-icon{
+    margin-top : 1.9rem;
+}
+
+.THIS .cal-margin {
+    margin-top: 1.8rem;
+}
+
+.THIS.dal-createOrder-detail-header {
+    font-size: large;
+    margin-bottom: 2rem;
+    color: #737373;
+}
+
+.THIS .dal-remove-icon {
+    margin-top: 1rem;
+}
+
+.THIS .dal-topic-bold {
+    font-weight : 800;
+}
+
+.THIS .dal-line-item-bold{
+    font-weight : 600;
+}
+
+.THIS .dal-createOrder-detail-page {
+    font-size: 14px;
+}
+
+.THIS .slds-text-heading_medium{
+    margin-bottom: 1.5rem;
+}
+
+.THIS .dal-orderDetail-unitprice {
+    margin-bottom: 1.1rem;
+    margin-top: 1.2rem;
+}
+
+.THIS .sku-child-label-color {
+    color : #a5a5a5;
+}
+
+.THIS .warning-color-green .slds-icon {
+    fill :  #05911a !important;
+    padding-right : 5px;
+}
+
+.THIS .warning-color-orange .slds-icon{
+    fill :  #cf740a !important;
+    padding-right : 5px;
+}
+
+.THIS .warning-color-red .slds-icon{
+    fill : red !important;
+    padding-right : 5px;
+}
+
+.THIS .date-to-green {
+    color : #05911a;
+}
+
+.THIS .date-to-orange {
+    color : #cf740a;
+}
+
+.THIS .date-to-red {
+    color : red;
+}
+
+.THIS .shippingStatus {
+    font-family: helvetica,arial,sans-serif;
+    font-size: .9375rem;
+    font-weight: bold;
+}
+
+.THIS .calculator-color .slds-icon{
+    fill : #8c8a8a !important;
+}
+
+.THIS .dal-createOrder-unitPrice-size {
+    font-size: medium;
+    margin-left: 4.8rem;
+}
+
+.THIS .create-order-sku {
+    color: #737373;
+}
+.THIS.exampleHolder{
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+@media only screen and (max-width: 64em) and (min-width: 48em){
+    .THIS .dal-createOrder-unitPrice-size {
+        font-size: medium;
+        margin-left: 2%;
+        margin-right: 0%;
+    }
+    .THIS .font-size{
+        font-size: small;
+    }
+}
