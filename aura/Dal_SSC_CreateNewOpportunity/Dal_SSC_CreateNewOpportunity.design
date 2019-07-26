@@ -1,0 +1,7 @@
+<!--
+ - Created by ranja on 23-11-2018.
+ -->
+
+<design:component>
+    <design:attribute name="isOutput" label="Show Output" />
+</design:component>

@@ -1,0 +1,153 @@
+<!--
+ - Created by 7Summits on 5/10/18.
+ -->
+
+<aura:component description="Dal_SSC_ScheduleByLineItemItems">
+    <!-- passed in attributes -->
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="currentOrder" type="Map" default="{}"/>
+
+    <!-- internal orders -->
+    <aura:attribute name="skus" type="List" default="[]"/>
+    <aura:attribute name="skusSelected" type="Integer" default="0"/>
+    <aura:attribute name="scheduleTypeValue" type="String" default="pickup"/>
+    <aura:attribute name="scheduleTypeValues" type="List" default="[
+        {'label': 'Pick Up', 'value': 'pickup'},
+        {'label': 'Delivery', 'value': 'delivery'}
+    ]"/>
+    <aura:attribute name="selectAllItemsValue" type="Boolean" default="false"/>
+    <aura:attribute name="isChanged" type="boolean" default="false" />
+    
+    <!-- labels -->
+    <aura:attribute name="labelScheduleTypeHeader" type="String" default="Show items available for:"/>
+    <aura:attribute name="labelScheduleTypePickup" type="String" default="Pick Up"/>
+    <aura:attribute name="labelScheduleTypeDelivery" type="String" default="Delivery"/>
+    <aura:attribute name="labelScheduleButtonDelivery" type="String" default="SCHEDULE DELIVERY"/>
+    <aura:attribute name="labelScheduleButtonPickup" type="String" default="SCHEDULE PICKUP"/>
+    <aura:attribute name="isError" type="Boolean" default="false"/>
+    <aura:attribute name="errorText" type="String" default="false"/>
+    <aura:attribute name="showFirst" type="boolean" default="false" />
+
+    <lightning:layout class="dal-scheduleLineItem-tabContent" multipleRows="true">
+
+        <lightning:layoutItem class="slds-p-bottom_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+            <h4>Select items for pickup or delivery</h4>
+        </lightning:layoutItem>
+
+        <!-- ******************** -->
+        <!-- schedule type radio buttons -->
+        <!-- ******************** -->
+        <lightning:layoutItem class="slds-p-bottom_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+            <fieldset class="dal-radioGroup slds-form-element">
+                <span class="slds-form-element__legend slds-form-element__label">{!v.labelScheduleTypeHeader}</span>
+                <lightning:radioGroup aura:id="scheduleType"
+                    name="scheduleType"
+                    variant="label-hidden"
+                    label=""
+                    options="{!v.scheduleTypeValues}"
+                    value="{!v.scheduleTypeValue}"
+                    onchange="{!c.handleScheduleTypeChange}" />
+            </fieldset>
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- end schedule type radio buttons -->
+        <!-- ******************** -->
+
+        <!-- ******************** -->
+        <!-- items table -->
+        <!-- ******************** -->
+        <lightning:layoutItem class="slds-border_top slds-p-top_x-large" size="12">
+            <table class="dal-item-table slds-table slds-table_bordered slds-table_cell-buffer slds-no-row-hover slds-max-medium-table_stacked-horizontal">
+                <thead>
+                <tr class="slds-text-title_caps">
+                    <th scope="col" class="slds-cell-wrap dal-checkCol"></th>
+                    <th scope="col" class="slds-cell-wrap">
+                        <div class="slds-truncate slds-text-align_right" title="Line #">Line #</div>
+                    </th>
+                    <th scope="col" class="slds-cell-wrap">
+                        <div class="ForWrap" title="Product/SKU #">Product/SKU #</div>
+                    </th>
+                    <th scope="col" class="slds-cell-wrap">
+                        <div class="slds-truncate" title="Quantity">Quantity</div>
+                    </th>
+                    <th scope="col" class="slds-cell-wrap">
+                        <div class="slds-truncate" title="Item Status">Item Status</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                    <!-- ******************** -->
+                    <!-- items rows -->
+                    <!-- ******************** -->
+                    <aura:iteration items="{!v.skus}" var="sku" indexVar="index">
+                        <tr class="{!(!empty(sku.fulfillmentId)) ? 'active' : ''}">
+                            <td class="slds-cell-shrink dal-checkCol" data-label="Select Row">
+                                <aura:if isTrue="{!empty(sku.fulfillmentId)}">
+                                    <input type="checkbox" title="" data-index="{!index}" onclick="{!c.handleSkuClicked}" checked="{!sku.selected}"/>
+                                </aura:if>
+                            </td>
+
+                            <td class="slds-cell-wrap" data-label="Line #">
+                                <div class="slds-truncate slds-text-align_right" title="{!sku.lineNumber}"><h4>{!sku.lineNumber}</h4></div>
+                            </td>
+                            <td class="slds-cell-wrap productsku-width" data-label="Product/SKU #">
+                                <div class="ForWrap" title="{!sku.description}">
+                                    <h4>{!sku.description}</h4>
+                                    <p>{!sku.sku}</p>
+                                </div>
+                            </td>
+                            <td class="slds-cell-wrap productqty-width" data-label="Quantity">
+                                <div class="slds-truncate" title="{!sku.quantity + ' ' + sku.uom}">{!sku.quantity + ' ' + sku.uom}</div> 
+						
+                               <!-- <lightning:input class="{!sku.isError? 'slds-truncate slds-size&#45;&#45;1-of-1 slds-has-error' :'slds-truncate slds-size&#45;&#45;1-of-1'}"
+                                                 name="{!index}" label="" value="{!sku.originalQuantity}" onblur="{!c.handleQuantityChange}"
+                                                 pattern="[0-9]*.[0-9]*" /> &lt;!&ndash;{! sku.uom}&ndash;&gt;
+                                <div class="{!sku.isError ? 'dal-field-error slds-cell-wrap' : 'slds-hide'}">{!v.errorText}</div>-->
+                            </td>
+                            <td class="slds-cell-wrap" data-label="Item Status">
+                                <aura:if isTrue="{!and(!empty(sku.fulfillmentType), !empty(sku.fulfillmentPos))}">
+                                    <div class="slds-truncate" title="{!((sku.fulfillmentType == 'pickup') ? 'Pickup' : 'Delivery') + ' #' +  sku.fulfillmentPos}">
+                                        <aura:if isTrue="{!sku.fulfillmentType == 'pickup'}">Pickup<aura:set attribute="else">Delivery</aura:set></aura:if> #{!sku.fulfillmentPos}
+                                    </div>
+                                </aura:if>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                    <!-- ******************** -->
+                    <!-- end items rows -->
+                    <!-- ******************** -->
+
+                </tbody>
+            </table>
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- end items table -->
+        <!-- ******************** -->
+
+        <!-- ******************** -->
+        <!-- call to action buttons -->
+        <!-- ******************** -->
+        <lightning:layoutItem class="slds-p-vertical_medium" size="12">
+
+            <lightning:layout verticalAlign="center" multipleRows="true">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4">
+                    <lightning:input class="dal-checkbox-lg" type="checkbox" label="Select all items" name="selectAllItems" checked="{!v.selectAllItemsValue}" onchange="{!c.handleSelectAllSkusClicked}" />
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" class="slds-medium-text-align_right slds-large-text-align_right">
+                    <p class="slds-form-element__label slds-p-vertical_small slds-p-right_x-small dal-large-inlineBlock dal-medium-inlineBlock">{!v.skusSelected} items selected</p>
+                    <lightning:button class="dal-small-fullWidth dal-large-inlineBlock dal-medium-inlineBlock uppercase bold" variant="brand"
+                      label="{!(v.scheduleTypeValue == 'pickup') ? v.labelScheduleButtonPickup : v.labelScheduleButtonDelivery}"
+                                      onclick="{!c.handleGoToScheduleClick}" disabled="{!v.skusSelected == 0}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- end call to action buttons -->
+        <!-- ******************** -->
+
+
+    </lightning:layout>
+
+</aura:component>

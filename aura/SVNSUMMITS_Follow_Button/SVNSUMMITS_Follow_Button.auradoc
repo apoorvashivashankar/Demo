@@ -1,0 +1,7 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:documentation>
+	<aura:description>Documentation</aura:description>
+	<aura:example name="ExampleName" ref="exampleComponentName" label="Label">
+		Example Description
+	</aura:example>
+</aura:documentation>

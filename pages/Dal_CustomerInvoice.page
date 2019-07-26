@@ -1,0 +1,8 @@
+<apex:page controller="Dal_InvoiceController" sidebar="false" showHeader="false" action="{!getPDF}">
+    <apex:includeScript value="{!URLFOR($Resource.PDF_READ, '/build/pdf.js')}"/>
+	<apex:slds />
+    
+    <!-- iframe containing pdf, will be 100vh unless browser doesn't support vh, then it will be 800px -->
+    <iframe src="data:application/PDF;base64,{!pdf}" width="100%" frameBorder="0" style="height: 800px; height: 100vh;" ></iframe>
+
+</apex:page>

@@ -1,0 +1,40 @@
+<!--
+ - Created by brianpoulsen on 12/4/17.
+ -->
+
+<aura:component description="Peak_FeaturedGroups"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+                controller="Peak_FeaturedGroupsController">
+
+    <aura:attribute name="GroupsUrl" type="String" default="" />
+    <aura:attribute name="RecommendedGroups" type="String" default="" />
+    <aura:attribute name="isInit" type="Boolean" default="false" />
+    <aura:attribute name="peakResponse" type="Peak_Response" default="" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <aura:handler name="init" action="{!c.initPeakFeaturedGroups}" value="{!this}"/>
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <aura:if isTrue="{!v.isInit}">
+
+            <!-- Header -->
+            <h5>{!$Label.c.X7S_Featured_Groups}</h5>
+            <h3 class="font-specialty slds-m-vertical_x-small">{!$Label.c.X7S_Groups_Intro}</h3>
+
+            <!-- Group results - same list regardless of in or not in groups -->
+            <aura:iteration items="{!v.peakResponse.results}" var="group">
+                <c:Peak_GroupAvatarTile group="{!group}"/>
+            </aura:iteration>
+
+            <!-- Footer -->
+            <aura:if isTrue="{!v.GroupsUrl}">
+            <footer>
+                <p class="slds-m-top_small"><a href="" onclick="{!c.linkClick}" data-link="{!v.GroupsUrl}" class="slds-button_brand">{!$Label.c.X7S_Explore_More_Groups}</a></p>
+            </footer>
+            </aura:if>
+
+        </aura:if>
+    </section>
+</aura:component>

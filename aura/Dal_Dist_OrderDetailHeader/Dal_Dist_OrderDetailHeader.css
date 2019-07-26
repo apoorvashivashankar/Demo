@@ -1,0 +1,30 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS .btnSaveContinue .slds-button.slds-button--neutral {
+  color: token(colorTextLabel);
+}
+@media print {
+    .THIS .displayInPrint {
+        background-color: white;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+    .THIS .hideInPrint{
+        display: none !important;
+    }
+
+
+}

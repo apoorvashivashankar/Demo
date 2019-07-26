@@ -1,0 +1,41 @@
+<!--
+ - Created by 7Summits on 2/13/18.
+ -->
+<aura:component description="Dal_Dist_RequestUser" extends="c:Dal_Dist_FormModalBase" controller="Dal_RequestUserController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="formHeading" type="String" default="Request to add/remove User Form" />
+    <aura:attribute name="removeUser" type="Boolean" />
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+
+    <lightning:layout class="slds-p-vertical_medium" multipleRows="true">
+
+        <lightning:layoutItem class="slds-p-horizontal_medium slds-container_left" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+            <h1>{!v.formHeading}</h1>
+            <div class="slds-form slds-form_stacked">
+                <lightning:input aura:id="FirstName" name="FirstName" label="First Name" type="text" class="slds-p-vertical_x-small" maxlength="50" />
+                <lightning:input aura:id="LastName" name="LastName" label="Last Name" type="text" class="slds-p-vertical_x-small" maxlength="50" />
+                <lightning:input aura:id="AccountNumber" name="AccountNumber" label="Account Number" type="text" class="slds-p-vertical_x-small" maxlength="25" />
+                <lightning:input aura:id="AccountName" name="AccountName" label="Account Name" type="text" class="slds-p-vertical_x-small" maxlength="25" />
+                <lightning:input aura:id="email" name="email" label="Email Address" type="email" class="slds-p-vertical_x-small" maxlength="50" />
+                <lightning:input aura:id="phone" name="phone" label="Phone Number" type="text" class="slds-p-vertical_x-small" maxlength="10"
+                                 pattern="[0-9]{10}" messageWhenPatternMismatch="Enter 10 digit phone number, no special characters" />
+            </div>
+            <div class="dal_acctCheckbox" >
+                <lightning:input type="radio" value="true" label="Remove User" name="remove" class="slds-p-vertical_x-small" onchange="{!c.handleRadioClick}" />
+                <lightning:input type="radio" value="false" label="Add User" name="remove" class="slds-p-vertical_x-small" onchange="{!c.handleRadioClick}"  />
+            </div>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+    <lightning:layout class="slds-p-around_medium" horizontalAlign="end">
+        <lightning:layoutItem >
+            <lightning:button variant="brand" label="Submit Request" onclick="{! c.handleSubmit }" />
+        </lightning:layoutItem>
+    </lightning:layout>
+
+    <!-- check if loading or not -->
+    <aura:if isTrue="{!v.isLoading == true}">
+        <lightning:spinner variant="brand" size="medium" class="slds-is-fixed" />
+    </aura:if>
+
+</aura:component>

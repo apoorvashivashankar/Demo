@@ -1,0 +1,13 @@
+<!--
+ - Created by ranja on 22-01-2019.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_CreateOrderSaveShippingAddress">
+    <aura:attribute name="companyName" type="String" default=""/>
+    <aura:attribute name="streetAddress" type="String" default=""/>
+    <aura:attribute name="city" type="String" default=""/>
+    <aura:attribute name="state" type="String" default=""/>
+    <aura:attribute name="zipCode" type="String" default=""/>
+    <aura:attribute name="country" type="String" default=""/>
+    <aura:attribute name="orderNumber" type="String" default="order1" />
+</aura:event>

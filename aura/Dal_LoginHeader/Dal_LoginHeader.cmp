@@ -1,0 +1,33 @@
+<!--
+ - Created by abdoundure on 2/23/18.
+ -->
+
+<aura:component description="Dal_LoginHeader" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="title" type="String" default="Distributor Portal" />
+    <aura:attribute name="isDistributor" type="Boolean" default="True" />
+    <section class="dal-form" >
+        <lightning:layout class="dal-form_header slds-p-bottom_medium" verticalAlign="center" horizontalAlign="center" multipleRows="true">
+            <lightning:layoutItem size="12">
+                <aura:if isTrue="{!v.isDistributor}">
+                    <lightning:layout class="slds-p-horizontal_xx-large" multipleRows="true" horizontalAlign="space" pullToBoundary="small">
+                        <lightning:layoutItem class="slds-p-around_small slds-text-align_center">
+                                <img class="icon-proexchange" src="{!$Resource.proexchangeLogo}" alt="ProExchange" />
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    <aura:set attribute="else">
+                        <lightning:layout class="slds-p-horizontal_xx-large" horizontalAlign="space" pullToBoundary="small">
+                            <lightning:layoutItem class="slds-p-around_small slds-text-align_center">
+                                <img class="icon-proexchange" src="{!$Resource.proexchangeLogo}" alt="ProExchange" />
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </aura:set>
+                </aura:if>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem class="slds-p-top_medium">
+                <h2 class="bold">{!v.title}</h2>
+            </lightning:layoutItem>
+        </lightning:layout>
+   </section>
+
+</aura:component>

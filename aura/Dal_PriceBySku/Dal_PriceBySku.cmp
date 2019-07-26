@@ -1,0 +1,23 @@
+<!--
+ - Created by 7Summits on 5/1/18.
+ -->
+
+<aura:component description="Dal_PriceBySkuContainer" extends="c:Dal_Dist_OrderBase">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="activeTab" type="String" default=""/>
+    <aura:attribute name="requestedShipDateLabel" type="String" default="Effective Date"/>
+    <aura:attribute name="defaultPromotionLabel" type="String" default="Applied Special Pricing"/>
+    <aura:attribute name="addOrderButton" type="Boolean"/>
+
+    <aura:if isTrue="{!v.store.currentPos != undefined}">
+        <c:Dal_Dist_OrderProcess_SkuProduct store="{!v.store}"
+                isActive="false"
+                checkAvailability="false"
+                priceBySku="true"
+                labelDefaultRequestedShipDate="{!v.requestedShipDateLabel}"
+                labelDefaultPriceRecord="{!v.defaultPromotionLabel}"
+                addAllToOrder="{!v.addOrderButton}"
+        />
+    </aura:if>
+
+</aura:component>

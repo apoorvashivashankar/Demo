@@ -1,0 +1,289 @@
+<!--
+ - Created by ranja on 20-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateNewLead" controller="Dal_LeadManager" extends="c:Dal_SSC_LeadManagementBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="recordTypeId" type="String"/>
+    <aura:attribute name="disabled" type="Boolean" default="false"/>
+    <aura:attribute name="saved" type="Boolean" default="false"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="isOutput" type="Boolean" default="false"/>
+    <aura:attribute name="isEdit" type="Boolean" default="false"/>
+    <aura:attribute name="fieldParams" type="String"/>
+    <aura:attribute name="selectedOwnerName" type="String"/>
+    <aura:attribute name="selectedOwner" type="String"/>
+
+    <!-- Event -->
+    <aura:handler event="c:Dal_SSC_CreateNewLeadEvent" action="{!c.handleLeadEditEvent}"/>
+    <!--<aura:registerEvent name="leadFieldParams" type="c:Dal_SSC_UpdatedValuesForLead"/>-->
+    <aura:registerEvent name="pageChange" type="c:Dal_SSC_LeadManagement_BreadCrumbEvent"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+
+    <!-- BODY --> 
+    <aura:if isTrue="{!or(v.recordId,!(v.isEdit))}" >
+    <lightning:recordEditForm
+            recordId="{!v.recordId}"
+            recordTypeId="{!v.recordTypeId}"
+            onsubmit="{!c.updateRecords}"
+            objectApiName="Lead">
+        <aura:if isTrue="{!or(not(v.isOutput),v.isEdit)}">
+
+            <!-- The messages component is for error messages -->
+            <lightning:messages class="dal-form-show-error"/>
+
+
+            <div>
+                <div class="slds-m-bottom_large width-name-custom form-element-box-border">
+                    <lightning:inputField fieldName="Name" aura:id="leadName"/>
+                </div>
+                <div class="lead-desription description-width-custom form-element-box-border">
+                    <lightning:inputField fieldName="Description"/>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="slds-m-bottom_large custom-info">
+                    <div class="heading-custom">
+                        Contact Info
+                    </div>
+
+                    <div class="slds-grid slds-m-vertical_medium slds-wrap">
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1 ">
+                            <div class=" form-element-box-border">
+                                <lightning:inputField fieldName="Company"/>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_5-of-12 form-element-box-border">
+                            <lightning:inputField fieldName="Street" class="dal-input dal-remove-helper-text"/>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-m-vertical_medium slds-wrap">
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1 ">
+                            <div class=" form-element-box-border">
+                                <lightning:inputField fieldName="Job_Title__c" aura:id="jobTitle"
+                                                      class="dal-input dal-remove-helper-text"/>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <lightning:inputField fieldName="City" class="dal-input dal-remove-helper-text"/>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-m-vertical_medium slds-wrap">
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <div class="">
+                                <lightning:inputField fieldName="Phone" class="dal-input"/>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <div class="">
+                                <lightning:inputField fieldName="State" class="dal-input"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-m-vertical_medium slds-wrap">
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <div class="">
+                                <lightning:inputField fieldName="MobilePhone" class="dal-input"/>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <div class="">
+                                <lightning:inputField fieldName="PostalCode" class="dal-input"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-m-vertical_medium slds-wrap">
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <div class="">
+                                <lightning:inputField fieldName="Email" class="dal-input"/>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <div class="">
+                                <lightning:inputField fieldName="Country" class="dal-input"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Lead Info -->
+                <div class="slds-m-bottom_large lead-info-section-custom custom-info">
+                    <div class="heading-custom">
+                        Lead Info
+                    </div>
+
+                    <div class="slds-grid slds-m-vertical_medium slds-wrap">
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <div class="">
+                                <lightning:inputField fieldName="Lead_Score__c" class="dal-lead-info-input"
+                                                      aura:id="leadScore"/>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <div class="">
+                                <lightning:inputField fieldName="LeadSource" class="dal-lead-info-input"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SPINNER -->
+                    <aura:if isTrue="{!v.showSpinner}" >
+                        <lightning:spinner class="fixed-position" variant="brand"/>
+                    </aura:if>
+
+                    <div class="slds-grid slds-m-vertical_medium slds-wrap">
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <div class="">
+                                <label class="custom-label">Status of Lead</label>
+                                <lightning:inputField fieldName="Status" class="dal-lead-info-input label-hidden"/>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_1-of-1  form-element-box-border">
+                            <div class="">
+                                <label class="custom-label">Reason for Rejection</label>
+                                <lightning:inputField fieldName="Disqual_Reason__c" aura:id="disqualReason"
+                                                      class="dal-lead-info-input dal-remove-helper-text label-hidden"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <aura:if isTrue="{!not(v.isEdit)}">
+
+                <div class="dal-create-new-lead slds-grid">
+                    <div>
+                        <lightning:button variant="neutral" name="CANCEL" class="dal-new-lead" label="CANCEL"
+                                          onclick="{!c.handleCancel}"/>
+                    </div>
+
+                    <div class="new-lead-spacing">
+                        <lightning:button variant="brand" type="submit" class="dal-new-lead" name="Create New Lead"
+                                          label="Create New Lead"/>
+                    </div>
+                </div>
+
+                <aura:set attribute="else">
+                    <div class="dal-create-new-lead slds-grid">
+                        <div>
+                            <lightning:button variant="neutral" name="CANCEL" class="dal-new-lead" label="CANCEL"
+                                              onclick="{!c.handleCancelFromEdit}"/>
+                        </div>
+                        <div class="new-lead-spacing">
+                            <lightning:button variant="brand" type="submit" class="dal-new-lead" name="SAVE"
+                                              label="SAVE"/>
+                        </div>
+                    </div>
+                </aura:set>
+            </aura:if>
+            <!--</lightning:recordEditForm>-->
+
+
+            <!-- FOR DETAIL PAGE -->
+            <aura:set attribute="else">
+
+                <!-- <lightning:recordEditForm
+                    recordId="{!v.recordId}"
+                    objectApiName="Lead">-->
+                <div class="slds-m-top_x-large">
+                    <div class="lead-desription dal-leadDetail-description">
+                        <lightning:outputField fieldName="Description"/>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="slds-m-bottom_large custom-info ">
+                        <div class="heading-custom">
+                            Contact Info
+                        </div>
+
+                        <div class="slds-grid slds-m-bottom_medium slds-wrap">
+                            <div class="slds-m-vertical_small slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="width-name-twocolumn--custom form-element-box-border">
+                                    <lightning:outputField fieldName="Name"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <lightning:outputField fieldName="Job_Title__c"
+                                                       class="dal-input dal-remove-helper-text"/>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <lightning:outputField fieldName="Phone" class="dal-input"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <lightning:outputField fieldName="Address" class="dal-input"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-m-bottom_medium slds-wrap">
+
+                            <div class="slds-m-vertical_small slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <lightning:outputField fieldName="MobilePhone" class="dal-input"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <lightning:outputField fieldName="Email" class="dal-input"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lead Info -->
+                    <div class="slds-m-bottom_large lead-info-section-custom custom-info">
+                        <div class="heading-custom">
+                            Lead Info
+                        </div>
+
+                        <div class="slds-grid slds-m-bottom_medium slds-wrap form-element-box-border">
+                            <div class="slds-m-vertical_small slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <lightning:outputField fieldName="Lead_Score__c" class="dal-lead-info-input"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <lightning:outputField fieldName="LeadSource" class="dal-lead-info-input"/>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="slds-grid slds-m-bottom_medium slds-wrap">
+                            <div class="slds-m-vertical_small slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <label class="custom-label">Status of Lead</label>
+                                    <lightning:outputField fieldName="Status" class="dal-lead-info-input label-hidden"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <label class="custom-label">Reason for Rejection</label>
+                                    <lightning:outputField fieldName="Disqual_Reason__c"
+                                                           class="dal-lead-info-input dal-remove-helper-text  label-hidden"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </aura:set>
+
+        </aura:if>
+    </lightning:recordEditForm>
+    </aura:if>
+</aura:component>

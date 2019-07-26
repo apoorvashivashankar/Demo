@@ -1,0 +1,22 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ - Edited by Joe Callin on 8/12/2017.
+ -->
+
+<aura:component description="Peak_HTML_Headings" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" extends="c:Peak_Base">
+    <aura:attribute name="headingTag" type="string"/>
+    <aura:attribute name="headingText" type="string"/>
+    <aura:attribute name="headingAlignment" type="string"/>
+    <aura:attribute name="heading" type="Object"/>
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:registerEvent name="labelUtilEvent" type="c:Peak_LabelUtilEvent"/>
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <aura:unescapedHtml value="{!v.heading.open + v.headingText + v.heading.close}"/>
+    </section>
+</aura:component>

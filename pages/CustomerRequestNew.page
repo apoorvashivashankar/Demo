@@ -1,0 +1,3 @@
+<apex:page standardController="Change_Request__c" extensions="CustomerRequestNewLightningExtension" action="{!doCheckForUX}">
+
+</apex:page>

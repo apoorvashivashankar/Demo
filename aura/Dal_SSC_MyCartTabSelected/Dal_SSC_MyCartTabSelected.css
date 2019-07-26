@@ -1,0 +1,17 @@
+/**
+ * Created by Preshit on 07-01-2019.
+ */
+.THIS .page-selected{
+    font-size: 1.3rem;
+    border-bottom : 5px solid #cf0a2c;
+    font-weight: 900;
+}
+
+.THIS .dal-my-cart-back-button{
+    color : #cf0a2c;
+    font-size: 1.2rem;
+}
+
+.THIS.dal-my-cart-header {
+    font-size : 1.3rem;
+}

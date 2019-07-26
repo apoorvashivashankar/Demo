@@ -1,0 +1,24 @@
+<aura:component description="Display multiple videos from YouTube and configure related display settings in a single component." access="global" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    
+    <aura:attribute name="Title" access="global" type="String" default="Video Gallery" />
+    
+    <aura:attribute name="videoType1" access="global" type="String" default="Vimeo" />
+    <aura:attribute name="VideoURL1" access="global" type="String" default="288429210" />
+    <aura:attribute name="VideoTitle1" access="global" type="String" default="Welcome to ProExchange" />
+    <aura:attribute name="VideoDescription1" access="global" type="String" default="Solutions on demand." />
+    
+    <aura:attribute name="hideDescriptions" access="global" type="Boolean" default="false" />
+    <aura:attribute name="descriptionLineLength" access="global" type="String" default="3" />
+    <aura:attribute name="hasBorder" access="global" type="Boolean" default="false" />
+    
+    <aura:attribute name="align" access="global" type="String" default="center" />
+    
+    <div class="slds-p-horizontal_small slds-size--1-of-1 slds-medium-size_1-of-1 slds-p-vertical_medium hasBorder">
+        <article data-hasBorder="{!v.hasBorder}">
+            <div class="video-wrap">
+                <iframe src="{!'https://player.vimeo.com/video/'+v.VideoURL1+'?playsinline=0'}" frameborder="0" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen"></iframe>
+            </div>
+        </article>
+    </div>    
+    
+</aura:component>

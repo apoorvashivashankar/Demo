@@ -1,0 +1,55 @@
+/**
+ * Created by presh on 28-12-2018.
+ */
+
+.THIS .slds-text-heading_medium.heading {
+    color: #d81010;
+    font-weight: initial;
+}
+
+.THIS a{
+    color: #d81010;
+}
+
+.THIS .addToCart-modal-midder {
+
+}
+
+@media only screen and (min-width: 800px) {
+  .THIS .c-container {
+      margin-left: 9rem;
+      margin-right: 9rem;
+      border-bottom: 0.1px solid #cccccc;
+  }
+}
+
+.THIS .custom-box {
+    font-size: medium;
+}
+
+.THIS .heading {
+    font-size: x-large;
+}
+
+.THIS .view-cart {
+    margin-top: 4rem;
+}
+
+.THIS .view-cart-button {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    padding-left: 6rem;
+    padding-right: 6rem;
+    margin-bottom: 1.3rem;
+}
+
+.THIS .continue-shopping {
+    font-size: large;
+    text-decoration: underline;
+    margin-bottom : 0.2rem;
+}
+
+.THIS .add-to-cart-show-more {
+    margin-top: 1rem;
+    float: right;
+}

@@ -1,0 +1,14 @@
+<!--
+ - Created by abdoundure on 2/19/18.
+ -->
+
+<design:component label="DalTile Info Panel Item">
+    <design:attribute name="iconBG" label="Icon Background Color" datasource="#555759, #00416A, #CF0A2C" />
+    <design:attribute name="icon" label="Select Icon" dataSource="utility:call, utility:help, utility:questions_and_answers" />
+    <design:attribute name="size" label="Panel Size" dataSource="small, large" />
+    <design:attribute name="subText" label="Sub Text"  />
+    <design:attribute name="mainText" label="Main Text"  />
+    <design:attribute name="panelURL" label="URL"  />
+    <design:attribute name="OpenInNewTab" label="Open in New Tab"  />
+    <design:attribute name="className" label="Custom Class"  />
+</design:component>

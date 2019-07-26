@@ -1,0 +1,70 @@
+<!--
+ - Created by Yadav on 10/31/2018.
+ -->
+
+<aura:component description="Dal_SSC_InventoryBase" controller="Dal_InventorySearchController" extensible="true"
+                access="global" extends="c:Dal_Base" >
+    
+    
+    <!-- Base class loading -->
+    <aura:attribute name="errorSampleOrderInit" type="Boolean" default="false"/>
+    <aura:attribute name="errorSampleOrderInitMsg" type="String"
+                    default="There was a problem initializing inventory search page."/>
+    <aura:attribute name="isInventoryBaseLoading" type="Boolean" description="Inventory Loading Spinner"
+                    default="false"/>
+    <aura:attribute name="isPageLoading" type="boolean" default="false"  />
+    
+    <!-- Response for 1st page & 2nd page -->
+    <aura:attribute name="responseWrapperData" type="Map" default="{}" description="Product list for 1st page."/>
+    <aura:attribute name="finalResponseWrapper" type="Map" default="{}" description="Product list for 2nd page."/>
+    
+    <!-- List of selected products -->
+    <aura:attribute name="listOfSelectedProducts" type="List"
+                    description="List of selected products from list of searched product results"/>
+    <aura:attribute name="displayProdList" type="List" default="[]" description="List to show for search results" />
+    <aura:attribute name="totalPages" type="Integer" default="1"/>
+    <aura:attribute name="pageNumber" type="Integer" default="1" />
+    <aura:attribute name="divisionCode" type="String" />
+    <aura:attribute name="isProductSelected" type="Boolean" default="true"/>
+    <aura:attribute name="disableNext" type="Boolean" default="false" />
+    <aura:attribute name="disablePrev" type="Boolean" default="true" />
+    <aura:attribute name="listOfVendors" type="List" description="List of Vendors for Installation product." />
+    <aura:attribute name="listOfSizes" type="List" />
+    <aura:attribute name="isFilterOpen" type="boolean" default="false" />
+    <aura:attribute name="selectedProductType" type="String"/>
+    <aura:attribute name="count" type="Integer" default="0" />
+    <aura:attribute name="selectedVendor" type="String" />
+    <aura:attribute name="listOfSeries" type="Object" description="List of series for products" />
+    <aura:attribute name="listOfColors" type="Object" description="List of Color for selected series." />
+    <aura:attribute name="selectedColor" type="String" description="" />
+    <aura:attribute name="selectedSeries" type="String" description="" />
+    <aura:attribute name="selectedSize" type="String" />
+	<aura:attribute name="selectedBrand" type="String" />
+
+    <!-- SPINNER -->
+    <aura:if isTrue="{!v.isInventoryBaseLoading == false}">
+        
+        <aura:if isTrue="{!v.errorSampleOrderInit == false}">
+            {!v.body}
+            <aura:set attribute="else">
+                <ui:message title="Error" severity="error" closable="false">{!v.errorSampleOrderInitMsg}</ui:message>
+            </aura:set>
+        </aura:if>
+        
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.isPageLoading == false}">
+                <div class="slds-is-relative slds-p-around_medium">
+                    <lightning:spinner variant="brand"/>
+                </div>
+                <aura:set attribute="else">
+                    {!v.body}
+                    <lightning:spinner class="spinner-fixed" variant="brand"/>
+                </aura:set>
+            </aura:if>
+            
+        </aura:set>
+        
+    </aura:if>
+    
+    
+</aura:component>

@@ -1,0 +1,67 @@
+<!--
+ - Created by michaelsullivan on 6/7/17.
+ -->
+
+<design:component label="7S Peak MyStats">
+    <design:attribute name="backgroundColor" label="Background Color"   description="Enter a valid web color"/>
+    <design:attribute name="backgroundImage" label="Background Image"   description="(Optional) Enter a full image path"/>
+    <design:attribute name="headerAtTop" label="Show Headers at Top? (defaults to beneath stat)" />
+    <design:attribute name="mainTitle" label="Header for entire component"/>
+
+
+    <design:attribute name="showStat1" label="Show Stat1?"/>
+    <design:attribute name="statMode" label="Stat Mode 1" datasource="Peak_Stat,Peak_ProgressCircle,Peak_StatProgressBar, Peak_StatProgressBarVertical" description="This allows you to select the stat display type"/>
+    <design:attribute name="statQuery" label="Stat Query 1" datasource="noQuery, getSampleStat, getMyNewOpps, getMyClosedWonOpps" description="This allows you to select a query built by your developer - or choose noQuery to hard-code a stat"/>
+    <design:attribute name="isSingleStat" label="Single Stat - only one number to display (default is no)" description="A stat is usually two numbers but can be displayed as only one "/>
+    <design:attribute name="header" label="header" description="This is the header text for the stat.  It's default location is below the stat (set to above in Show Headers at Top)  "/>
+    <design:attribute name="message" label="message" description="This is the message displayed when hovering over tooltip on the stat"/>
+    <design:attribute name="title" label="title" description="This is the Tooltip title"/>
+    <design:attribute name="count" label="count" description="This is the actual number (only used for hard-coded stat)"/>
+    <design:attribute name="total" label="total" description="This is the reference number (only used for hard-coded stat)"/>
+    <design:attribute name="separatorText" label="Separator Text"/>
+    <design:attribute name="moreLink" label="moreLink"/>
+    <design:attribute name="moreText" label="moreText"/>
+
+    <design:attribute name="showStat2" label="Show Stat2?"/>
+    <design:attribute name="statMode2" label="Stat Mode 2" datasource="Peak_Stat,Peak_ProgressCircle,Peak_StatProgressBar, Peak_StatProgressBarVertical" />
+    <design:attribute name="statQuery2" label="Stat Query 2" datasource="noQuery, getSampleStat, getMyNewOpps, getMyClosedWonOpps"/>
+    <design:attribute name="isSingleStat2" label="Single Stat 2? (default is no)"/>
+    <design:attribute name="header2" label="header2"/>
+    <design:attribute name="message2" label="message2"/>
+    <design:attribute name="title2" label="title2"/>
+    <design:attribute name="count2" label="count2"/>
+    <design:attribute name="total2" label="total2"/>
+    <design:attribute name="separatorText2" label="Separator Text 2"/>
+    <design:attribute name="moreLink2" label="moreLink2"/>
+    <design:attribute name="moreText2" label="moreText2"/>
+
+    <design:attribute name="showStat3" label="Show Stat3?"/>
+    <design:attribute name="statMode3" label="Stat Mode 3" datasource="Peak_Stat, Peak_ProgressCircle,Peak_StatProgressBar, Peak_StatProgressBarVertical" />
+    <design:attribute name="statQuery3" label="Stat Query 3" datasource="noQuery,getSampleStat, getMyNewOpps, getMyClosedWonOpps"/>
+    <design:attribute name="isSingleStat3" label="Single Stat 3? (default is no)"/>
+    <design:attribute name="header3" label="header3"/>
+    <design:attribute name="message3" label="message3"/>
+    <design:attribute name="title3" label="title3"/>
+    <design:attribute name="count3" label="count3"/>
+    <design:attribute name="total3" label="total3"/>
+    <design:attribute name="separatorText3" label="Separator Text 3"/>
+    <design:attribute name="moreLink3" label="moreLink3"/>
+    <design:attribute name="moreText3" label="moreText3"/>
+
+
+    <design:attribute name="showStat4" label="Show Stat4?"/>
+    <design:attribute name="statMode4" label="Stat Mode 4" datasource="Peak_Stat, Peak_ProgressCircle, Peak_StatProgressBarVertical" />
+    <design:attribute name="statQuery4" label="Stat Query 4" datasource="noQuery, getSampleStat, getMyNewOpps, getMyClosedWonOpps"/>
+    <design:attribute name="isSingleStat4" label="Single Stat 4? (default is no)"/>
+    <design:attribute name="header4" label="header4"/>
+    <design:attribute name="message4" label="message4"/>
+    <design:attribute name="title4" label="title4"/>
+    <design:attribute name="count4" label="count4"/>
+    <design:attribute name="total4" label="total4"/>
+    <design:attribute name="separatorText4" label="Separator Text 4"/>
+    <design:attribute name="moreLink4" label="moreLink4"/>
+    <design:attribute name="moreText4" label="moreText4"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class" />
+    <design:attribute name="CustomIdName" label="Custom ID" />
+</design:component>

@@ -1,0 +1,31 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ -->
+
+<design:component label="7S HTML Subnav">
+    <design:attribute name="labelText" label="Label Text" />
+    <design:attribute name="navItemLabel1" label="Link 1 Text"/>
+    <design:attribute name="navItem1" label="Link 1" description="Prepend '#' for page anchor; '/' for Community page." />
+    <design:attribute name="navItemLabel2" label="Link 2 Text"/>
+    <design:attribute name="navItem2" label="Link 2" description="Prepend '#' for page anchor; '/' for Community page." />
+    <design:attribute name="navItemLabel3" label="Link 3 Text"/>
+    <design:attribute name="navItem3" label="Link 3" description="Prepend '#' for page anchor; '/' for Community page." />
+    <design:attribute name="navItemLabel4" label="Link 4 Text"/>
+    <design:attribute name="navItem4" label="Link 4" description="Prepend '#' for page anchor; '/' for Community page." />
+    <design:attribute name="navItemLabel5" label="Link 5 Text"/>
+    <design:attribute name="navItem5" label="Link 5" description="Prepend '#' for page anchor; '/' for Community page." />
+    <design:attribute name="navItemLabel6" label="Link 6 Text"/>
+    <design:attribute name="navItem6" label="Link 6" description="Prepend '#' for page anchor; '/' for Community page." />
+    <design:attribute name="navItemLabel7" label="Link 7 Text"/>
+    <design:attribute name="navItem7" label="Link 7" description="Prepend '#' for page anchor; '/' for Community page." />
+    <design:attribute name="navItemLabel8" label="Link 8 Text"/>
+    <design:attribute name="navItem8" label="Link 8" description="Prepend '#' for page anchor; '/' for Community page." />
+    <design:attribute name="navItemLabel9" label="Link 9 Text"/>
+    <design:attribute name="navItem9" label="Link 9" description="Prepend '#' for page anchor; '/' for Community page." />
+    <design:attribute name="navItemLabel10" label="Link 10 Text"/>
+    <design:attribute name="navItem10" label="Link 10" description="Prepend '#' for page anchor; '/' for Community page." />
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+    <design:attribute name="ScrollToAnchors" label="Smooth scroll to page anchors" description="Use smooth scroll; IE is not supported" default="true" />
+</design:component>

@@ -1,0 +1,61 @@
+<apex:component controller="AccountSnapshotController" >
+
+<b class="PrintFont">Account Objectives – Sales Growth Plan</b>
+
+<table class="slds-table slds-table_cell-buffer slds-table_bordered">
+    <thead>
+        <tr class="slds-line-height_reset">
+            <th class="PrintFont" scope="col" width="50%">
+                <div class="slds-truncate" title="Opportunity Name">Objective Name</div>
+            </th>
+            <th class="PrintFont" scope="col" width="25%">
+                <div class="slds-truncate" title="Last Activity Date">Last Activity Date</div>
+            </th>
+            <th class="PrintFont" scope="col" width="25%">
+                <div class="slds-truncate" title="Last Activity Date">Last Modified Date</div>
+            </th>
+            <th class="PrintFont" scope="col" width="25%">
+                <div class="slds-truncate" title="Status">Status</div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    <apex:repeat value="{!SalesGrowthPlan}" var="record" rows="10">
+        <tr class="slds-hint-parent">
+            
+            <th data-label="Opportunity Name" scope="row" class="PrintFont">
+                <div class="slds-truncate" title="Cloudhub">
+                    <apex:outputPanel rendered="{!NOT(bolPrintableView)}">
+                        <a href="/{!record.Id}" tabindex="-1" target="_blank">
+                            {!record.Objective_Name__r.Name}
+                        </a>
+                    </apex:outputPanel> 
+                    <apex:outputPanel rendered="{!bolPrintableView}">
+                            {!record.Objective_Name__r.Name}
+                    </apex:outputPanel>
+                </div>
+            </th>
+            <td data-label="Account Name" class="PrintFont">
+                <div class="slds-truncate" title="Cloudhub">
+                    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                        <apex:param value="{!record.LastActivityDate}" /> 
+                    </apex:outputText>
+                </div>
+            </td>
+            <td data-label="Account Name" class="PrintFont">
+                <div class="slds-truncate" title="Cloudhub">
+                    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                        <apex:param value="{!record.LastModifiedDate}" /> 
+                    </apex:outputText>
+                </div>
+            </td>
+            <td data-label="Account Name" class="PrintFont">
+                <div class="slds-truncate" title="Cloudhub">{!record.Status__c}</div>
+            </td>
+            
+        </tr>
+    </apex:repeat> 
+    </tbody>
+</table>
+
+</apex:component>

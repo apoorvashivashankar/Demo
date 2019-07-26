@@ -1,0 +1,40 @@
+<!--
+ - Created by 7Summits on 2/15/18.
+ -->
+
+<aura:component description="Dal_CustomButton"  implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" extends="c:Dal_Base">
+
+
+    <aura:attribute name="ButtonURL1" type="String" default="/" />
+    <aura:attribute name="ButtonText1" type="String" default="View All" />
+
+    <aura:attribute name="ButtonURL2" type="String" default="" />
+    <aura:attribute name="ButtonText2" type="String" default="" />
+
+    <aura:attribute name="ButtonURL3" type="String" default="" />
+    <aura:attribute name="ButtonText3" type="String" default="" />
+
+    <aura:attribute name="OpenInNewTab" type="Boolean" default="false" />
+    <aura:attribute name="className" type="String" />
+    <aura:attribute name="btnClass" type="String" default="slds-button_neutral" />
+    <aura:attribute name="heading" type="String" default="" />
+
+    <div class="{!'slds-grid slds-wrap ' + v.className}">
+        <aura:if isTrue="{!v.heading != ''}">
+            <div class="slds-size_12-of-12 slds-medium-size_7-of-12 ">
+               <h2>{!v.heading}</h2>
+            </div>
+        </aura:if>
+        <div class="{!v.heading != '' ? 'slds-medium-size_5-of-12 slds-text-align--right' : 'slds-size_12-of-12 slds-text-align--center'}">
+            <aura:if isTrue="{!v.ButtonURL1 != ''}">
+                <a href="javascript:void(0)" data-url="{!v.ButtonURL1}" onclick="{!c.gotoURL}" class="{!'bold slds-button  ' + v.btnClass}" target="{!v.OpenInNewTab  ? '_blank' : ''}">{!v.ButtonText1}</a>
+            </aura:if>
+            <aura:if isTrue="{!v.ButtonURL2 != ''}">
+                <a href="javascript:void(0)" data-url="{!v.ButtonURL2}" onclick="{!c.gotoURL}" class="{!'bold slds-button  ' + v.btnClass}" target="{!v.OpenInNewTab  ? '_blank' : ''}">{!v.ButtonText2}</a>
+            </aura:if>
+            <aura:if isTrue="{!v.ButtonURL3 != ''}">
+                <a href="javascript:void(0)" data-url="{!v.ButtonURL3}" onclick="{!c.gotoURL}" class="{!'bold slds-button  ' + v.btnClass}" target="{!v.OpenInNewTab  ? '_blank' : ''}">{!v.ButtonText3}</a>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

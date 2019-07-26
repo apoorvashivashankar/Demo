@@ -1,0 +1,13 @@
+<design:component label="7s Alt Featured User">
+    <design:attribute name="userId" label="Featured User's Id"/>
+    <design:attribute name="borderColor" label="Border color" description="Border color that surrounds the whole component"/>
+    <design:attribute name="customBackground" label="Use custom image for background effect?"/>
+    <design:attribute name="customBackgroundImage" label="Path to custom image"/>
+    <design:attribute name="title" label="Title Text" description="If the user does not have their title set this text will be displayed instead. If left blank this will not be displayed"/>
+    <design:attribute name="description" label="Description Text" description="Enter description text to add a description. If left blank this will not be displayed"/>
+    <design:attribute name="ctaLinkText" label="Link Text" description="Enter link text to add a link to the component. If left blank this will not be displayed"/>
+    <design:attribute name="ctaLinkURL" label="Url for link" description="Enter a link if you want the link to navigate to a custom url. If left blank the link will navigate to the featured user's profile"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

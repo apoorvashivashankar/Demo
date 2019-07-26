@@ -1,0 +1,25 @@
+<aura:component extends="c:Dal_Base">
+    <aura:attribute name="Link" type="String" default="" />
+    <aura:attribute name="Text" type="String" default="" />
+    <aura:attribute name="IsButton" type="Boolean" default="" />
+    <aura:attribute name="OpenInNewPage" type="Boolean" default="" />
+    <aura:attribute name="CustomClassName" type="String" default=" " />
+    <aura:attribute name="IsFormModal" type="Boolean" default="" />
+    <aura:attribute name="FormModalContent" type="String" default="" />
+
+    <!-- Button class to use -->
+    <aura:attribute name="ButtonClass" type="String" default="slds-button slds-button_brand" />
+
+    <aura:if isTrue="{!or(v.Link != '', and(v.IsFormModal == true, v.FormModalContent != ''))}">
+        <div class="{!v.CustomClassName + ' slds-p-around_small '}">
+
+            <aura:if isTrue="{!v.IsFormModal != true}">
+                <a href="javascript:void(0)" data-url="{!v.Link}" onclick="{!c.gotoURL}" class="{!v.IsButton  ? v.ButtonClass + ' ' + v.CustomClassName : v.CustomClassName}" target="{!v.OpenInNewPage  ? '_blank' : ''}"><c:Peak_Base labelText="{!v.Text}"/></a>
+            	<aura:set attribute="else">
+                   IsModal Feature is not longer available.
+            	</aura:set>
+            </aura:if>
+
+        </div>
+    </aura:if> 
+</aura:component>

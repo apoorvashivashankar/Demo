@@ -1,0 +1,158 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaViewController"
+                implements="force:appHostable,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                extends="c:SVNSUMMITS_Ideas_Base"
+                access="global">
+
+	<c:SVNSUMMITS_Include_MomentJS />
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="zoneName" type="String" default="" required="true" access="global"/>
+	<aura:attribute name="displayPostDateAuthor" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="ideasListURL" type="String" default="/ideas/" access="global"/>
+	<aura:attribute name="ideaDetailURL" type="String" default="/idea/" access="global" required="true"/>
+	<aura:attribute name="recordId" type="String" default="{!recordId}" access="global"/>
+
+	<aura:attribute name="allowImages" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="allowThemes" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="allowCategories" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="allowExploreIdeas" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="zoneId" type="String" default="" access="global"/>
+	<aura:attribute name="userProfileURL" type="String" default="/profile/" access="global"/>
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" default="true" access="global"/>
+
+	<aura:attribute name="sitePrefix" type="String" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="idea" type="Idea" access="global"/>
+
+	<aura:attribute name="canEdit" type="Boolean" access="global" default="false"/>
+	<aura:attribute name="canDelete" type="Boolean" access="global" default="false"/>
+	<aura:attribute name="canFollow" type="Boolean" access="global" default="false"/>
+	<aura:attribute name="isFollowing" type="Boolean" access="global" default="false"/>
+	<aura:attribute name="isEditing" type="Boolean" access="global" default="false"/>
+
+	<!-- UI text -->
+	<aura:attribute name="labelFollowText" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_Follow}"/>
+	<aura:attribute name="labelFollowingText" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_Following}"/>
+	<aura:attribute name="labelUnFollowText" type="String"
+	                default="{!$Label.c.ss_idea_label_UnFollow}"/>
+	<aura:attribute name="labelFollow" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_PlusFollow}"/>
+	<aura:attribute name="labelEdit" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_Edit}"/>
+	<aura:attribute name="labelDelete" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_Delete}"/>
+	<aura:attribute name="deleteRecordMessage" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_RemoveThisRecord}"/>
+	<aura:attribute name="labelModalClose" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_Close}"/>
+
+	<aura:attribute name="deleteRecordToast" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_Deleted}"/>
+	<aura:attribute name="deleteRecordFailed" type="String" access="global"
+	                default="{!$Label.c.ss_idea_error_Delete}"/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_BaseReady" action="{!c.fetchUrl}"/>
+
+	<lightning:layout multipleRows="false"
+	                  horizontalAlign="spread"
+	                  verticalAlign="center"
+	                  class="slds-border--bottom slds-p-top--small slds-p-bottom--small">
+		<lightning:layoutItem size="8"
+		                      padding="around-small">
+			<lightning:layout multipleRows="true">
+
+				<!-- Topic (hyperlink) -->
+				<lightning:layoutItem size="12">
+					<div class="topics">
+                        <span class="slds-text-heading--label topic-label">
+                            <ui:outputURL aura:id="topicLink" value=""/>
+                        </span>
+					</div>
+				</lightning:layoutItem>
+
+				<!-- Title -->
+				<lightning:layoutItem size="12" class="slds-text-heading--large">
+						{!v.idea.Title}
+				</lightning:layoutItem>
+
+				<!-- Author -->
+				<aura:if isTrue="{!v.displayPostDateAuthor}">
+					<lightning:layoutItem size="12">
+						<div class="slds-text-heading--label-normal owner-label">
+							<ui:outputText value="{!v.idea.fromNow}"/>
+							&nbsp;{!$Label.c.ss_idea_label_by}&nbsp;
+							<a href="{!v.sitePath + v.userProfileURL + v.idea.CreatedBy.Id}">
+									{!if(v.isNicknameDisplayEnabled, v.idea.CreatedBy.CommunityNickname, v.idea.CreatedBy.Name)}
+							</a>
+						</div>
+					</lightning:layoutItem>
+				</aura:if>
+			</lightning:layout>
+		</lightning:layoutItem>
+
+		<!-- BUTTONS -->
+		<lightning:layoutItem size="3"
+		                      padding="around-small">
+
+			<aura:if isTrue="{!v.canEdit}">
+				<lightning:button name="editIdea"
+				                  label="{!v.labelEdit}"
+				                  onclick="{!c.handleEdit}"/>
+			</aura:if>
+
+			<!-- Delete -->
+			<aura:if isTrue="{!v.canDelete}">
+				<lightning:button name="deleteIdea"
+				                  label="{!v.labelDelete}"
+				                  onclick="{!c.handleDelete}"/>
+			</aura:if>
+
+			<aura:if isTrue="{!v.allowExploreIdeas}">
+				<div class="slds-m-vertical--small">
+				{!$Label.c.ss_idea_label_ExploreOther}&nbsp;
+					<a href="javascript:void(0);"
+					   onclick="{!c.handleExploreIdeas}">
+							{!$Label.c.ss_idea_label_Ideas}
+					</a>
+				</div>
+			</aura:if>
+
+		</lightning:layoutItem>
+	</lightning:layout>
+
+	<div>
+		<div class="slds-grid" aura:id="resultsDiv">
+			<ui:outputRichText value="" aura:id="resultOutput"/>
+		</div>
+	</div>
+
+	<aura:renderIf isTrue="{!v.isEditing}">
+		<div class="slds-modal slds-fade-in-open" aria-hidden="false" role="dialog">
+			<div class="slds-modal__container">
+				<div class="slds-modal__header">
+					<button class="slds-button slds-button--icon-inverse slds-modal__close"
+					        onclick="{!c.closeEditPage}">
+						<lightning:icon iconName="utility:close"
+						                size="medium"
+						                alternativeText="Close"
+						                title="{!v.labelModalClose}"
+						                variant="inverse"/>
+						<span class="slds-assistive-text">{!v.labelModalClose}</span>
+					</button>
+					<h3 class="slds-text-heading--medium">{!v.labelEdit}: {!v.idea.Title}</h3>
+				</div>
+				<div class="slds-modal__content createIdeaBox">
+					<div aura:id="editView" class="slds-grid slds-wrap"></div>
+				</div>
+			</div>
+		</div>
+		<div class="slds-backdrop slds-backdrop--open"></div>
+	</aura:renderIf>
+
+</aura:component>

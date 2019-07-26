@@ -1,0 +1,171 @@
+<!--
+ - Created by presh on 20-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_MyLeads" extends="c:Dal_Base" controller="Dal_LeadManager" access="global" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+    <aura:attribute name="leadStatus" type="String" default=""/>
+    <aura:attribute name="firstName" type="String" default=""/>
+    <aura:attribute name="lastName" type="String" default=""/>
+    <aura:attribute name="leadSource" type="String" default=""/>
+    <aura:attribute name="leadScore" type="String" default=""/>
+    <aura:attribute name="leadDateStart" type="Date" default=""/>
+    <aura:attribute name="leadDateEnd" type="Date" default=""/>
+    <aura:attribute name="lineStatus" type="String" default=""/>
+    <aura:attribute name="listType" type="String" default="New"/>
+    <aura:attribute name="lineStatusSelected" type="String" />
+    <aura:attribute name="searchButton" type="String" default=""/>
+    <aura:attribute name="filteredRows" type="String" />
+    <aura:attribute name="communityType" type="String" default="SSC" />
+    <aura:attribute name="lineStatuses" type="List" default="[]" />
+    <aura:attribute name="leadSources" type="List" default="[]" />
+    <aura:attribute name="multilpeLineStatus" type="List" default="[]" />
+
+    <aura:attribute name="hasPagination" type="Boolean" default="false" />
+    <aura:attribute name="paginationItemsPerPage" type="Integer" default="30" />
+    <aura:attribute name="paginationStartPage" type="Integer" default="0" />
+    <aura:attribute name="listMaximum" type="Integer" default="300" />
+    <aura:attribute name="isChecked" type="Boolean" default="false" />
+
+    <aura:attribute name="showDropdown" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{! c.init }"/>
+
+    <lightning:layout pullToBoundary="small" multipleRows="true">
+        <lightning:layoutItem size="12" class="slds-p-vertical--large">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem class="slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <ui:inputText aura:id="firstName" label="First Name"
+                                  class="slds-p-around_small input-x-small"
+                                  value="{!v.firstName}"
+                                  required="false"
+                                  maxlength="11"
+                    />
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <ui:inputText aura:id="lastName" label="Last Name"
+                                  class="slds-p-around_small input-x-small"
+                                  value="{!v.lastName}"
+                                  required="false"
+                                  maxlength="11"
+                    />
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                   <!-- <ui:inputText aura:id="leadScore" label="Lead Source"
+                                  class="slds-p-around_small input-x-small"
+                                  value="{!v.leadSource}"
+                                  required="false"/>-->
+                    <lightning:select name="leadSource" label="Lead Source" aura:id="leadSource" value="{!v.leadSource}"
+                                      class="input-x-small" onchange="{!c.onLineSourceChange}">
+                        <option value="">-None-</option>
+                        <aura:iteration items="{!v.leadSources}" var="leadSource">
+                            <option value="{!leadSource}" selected="{!leadSource.LeadSource}" label="{!leadSource}">{!leadSource}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem class="orderDate slds-p-around_x-small" size="12" mediumDeviceSize="6"
+                                      largeDeviceSize="3">
+                    <label class="uiLabel">Created Date Between</label>
+                    <div>
+                        <ui:inputDate aura:id="leadStartDate" displayDatePicker="true"
+                                      value="{!v.leadDateStart}"
+                                      format="MM/DD/YYYY"
+                                      required="true"/>
+                        <span class="dateSeparator">-</span>
+                        <ui:inputDate aura:id="leadEndDate" displayDatePicker="true"
+                                      value="{!v.leadDateEnd}"
+                                      format="MM/DD/YYYY"
+                                      required="true"/>
+                    </div>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem class="leadStatus slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <lightning:select name="leadStatus" label="Lead Status" aura:id="leadStatus" value="{!v.lineStatus}"
+                                      class="input-x-small" onchange="{!c.onLineStatusChange}">
+                        <option value="">-None-</option>
+                        <option value="New"  label="New">New</option>
+                        <option value="In Progress"  label="In Progress">In Progress</option>
+                        <option value="Closed Lost"  label="Closed Lost">Closed Lost</option>
+                        <!--<aura:iteration items="{!v.lineStatuses}" var="lineStatus">
+                            <option value="{!lineStatus}" selected="{!lineStatus.Status}" label="{!lineStatus}">{!lineStatus}</option>
+                        </aura:iteration>-->
+                    </lightning:select>
+                </lightning:layoutItem>
+
+
+                <!--<lightning:layoutItem class="leadStatus slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="combobox-id-10">Status</label>
+                            <div class="slds-form-element__control">
+                                <div class="slds-combobox_container">
+                                    <div aura:id="dropdownDiv" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                            <input type="text" onclick="{!c.handleDropdownClick}" class="slds-input slds-combobox__input slds-combobox__input-value"
+                                                   id="dropdownIdLineStatus" aria-controls="listbox-id-7" autoComplete="off" role="textbox"
+                                                   placeholder="Select an Option" readonly="" value="{!v.multilpeLineStatus.length + ' Selected'}"
+                                            />
+                                            <span class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right ">
+                                                <lightning:icon iconName="utility:chevrondown"  size="xx-small" />
+                                            </span>
+                                        </div>
+                                        <aura:if isTrue="{!v.showDropdown}">
+                                            <div class="dropdown-overlay" onclick="{!c.doDropdownClose}"/>
+                                        </aura:if>
+                                        <div aura:id="dropdownBox" id="listbox-id-7"  class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid order-status-dropdown" role="listbox" onmouseleave="{!c.doDropdownClose}">
+                                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                                <aura:iteration items="{!v.lineStatuses}" var="lineStatus" indexVar="index">
+
+                                                    &lt;!&ndash;<li role="presentation" class="slds-listbox__item" >&ndash;&gt;
+                                                        &lt;!&ndash;<div id="option" class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-is-selected " role="option">&ndash;&gt;
+                                                            &lt;!&ndash;<a href="" name="{!lineStatus.value}" onclick="{!c.onLineStatusSelect}" data-row-index="{!index}">&ndash;&gt;
+                                                                &lt;!&ndash;<span class="slds-media__figure slds-listbox__option-icon">&ndash;&gt;
+                                                                    &lt;!&ndash;<span class="slds-icon_container slds-icon-utility-check slds-current-color slds-grid icon-check">&ndash;&gt;
+
+                                                                        &lt;!&ndash;<lightning:icon class="{!lineStatus.isChecked ? '': 'slds-hide'}" iconName="utility:check"  size="xx-small"/>&ndash;&gt;
+                                                                        &lt;!&ndash;<option value="{!lineStatus.value}" selected="{!lineStatus.selected}" label="{!lineStatus.label}">{!lineStatus.label}</option>&ndash;&gt;
+                                                                    &lt;!&ndash;</span>&ndash;&gt;
+                                                                &lt;!&ndash;</span>&ndash;&gt;
+                                                            &lt;!&ndash;</a>&ndash;&gt;
+                                                            &lt;!&ndash;<span class="slds-media__body">&ndash;&gt;
+                                                                &lt;!&ndash;<span class="slds-truncate" title="{!lineStatus.value}">&ndash;&gt;
+                                                                &lt;!&ndash;</span>&ndash;&gt;
+                                                            &lt;!&ndash;</span>&ndash;&gt;
+
+                                                        &lt;!&ndash;</div>&ndash;&gt;
+                                                    &lt;!&ndash;</li>&ndash;&gt;
+                                                </aura:iteration>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        &lt;!&ndash;<aura:set attribute="else" >
+                            <lightning:select name="leadStatus" label="Line status" aura:id="leadStatus" value="{!v.lineStatus}"
+                                              class="input-x-small" onchange="{!c.onLineStatusChange}">
+                                <option value="" label="" selected="selected">-None-</option>
+                                <aura:iteration items="{!v.lineStatuses}" var="lineStatus">
+                                    <option value="{!lineStatus.value}" selected="{!lineStatus.selected}" label="{!lineStatus.label}">{!lineStatus.label}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </aura:set>&ndash;&gt;
+
+
+                </lightning:layoutItem>
+-->
+                <lightning:layoutItem class="searchButton slds-align-content-center  slds-p-horizontal_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="1">
+                    <label class="slds-form-element__label">&nbsp;</label>
+                    <lightning:button variant="neutral" label="Search" onclick="{!c.searchLeads}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" class="box-shadow">
+            <c:Dal_SSC_MyLeadsList aura:id="leadListComponent" hasPagination="{!v.hasPagination}" paginationItemsPerPage="{!v.paginationItemsPerPage}"
+                                   paginationStartPage="{!v.paginationStartPage}" listMaximum="{!v.listMaximum}"/>
+
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

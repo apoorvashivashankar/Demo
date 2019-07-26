@@ -1,0 +1,312 @@
+<!--
+ - Created by presh on 28-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderDetailPage"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" extends="c:Dal_SSC_CreateOrderBase">
+
+    <!--Labels-->
+    <aura:attribute name="createOrderDetailHeader" type="String" default="My Product List allows you to review multiple products and add them
+                                                                          to your cart. Once you navigate away from this page, your list will not be saved. To keep your selected products
+                                                                          add them to your cart."/>
+    <aura:attribute name="additionalInventory" type="String" default="Additional inventory can ship to the primary store location between " />
+    <aura:attribute name="additionalInventoryAvailability" type="String" default="For additional inventory availability, please contact your primary store location." />
+
+    <!--Internal Attributes-->
+    <aura:attribute name="selectedAddressMile" type="String" />
+    <aura:attribute name="primaryStoreData" type="String" />
+    <aura:attribute name="profile" type="String" />
+    <aura:attribute name="isOldQuantity" type="String" default="1"/>
+    <aura:attribute name="newQuantity" type="String" default=""/>
+    <aura:attribute name="isQuantityChanged" type="boolean" default="false"/>
+    <aura:attribute name="isPageLoad" type="boolean" default="true"/>
+    <aura:attribute name="messageList" type="List" default=""/>
+    <aura:attribute name="oldValue" type="Object" default=""/>
+    <aura:attribute name="newValue" type="Object" default=""/>
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+
+
+    <!--BODY-->
+
+    <div class="slds-text-body_regular dal-createOrder-detail-header ">
+        {!v.createOrderDetailHeader}
+    </div>
+
+    <aura:iteration items="{!v.finalResponseWrapper}" var="resp" indexVar="x">
+        <lightning:layout class="dal-createOrder-detail-page slds-p-around_small slds-size_12-of-12 slds-border_bottom
+                                 slds-border_top slds-border_left slds-border_right">
+
+            <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                <div class=" slds-large-size_10-of-12 slds-medium-size_8-of-12 slds-small-size_3-of-12
+                            slds-m-around_small">
+
+                    <div class="slds-text-body_regular create-order-sku slds-m-around_small">{!resp.sku}</div>
+                    <div class="slds-text-heading_medium heading slds-m-around_small a-color">
+                        <!-- <a class="" name="{!x}" onclick="{!c.openSkuDetailPage}">-->
+                        {!resp.Description}
+                        <!--</a>-->
+                    </div>
+
+                    <table class="slds-m-around_small">
+
+                        <aura:if isTrue="{!and (not(empty(resp.Size)), resp.Size != 'IP')}">
+                            <tr class="slds-border_top slds-grid slds-p-around_x-small">
+                                <td class="slds-size_8-of-12 dal-line-item-bold">Size</td>
+                                <td class="slds-size_4-of-12">{!resp.Size}</td>
+                            </tr>
+                            <aura:set attribute="else">
+                                <!-- content renders if false -->
+                                <tr class="slds-border_top slds-grid slds-p-around_x-small">
+                                    <td class="slds-size_8-of-12 dal-line-item-bold">Size</td>
+                                    <td class="slds-size_4-of-12 "></td>
+                                </tr>
+                            </aura:set>
+                        </aura:if>
+
+                        <aura:if isTrue="{!and(!empty(resp.Color),not(resp.Color == '9999'))}">
+                            <tr class="slds-border_top slds-grid slds-p-around_x-small">
+                                <td class="slds-size_8-of-12 dal-line-item-bold">Color</td>
+                                <td class="slds-size_4-of-12">{!resp.Color}</td>
+                            </tr>
+                            <aura:set attribute="else">
+                                <!-- content renders if false -->
+                                <tr class="slds-border_top slds-grid slds-p-around_x-small">
+                                    <td class="slds-size_8-of-12 dal-line-item-bold">Color</td>
+                                    <td class="slds-size_4-of-12 "></td>
+                                </tr>
+                            </aura:set>
+                        </aura:if>
+
+
+                        <!--<tr class="slds-border_top slds-grid slds-p-around_x-small">-->
+                        <!--<td class="slds-size_8-of-12 dal-line-item-bold">Trim</td>-->
+                        <!--<td class="slds-size_4-of-12">Bullnose</td>-->
+                        <!--</tr>-->
+
+                        <aura:if isTrue="{!resp.PiecesPerCarton__c}">
+                            <tr class="slds-border_top slds-grid slds-p-around_x-small">
+                                <td class="slds-size_8-of-12 dal-line-item-bold"># Of Pieces per Carton</td>
+                                <td class="slds-size_4-of-12 ">{!resp.PiecesPerCarton__c}</td>
+                            </tr>
+                            <aura:set attribute="else">
+                                <!-- content renders if false -->
+                                <tr class="slds-border_top slds-grid slds-p-around_x-small">
+                                    <td class="slds-size_8-of-12 dal-line-item-bold"># Of Pieces per Carton</td>
+                                    <td class="slds-size_4-of-12 ">0</td>
+                                </tr>
+                            </aura:set>
+                        </aura:if>
+
+                        <aura:if isTrue="{!resp.SquarefeetPerCarton__c}">
+                            <tr class="slds-border_top slds-border_bottom slds-grid slds-p-around_x-small">
+                                <td class="slds-size_8-of-12 dal-line-item-bold">Sq. Ft. per Carton</td>
+                                <td class="slds-size_4-of-12">
+                                    <lightning:formattedNumber value="{!resp.SquarefeetPerCarton__c}" style="decimal" maximumFractionDigits="2" minimumFractionDigits="2" />
+                                </td>
+                            </tr>
+                            <aura:set attribute="else">
+                                <!-- content renders if false -->
+                                <tr class="slds-border_top slds-border_bottom slds-grid slds-p-around_x-small">
+                                    <td class="slds-size_8-of-12 dal-line-item-bold">Sq. Ft. per Carton</td>
+                                    <td class="slds-size_4-of-12 ">0</td>
+                                </tr>
+                            </aura:set>
+                        </aura:if>
+
+                    </table>
+                </div>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem flexibility="auto" padding="horizontal-medium" size="6">
+
+                <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_1-of-1
+                            slds-m-around_small">
+
+                    <div class="slds-grid slds-size_12-of-12 slds-medium-size_11-of-12 slds-small-size_1-of-1 slds-m-vertical_large dal-orderDetail-unitprice">
+                        <div class="slds-size_10-of-12 slds-medium-size_11-of-12 slds-small-size_1-of-1 slds-grid slds-wrap">
+
+                            <aura:if isTrue="{! 
+                                                 or(v.profile == 'SSC Customer Service',
+                                                 or(v.profile == 'SSC Sales Rep',
+                                                 v.profile == 'SSC Statement Dealer Sales Rep'))}">
+
+                                <div class="slds-text-body_regular unit-label "> </div>
+                                <aura:set attribute="else">
+                                    <div class="slds-text-body_regular unit-label "><b><lightning:formattedNumber value="{!resp.pricingUOM_NetPrice}" style="currency" currencyCode="USD"/></b> / {!resp.BaseUOM}</div>
+                                </aura:set>
+
+                            </aura:if>
+                            <label class="slds-form-element__label dal-createOrder-unitPrice-size slds-m-horizontal_small  font-label"
+                                   for="quantity">Qty:</label>
+                            <lightning:input class="input-qty slds-m-right_small slds-large-size_2-of-12 slds-medium-size_2-of-12
+                                                    slds-small-size_1-of-1 font-label" value="{!resp.updatedQuantity}" label="" type="number" min="0"
+                                             variant="label-hidden" name="{!x}" onfocusout="{!c.handleQuantityChange}" />
+
+                            <aura:if isTrue="{!resp.uomList.length > 0}">
+                                <lightning:select name="{!x}" label="" variant="label-hidden" value="{!resp.updatedBaseUOM}"
+                                                  class="input-uom" onchange="{!c.handleQuantityChange}">
+                                    <aura:iteration items="{!resp.uomList}" var="uom">
+                                        <option value="{!uom}">{!uom}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </aura:if>
+
+                            <a href="" onclick="{!c.openCalculator}" class="slds-m-left_large cal-margin" name="{!x}">
+                                <i class="fa fa-calculator fa-2x icon-color-custom" aria-hidden="true"></i>
+                            </a>
+                        </div>
+
+                        <div class="slds-size_2-of-12 dal-remove-icon slds-wrap">
+                            <a name="{!x}" onclick="{!c.clearSelectedValue}">
+                                <div class="slds-size_1-of-2">
+                                    <lightning:icon iconName="utility:close" alternativeText="Close"
+                                                    class=" slds-align_absolute-center" size="x-small"/>
+                                </div>
+                                <div class="">
+                                    <u>Remove</u>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="slds-large-size_10-of-12 slds-m-vertical_small slds-medium-size_12-of-12 slds-small-size_1-of-1">
+                        <aura:if isTrue="{!resp.isChanged}">
+                            <lightning:icon iconName="utility:warning" alternativeText="Warning!" variant="warning" size="x-small"/>
+                            <span class="date-to-orange"><b>Quantity has been rounded to nearest {!resp.updatedBaseUOM} for ordering.</b></span>
+                        </aura:if>
+                    </div>
+
+
+                    <div class="slds-large-size_10-of-12 slds-m-vertical_small slds-medium-size_12-of-12 slds-small-size_1-of-1">
+                        <p class="dal-topic-bold">
+                            <aura:if isTrue="{!not(resp.isStoreChanged)}" >
+                                Primary Store Location:
+
+                                <aura:set attribute="else" >
+                                    Selected Store Location:
+                                </aura:set>
+                            </aura:if>
+
+                        </p>
+                        <div class="slds-grid slds-wrap">
+                            <aura:if isTrue="{!resp.isStoreChanged}">
+                                <div class="slds-col slds-size_1-of-1">
+                                    <span>{!resp.supplyPlant}</span>
+                                    <br/>
+                                    <div class="slds-grid slds-wrap">
+                                        <div>
+                                            <a class="check-nearby-color" onclick="{!c.changeMilesAddress}" name="{!x}">
+                                                Check nearby locations
+                                            </a>
+                                        </div>
+                                        <div class="slds-p-horizontal_x-small">||</div>
+                                        <div>
+                                            <a class="check-nearby-color" onclick="{!c.handleBackToPSL}" name="{!x}">
+                                                Primary Store Location
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <aura:set attribute="else">
+                                    <div class="slds-col slds-size_6-of-12 ">
+                                        <span>{!resp.supplyPlant}</span>
+                                        <br/>
+                                        <div class="slds-grid slds-wrap">
+                                            <div>
+                                                <a class="check-nearby-color" onclick="{!c.changeMilesAddress}" name="{!x}">
+                                                    Check nearby locations
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </aura:set>
+                            </aura:if>
+                            <div class="slds-col slds-size_6-of-12 slds-medium-size_3-of-6 slds-small-size_1-of-1 ">
+                                <aura:if isTrue="{!not(resp.isStoreChanged)}">
+                                    <aura:if isTrue="{!!empty(resp.dateAtSupplyPlant)}">
+                                        <aura:if isTrue="{!and(resp.totalCartons, (resp.totalCartons != '0'))}">
+
+                                            <b class="shippingStatus date-to-green font-size">
+                                                {!v.additionalInventory}
+                                                 {!resp.dateAtSupplyPlant} and {!resp.dateAtSupplyPlantFinal}
+                                            </b>
+
+                                            <aura:set attribute="else">
+
+                                                <aura:if isTrue="{!(resp.totalCartons == '0')}">
+
+                                                    <b class="shippingStatus date-to-orange font-size">
+                                                        {!v.additionalInventory}
+                                                         {!resp.dateAtSupplyPlant}
+                                                        and {!resp.dateAtSupplyPlantFinal}
+                                                    </b>
+
+                                                    <aura:set attribute="else">
+                                                        <b class="shippingStatus date-to-red font-size">
+                                                            No inventory available, please contact your primary store location for details.
+                                                        </b>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </aura:set>
+                                        </aura:if>
+
+                                        <aura:set attribute="else">
+                                            <aura:if isTrue="{!resp.totalCartons != '0'}">
+                                                <b class="shippingStatus date-to-green font-size">
+                                                    {!v.additionalInventoryAvailability}
+                                                </b>
+                                                <aura:set attribute="else">
+                                                    <b class="shippingStatus date-to-red font-size">
+                                                        No inventory available, please contact your primary store location for details.
+                                                    </b>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-large-size_9-of-12 slds-medium-size_12-of-12 slds-small-size_8-of-12">
+                        <p class="dal-topic-bold">
+
+                            <aura:if isTrue="{!not(resp.isStoreChanged)}" >
+                                Primary Store Inventory:
+
+                                <aura:set attribute="else" >
+                                    Selected Store Inventory:
+                                </aura:set>
+                            </aura:if>
+                        </p>
+                        <table>
+                            <tr class="slds-border_top slds-grid slds-p-around_x-small">
+                                <td class="slds-size_8-of-12">{!resp.BaseUOM}</td>
+                                <td class="slds-size_4-of-12">
+                                    <lightning:formattedNumber value="{!resp.availableQty}" maximumFractionDigits="2" minimumFractionDigits="2" />
+                                </td>
+                            </tr>
+                            <tr class="slds-border_top slds-grid slds-p-around_x-small">
+                                <td class="slds-size_8-of-12">Total # Of Cartons</td>
+                                <td class="slds-size_4-of-12">
+                                    <lightning:formattedNumber value="{!resp.totalCartons}" maximumFractionDigits="2" minimumFractionDigits="2" />
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+
+            </lightning:layoutItem>
+
+        </lightning:layout>
+    </aura:iteration>
+
+</aura:component>

@@ -1,0 +1,50 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaListController"
+                access="global">
+
+    <aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="recordId" type="String" default="{!recordId}" access="global"/>
+    <aura:attribute name="userId" type="String" access="global"/>
+    <aura:attribute name="zoneid" type="String" default="" access="global"/>
+    <aura:attribute name="zoneName" default="" type="String" required="true" access="global"/>
+    <aura:attribute name="title" type="String" default="Community Stats" access="global"/>
+    <aura:attribute name="myIdeasDescription" type="String" default="{!$Label.c.ss_idea_label_SubmittedIdeas}" access="global"/>
+    <aura:attribute name="myIdeasURL" type="String" default="/my-ideas/" access="global"/>
+    <aura:attribute name="myVotedOnIdeasDescription" type="String" default="{!$Label.c.ss_idea_label_VotedOnIdeas}" access="global"/>
+    <aura:attribute name="myVotedOnIdeasURL" type="String" default="/my-voted-ideas/" access="global"/>
+    <aura:attribute name="doNotLink" type="Boolean" default="false" access="global"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:if isTrue="{! and(v.userId, v.recordId, v.zoneid != '')}">
+        <div class="slds">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate">
+                    <h1 class="slds-text-heading--medium slds-truncate">{!v.title}</h1>
+                    <div class="slds-grid">
+                        <div class="slds-grid slds-grid--pull-padded">
+                            <div class="slds-grid slds-col--padded">
+                                <c:SVNSUMMITS_Ideas_MyProfile debugMode="{!v.debugMode}"
+                                                              recordId="{!v.recordId}"
+                                                              zoneName="{!v.zoneName}"
+                                                              description="{!v.myIdeasDescription}"
+                                                              linkToURL="{!v.myIdeasURL}"
+                                                              doNotLink="{!v.doNotLink}"
+                                                              type="My Ideas" />
+                            </div>
+                            <div class="slds-grid slds-col--padded">
+                                <c:SVNSUMMITS_Ideas_MyProfile debugMode="{!v.debugMode}"
+                                                              recordId="{!v.recordId}"
+                                                              zoneName="{!v.zoneName}"
+                                                              description="{!v.myVotedOnIdeasDescription}"
+                                                              linkToURL="{!v.myVotedOnIdeasURL}"
+                                                              doNotLink="{!v.doNotLink}"
+                                                              type="Voted On Ideas" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

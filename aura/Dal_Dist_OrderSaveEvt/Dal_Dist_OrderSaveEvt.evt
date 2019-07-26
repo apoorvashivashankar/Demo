@@ -1,0 +1,8 @@
+<!--
+ - Created by 7Summits on 5/7/18.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_Dist_OrderSaveEvt">
+    <aura:attribute name="poNumber" type="String" default=""/>
+    <aura:attribute name="jobName" type="String" default=""/>
+</aura:event>

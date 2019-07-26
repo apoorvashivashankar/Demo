@@ -1,0 +1,27 @@
+<!--
+ - Created by 7Summits on 3/28/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderBase" extensible="true" extends="c:Dal_Base" controller="Dal_OrderProcessController">
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="isOrderBaseLoading" type="Boolean" default="true"/>
+    <aura:attribute name="errorOrderInit" type="Boolean" default="false"/>
+    <aura:attribute name="errorOrderInitMsg" type="String" default="There was a problem initializing the order form."/>
+
+    <aura:if isTrue="{!v.isOrderBaseLoading == false}">
+
+        <aura:if isTrue="{!v.errorOrderInit == false}">
+            {!v.body}
+            <aura:set attribute="else">
+                <ui:message title="Error" severity="error" closable="false">{!v.errorOrderInitMsg}</ui:message>
+            </aura:set>
+        </aura:if>
+
+    <aura:set attribute="else">
+        <div class="slds-is-relative slds-p-around_xx-large">
+            <lightning:spinner variant="brand" />
+        </div>
+    </aura:set>
+    </aura:if>
+
+</aura:component>

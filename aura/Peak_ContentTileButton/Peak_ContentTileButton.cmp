@@ -1,0 +1,15 @@
+<aura:component description="Peak_ContentTileButton" extends="c:Dal_Base">
+    <aura:attribute name="ButtonURL" type="String" default="http://7summitsinc.com/" />
+    <aura:attribute name="ButtonText" type="String" default="http://7summitsinc.com/" />
+
+    <aura:attribute name="darkText" type="Boolean" default="false" />
+
+    <aura:if isTrue="{!v.ButtonURL != ''}">
+        <aura:if isTrue="{!v.darkText}">
+            <a href="javascript:void(0)" data-url="{!v.ButtonURL}" onclick="{!c.gotoURL}" class="slds-button slds-button_brand"><c:Peak_Base labelText="{!v.ButtonText}"/></a>
+            <aura:set attribute="else">
+                <a href="javascript:void(0)" data-url="{!v.ButtonURL}" onclick="{!c.gotoURL}" class="slds-button slds-button_inverse"><c:Peak_Base labelText="{!v.ButtonText}"/></a>
+            </aura:set>
+        </aura:if>
+    </aura:if>
+</aura:component>

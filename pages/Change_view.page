@@ -1,0 +1,35 @@
+<apex:page standardcontroller="Change_Request__c" action="{!setPrinted}" recordSetVar="Change_Request" extensions="ChangeViewExtension" showheader="false" id="thePage">
+  <apex:stylesheet value="{!$Resource.customPrintStyle}" />
+  <apex:form id="form" >
+    <head>
+      <script src="/soap/ajax/9.0/connection.js" type="text/javascript"></script>
+      <script language="javascript">
+        function PrintPage()
+        {
+          window.print();
+          window.onfocus=function(){ window.close();}
+        }
+      </script>       
+      <body onload="PrintPage();"/> 
+      <apex:PageMessages />
+      <apex:pageBlock id="records">
+        <apex:repeat var="o" value="{!oList}" id="theRepeat">
+          <apex:outputPanel layout="block" styleclass="results">
+            <h2> Customer Workflow </h2>
+            <apex:detail subject="{!o}"/>
+            <hr/>
+          </apex:outputPanel>
+          <DIV style="page-break-after:always"></DIV>
+        </apex:repeat>
+      </apex:pageBlock>
+    </head>
+  </apex:form>
+    <script>
+        var a = navigator.userAgent; 
+        if ((a.indexOf('Salesforce') != -1) && (a.indexOf('iPhone') != -1 || a.indexOf('iPad') != -1) && (a.indexOf('Safari') == -1)) { 
+        var s = document.createElement('style'); 
+        s.innerHTML = "html,html body{overflow:scroll;-webkit-overflow-scrolling:touch;z-index:0;}body{position:absolute;left:0;right:0;top:0;bottom:0;}"; 
+        document.getElementsByTagName('head')[0].appendChild(s); 
+        };
+    </script>
+</apex:page>

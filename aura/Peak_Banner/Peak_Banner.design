@@ -1,0 +1,44 @@
+<design:component label="7S Banner">
+    <design:attribute name="columns" label="Columns"  description="Two column will appear in a 2:1 ratio" dataSource="1,2,3"/>
+
+    <design:attribute name="backgroundColor" label="Background Color"   description="Enter a hex code"/>
+    <design:attribute name="backgroundImage" label="Background Image"   description="(Optional) Enter a full image path"/>
+    <design:attribute name="fixed" label="Fixed Background?"   description="Fix the background image for a scrolling effect"/>
+
+    <design:attribute name="overlayColor" label="Overlay Color"   description="Enter a hex code"/>
+    <design:attribute name="overlayOpacity" label="Overlay Opacity"   description="0 is transparent, .9 is almost solid" datasource="0,.1,.2,.3,.4,.5,.6,.7,.8,.9"/>
+
+    <design:attribute name="darkText" label="Dark Text (if using a light BG)"   />
+    <design:attribute name="centered" label="Center text?"   />
+    <design:attribute name="alignItems" label="Vertical Centering"  dataSource="Start,Center,End" description="Choose vertical alignment of left and right column"/>
+
+    <design:attribute name="Headline" label="Headline"  description="A big heading to show on top"/>
+    <design:attribute name="SubHeadline" label="Sub Headline"  description="A smaller heading beneath"/>
+    <design:attribute name="Paragraph" label="Paragraph Text"  description="Paragraph text to use for messaging."/>
+    <design:attribute name="ButtonText" label="Button Text"  description="The label on the CTA button"/>
+    <design:attribute name="ButtonURL" label="Button URL"  description="The URL for the CTA button"/>
+    <design:attribute name="Button2Text" label="Button 2 Text"  description="The label on the 2nd CTA button"/>
+    <design:attribute name="Button2URL" label="Button 2 URL"  description="The URL for the 2nd CTA button"/>
+
+    <design:attribute name="Headline2" label="Headline 2"  description="A big heading to show on top"/>
+    <design:attribute name="SubHeadline2" label="Sub Headline 2"  description="A smaller heading beneath"/>
+    <design:attribute name="Paragraph2" label="Paragraph Text 2"  description="Paragraph text to use for messaging."/>
+    <design:attribute name="ButtonText2" label="Button Text 2"  description="The label on the CTA button"/>
+    <design:attribute name="ButtonURL2" label="Button URL 2"  description="The URL for the CTA button"/>
+    <design:attribute name="Button2Text2" label="Button 2 Text 2"  description="The label on the 2nd CTA button"/>
+    <design:attribute name="Button2URL2" label="Button 2 URL 2"  description="The URL for the 2nd CTA button"/>
+
+    <design:attribute name="Headline3" label="Headline 3"  description="A big heading to show on top"/>
+    <design:attribute name="SubHeadline3" label="Sub Headline 3"  description="A smaller heading beneath"/>
+    <design:attribute name="Paragraph3" label="Paragraph Text 3"  description="Paragraph text to use for messaging."/>
+    <design:attribute name="ButtonText3" label="Button Text 3"  description="The label on the CTA button"/>
+    <design:attribute name="ButtonURL3" label="Button URL 3"  description="The URL for the CTA button"/>
+    <design:attribute name="Button2Text3" label="Button 2 Text 3"  description="The label on the 2nd CTA button"/>
+    <design:attribute name="Button2URL3" label="Button 2 URL 3"  description="The URL for the 2nd CTA button"/>
+
+    <design:attribute name="rightComponent" label="Right Component"  description="Component to display in right 3rd of banner. This will display instead of any text/buttons you enter for column 3" datasource="None,Sample Component"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+
+</design:component>

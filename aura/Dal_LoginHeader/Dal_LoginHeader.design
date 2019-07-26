@@ -1,0 +1,8 @@
+<!--
+ - Created by 7Summits on 2/23/18.
+ -->
+
+<design:component label="Dal Login Header">
+    <design:attribute name="title" label="Community Name" />
+    <design:attribute name="isDistributor" label="Show Distributor Logos" description="Shows distributor logos when checked" />
+</design:component>

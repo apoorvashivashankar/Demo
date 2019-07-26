@@ -1,0 +1,54 @@
+<!--
+ - Created by 7Summits on 5/2/18.
+ -->
+
+<aura:component description="Dal_SSC_OrderDetailHeader" extends="c:Dal_Base" controller="Dal_OrderProcessController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <ltng:require styles="{!$Resource.Dal_Print}"/>
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <!-- Internal attributes -->
+    <aura:attribute name="listOfAllSkus" type="List" default="[]" />
+    <aura:attribute name="orderLabel" type="String" default="Order #" />
+    <aura:attribute name="orderNumber" type="String" default="" />
+    <aura:attribute name="canSchedulePickupDelivery" type="Boolean" default="false"/>
+    <aura:attribute name="canReSchedulePickupDelivery" type="Boolean" default="false"/>
+    <aura:attribute name="button1Link" type="String" default="/" />
+    <aura:attribute name="button1label" type="String" default="SUBMIT A CASE" />
+    <aura:attribute name="button1Icon" type="String" default="" />
+    <aura:attribute name="button2Link" type="String" default="{!c.print}" />
+    <aura:attribute name="button2label" type="String" default="PRINT" />
+    <aura:attribute name="button2Icon" type="String" default="utility:news" />
+    <aura:attribute name="showHeader" type="Boolean" default="false"/>
+    <aura:attribute name="forBDC" type="Boolean" default="false"/>
+    <aura:attribute name="profile" type="String" default=""/>
+    <aura:attribute name="skus" type="List" />
+    <aura:attribute name="futureDate" type="Date" />	    
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+
+    <!-- Body Starts here -->
+    <aura:if isTrue="{!v.showHeader}">
+        <lightning:layout class="slds-grid slds-grid_align-spread slds-col" horizontalAlign="center" verticalAlign="stretch" multipleRows="true">
+            <lightning:layoutItem  flexibility="auto" size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="4" >
+                <span class="orderButtons" ><h1> {!v.orderLabel} {!v.orderNumber}</h1></span> 
+            </lightning:layoutItem>
+            <lightning:layoutItem class=" slds-col slds-text-align--right layoutClass" flexibility="auto" size="12" smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="8" >
+                <aura:if isTrue="{!v.canSchedulePickupDelivery == true}">
+                    <lightning:button variant="neutral" label="SCHEDULE PICKUP / DELIVERY" iconName="utility:layers" class="slds-m-left_xx-small deliverytButton button-full-width orderButtons" onclick="{!c.handlePickupScheduleClick}" />
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!v.canReSchedulePickupDelivery == true}">
+                        	<lightning:button variant="neutral" label="RESCHEDULE APPOINTMENT" value="{!v.orderNumber}" iconName="utility:layers" class="scheduleButton orderButtons button-full-width slds-m-left_xx-small" onclick="{!c.handlePickupScheduleRescheduleClick}" />   
+                       		<lightning:button variant="neutral" label="CANCEL APPOINTMENT" iconName="utility:layers" class="cancelButton button-full-width orderButtons " onclick="{!c.handlePickupScheduleCancelClick}"  />
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+                <!--lightning:button variant="neutral" label="{!v.button1label}" iconName="{!v.button1Icon}" class="dal-small-fullWidth dal-medium-fullWidth" onclick="{!c.handleLinkClick}" value="{!v.button1Link}"/-->
+
+                <lightning:button variant="neutral" label="PRINT" iconName="utility:news" class="button-full-width printButton orderButtons" onclick="{!c.handlePrintClick}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+</aura:component>

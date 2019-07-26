@@ -1,0 +1,13 @@
+<!--
+ - Created by 7Summits on 2/14/18.
+ -->
+
+<design:component label="DalTile Distributor Theme">
+    <design:attribute name="communityName" label="Community Name" description="Community Name displayed next to Logo" />
+    <design:attribute name="decorLogoLink" label="Decor Logo Link" />
+    <design:attribute name="trainingIcon" label="Training Icon" description="Font awesome icon" />
+    <design:attribute name="trainingText" label="Training text" description="Training Text Field" />
+    <design:attribute name="trainingLink" label="Training Link" description="Url to training page/site" />
+    <design:attribute name="liveChatIcon" label="Live Agent icon" description="Slds Icon" />
+    <design:attribute name="showCopyright" label="Show Copyright" description="Show / Hide Copyright area" />
+</design:component>

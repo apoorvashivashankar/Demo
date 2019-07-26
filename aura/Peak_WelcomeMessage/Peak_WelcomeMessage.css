@@ -1,0 +1,14 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS .comm-welcome {
+  background: #f0f0f0;
+}
+.THIS h1 {
+  font-size: 2.5rem;
+  color: token(colorTextDefault);
+}

@@ -1,0 +1,92 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component access="global"
+                controller="SVNSUMMITS_NewsController"
+                extends="c:SVNSUMMITS_News_Base"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+	<ltng:require scripts="{!join(',',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-ui.js',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/fullcalendar-2.6.1/moment.min.js')}"/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_News_BaseReady" action="{!c.onInit}"/>
+	<aura:handler event="c:SVNSUMMITS_News_Header_Event" action="{!c.itemCount}"/>
+	<aura:registerEvent name="appEvent" type="c:SVNSUMMITS_News_SortBy_Filter_Event"/>
+
+	<!--wait for the header event (fired when data is loaded) before showing the count-->
+	<aura:attribute name="debugMode" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="numberOfResults" type="Integer" default="" access="global"/>
+	<aura:attribute name="newNewsLabel" type="String" default="Add News Item" access="global"/>
+	<aura:attribute name="titleText" type="String" default="News" access="global"/>
+	<aura:attribute name="showNumberOfNews" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="createNewsURL" type="String" default="/create-news" access="global"/>
+	<aura:attribute name="isObjectCreatable" type="Boolean" access="global"/>
+
+	<aura:attribute name="searchText" type="String" default="" access="global"/>
+	<aura:attribute name="searchLabel" type="String" default="{!$Label.c.ss_nws_label_search}" access="global"/>
+	<aura:attribute name="placeholderText" type="String" default="{!$Label.c.ss_nws_placeholder_search}"
+	                access="global"/>
+	<aura:attribute name="newButtonTitle" type="String" default="{!$Label.c.ss_nws_title_newItem}" access="public"/>
+
+	<lightning:layout multipleRows="false"
+	                  verticalAlign="center"
+	                  horizontalAlign="spread"
+	                  class="slds-border--bottom slds-p-top--medium slds-p-bottom--medium">
+
+		<lightning:layoutItem size="12"
+		                      smallDeviceSize="12"
+		                      mediumDeviceSize="6"
+		                      largeDeviceSize="3"
+		                      padding="around-small">
+			<lightning:layout multipleRows="false"
+			                  verticalAlign="center">
+				<lightning:layoutItem >
+					<lightning:icon iconName="standard:news"
+					                size="large"
+					                alternativeText="News"
+					                variant="bare"/>
+				</lightning:layoutItem>
+
+				<aura:if isTrue="{!v.showNumberOfNews}">
+					<lightning:layoutItem class="slds-text-heading--large slds-p-left--small">
+							{!v.numberOfResults || ''}
+					</lightning:layoutItem>
+				</aura:if>
+				<lightning:layoutItem class="slds-text-heading--large slds-truncate slds-p-left--small">
+						{!v.titleText}
+				</lightning:layoutItem>
+			</lightning:layout>
+		</lightning:layoutItem>
+
+		<lightning:layoutItem size="12"
+		                      smallDeviceSize="12"
+		                      mediumDeviceSize="4"
+		                      largeDeviceSize="5"
+		                      padding="around-small">
+			<lightning:input type="search"
+			                 placeholder="{!$Label.c.ss_nws_placeholder_search}"
+			                 name="searchNews"
+			                 label="{!$Label.c.ss_nws_label_search}"
+			                 onchange="{!c.clickSearchButton}"
+			                 value="{!v.searchText}"/>
+		</lightning:layoutItem>
+
+		<aura:if isTrue="{!v.isObjectCreatable}">
+			<lightning:layoutItem size="12"
+			                      smallDeviceSize="12"
+			                      mediumDeviceSize="4"
+			                      largeDeviceSize="2"
+			                      padding="around-small"
+			                      class="slds-p-top--x-large">
+				<lightning:button name="newItem"
+				                  class="slds-float--right"
+				                  title="{!v.newButtonTitle}"
+				                  onclick="{!c.createNewItem}"
+				                  value="{!v.newNewsLabel}"
+				                  label="{!v.newNewsLabel}"
+				                  variant="brand"/>
+			</lightning:layoutItem>
+		</aura:if>
+	</lightning:layout>
+</aura:component>

@@ -1,0 +1,367 @@
+<!--
+ - Created by ranja on 31-10-2018.
+ -->
+
+<aura:component description="Dal_SSC_InventoryList" extends="c:Dal_SSC_InventoryBase"
+                controller="Dal_InventorySearchController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes">
+
+    <!-- Init Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!-- For Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <ltng:require styles="{!$Resource.fontawesome4 + '/font-awesome-4.7.0/css/font-awesome.css'}"/>
+
+    <!-- Label Attributes -->
+    <aura:attribute name="topText" type="String" default="Call or click-to-chat to ensure availability"/>
+
+    <!-- Internal Arributes -->
+    <aura:attribute name="tomorrowsDate" type="Date"/>
+    <aura:attribute name="listOfMiles" type="List" default="['50','75','100','125','150','175','200']"/>
+    <aura:attribute name="selectedMile" type="String" default="50"/>
+    <aura:attribute name="showSpinner" type="boolean" default="false"/>
+
+
+    <!-- Body starts here -->
+    <lightning:layout class="orderContainer dal-form-order slds-m-vertical_x-large color-back" verticalAlign="center"
+                      multipleRows="true" horizontalAlign="center">
+
+        <!-- ******************** -->
+        <!-- Header -->
+        <!-- ******************** -->
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+            <lightning:layout class="saveFooter slds-p-vertical_medium section-border-bottom" multipleRows="true"
+                              horizontalAlign="center" verticalAlign="center">
+
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4"
+                                      padding="horizontal-large">
+                    <!--<i class="italic-text">{!v.topText}</i>-->
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" class="slds-grid slds-grid_align-center
+                                                                                                                     slds-large-grid_align-end slds-medium-grid_align-end slds-order_1 slds-large-order_2 slds-p-top_large slds-p-bottom_small">
+                    <div id="btnSaveContinue" class="saveAndContinueButtons">
+                        <lightning:button variant="brand" label="CREATE NEW SEARCH" class="slds-m-horizontal_small"
+                                          onclick="{!c.createNewInventory}"/>
+                    </div>
+                </lightning:layoutItem>
+
+            </lightning:layout>
+        </lightning:layoutItem>
+
+
+        <lightning:layout class="dal-form-order orderContainer slds-size_12-of-12
+                                 slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12"
+                          horizontalAlign="center" verticalAlign="center" multipleRows="true">
+
+            <!-- SPINNER -->
+            <aura:if isTrue="{!v.showSpinner}">
+
+                <div class="slds-is-relative">
+                    {!v.body}
+                    <lightning:spinner class="spinner-fixed" variant="brand"/>
+                </div>
+            </aura:if>
+            <!-- ******************** -->
+            <!-- Products -->
+            <!-- ******************** -->
+            <lightning:layoutItem size="12" class="section-border-bottom ">
+                <aura:if isTrue="{!v.finalResponseWrapper.length > 0}">
+
+                    <aura:iteration items="{!v.finalResponseWrapper}" var="resp" indexVar="x">
+                        <lightning:layout multipleRows="true" verticalAlign="center" horizontalAlign="center"
+                                          class="show-different-color">
+
+                            <!-- Display added products header -->
+                            <lightning:layoutItem
+                                    class="slds-grid slds-wrap slds-p-horizontal_small slds-p-top_small slds-is-relative"
+                                    size="12">
+
+                                <div class="slds-col slds-p-left_small slds-large-size_5-of-12 slds-m-right_large slds-medium-size_6-of-12 slds-small-size-9-of-12 slds-size_9-of-12 table-cell-text-wrap">
+                                    <h3><strong>{!resp.Description}</strong></h3>
+                                    <div class=" slds-m-bottom_x-small">
+                                        SKU: <span> {!resp.sku}</span>
+                                    </div>
+                                </div>
+
+                                <aura:if isTrue="{!resp.pricingUOM_NetPrice}">
+                                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_4-of-12 slds-large-size_2-of-12 slds-size_4-of-12">
+                                        <div>
+                                            <span class=""> UNIT PRICE</span>
+                                        </div>
+                                        <div class="slds-p-top_xx-small slds-p-left_xx-small quantity-value-bold table-cell-text-wrap">
+                                            $ {!resp.pricingUOM_NetPrice}&nbsp; / {!resp.BaseUOM}
+                                        </div>
+                                    </div>
+                                </aura:if>
+
+                                <aura:if isTrue="{!resp.PiecesPerCarton__c}">
+                                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_4-of-12 slds-large-size_2-of-12 slds-size_4-of-12">
+                                        <div>
+                                            <span class=""> # OF PCS PER CARTON</span>
+                                        </div>
+                                        <div class="slds-p-top_xx-small slds-p-left_xx-small table-cell-text-wrap quantity-value-bold">
+                                            {!resp.PiecesPerCarton__c}
+                                        </div>
+                                    </div>
+                                </aura:if>
+
+                                <aura:if isTrue="{!resp.SquarefeetPerCarton__c}">
+                                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_4-of-12 slds-large-size_2-of-12 slds-size_4-of-12">
+                                        <div>
+                                            <span class=" table-cell-text-wrap "> SQ. FT. PER CARTON</span>
+                                        </div>
+                                        <div class="slds-p-top_xx-small slds-p-left_xx-small table-cell-text-wrap quantity-value-bold">
+                                            {!resp.SquarefeetPerCarton__c}
+                                        </div>
+                                    </div>
+                                </aura:if>
+                                <div class="slds-col slds-size_2-of-12">
+                                    <!-- ******************** -->
+                                    <!-- Remove product record -->
+                                    <!-- ******************** -->
+                                    <button class="slds-button btn-product-clear" value="{!x}"
+                                            onclick="{!c.clearSelectedValue}">
+                                        <lightning:icon iconName="utility:clear" size="x-small"
+                                                        alternativeText="Clear"/>&nbsp;<u>Clear</u>
+                                    </button>
+                                </div>
+
+                            </lightning:layoutItem>
+
+                            <!-- ******************** -->
+                            <!-- Display details below products -->
+                            <!-- Data coming from webservice-->
+                            <!-- ******************** -->
+                            <lightning:layoutItem class="productInput slds-grid slds-wrap slds-p-left_small slds-p-right_medium
+                                                         slds-p-bottom_x-small slds-is-relative" size="12">
+
+                                <!-- Size -->
+                                <aura:if isTrue="{!resp.Size}">
+                                    <div class="productSku slds-margin-more slds-large-size_2-of-12 slds-medium-size_3-of-12 slds-size_4-of-12 slds-m-vertical_small">
+                                        <span class="">Size: </span>
+                                        <b class="">{!resp.Size}</b>
+                                    </div>
+                                </aura:if>
+
+                                <!-- Color -->
+                                <aura:if isTrue="{!and(resp.Color,not(resp.Color == '9999'))}"> 
+                                    <div class="productSku slds-margin-more slds-large-size_2-of-12 slds-medium-size_3-of-12 slds-size_4-of-12 slds-m-vertical_small">
+                                        <span class="">Color: </span>
+                                        <b class="">{!resp.Color}</b>
+                                    </div>
+                                </aura:if>
+
+                            </lightning:layoutItem>
+
+
+                            <!-- ******************** -->
+                            <!-- Availabiliy Dates -->
+                            <!-- ******************** -->
+                            <lightning:layoutItem class="productInput slds-grid slds-wrap slds-p-left_small slds-p-right_medium slds-p-bottom_x-small
+                                                  slds-is-relative" size="12">
+
+                                <div class="slds-grid slds-wrap slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12
+                                            slds-large-size_10-of-12 searchResult slds-p-horizontal_small">
+                                    <div>
+
+                                        <aura:if isTrue="{!!empty(resp.dateAtSupplyPlant)}">
+
+                                             <aura:if isTrue="{!and(resp.totalCartons, (resp.totalCartons != '0'))}">
+
+                                                <lightning:icon iconName="utility:warning" size="x-small"
+                                                                class="warning-color-green"
+                                                                alternativeText="Shipping Date"/>
+
+                                                <b class="shippingStatus date-to-green">
+                                                    Additional inventory will be available
+                                                    between {!resp.dateAtSupplyPlant} and {!resp.dateAtSupplyPlantFinal}
+                                                </b>
+ 
+                                                <aura:set attribute="else">
+
+                                                    <aura:if isTrue="{!(resp.totalCartons == '0')}">
+                                                        <lightning:icon iconName="utility:warning" size="x-small"
+                                                                        class="warning-color-orange"
+                                                                        alternativeText="Shipping Date"/>
+
+                                                        <b class="shippingStatus date-to-orange">
+                                                            Additional inventory will be available
+                                                            between {!resp.dateAtSupplyPlant} and {!resp.dateAtSupplyPlantFinal}
+                                                        </b>
+
+                                                        <aura:set attribute="else">
+
+                                                            <lightning:icon iconName="utility:warning" size="x-small"
+                                                                            class="warning-color-red"
+                                                                            alternativeText="Shipping Date"/>
+
+                                                            <b class="shippingStatus date-to-red">
+                                                                Call your local SSC to check availability.
+                                                            </b>
+
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:set>
+                                            </aura:if>
+
+                                            <aura:set attribute="else">
+												<aura:if isTrue="{!resp.totalCartons != '0'}">
+
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon iconName="utility:warning" size="x-small"
+                                                                        class="warning-color-red"
+                                                                        alternativeText="Shipping Date"/>
+
+                                                        <b class="shippingStatus date-to-red">
+                                                            Call your local SSC to check availability.
+                                                        </b>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </aura:set>
+
+                                        </aura:if>
+                                    </div>
+                                </div>
+
+                            </lightning:layoutItem>
+
+
+                            <!-- ******************** -->
+                            <!-- Details about the sku -->
+                            <!-- ******************** -->
+                            <lightning:layoutItem class="productInput slds-grid slds-wrap slds-p-left_small slds-p-right_medium
+                                                    slds-p-bottom_medium slds-is-relative" size="12">
+
+                                <div class="productSku  slds-large-size_2-of-12 slds-medium-size_3-of-12 slds-small-size_1-of-8
+                                            slds-m-around_small">
+                                    <div>
+                                        <b> Square Feet </b>
+                                    </div>
+                                    <div class="slds-p-top_xx-small slds-p-left_xx-small  table-cell-text-wrap">
+                                        {!resp.availableQty}&nbsp; {!resp.pricingUOM}
+                                    </div>
+                                </div>
+
+                                <div class="productSku  slds-large-size_2-of-12 slds-medium-size_3-of-12 slds-small-size_2-of-12
+                                            slds-m-around_small">
+                                    <div>
+                                        <b> Total # of Cartons</b>
+                                    </div>
+                                    <div class="slds-p-top_xx-small slds-p-left_xx-small table-cell-text-wrap">
+                                        {!resp.totalCartons}
+                                    </div>
+                                </div>
+
+
+                                <div class="productSku  slds-large-size_2-of-12 slds-medium-size_3-of-12 slds-small-size_2-of-12
+                                            slds-m-around_small">
+                                    <div>
+                                        <div class="{!resp.supplyPlant ?'':'slds-hide'}">
+                                            <b> Store </b>
+                                        </div>
+                                        <div class="slds-p-top_xx-small slds-p-left_xx-small table-cell-text-wrap">
+                                            {!resp.supplyPlant}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </lightning:layoutItem>
+
+
+                            <!-- Table -->
+                            <lightning:layoutItem class="productInput slds-grid slds-wrap slds-m-left_medium slds-p-left_small slds-p-right_medium
+                                                         slds-p-bottom_x-small slds-is-relative slds-m-bottom_large"
+                                                  size="12">
+
+                                <div class="slds-grid slds-wrap slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12
+                                            slds-large-size_9-of-12 searchResult slds-p-horizontal_small">
+                                    <h4 class="slds-m-right_large"><strong>Distance from Home</strong></h4>
+                                    <lightning:select class="distance-from-home" label="Distance from Home"
+                                                      value="{!resp.selectedMile}"
+                                                      variant="label-hidden" onchange="{!c.changeSelectedMiles}"
+                                                      name="{!x}">
+                                        <aura:iteration items="{!v.listOfMiles}" var="ml">
+                                            <option value="{!ml}">{!ml} mi.</option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </div>
+
+                            </lightning:layoutItem>
+
+
+
+                            <lightning:layoutItem class="productInput slds-grid slds-wrap slds-m-left_medium slds-p-left_small slds-p-right_medium
+                                                         slds-p-bottom_x-small slds-is-relative slds-m-bottom_large"
+                                                  size="12">
+
+                                <c:Dal_Dist_Inventory_SkuAvailTable milesWrapperList="{!resp.milesWrapperList}"
+                                                                    showTill="{!resp.ShowTill}"
+                                                                    storeName="{!resp.supplyPlant}"/>
+
+                            </lightning:layoutItem>
+
+                            <aura:if isTrue="{!!(resp.ShowTill >= (resp.milesWrapperList.length))}">
+                                <lightning:layoutItem class="productInput slds-grid slds-wrap slds-p-right_medium slds-p-bottom_x_small
+                                                         slds-is-relative slds-m-bottom_small" size="8"
+                                                      largeDeviceSize="4" mediumDeviceSize="4">
+
+                                    <lightning:button class="show-button-custom" name="SHOW MORE" label="SHOW MORE"
+                                                      value="{!x}" onclick="{!c.handleShowMore}"
+                                                      variant="brand"/>
+                                </lightning:layoutItem>
+                            </aura:if>
+
+
+                            <!-- Calculator -->
+                            <lightning:layoutItem class="productInput slds-grid slds-wrap slds-p-left_small slds-p-right_medium
+                                                         slds-p-bottom_medium slds-is-relative" size="12">
+
+                                <div class="slds-grid slds-wrap slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12
+                                            slds-large-size_9-of-12 searchResult slds-p-bottom_small slds-p-horizontal_small">
+                                    <a href="" onclick="{!c.openCalculator}" name="{!x}">
+                                        <i class="fa fa-calculator icon-color-custom" aria-hidden="true"
+                                           onclick="{!c.openCalculator}">
+                                            <b class="slds-p-left_small "><u><b>Need to calculate
+                                                        sq ft?</b></u></b>
+                                        </i>
+                                    </a>
+                                </div>
+
+                            </lightning:layoutItem>
+
+                        </lightning:layout>
+                    </aura:iteration>
+                </aura:if>
+            </lightning:layoutItem>
+
+        </lightning:layout>
+
+
+        <!-- Border Bottom -->
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+            <lightning:layout class="saveFooter slds-p-vertical_medium" multipleRows="true"
+                              horizontalAlign="center" verticalAlign="center">
+
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4"
+                                      padding="horizontal-large">
+                  <!--<i class="italic-text">{!v.topText}</i>-->
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" class="slds-grid slds-grid_align-center
+                                                                                                                     slds-large-grid_align-end slds-medium-grid_align-end slds-order_1 slds-large-order_2 slds-p-top_large slds-p-bottom_small">
+                    <div id="btnSaveContinue" class="saveAndContinueButtons">
+                        <lightning:button variant="brand" label="CREATE NEW SEARCH" class="slds-m-horizontal_small"
+                                          onclick="{!c.createNewInventory}"/>
+                    </div>
+                </lightning:layoutItem>
+
+            </lightning:layout>
+        </lightning:layoutItem>
+
+
+    </lightning:layout>
+
+</aura:component>

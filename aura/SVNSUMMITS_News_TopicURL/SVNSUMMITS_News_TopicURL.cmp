@@ -1,0 +1,18 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component access="global" controller="SVNSUMMITS_NewsController">
+
+    <ltng:require scripts="{!join(',',
+    			$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js',
+                $Resource.SVNSUMMITS_News_SemanticUI + '/fullcalendar-2.6.1/moment.min.js'
+                 )}"
+    />
+
+	<aura:attribute name="topicName" type="String" access="global"/>
+    <aura:attribute name="sitePath" type="String" access="global"/>
+    <aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="topicNameToId" type="Map" access="global"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <ui:outputURL aura:id="topicLink"/>
+
+</aura:component>

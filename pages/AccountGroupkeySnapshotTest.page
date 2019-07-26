@@ -1,0 +1,241 @@
+<apex:page standardController="Account" extensions="AccountGroupKeySnapshotController" lightningStylesheets="true" id="thePage" sidebar="false" showHeader="false" >
+
+<apex:slds />
+    
+    <apex:outputPanel rendered="{!bolPrintableView}">
+         <script>
+          window.print()
+         </script>
+         
+        <style type="text/css" media="print">
+            @media print {
+                
+            }
+            
+            .PrintFont {
+            
+                font-size: 75%;
+            }
+        </style>
+         
+    </apex:outputPanel>
+    <style>
+        .logo {
+
+            height: auto;
+        }
+        
+        .width30{
+        
+            width:30%;
+        
+        }
+        
+        .width70{
+        
+            width:70%;
+        
+        }
+        
+    </style>
+    <apex:outputPanel id="wholePage">
+      
+    <apex:pageBlock id="theBlockHeader" >
+
+        <apex:form >
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <nav role="navigation" aria-label="Breadcrumbs">
+                        <ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
+                            <li class="slds-breadcrumb__item">Groupkey Snapshot - {!Account.Name}</li>
+                        </ol>
+                    </nav>
+                    <div class="slds-media">
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate" title="{!Account.Name}"></span>
+                                        
+                                        <apex:outputPanel rendered="{!If( (Account.Division__c ='40' && selectedDivisionVal = '')  || (selectedDivisionVal = '40') , true, false)}" >
+                                            <apex:image styleClass="logo" value="{!$Resource.logodt}" style="text-align: right;"/>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!If( (Account.Division__c ='41' && selectedDivisionVal = '') || selectedDivisionVal = '41', true, false)}" >
+                                            <apex:image styleClass="logo" value="{!$Resource.logoAOMZ}" style="text-align: right;"/>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!If( selectedDivisionVal = 'All' , true, false)}" >
+                                            <apex:image styleClass="logo" value="{!$Resource.logoAll}" style="text-align: right;"/>
+                                        </apex:outputPanel>
+                                        
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__controls">
+                        <div class="slds-page-header__control">
+                            <ul class="slds-button-group-list">
+                                <li>
+                                    <apex:outputPanel rendered="{!NOT(bolPrintableView)}">
+                                        <a class="slds-button slds-button_brand" href='/{!Account.Id}' target='_parent'>back to account</a> 
+                                        &nbsp;
+                                    </apex:outputPanel> 
+                                </li>
+                                <li>
+                                    <apex:outputPanel rendered="{!NOT(bolPrintableView)}">
+                                        <a class="slds-button slds-button_brand" href='AccountGroupkeySnapshot?id={!Account.Id}&division={!selectedDivisionVal}&date={!selectedDateVal}&print=1' target='_blank'>print/pdf</a> 
+                                    </apex:outputPanel>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slds-page-header__row slds-page-header__row_gutters">
+                <div class="slds-page-header__col-details">
+                  <ul class="slds-page-header__detail-row">
+                    <li class="slds-page-header__detail-block">
+                      <div class="slds-text-title slds-truncate" title="Field 1"><b>Group Key</b></div>
+                      <div class="slds-truncate" title="{!Account.GroupKey__c}">{!Account.GroupKey__c}</div>
+                    </li>
+                    
+                    <li class="slds-page-header__detail-block">
+                      <div class="slds-text-title slds-truncate" title="Field 2 (3)"><b>Division</b></div>
+                      <div class="slds-truncate" title="Multiple Values">
+                          <apex:selectList id="selectDivisionList" value="{!selectedDivisionVal}" size="1" > 
+                              <apex:actionSupport event="onchange" rerender="wholePage" action="{!refreshSales}" status="status" />
+                              <apex:selectOptions id="selectDivisionValue" value="{!divisionOptions}" /> 
+                          </apex:selectList>  
+                      </div>
+                    </li>
+                    
+                    <li class="slds-page-header__detail-block">
+                      <div class="slds-text-title slds-truncate" title="Field 3"><b>Rep Name</b></div>
+                      <div class="slds-truncate" title="Hyperlink">{!Account.Salesman__r.Name}</div>
+                    </li>
+                    
+                    <li class="slds-page-header__detail-block">
+                      <div class="slds-text-title slds-truncate" title="Field 4"><b>Sales Dates</b></div>
+                      <div class="slds-truncate" title="Sales Dates">
+                          <apex:selectList id="selectDateList" value="{!selectedDateVal}" size="1" > 
+                              <apex:actionSupport event="onchange" rerender="wholePage,chartProductTeam" action="{!refreshSales}" status="status" />
+                              <apex:selectOptions id="selectDateValue" value="{!dateOptions}" /> 
+                          </apex:selectList>  
+                      </div>
+                    </li>
+                    
+                  </ul>
+                </div>
+              </div>
+
+        </apex:form>   
+        <apex:outputText rendered="{! IF( selectedDateVal == 'Previous Year / All Periods', true, false)}" >
+            <br />
+            <b style="color:red;">Warning: All sales reflected on the report are from the years 2017 and 2018. Toggle to the current pay period using the Sales Date drop down.</b>
+        </apex:outputText>
+        <br />
+
+    </apex:pageBlock> 
+
+    <apex:outputPanel layout="none" id="thePanelReport">
+    
+        <apex:pageBlock id="theBlockReport1" >
+            <apex:pageBlockSection columns="1" Id="accountObjectives">
+                <b>Sales by Quarter</b>
+                
+                <apex:outputText escape="false" value="{!SalesStatus}"/>
+        
+        
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+        <apex:pageBlock id="theBlockReport2" >
+            <apex:pageBlockSection columns="2" Id="accountProductMixYTD" >
+                         
+                <apex:pageBlockSectionItem >
+                    
+                    <!---- Sales By Proudct Team ---->
+
+                    <apex:outputText value="{!SalesByProductTeam}" escape="false" />
+                    
+                    <!---- End Sales By Proudct Team ---->
+                    
+                </apex:pageBlockSectionItem>   
+                
+                <apex:pageBlockSectionItem >
+
+                    
+                    <apex:chart height="350" width="90%" data="{!ProductTeamPieData}" name="Temp323">
+                        <apex:pieSeries dataField="data" labelField="name" >
+                            <apex:chartLabel display="none"/>
+                            <apex:chartTips height="40" width="120" />
+                        </apex:pieSeries>
+                        <apex:legend position="right"  />
+                    </apex:chart>
+                    
+
+                    
+                </apex:pageBlockSectionItem> 
+                   
+            </apex:pageBlockSection>
+        </apex:pageBlock>   
+
+        <apex:pageBlock id="theBlockReport3" >
+
+            
+            
+                <table width="100%" cellspace="0">
+                <tr>
+                <td width='60%'>
+                    <!---- Sales By Account ---->
+                    <apex:outputText value="{!SalesByAccount}" escape="false" />
+    
+                    <!---- End Sales By Account ---->
+                </td>
+                <td width='40%'>       
+                 
+                    <apex:chart height="300" width="80%" data="{!AccountPieData}" name="Temp2" rendered="true">
+                        <apex:pieSeries dataField="data" labelField="name">
+                            <apex:chartLabel display="none"/>
+                            <apex:chartTips height="40" width="120" />
+                        </apex:pieSeries>
+                        <apex:legend position="right" spacing="1" font="10px Helvetica" padding="5" />
+                    </apex:chart>
+                    
+               </td>
+               </tr>
+               </table>  
+ 
+        </apex:pageBlock>
+
+        <apex:pageBlock id="theBlockReport4" >
+            <apex:pageBlockSection columns="2" Id="accountProductMixYTD12" >
+                <apex:pageBlockSectionItem >
+                    <!---- Sales By Product Line ---->
+
+                    <apex:outputText value="{!SalesByProductLine}" escape="false" />
+                    
+                    
+                    <!---- End Sales By Product Line ---->
+                    
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                
+                     <!---- Sales By Period ---->
+                    
+                    <apex:outputText value="{!SalesByPeriod}" escape="false" />
+                    
+                    <!---- End Sales By Period ---->
+                    
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>  
+        </apex:pageBlock>
+
+
+    </apex:outputPanel>
+
+ </apex:outputPanel>
+</apex:page>

@@ -1,0 +1,62 @@
+<!--
+ - Created by 7Summits on 4/9/18.
+ -->
+
+<aura:component description="Dal_PricingByMaterial_Search" controller="Dal_PricingListController" extends="c:Dal_Base" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" value="{!this}" action="{! c.init }"/>
+
+    <aura:attribute name="effectiveDate" type="String" default="" />
+    <aura:attribute name="appliedPromotion" type="String" default="" />
+
+    <aura:attribute name="skuLabel" type="String" default="SKU # "/>
+    <aura:attribute name="skuNumber" type="String" default=""/>
+    <aura:attribute name="description" type="String" default=""/>
+    <aura:attribute name="descriptionLabel" type="String" default="Description"/>
+    <aura:attribute name="searchButton" type="String" default="Search"/>
+
+    <aura:attribute name="communityType" type="String" default="Distributor" />
+    <aura:attribute name="hasPagination" type="Boolean" default="false" />
+    <aura:attribute name="paginationItemsPerPage" type="Integer" default="30" />
+    <aura:attribute name="paginationStartPage" type="Integer" default="0" />
+    <aura:attribute name="listMaximum" type="Integer" default="300" />
+    <aura:attribute name="isInitPricingByMaterialSearch" type="Boolean" default="false"/>
+    
+
+    <aura:handler event="c:Dal_PricingByMaterialDatePromoChangeEvt" action="{!c.handleDatePromoChange}"/>
+
+    <!-- <aura:handler name="searchButton" value="{!v.searchButton}" action="{!c.searchPromotions}"/> -->
+
+    <!-- Header Component-->
+    <aura:if isTrue="{!v.isInitPricingByMaterialSearch == true}">
+        <c:Dal_PricingByMaterialHeader aura:id="pricingHeaderComponent" effectiveDate="{!v.effectiveDate}" appliedPromotion="{!v.appliedPromotion}" />
+    </aura:if>
+    <!-- End Header Component -->
+
+    <!-- Body Component-->
+    <lightning:layout pullToBoundary="small" multipleRows="true">
+
+        <lightning:layoutItem padding="medium" flexibility="auto" class="searchWrapper slds-p-around_x-small slds-wrap slds-border--bottom" size="12" mediumDeviceSize="12" largeDeviceSize="12">
+            <div class="slds-p-horizontal_small">
+                <lightning:input aura:id="skuNumber" label="{!v.skuLabel}" value="{!v.skuNumber}" name="skuNumber" class="slds-p-around_small input-x-small" />
+            </div>
+            <div class="slds-p-horizontal_small">
+                <lightning:input aura:id="description" label="{!v.descriptionLabel}" value="{!v.description}" name="description" class="slds-p-around_small input-description" />
+            </div>
+            <div class="slds-m-top_x-large slds-p-horizontal_small">
+                <lightning:button variant="neutral" label="{!v.searchButton}" onclick="{!c.searchPromotions}"/>
+            </div>
+        </lightning:layoutItem>
+
+        <!-- List Component-->
+        <aura:if isTrue="{!v.isInitPricingByMaterialSearch == true}">
+            <lightning:layoutItem size="12" class="pricingListWrapper slds-p-around_medium" >
+                <c:Dal_PricingByMaterialList aura:id="pricingListComponent" communityType="{!v.communityType}" appliedPromotion="{!v.appliedPromotion}" effectiveDateValue="{!v.effectiveDate}" skuNumber="{!v.skuNumber}" description="{!v.description}"
+                     hasPagination="{!v.hasPagination}" paginationItemsPerPage="{!v.paginationItemsPerPage}" paginationStartPage="{!v.paginationStartPage}" listMaximum="{!v.listMaximum}"/>
+            </lightning:layoutItem>
+        </aura:if>
+        <!-- END List Component-->
+
+    </lightning:layout>
+    <!-- End Body Component-->
+
+</aura:component>

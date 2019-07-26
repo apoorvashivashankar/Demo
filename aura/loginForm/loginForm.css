@@ -1,0 +1,124 @@
+.THIS #sfdc_username_container{
+    margin-bottom:10px;
+    padding: 12px;
+    background-color:white;
+    border: 1px solid #CCC;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 5px;
+    line-height : 1.5;
+    height : 49px;
+}
+
+.THIS #sfdc_user{
+    float:left;
+    width:23px;
+    height:25px;
+    padding-top:1px;
+    padding-left:2px;
+    margin:0px;
+}
+
+.THIS #sfdc_lock{
+    float:left;
+    width:23px;
+    height:25px;
+    padding-top:1px;
+    padding-left:2px;
+    margin:0px;
+}
+
+.THIS  #error {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+    /*color: rgb(118, 122, 76);*/
+	color : t(colorTextLink);
+}
+
+.THIS  .login-icon {
+    color:#ccc;font-size:22px;
+}
+
+.THIS .slds-form-element__label {
+    display : none;
+}
+
+.THIS #sfdc_password_container{
+    padding: 12px;
+    margin-bottom : 10px;
+    background-color:white;
+    border: 1px solid #CCC;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 5px;
+    line-height : 1.5;
+    height : 49px;
+}
+
+.THIS  button.sfdc_button {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 12px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.42857143;
+    font-family: 'Gotham',sans-serif!important;
+    padding: .75rem;
+    border-radius: 4px;
+    margin-left : 0px;
+    margin-right : 0px;
+    height: 46px;
+}
+/*
+.THIS button.sfdc_button:hover {
+    background-color:#5f7e95;
+    border-color:#285e8e;
+    cursor:pointer;
+}
+*/
+.THIS #sfdc_forgot {
+	height : 20px;
+}
+
+.THIS button .label {
+    color: #ffffff;
+    text-shadow: none;
+    
+}
+
+.THIS  input {
+    margin-left:10px;
+    margin-top: -3px;
+    border: 0px solid transparent;
+    width: 92%;
+    -webkit-appearance: none;
+    font-size: 16px;
+    font-family: 'Gotham',sans-serif!important;
+    box-shadow: none!important;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.THIS label.uiLabel-hidden {
+    display:none;
+}
+
+.THIS .slds-icon {
+    fill : black;
+}
+
+.THIS .inverseTextColorCustom {
+    font-family: 'Gotham',sans-serif!important;
+    /*color: rgb(124, 151, 171);*/
+    color : t(colorTextLink);
+}
+
+/*.THIS .inverseTextColorCustom :hover{
+    font-family: 'Gotham',sans-serif!important;
+    color: black ;
+}*/

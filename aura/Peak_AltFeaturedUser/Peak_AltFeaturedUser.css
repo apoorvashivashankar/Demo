@@ -1,0 +1,92 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+/* Common CSS here */
+.THIS {
+  background-color: #fff;
+}
+.THIS .componentWrapper .backgroundImageWrapper {
+  overflow: hidden;
+  width: 100%;
+}
+.THIS .componentWrapper .backgroundImageWrapper .backgroundImage {
+  overflow: hidden;
+  height: 90px;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: cover;
+  -webkit-filter: blur(25px);
+  -moz-filter: blur(25px);
+  -o-filter: blur(25px);
+  -ms-filter: blur(25px);
+  filter: blur(25px);
+}
+.THIS .componentWrapper .userImageWrapper {
+  position: relative;
+}
+.THIS .componentWrapper .userImageWrapper > div > div {
+  position: absolute;
+  left: 50%;
+  top: -57px;
+}
+.THIS .componentWrapper .userImageWrapper > div > div .userImageBackground {
+  position: relative;
+  left: -50%;
+  background-color: #fff;
+  width: 114px;
+  height: 114px;
+  margin: auto;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+}
+.THIS .componentWrapper .userImageWrapper > div > div .userImageBackground .userImage {
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: cover;
+  width: 104px;
+  height: 104px;
+  margin: auto;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  /*105px makes the image get cut off and makes the side have a straight line??*/
+}
+.THIS .componentWrapper .textWrapper {
+  padding-top: 20px;
+  text-align: center;
+  padding-top: 77px;
+}
+.THIS .componentWrapper .textWrapper p {
+  font-family: token(fontFamily);
+  font-size: 1rem;
+  color: token(colorTextBrand);
+}
+.THIS .componentWrapper .textWrapper p.description {
+  margin-top: 1.25rem;
+  text-align: left;
+  color: token(colorTextDefault);
+}
+.THIS .componentWrapper .textWrapper p:first-child {
+  font-size: 1.5rem;
+}
+.THIS .componentWrapper .textWrapper span {
+  font-size: 1.25rem;
+  color: token(colorTextLink);
+}
+.THIS .componentWrapper .customLink {
+  font-size: .875rem;
+}
+.THIS .componentWrapper .customLink a:hover {
+  text-decoration: none;
+}

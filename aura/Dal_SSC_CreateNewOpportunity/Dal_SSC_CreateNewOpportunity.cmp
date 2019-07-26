@@ -1,0 +1,209 @@
+<!--
+ - Created by ranja on 23-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateNewOpportunity" controller="Dal_OpportunityManager"
+                extends="c:Dal_SSC_LeadManagementBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+    <!-- Internal Attributes -->
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="disabled" type="Boolean" default="false"/>
+    <aura:attribute name="saved" type="Boolean" default="false"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="isOutput" type="Boolean" default="false"/>
+    <aura:attribute name="isEdit" type="Boolean" default="false"/>
+
+    <!-- Events --> 
+    <aura:handler event="c:Dal_SSC_CreateNewLeadEvent" action="{!c.handleLeadEditEvent}"/>
+    <aura:registerEvent name="pageChange" type="c:Dal_SSC_LeadManagement_BreadCrumbEvent"/>
+
+
+    <!-- BODY -->
+
+    <!-- The messages component is for error messages -->
+    <lightning:messages class="dal-form-show-error"/>
+
+
+    <lightning:recordEditForm
+            recordId="{!v.recordId}"
+            onsubmit="{!c.updateRecords}"
+            objectApiName="Opportunity">
+
+        <aura:if isTrue="{!or(not(v.isOutput),v.isEdit)}">
+
+
+            <div >
+                <div class="slds-m-bottom_large width-name-custom form-element-box-border">
+                    <lightning:inputField fieldName="Name" aura:id="nameOfOpp"/>
+                </div>
+                <div class="lead-desription description-width-custom form-element-box-border">
+                    <lightning:inputField fieldName="Description" aura:id="opp-description"/>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="slds-m-bottom_large custom-info">
+                    <div class="heading-custom">
+                        Opportunity Info
+                    </div>
+
+                    <div class="slds-grid slds-m-bottom_medium slds-wrap">
+                        <div class="slds-large-size_5-of-12 slds-m-vertical_small slds-medium-size_5-of-12 slds-size_1-of-1">
+                            <div class="form-element-box-border">
+                                <label class="custom-label">Account</label>
+                                <lightning:inputField fieldName="OwnerId" class="label-hidden"/>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_5-of-12 slds-m-vertical_small slds-medium-size_5-of-12 slds-size_1-of-1 form-element-box-border">
+                            <label class="custom-label">Account</label>
+                            <lightning:inputField fieldName="AccountId" class="dal-input dal-custom-lookup label-hidden"/>
+                        </div>
+
+                    </div>
+
+                    <div class="slds-grid slds-m-bottom_medium slds-wrap">
+
+                        <div class="slds-large-size_5-of-12 slds-m-vertical_small slds-medium-size_5-of-12 slds-size_1-of-1 form-element-box-border">
+                            <lightning:inputField fieldName="StageName" class="dal-input dal-remove-helper-text"/>
+                        </div>
+                        <div class="slds-large-size_5-of-12 slds-m-vertical_small slds-medium-size_5-of-12 slds-size_1-of-1 form-element-box-border">
+                            <div class="">
+                                <lightning:inputField fieldName="Amount" class="dal-input dal-remove-helper-text"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="slds-grid slds-m-bottom_medium slds-wrap">
+                        <div class="slds-large-size_5-of-12 slds-m-vertical_small slds-medium-size_5-of-12 slds-size_1-of-1">
+                            <div class="form-element-box-border">
+                                <lightning:inputField fieldName="Bid_Date__c" aura:id="opp-form-bidDate"
+                                                      class="dal-input dal-remove-helper-text"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <aura:if isTrue="{!not(v.isEdit)}">
+                <div class="dal-create-new-lead slds-grid">
+                    <div>
+                        <lightning:button variant="neutral" name="CANCEL" class="dal-new-lead" label="CANCEL"
+                                          onclick="{!c.handleCancel}"/>
+                    </div>
+
+                    <div class="new-lead-spacing">
+                        <lightning:button variant="brand" type="submit" class="dal-new-lead" name="Create New Lead"
+                                          label="Create New Opportunity"/>
+                    </div>
+                </div>
+
+                <aura:set attribute="else">
+                    <div class="dal-create-new-lead slds-grid">
+                        <div>
+                            <lightning:button variant="neutral" name="CANCEL" class="dal-new-lead" label="CANCEL"
+                                              onclick="{!c.handleCancelFromEdit}"/>
+                        </div>
+                        <div class="new-lead-spacing">
+                            <lightning:button variant="brand" type="submit" class="dal-new-lead" name="SAVE"
+                                              label="SAVE"/>
+                        </div>
+                    </div>
+                </aura:set>
+            </aura:if>
+            <!-- </lightning:recordEditForm>-->
+
+
+            <!-- FOR DETAIL PAGE -->
+            <aura:set attribute="else">
+
+                <!--  <lightning:recordEditForm
+                    recordId="{!v.recordId}"
+                    objectApiName="Opportunity"> -->
+                <div class="slds-m-vertical_x-large">
+                    <div class="lead-desription dal-leadDetail-description description-width-custom">
+                        <lightning:outputField fieldName="Description"/>
+                    </div>
+
+                    <!-- Opportunity Info -->
+                    <div class="slds-m-bottom_large custom-info ">
+                        <div class="heading-custom">
+                            Opportunity Info
+                        </div>
+
+                        <div class="slds-grid slds-m-bottom_medium slds-wrap">
+                            <div class="slds-m-vertical_small slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="form-element-box-border">
+                                    <lightning:outputField fieldName="Name"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="form-element-box-border">
+                                    <label class="custom-label">Owner</label>
+                                    <lightning:outputField fieldName="OwnerId" class="label-hidden"/>
+                                </div>
+                            </div>
+                            <div class="slds-large-size_4-of-12 form-element-box-border">
+                                <lightning:outputField fieldName="StageName"
+                                                       class="dal-input dal-remove-helper-text"/>
+                            </div>
+
+                        </div>
+
+                        <div class="slds-grid slds-m-bottom_medium slds-wrap">
+                            <div class="slds-m-vertical_small slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <lightning:outputField fieldName="Bid_Date__c" class="dal-input"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <label class="custom-label">Account</label>
+                                    <lightning:outputField fieldName="AccountId" class="dal-input label-hidden"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <lightning:outputField fieldName="Amount" class="dal-input dal-remove-helper-text"/>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <aura:if isTrue="{!v.showSpinner}">
+                            <lightning:spinner class="spinner-fixed"/>
+                        </aura:if>
+
+
+                        <div class="slds-grid slds-m-bottom_medium slds-wrap">
+                            <div class="slds-m-vertical_small slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <lightning:outputField fieldName="Probability" class="dal-input"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <label class="custom-label">Created By</label>
+                                    <lightning:outputField fieldName="CreatedById" class="dal-input label-hidden"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-vertical_small slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_1-of-1 form-element-box-border">
+                                <div class="">
+                                    <label class="custom-label">Last Modified By</label>
+                                    <lightning:outputField fieldName="LastModifiedById"
+                                                           class="dal-input label-hidden dal-remove-helper-text"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </aura:set>
+
+        </aura:if>
+    </lightning:recordEditForm>
+
+</aura:component>

@@ -1,0 +1,87 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" controller="Dal_OpportunityManager"
+                extends="c:Dal_SSC_LeadManagementBase" description="Dal_SSC_NewOpportunityCreate">
+    
+    <!-- Internal Attribute -->
+    <aura:attribute name="isCreate" type="boolean" default="true" />    
+    
+            
+            
+    <!-- Body -->              
+    <lightning:recordEditForm recordId="{!v.recordId}" onsubmit="{!c.updateRecords}" objectApiName="Opportunity">
+        
+        <div >
+            
+            <div class="slds-m-bottom_large width-name-custom form-element-box-border">
+                <lightning:inputField fieldName="Name" aura:id="nameOfOpp"/>
+            </div>
+            
+            <div class="lead-desription description-width-custom form-element-box-border">
+                <lightning:inputField fieldName="Description" aura:id="opp-description"/>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="slds-m-bottom_large custom-info">
+                <div class="heading-custom">
+                    Opportunity Info
+                </div>
+                
+                <div class="slds-grid slds-m-bottom_medium slds-wrap">
+                    <aura:if isTrue="{!!v.isCreate}" >
+                        <div class="slds-large-size_5-of-12 slds-m-vertical_small slds-medium-size_5-of-12 slds-size_1-of-1">
+                            <div class="form-element-box-border">
+                                <label class="custom-label">Owner</label>
+                                <lightning:inputField fieldName="OwnerId" class="label-hidden"/>
+                            </div>
+                        </div>
+                    </aura:if>
+                     <div class="slds-large-size_5-of-12 slds-m-vertical_small slds-medium-size_5-of-12 slds-size_1-of-1">
+                        <div class="form-element-box-border">
+                            <lightning:inputField fieldName="Bid_Date__c" aura:id="opp-form-bidDate"
+                                                  class="dal-input dal-remove-helper-text"/>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-large-size_5-of-12 slds-m-vertical_small slds-medium-size_5-of-12 slds-size_1-of-1 form-element-box-border">
+                        <label class="custom-label">Account</label>
+                        <lightning:inputField fieldName="AccountId" class="dal-input dal-custom-lookup label-hidden"/>
+                    </div>
+                </div>
+                
+                 <!-- SPINNER -->
+                <aura:if isTrue="{!v.showSpinner}" >
+                    <lightning:spinner class="fixed-position" variant="brand"/>
+                </aura:if>
+                
+                <div class="slds-grid slds-m-bottom_medium slds-wrap">
+                    
+                    <div class="slds-large-size_5-of-12 slds-m-vertical_small slds-medium-size_5-of-12 slds-size_1-of-1 form-element-box-border">
+                        <lightning:inputField fieldName="StageName" class="dal-input dal-remove-helper-text"/>
+                    </div>
+                    <div class="slds-large-size_5-of-12 slds-m-vertical_small slds-medium-size_5-of-12 slds-size_1-of-1 form-element-box-border">
+                        <div class="">
+                            <lightning:inputField fieldName="Amount" class="dal-input dal-remove-helper-text"/>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- Create New Opportunity Button -->
+        <div class="dal-create-new-lead slds-grid">
+            <div>
+                <lightning:button variant="neutral" name="CANCEL" class="dal-new-lead" label="CANCEL"
+                                  onclick="{!c.handleCancel}"/>
+            </div>  
+            <div class="new-lead-spacing">
+                <lightning:button variant="brand" type="submit" class="dal-new-lead" name="Create New Lead"
+                                  label="Create New Opportunity"/>
+            </div>
+        </div>
+        
+        
+    </lightning:recordEditForm>
+    
+    
+</aura:component>

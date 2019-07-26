@@ -1,0 +1,7 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ -->
+
+<design:component label="7S HTML Anchor">
+    <design:attribute name="anchorName" label="Page Specific Anchor Name"/>
+</design:component>

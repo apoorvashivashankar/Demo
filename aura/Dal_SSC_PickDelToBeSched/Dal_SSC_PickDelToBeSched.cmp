@@ -1,0 +1,30 @@
+<!--
+ - Created by 7Summits on 3/1/18.
+ -->
+
+<aura:component description="Dal_SSC_PickDelToBeSched" extends="c:Dal_ListBase" controller="Dal_OrderSearchController">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="headerText" type="String" default="Check the boxes of the orders you’d like to schedule pickups or deliveries for and select &quot;Schedule Selected Orders&quot;." />
+
+    <!-- internal -->
+    <aura:attribute name="showMoreLabel" type="String" default="Show More"/>
+    <aura:attribute name="viewAllOpenOrdersLabel" type="String" default="View All Open Orders"/>
+    <aura:attribute name="viewAllOpenOrdersUrl" type="String" default="{!$Label.c.Dal_PickDelToBeSched_AllOrder_Label}" />
+    <aura:attribute name="allDataChecked" type="Boolean"/>
+    
+    <lightning:layout class="slds-p-top_small" multipleRows="true" verticalAlign="center">
+        <lightning:layoutItem class="slds-p-horizontal_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="8">
+            <!--<input type="checkbox" class="slds-m-vertical_x-small" name="showAll" onclick="{!c.handleSelectAllOrders}" checked="{!v.allDataChecked}" /><span class="dal-list-showAll slds-p-horizontal_medium">Select all orders</span>-->
+            <button type="button" class="slds-button slds-button_neutral slds-m-vertical_x-small" name="scheduleSelectedOrders"
+                    onclick="{!c.handleScheduleSelectedOrders}">SCHEDULE SINGLE APPOINTMENT</button>
+            <button type="button" class="slds-button slds-button_neutral slds-m-vertical_x-small" name="scheduleSelectedOrders"
+                    onclick="{!c.handleScheduleSelectedOrdersForMultiple}">SCHEDULE MULTIPLE APPOINTMENTS</button>
+        </lightning:layoutItem>
+        <lightning:layoutItem class="slds-p-around_x-small slds-text-align_right" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="4">
+            <a class="dal-list-ctaLink" href="javascript:void(0)" data-url="{!v.viewAllOpenOrdersUrl}" onclick="{!c.gotoURL}">
+                {!v.viewAllOpenOrdersLabel}
+            </a>
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

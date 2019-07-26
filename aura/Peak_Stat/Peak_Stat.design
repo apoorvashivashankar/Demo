@@ -1,0 +1,20 @@
+<!--
+ - Created by michaelsullivan on 6/7/17.
+ -->
+
+<design:component label="7S Peak Stats">
+
+    <design:attribute name="header" label="header"/>
+    <design:attribute name="message" label="message"/>
+    <design:attribute name="title" label="title"/>
+    <design:attribute name="count" label="count"/>
+    <design:attribute name="total" label="total"/>
+    <design:attribute name="separatorText" label="Separator Text"/>
+    <design:attribute name="moreLink" label="moreLink"/>
+    <design:attribute name="moreText" label="moreText"/>
+    <design:attribute name="isSingleStat" label="Single Stat?"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class" />
+    <design:attribute name="CustomIdName" label="Custom ID" />
+
+</design:component>

@@ -1,0 +1,278 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaNewController"
+                implements="force:appHostable,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes"
+                extends="c:SVNSUMMITS_Ideas_Base"
+                access="global">
+
+	<ltng:require scripts="{!join(',',
+			$Resource.jquery_2_2_4,
+			$Resource.forcetk)}"/>
+
+	<c:SVNSUMMITS_Include_SemanticUI />
+
+	<aura:attribute name="debugMode" type="Boolean" default="true" access="global"/>
+
+	<!-- Design attributes -->
+	<aura:attribute name="zoneName" type="String" default="" access="global" required="true"/>
+	<aura:attribute name="allowImages" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="allowThemes" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="allowCategories" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showDuplicates" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="ideaDetailURL" type="String" default="/idea/" access="global" required="true"/>
+	<aura:attribute name="ideaListURL" type="String" default="/ideas/" access="global" required="true"/>
+
+	<aura:attribute name="title" default="New Idea" type="String" access="global"/>
+	<aura:attribute name="zoneId" type="String" default="" access="global"/>
+	<aura:attribute name="defaultStatus" default="Submitted" type="String" access="global"/>
+	<aura:attribute name="simIdeasLimit" default="5" type="Integer" required="true" access="global"/>
+	<aura:attribute name="currIdea" type="Idea" access="global"
+	                default="{'sobjectType' : 'Idea', 'Title': ''}"/>
+
+	<!-- Edit mode -->
+	<aura:attribute name="isEditing" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="parentId" type="String" access="global"/>
+	<aura:attribute name="sObjectId" type="Id" access="global"/>
+
+	<!-- do we use topics? -->
+	<aura:attribute name="useTopics" default="true" type="Boolean" access="global"/>
+
+	<!-- image upload -->
+	<aura:attribute name="sfInstanceUrl" type="String" default="" required="true" access="global"/>
+	<aura:attribute name="strAttachmentError" type="String[]" access="global"/>
+	<aura:attribute name="isBrowseError" type="Boolean"/>
+	<aura:attribute name="strError" type="String[]"/>
+
+	<aura:attribute name="sessionId" type="String" access="global"/>
+
+	<aura:attribute name="ideasList" type="idea[]" access="global"/>
+	<aura:attribute name="topicNamesList" type="String[]" access="global"/>
+	<aura:attribute name="categoriesSet" type="Set" access="global"/>
+	<aura:attribute name="themeSet" type="IdeaTheme[]" access="global"/>
+	<aura:attribute name="statusSet" type="Set" access="global"/>
+
+	<!-- Error handling -->
+	<aura:attribute name="validDescription" type="Boolean" default="true"/>
+	<aura:attribute name="errorDescription" type="String" default="{!$Label.c.ss_idea_error_descriptionEntry}" />
+	<aura:attribute name="errorTitle" type="String" default="{!$Label.c.ss_idea_error_titleEntry}"/>
+	<aura:attribute name="errorImageType" type="String" default="{!$Label.c.ss_idea_error_imageEntry}"/>
+	<aura:attribute name="errorImageSize" type="String" default="{!$Label.c.ss_idea_error_imageSize}"/>
+
+	<!-- UI Labels -->
+	<aura:attribute name="labelTitle" type="String" access="global" default="{!$Label.c.ss_idea_label_Title}"/>
+	<aura:attribute name="labelTitleHelp" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_CharacterLimit}"/>
+	<aura:attribute name="labelSubmitted" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_AlreadySubmitted}"/>
+	<aura:attribute name="labelBody" type="String" access="global" default="{!$Label.c.ss_idea_label_Describe}"/>
+	<aura:attribute name="labelUpload" type="String" access="global" default="{!$Label.c.ss_idea_label_UploadImage}"/>
+	<aura:attribute name="labelUploadSize" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_AspectRatio}"/>
+	<aura:attribute name="labelAttachment" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_ChooseFile}"/>
+
+	<aura:attribute name="labelTheme" type="String" access="global" default="{!$Label.c.ss_idea_label_ChooseTheme}"/>
+	<aura:attribute name="labelTopic" type="String" access="global" default="{!$Label.c.ss_idea_label_PickTopic}"/>
+	<aura:attribute name="labelCategory" type="String" access="global"
+	                default="{!$Label.c.ss_idea_label_SelectCategory}"/>
+	<aura:attribute name="labelStatus" type="String" access="global" default="{!$Label.c.ss_idea_label_Status}"/>
+	<aura:attribute name="labelSubmit" type="String" access="global" default="{!$Label.c.ss_idea_label_Submit}"/>
+	<aura:attribute name="labelCancel" type="String" access="global" default="{!$Label.c.ss_idea_label_Cancel}"/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_BaseReady" action="{!c.doInit}"/>
+
+	<!-- Needs to use the new Lightning layout -->
+	<div class="createIdeaBox">
+		<aura:renderIf isTrue="{!v.zoneId != ''}">
+			<div class="slds-grid slds-wrap">
+
+				<lightning:spinner size="large"
+				                   class="slds-hide"
+				                   aura:id="spinnerSubmit"
+				                   alternativeText="Loading..."/>
+
+				<div class="slds-grid slds-wrap slds-size_1-of-1" aura:id="newIdeaForm" id="newIdeaForm">
+
+					<!-- Title -->
+					<div class="slds-size--1-of-1 slds-p-vertical--small">
+						<div class="slds-form-element">
+							<label class="slds-form-element__label" for="title">{!$Label.c.ss_idea_label_Title} *
+								<br/>
+								<small>{!$Label.c.ss_idea_label_CharacterLimit}</small>
+							</label>
+							<div class="slds-form-element__control">
+								<ui:inputText aura:id="title"
+								              class="slds-input"
+								              required="true"
+								              value="{!v.currIdea.Title}"
+								              blur="{!c.check_DuplicateIdeas}"/>
+							</div>
+						</div>
+					</div>
+					<div class="slds-size--1-of-1 slds-p-vertical--small">
+						<div class="slds-form-element">
+							<div class="slds-media__body">
+
+								<div aura:id="spinner">
+									<div class="slds-spinner--small">
+										<img src="{!v.spinnerImageUrl}" alt="Loading..."/>
+									</div>
+								</div>
+
+								<aura:iteration items="{!v.ideasList}" var="idea" indexVar="i">
+									<aura:if isTrue="{!i == 0}">
+										<p class="slds-text-heading--label">{!$Label.c.ss_idea_label_AlreadySubmitted}</p>
+									</aura:if>
+
+									<p class="slds-tile__title">
+										<a href="javascript:void(0);"
+										   onclick="{!c.gotoRecord}"
+										   data-id="{!idea.Id}"
+										   class=" slds-truncate">{!idea.Title}</a>
+										&nbsp;-&nbsp;{!idea.VoteTotal}&nbsp;{!$Label.c.ss_idea_label_points}</p>
+								</aura:iteration>
+							</div>
+						</div>
+					</div>
+
+					<!-- Description -->
+					<div class="slds-size--1-of-1 slds-p-vertical--small">
+						<div class="slds-form-element">
+							<label class="slds-form-element__label"
+							       for="description">{!$Label.c.ss_idea_label_Describe} *</label>
+							<div class="slds-form-element__control">
+								<lightning:inputRichText aura:id="description"
+								                         valid="{!v.validDescription}"
+								                         messageWhenBadInput="{!v.errorDescription}"
+								                         value="{!v.currIdea.Body}"/>
+							</div>
+						</div>
+					</div>
+
+					<!--Attachments -->
+					<aura:if isTrue="{!v.allowImages}">
+						<div class="slds-form-element labelPadding">
+							<label class="slds-form-element__label toUpper">{!$Label.c.ss_idea_label_UploadImage}
+								<br/>
+								<small>{!$Label.c.ss_idea_label_AspectRatio}</small>
+							</label>
+							<div class="slds-form-element__control">
+								<label class="slds-button slds-button--neutral upload-trigger" for="imageUpload"
+								       aura:id="image-file-name"
+								       id="image-file-name">{!$Label.c.ss_idea_label_ChooseFile}</label>
+								<input type="file"
+								       aura:id="imageUpload"
+								       class="slds-input the-upload"
+								       id="imageUpload"
+								       onchange="{!c.chosenImage}"/>
+							</div>
+							<aura:if isTrue="{!v.isBrowseError}">
+								<ui:inputDefaultError value="{!v.strError}"/>
+							</aura:if>
+						</div>
+					</aura:if>
+
+					<!-- Theme -->
+					<aura:if isTrue="{!v.allowThemes}">
+						<div class="slds-size--1-of-1 slds-p-vertical--small">
+							<div class="slds-form-element">
+								<label class="slds-form-element__label toUpper"
+								       for="selectedTheme">{!$Label.c.ss_idea_label_ChooseTheme}</label>
+								<div class="slds-form-element__control">
+									<ui:inputSelect multiple="false" aura:id="selectedTheme"
+									                class="slds-input-select ui dropdown select uiInput uiInputSelect"
+									                value="{!v.currIdea.IdeaThemeId}">
+										<ui:inputSelectOption text="" Label="--None--" class="slds-input"/>
+										<aura:iteration items="{!v.themeSet}" var="theme">
+											<ui:inputSelectOption text="{!theme.Id}"
+											                      label="{!theme.Title}"/>
+										</aura:iteration>
+									</ui:inputSelect>
+								</div>
+							</div>
+						</div>
+					</aura:if>
+
+					<!-- Topics -->
+					<aura:if isTrue="{!v.useTopics}">
+						<div class="slds-size--1-of-1 slds-p-vertical--small">
+							<div class="slds-form-element">
+								<label class="slds-form-element__label"
+								       for="selectedTopic">{!$Label.c.ss_idea_label_PickTopic}</label>
+								<div class="slds-form-element__control">
+									<ui:inputSelect aura:id="selectedTopic"
+									                multiple="false"
+									                value="{!v.currIdea.Related_Topic_Name__c}"
+									                class="slds-input-select ui dropdown select uiInput uiInputSelect">
+										<ui:inputSelectOption text="" Label="--None--" class="slds-input"/>
+										<aura:iteration items="{!v.topicNamesList}" var="topic">
+											<ui:inputSelectOption text="{!topic.Name}"
+											                      label="{!topic.Name}"/>
+										</aura:iteration>
+									</ui:inputSelect>
+								</div>
+							</div>
+						</div>
+					</aura:if>
+
+					<!--  Categories -->
+					<aura:if isTrue="{!v.allowCategories}">
+						<div class="slds-size--1-of-1 slds-p-vertical--small">
+							<div class="slds-form-element">
+								<label class="slds-form-element__label"
+								       for="selectedCategory">{!$Label.c.ss_idea_label_SelectCategory}</label>
+								<div class="slds-form-element__control">
+									<ui:inputSelect aura:id="selectedCategory"
+									                multiple="false"
+									                class="slds-input-select ui dropdown select uiInput uiInputSelect">
+										<aura:iteration items="{!v.categoriesSet}" var="category">
+											<ui:inputSelectOption text="{!category}"
+											                      label="{!category}"/>
+										</aura:iteration>
+									</ui:inputSelect>
+								</div>
+							</div>
+						</div>
+					</aura:if>
+
+					<!-- Status -->
+					<aura:if isTrue="{!v.isEditing}">
+						<div class="slds-size--1-of-1 slds-p-vertical--small">
+							<div class="slds-form-element">
+								<label class="slds-form-element__label"
+								       for="selectedStatus">{!$Label.c.ss_idea_label_Status}</label>
+								<div class="slds-form-element__control">
+									<ui:inputSelect aura:id="selectedStatus"
+									                multiple="false"
+									                class="slds-input-select ui dropdown select uiInput uiInputSelect">
+										<aura:iteration items="{!v.statusSet}" var="status">
+											<ui:inputSelectOption text="{!status}"
+											                      label="{!status}"/>
+										</aura:iteration>
+									</ui:inputSelect>
+								</div>
+							</div>
+						</div>
+					</aura:if>
+
+					<!-- Submit, Error -->
+					<div class="slds-size--1-of-1 slds-p-vertical--small">
+						<lightning:button name="Submit"
+						                  label="{!$Label.c.ss_idea_label_Submit}"
+						                  onclick="{!c.submitIdea}"
+						                  variant="brand"/>
+						<lightning:button name="Cancel"
+						                  label="{!$Label.c.ss_idea_label_Cancel}"
+						                  onclick="{!c.goBack}"
+						                  variant="neutral"/>
+
+						<div class="slds-grid" aura:id="resultsDiv">
+							<ui:outputRichText value="" aura:id="resultId"/>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</aura:renderIf>
+	</div>
+</aura:component>

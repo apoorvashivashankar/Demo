@@ -1,0 +1,67 @@
+<!--
+ - Created by 7Summits on 2/20/18.
+ -->
+
+<aura:component description="Dal_SSC_PrimaryAccount" extends="c:Dal_Base" controller="Dal_SSC_PrimaryAccountController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:attribute name="title" type="String" default="My Primary SSC location:" />
+    <aura:attribute name="primaryAccount" type="SSC__c" access="global" />
+    <aura:attribute name="storeHours" type="Map" default="{}"/>
+    <aura:attribute name="otherLocationsUrl" type="String" default="https://www.daltile.com/company/store-locator"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+
+    <lightning:layout verticalAlign="center" multipleRows="true">
+
+        <aura:if isTrue="{!v.isLoading == false}">
+            <lightning:layoutItem size="12" padding="around-large">
+                <h4 class="slds-p-bottom_medium bold">{!v.title}
+                    <a class="acctLocations" href="{!v.otherLocationsUrl}" target="_blank">View other locations</a>
+                </h4>
+
+                <lightning:layout verticalAlign="center" horizontalAlign="center">
+                    <lightning:layoutItem size="9">
+                        <aura:if isTrue="{!v.primaryAccount.Name}">
+                            <h4 class="slds-p-around_xxx-small bold">{!v.primaryAccount.Name}</h4>
+                        </aura:if>
+                        <aura:if isTrue="{!v.primaryAccount.Street_Address}">
+                            <p class="address slds-p-around_xxx-small">{!v.primaryAccount.Street_Address}</p>
+                        </aura:if>
+                        <aura:if isTrue="{!v.primaryAccount.City}">
+                            <p class="address slds-p-around_xxx-small">{!v.primaryAccount.City}, {!v.primaryAccount.State}&nbsp;{!v.primaryAccount.Zip_Code}</p>
+                        </aura:if>
+                        <div class="contactInfo slds-p-top_medium">
+                            <aura:if isTrue="{!v.primaryAccount.SSC_Phone_Number}">
+                                <p class="slds-p-around_xxx-small"><lightning:icon iconName="utility:call" /><lightning:formattedPhone value="{!v.primaryAccount.SSC_Phone_Number}" /></p>
+                            </aura:if>
+                            <aura:if isTrue="{!v.primaryAccount.SSC_Fax_Number}">
+                                <p class="slds-p-around_xxx-small"><lightning:icon iconName="utility:log_a_call" />FAX: <lightning:formattedPhone value="{!v.primaryAccount.SSC_Fax_Number}" /></p>
+                            </aura:if>
+
+                            <p class="slds-p-around_xxx-small slds-text-color_weak">
+                                <lightning:icon iconName="utility:inbox" />
+                                <aura:if isTrue="{!and(!empty(v.storeHours.mfStartHour), !empty(!v.storeHours.mfEndHour))}">
+                                    M-F: {!v.storeHours.mfStartHour}-{!v.storeHours.mfEndHour}
+                                </aura:if>
+                                <aura:if isTrue="{!and(!empty(v.storeHours.satStartHour), !empty(!v.storeHours.satEndHour))}">
+                                    ,&nbsp;Sat: {!v.storeHours.satStartHour}-{!v.storeHours.satEndHour}
+                                </aura:if>
+                                <aura:if isTrue="{!and(!empty(v.storeHours.sunStartHour), !empty(!v.storeHours.sunEndHour))}">
+                                    ,&nbsp;Sun: {!v.storeHours.sunStartHour}-{!v.storeHours.sunEndHour}
+                                </aura:if>
+                            </p>
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+
+            </lightning:layoutItem>
+        </aura:if>
+
+        <aura:if isTrue="{!v.isLoading == true}">
+            <div class="slds-is-relative slds-p-around_xx-large slds-align_absolute-center">
+                <lightning:spinner variant="brand" />
+            </div>
+        </aura:if>
+
+    </lightning:layout>
+</aura:component>

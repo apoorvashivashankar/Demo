@@ -1,0 +1,71 @@
+<apex:component controller="AccountSnapshotController"  id="theComponent5">
+    <b class="PrintFont">Activity Log</b>
+
+
+
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th class="PrintFont" scope="col" width="35%">
+                <div class="slds-truncate" title="Opportunity Name" >Subject</div>
+                </th>
+                <th class="PrintFont" scope="col" width="10%">
+                <div class="slds-truncate" title="Account Name" >Due Date</div>
+                </th>
+                <th class="PrintFont" scope="col" width="20%">
+                <div class="slds-truncate" title="Close Date" >Contact Name</div>
+                </th>
+                <th class="PrintFont" scope="col" width="10%">
+                <div class="slds-truncate" title="Close Date" >Status</div>
+                </th>
+                <th class="PrintFont" scope="col" width="25%">
+                <div class="slds-truncate" title="Close Date" >Growth Plan Objective</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <apex:outputPanel rendered="{!OR(ISNULL(Activity),Activity.size == 0)}">
+                <tr class="slds-hint-parent">
+                <td colspan="5">No records found.</td>
+                </tr>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(NOT(ISNULL(Activity)),Activity.size > 0)}">
+                <apex:repeat value="{!Activity}" var="record" rows="10">
+                    <tr class="slds-hint-parent">
+                    <th data-label="Opportunity Name" scope="row" class="PrintFont">
+                        <div class="slds-truncate" title="Cloudhub">
+                            <apex:outputPanel rendered="{!NOT(bolPrintableView)}">
+                                <a href="/{!record.activityId}" tabindex="-1" target="_blank">
+                                    <apex:outputText value="{!LEFT(record.Subject,40)}"></apex:outputText>
+                                </a>
+                            </apex:outputPanel> 
+                            <apex:outputPanel rendered="{!bolPrintableView}">
+                                    <apex:outputText value="{!LEFT(record.Subject,40)}"></apex:outputText>
+                            </apex:outputPanel>
+                       </div>
+                    </th>
+                    <td data-label="Account Name" class="PrintFont">
+                    <div class="slds-truncate" title="Cloudhub">
+                        <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                            <apex:param value="{!record.ActivityDate}" /> 
+                        </apex:outputText>
+                    </div>
+                    </td>
+                    <td data-label="Close Date" class="PrintFont">
+                    <div class="slds-truncate" title="4/14/2015">
+                       {!record.Contact}
+                    </div>
+                    </td>
+                    <td data-label="Close Date" class="PrintFont">
+                    <div class="slds-truncate" title="4/14/2015">{!record.Status}</div>
+                    </td>
+                    <td data-label="Close Date" class="PrintFont">
+                    <div class="slds-truncate" title="4/14/2015">{!record.Objective}</div>
+                    </td>
+                    </tr>
+                </apex:repeat>  
+            </apex:outputPanel>     
+        </tbody>
+    </table>
+
+</apex:component>

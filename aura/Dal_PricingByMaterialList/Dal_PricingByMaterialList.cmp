@@ -1,0 +1,17 @@
+<!--
+ - Created by 7Summits on 4/2/18.
+ -->
+
+<aura:component description="Dal_PricingByMaterialList" extends="c:Dal_ListBase" controller="Dal_PricingListController" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="communityType" type="String" default=""/>
+    <aura:attribute name="appliedPromotion" type="String" />
+    <aura:attribute name="effectiveDateValue" type="String" />
+    <aura:attribute name="skuNumber" type="String" />
+    <aura:attribute name="description" type="String" />
+
+    <aura:handler event="c:Dal_PricingByMaterialDatePromoChangeEvt" action="{!c.handleDatePromoChange}"/>
+
+    <aura:method name="searchPromotionList" action="{!c.searchPromotionList}" access="PUBLIC">
+    </aura:method>
+</aura:component>

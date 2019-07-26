@@ -1,0 +1,42 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" controller="Peak_JoinCommunityController" >
+    <aura:attribute name="title" type="String" default="Have you joined our online community?" />
+    <aura:attribute name="boldText" type="String" default="Hello there!" />
+    <aura:attribute name="plainText" type="String" default="Join the community!" />
+    <aura:attribute name="ctaText" type="String" default="Learn More" />
+    <aura:attribute name="ctaLink" type="String" default="http://example.com" />
+    <aura:attribute name="users" type="List" default="" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <aura:handler name="init" action="{!c.initJoinCommunity}" value="{!this}"/>
+
+    <section class="{!'peak-component slds-p-around_x-large ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <h1 class="font-specialty slds-text-align_center"><c:Peak_Base labelText="{!v.title}"/></h1>
+
+        <div class="facepile slds-p-vertical_medium">
+            <aura:iteration items="{!v.users}" var="user">
+                <div class="face">
+                    <aura:if isTrue="{!user.FullPhotoUrl != null}">
+                        <div class="inner" style="{!'background-image: url('+user.FullPhotoUrl+');'}"></div>
+                        <aura:set attribute="else">
+                            <div class="inner"><h1 class="font-specialty">?</h1></div>
+                        </aura:set>
+                    </aura:if>
+
+                </div>
+            </aura:iteration>
+        </div>
+
+        <div class="slds-grid slds-wrap slds-grid_pull-padded slds-p-vertical_medium ">
+            <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_4-of-5 slds-align-middle">
+                <p><b><c:Peak_Base labelText="{!v.boldText}"/></b>&nbsp;<c:Peak_Base labelText="{!v.plainText}"/></p>
+            </div>
+            <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-5 slds-align-middle slds-text-align_right">
+                <p><a href="{v.ctaLink}"><c:Peak_Base labelText="{!v.ctaText}"/></a></p>
+            </div>
+        </div>
+    </section>
+
+
+</aura:component>

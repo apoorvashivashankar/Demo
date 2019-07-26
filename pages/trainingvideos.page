@@ -1,0 +1,48 @@
+<apex:page sidebar="false" >
+<style type="text/css">
+h1
+{
+font-size:20px;
+}
+</style>
+<center>
+<h1> <u>Training Videos</u></h1>
+</center>
+
+<p></p>
+    
+<apex:pageBlock title="Videos To Watch At SSC" >
+<b>
+Instructions:  Save these 2 files to the desktop (right click mouse - save - desktop - save).  Go to the desktop, double click on one.  When it opens, the message below will appear.  Click OK to launch.
+</b>
+<br></br>
+<a href="\\int.grp\share\NA\chatsworth\apps\MohawkTraining\SalesForce\Videos\Getting_Started_Navigation\index.html">
+<img border="0" src="{!$Resource.LinkIcon}" width="32" height="32" />
+</a> Getting Started Navigation
+<br></br>
+
+<a href="\\int.grp\share\NA\chatsworth\apps\MohawkTraining\SalesForce\Videos\Getting_Started_Sales\index.html">
+<img border="0" src="{!$Resource.LinkIcon}" width="32" height="32" />
+</a> Getting Started With Sales
+<br></br>
+
+</apex:pageBlock>
+
+    
+<apex:pageBlock title="Videos To Watch At Home" >
+<b>
+Instructions:  Click the Launch button</b>
+<br></br>
+<a href="\\int.grp\share\NA\chatsworth\apps\MohawkTraining\SalesForce\Videos\Getting_Started_Navigation\index.html">
+<img border="0" src="{!$Resource.LinkIcon}" width="32" height="32" />
+</a> Getting Started Navigation
+<br></br>
+
+<a href="\\int.grp\share\NA\chatsworth\apps\MohawkTraining\SalesForce\Videos\Getting_Started_Sales\index.html">
+<img border="0" src="{!$Resource.LinkIcon}" width="32" height="32" />
+</a> Getting Started With Sales
+<br></br>
+
+</apex:pageBlock>
+
+</apex:page>

@@ -1,0 +1,23 @@
+<apex:page sidebar="false" showHeader="true" standardController="Opportunity" >
+
+  <h1 style="font-family:arial;color:Black;font-size:20px;align:center">New Opportunity</h1>
+  
+    <apex:pageBlock title="Opportunity Information" >
+    <apex:form >        
+    <apex:panelGrid columns="2" id="theGrid">
+                            <apex:outputLabel value="Opportunity Name                   "/>    <apex:inputField value="{!opportunity.name}"/>
+                <apex:outputText value="Second" id="theSecond"/>
+        <apex:outputText value="Third" id="theThird"/>
+        <apex:outputText value="Fourth" id="theFourth"/>
+    
+//        Opportunity Owner Jon Rust *Close Date [ 12/12/2011 ] //
+// *Opportunity Name  *Stage New  
+// *Account Name  Probability (%) 
+
+        
+    </apex:panelGrid>
+    </apex:form>
+
+     </apex:pageBlock>
+   
+</apex:page>

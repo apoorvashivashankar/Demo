@@ -1,0 +1,138 @@
+/**
+ * Created by ranja on 20-11-2018.
+ */
+.THIS {
+}
+
+.THIS .lead-desription {
+    margin-bottom : 80px;
+}
+
+.THIS .lead-desription .slds-form-element__label {
+    font-weight: bold;
+    font-size : 18px;
+    color : rgb(105, 105, 105);
+}
+
+.THIS .dal-leadDetail-description {
+    font-weight: bold;
+    font-size : large!important;
+}
+
+.THIS .heading-custom {
+    font-weight : bold;
+    padding-bottom : 5px;
+    border-bottom : 1px solid #a6a6a6 !important;
+    color : rgb(105, 105, 105) !important;
+    margin-bottom : 10px;
+    font-size : large;
+}
+
+.THIS .width-text-box {
+    max-width : 60%;
+}
+
+.THIS .description-width-custom {
+    max-width : 64%;
+}
+
+.THIS .width-name-custom {
+    max-width: 11rem;
+}
+
+.THIS .width-name-twocolumn--custom {
+    width : 37%;
+}
+
+.THIS .lead-info-section-custom {
+    margin-top : 80px;
+}
+
+.THIS .dal-input input{
+    min-width: 260px;
+}
+
+.THIS .dal-input .slds-combobox__form-element {
+    max-width: 260px;
+    min-width: 260px;
+}
+
+.THIS .dal-create-new-lead {
+    float: right;
+    margin-top : 30px;
+}
+
+.THIS .dal-lead-info-input {
+     min-width: 200px;
+}
+
+.THIS .dal-lead-info-input .slds-combobox__form-element {
+     max-width: 200px;
+}
+
+.THIS .dal-new-lead {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-weight : bolder;
+    margin-left : 20px
+}
+
+.THIS .new-lead-spacing {
+    margin-left: 10px;
+}
+
+.THIS .dal-remove-helper-text button {
+    visibility : hidden;
+}
+
+.THIS .description-width-custom textarea {
+    font-size : 13px;
+    border-color : #b3b3b3;
+}
+
+.THIS .dal-form-show-error .slds-notify{
+    background-color : white;
+}
+
+.THIS .dal-form-show-error h2 {
+    font-size: large;
+}
+
+.THIS .slds-button.slds-button_neutral {
+    color: rgb(105, 105, 105);
+}
+
+.THIS .slds-form-element__label {
+    color: rgb(105, 105, 105);
+}
+
+.THIS .custom-info .slds-form-element__static {
+    font-weight: 500;
+    color: rgb(105, 105, 105);
+}
+
+.THIS .form-element-box-border input {
+    border-color: #b3b3b3 !important;
+}
+
+.THIS .form-element-box-border textarea {
+    border-color: #b3b3b3 !important;
+}
+
+.THIS .custom-info .slds-form-element__label {
+        color: #a6a6a6;
+}
+
+.THIS .custom-info input {
+    color : #8c8c8c	;
+}
+
+.THIS .custom-info textarea {
+    color : #8c8c8c	;
+}
+
+.THIS .spinner-fixed {
+    position : fixed;
+}

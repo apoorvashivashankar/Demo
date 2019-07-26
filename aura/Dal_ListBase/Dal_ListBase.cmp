@@ -1,0 +1,321 @@
+<!--
+ - Created by 7Summits on 2/22/18.
+ -->
+
+<aura:component description="Dal_ListBase" extensible="true" extends="c:Dal_Base">
+    <aura:attribute name="data" type="List" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="headerText" type="String" default=""/>
+    <aura:attribute name="hasPagination" type="Boolean" default="false" />
+    <aura:attribute name="paginationItemsPerPage" type="Integer" default="30" />
+    <aura:attribute name="paginationStartPage" type="Integer" default="0" />
+    <aura:attribute name="listMaximum" type="Integer" default="300" />
+    <aura:attribute name="pageMessage" type="String" default=""/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="sortedBy" type="String" />
+    <aura:attribute name="sortedDirection" type="String" />
+    <aura:attribute name="allDataChecked" type="Boolean" default="false" />
+    <aura:attribute name="isLoading" type="Boolean" default="true" />
+    <aura:attribute name="hasGetDataError" type="Boolean" default="false" />
+    <aura:attribute name="getDataErrorMsg" type="String" default="Unable to load list information." />
+    <aura:attribute name="hasModal" type="Boolean" default="false" />
+    <aura:attribute name="baseModal" type="Map" />
+
+    <!-- pager attributes -->
+    <aura:attribute name="pager" type="Object" default="{}" />
+    <aura:attribute name="pagerShowPrev" type="Boolean" default="false" />
+    <aura:attribute name="pagerShowNext" type="Boolean" default="false" />
+    <aura:attribute name="pagerTotalCount" type="String" />
+    <aura:attribute name="pagerCurrentPage" type="String" />
+    <aura:attribute name="pagerTotalPages" type="String" />
+
+    <aura:attribute name="noDataMsg" type="String" default="No data found" />
+    <aura:attribute name="showNoDataMsg" type="Boolean" default="true" />
+    <aura:attribute name="emptyValue" type="String" default="--" />
+
+    <aura:attribute name="labelPagerResults" type="String" default="Results"/>
+    <aura:attribute name="labelPagerPrev" type="String" default="Previous"/>
+    <aura:attribute name="labelPagerNext" type="String" default="Next"/>
+    <aura:attribute name="labelPagerPage" type="String" default="Page"/>
+
+
+    <div class="dal-listBase">
+
+        <!-- check if loading or not -->
+        <aura:if isTrue="{!v.isLoading == false}">
+
+            <!-- check if has data load error -->
+            <aura:if isTrue="{!v.hasGetDataError == false}">
+
+                <aura:if isTrue="{!v.headerText != ''}">
+                	<p class="slds-p-top_xx-small slds-p-bottom_medium">{!v.headerText}</p>
+                </aura:if>
+
+                <!-- check if there is data rows to show, if not show no data message -->
+                <aura:if isTrue="{!v.data.length > 0}">
+                    <aura:if isTrue="{!v.pageMessage != ''}">
+                        <div class="warning-message">{!v.pageMessage}</div>
+                    </aura:if>
+                    <table id="dalListBaseTable" class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-no-row-hover">
+
+                        <thead>
+                            <tr class="slds-text-title_caps">
+
+                                <!-- iterate all the columns -->
+                                <aura:iteration items="{!v.columns}" var="column">
+                                    <!-- check if we should display the column data or not -->
+                                    <aura:if isTrue="{!or(column.detailViewOnly == false, column.detailViewOnly == undefined)}">
+
+                                        <th style="{!(column.width != undefined) ? ('width:' + column.width) : ''}">
+                                            <!-- check if the column is not an action or checkbox column -->
+                                            <aura:if isTrue="{!and(column.type != 'action', and(column.type != 'checkbox', column.type != 'modal'))}">
+                                                <div title="{!column.label}">
+                                                    <aura:if isTrue="{!column.sortable == true}">
+                                                        <button class="slds-button slds-button_icon" title="Sort" onclick="{!c.handleSort}" data-fieldName="{!column.fieldName}" data-sortDirection="asc">
+                                                        {!column.label}
+                                                            <lightning:icon class="slds-m-left_xx-small" size="x-small"
+                                                                iconName="{!and(v.sortedBy == column.fieldName, v.sortedDirection == 'asc') ? 'utility:arrowup' : 'utility:arrowdown'}" />
+                                                            <span class="slds-assistive-text">Sort</span>
+                                                        </button>
+                                                        <aura:set attribute="else">
+                                                            {!column.label}
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+
+                                                <!-- action type -->
+                                                <aura:set attribute="else">
+                                                    <th class="slds-cell-shrink" scope="col"></th>
+                                                </aura:set>
+                                            </aura:if>
+                                            <!-- end check if the column is not an action or checkbox column -->
+                                        </th>
+
+                                    </aura:if>
+                                    <!-- check if we should display the column data or not -->
+                                </aura:iteration>
+                                <!-- end iterate all the columns -->
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <!-- iterate viewDataRows -->
+                        <aura:iteration items="{!v.data}" var="viewRow" indexVar="viewRowIndex">
+                            <tr class="slds-hint-parent" data-index="{!viewRowIndex}">
+                                <!-- ******************** -->
+                                <!-- iterate each column of the row -->
+                                <!-- ******************** -->
+                                <aura:iteration items="{!viewRow.columns}" var="column" indexVar="viewRowColumnIndex">
+
+                                    <!-- ******************** -->
+                                    <!-- check if we should display the column data or not -->
+                                    <!-- ******************** -->
+                                    <aura:if isTrue="{!column.detailViewOnly == false}">
+
+                                        <!-- ******************** -->
+                                        <!-- Type check -->
+                                        <!-- ******************** -->
+                                        <aura:if isTrue="{!and(column.type != 'action', and(column.type != 'checkbox', column.type != 'modal'))}">
+
+                                            <!-- ******************** -->
+                                            <!-- value output -->
+                                            <!-- ******************** -->
+                                            <aura:if isTrue="{!column.value != ''}">
+
+                                                <!-- date column -->
+                                                <aura:if isTrue="{!column.type == 'date'}">
+                                                    <td class="slds-cell-wrap" data-label="{!column.label}">
+                                                        <lightning:formattedDateTime value="{!column.value}" month="2-digit" day="2-digit" year="numeric" timeZone="UTC"/>
+                                                    </td>
+                                                </aura:if>
+                                                <!-- end date column -->
+
+                                                <!-- date link column -->
+                                                <aura:if isTrue="{!column.type == 'dateLink'}">
+                                                    <td class="slds-cell-wrap" data-label="{!column.label}">
+                                                        <a href="javascript:void(0)" data-url="{!column.url}" onclick="{!c.gotoURL}">
+                                                            <lightning:formattedDateTime value="{!column.value}" month="2-digit" day="2-digit" year="numeric" timeZone="UTC" />
+                                                        </a>
+                                                    </td>
+                                                </aura:if>
+                                                <!-- end date link column -->
+
+                                                <!-- text column -->
+                                                <aura:if isTrue="{!column.type == 'text'}">
+                                                    <td class="slds-cell-wrap" data-label="{!column.label}">
+                                                        {!column.value}
+                                                    </td>
+                                                </aura:if>
+                                                <!-- end text column -->
+
+                                                <!-- text Link column -->
+                                                <aura:if isTrue="{!column.type == 'textLink'}">
+                                                    <td class="slds-cell-wrap" data-label="{!column.label}">
+                                                        <a href="javascript:void(0)" data-url="{!column.url}" onclick="{!c.gotoURL}">{!column.value}</a>
+                                                    </td>
+                                                </aura:if>
+                                                <!-- end text column -->
+
+                                                <!-- currency column -->
+                                                <aura:if isTrue="{!column.type == 'currency'}">
+                                                    <td class="slds-cell-wrap" data-label="{!column.label}">
+                                                        <lightning:formattedNumber value="{!column.value}" style="currency" currencyCode="USD" />
+                                                    </td>
+                                                </aura:if>
+                                                <!-- end currency column -->
+
+                                                <!-- single call to action -->
+                                                <aura:if isTrue="{!column.type == 'singleAction'}">
+                                                    <td class="slds-cell-wrap" data-label="{!column.label}">
+                                                        <a href="javascript:void(0)" data-row="{!viewRowIndex}" onclick="{!c.handleSingleActionClick}">{!column.value}</a>
+                                                    </td>
+                                                </aura:if>
+                                                <!-- end single call to action -->
+
+                                                <!-- ******************** -->
+                                                <!-- empty cases -->
+                                                <!-- ******************** -->
+                                                <aura:set attribute="else">
+                                                    <td class="slds-cell-wrap slds-text-align_center">{!v.emptyValue}</td>
+                                                </aura:set>
+                                                <!-- ******************** -->
+                                                <!-- end empty cases -->
+                                                <!-- ******************** -->
+                                            </aura:if>
+                                            <!-- ******************** -->
+                                            <!-- end value output -->
+                                            <!-- ******************** -->
+
+
+                                            <!-- ******************** -->
+                                            <!-- special output cases -->
+                                            <!-- ******************** -->
+                                        	<aura:set attribute="else">
+
+                                                <!-- checkbox column -->
+                                                <aura:if isTrue="{!column.type == 'checkbox'}">
+                                                    <td class="slds-cell-wrap checkboxAction">
+                                                        <input type="checkbox" title="checkbox" name="{!'checkbox-' + viewRowIndex}"
+                                                               data-row="{!viewRowIndex}" onclick="{!c.handleOnCheckboxClick}" checked="{!viewRow.checked}" />
+                                                    </td>
+                                                </aura:if>
+                                                <!-- checkbox column -->
+
+                                                <!-- onclick column -->
+                                                <aura:if isTrue="{!column.type == 'modal'}">
+                                                    <td  data-label="{!column.label}">
+                                                        <a href="javascript:void(0)" onclick="{!c.handleShowModal}" data-component="{!column.component}" data-row="{!viewRowIndex}" data-column="{!viewRowColumnIndex}">{!column.label}</a>
+                                                    </td>
+                                                </aura:if>
+                                                <!-- end date column -->
+
+                                                <!-- action column -->
+                                                <aura:if isTrue="{!column.type == 'action'}">
+                                                    <td class="slds-cell-wrap actionMenu" data-label="{!column.label}">
+                                                        <lightning:buttonMenu iconName="utility:down" alternativeText="Actions" onselect="{!c.handleOnSelect}" menuAlignment="{!column.menuAlignment}">
+                                                            <aura:iteration items="{!column.actions}" var="action">
+                                                                <lightning:menuItem label="{!action.label}" value="{!viewRowIndex + ':' + action.name}" />
+                                                            </aura:iteration>
+                                                        </lightning:buttonMenu>
+                                                    </td>
+                                                </aura:if>
+                                                <!-- end action column -->
+
+                                        	</aura:set>
+                                            <!-- ******************** -->
+                                            <!-- end special output cases -->
+                                            <!-- ******************** -->
+
+                                        </aura:if>
+                                        <!-- ******************** -->
+                                        <!-- end type check -->
+                                        <!-- ******************** -->
+
+                                    </aura:if>
+                                    <!-- ******************** -->
+                                    <!-- end check if we should display column data -->
+                                    <!-- ******************** -->
+
+                                </aura:iteration>
+                                <!-- ******************** -->
+                                <!-- end iterate each column of the row -->
+                                <!-- ******************** -->
+                            </tr>
+                        </aura:iteration>
+                        <!-- end viewDataRows -->
+
+                        </tbody>
+                    </table>
+
+                    <!-- show pagination if needed -->
+                    <aura:if isTrue="{!v.hasPagination == true}">
+                        <lightning:layout class="dal-pagination slds-p-top_small"  verticalAlign="center" multipleRows="true">
+
+                            <lightning:layoutItem smallDeviceSize="3" size="6" class="slds-order_2 slds-small-order_1">
+                                <lightning:button iconName="utility:chevronleft" variant="brand" onclick="{! c.pagerPrev }" label="{!v.labelPagerPrev}" disabled="{!(v.pagerShowPrev == false) ? 'disabled' : ''}" />
+                            </lightning:layoutItem>
+
+                            <lightning:layoutItem smallDeviceSize="6" size="12" class="slds-grid slds-grid_align-center slds-order_1 slds-small-order_2">
+                                <div class="slds-p-vertical_medium pager-pageCount">
+                                    <span class="slds-p-horizontal_xxx-small pager-current-totalCount">{!v.pagerTotalCount}</span>
+                                    <span class="slds-p-horizontal_xxx-small pager-current-label">{!v.labelPagerResults}</span>
+                                    <span class="slds-p-horizontal_xxx-small pager-current-space">-</span>
+                                    <span class="slds-p-horizontal_xxx-small pager-current-pageLabel">{!v.labelPagerPage}</span>
+                                    <span class="slds-p-horizontal_xxx-small pager-current-activePage">{!v.pagerCurrentPage} / {!v.pagerTotalPages}</span>
+                                </div>
+                            </lightning:layoutItem>
+
+                            <lightning:layoutItem smallDeviceSize="3" size="6" class="slds-grid slds-grid_align-end slds-order_3 slds-small-order_3">
+                                <lightning:button iconName="utility:chevronright" iconPosition="right" variant="brand" onclick="{! c.pagerNext }" label="{!v.labelPagerNext}" disabled="{!(v.pagerShowNext == false) ? 'disabled' : ''}" />
+                            </lightning:layoutItem>
+
+                        </lightning:layout>
+                    </aura:if>
+
+                    <!-- if there are no data rows to show, show message -->
+                	<aura:set attribute="else">
+                        <aura:if isTrue="{!v.showNoDataMsg == true}">
+                            <ui:message title="" severity="info" closable="false">{!v.noDataMsg}</ui:message>
+                        </aura:if>
+                	</aura:set>
+                </aura:if>
+                <!-- End check if there is data rows to show, if not show no data message -->
+
+                <!-- customization provided by the component that implements this list -->
+                {!v.body}
+
+                <!-- Display error message if unable to get data from service call -->
+                <aura:set attribute="else">
+                    <ui:message title="" severity="warning" closable="false">{!v.getDataErrorMsg}</ui:message>
+                </aura:set>
+            </aura:if>
+            <!-- End hasGetDataError if block -->
+
+            <!-- if is loading show spinner -->
+            <aura:set attribute="else">
+                <div class="slds-is-relative slds-p-vertical_x-large">
+                    <lightning:spinner variant="brand" size="medium" />
+                </div>
+
+                <!-- in order for the component that extends this to be able to use ltng:require
+               we need to have the v.body attribute available in this page. Since we don't want the body
+               content from the child to be displayed during loading we will place the body in a hidden
+               tag here. When the component is done loading  the body is displayed below the list. -->
+                <div style="display:none!important">
+                    {!v.body}
+                </div>
+            </aura:set>
+        </aura:if>
+        <!-- end check if loading or not -->
+
+    </div>
+
+    <!-- if we have a modal column, load the library -->
+    <aura:if isTrue="{!v.hasModal == true}">
+        <lightning:overlayLibrary aura:id="overlayLib" />
+    </aura:if>
+
+</aura:component>

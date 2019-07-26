@@ -1,0 +1,3 @@
+<design:component label="Peak Theme for Wide Layout">
+    <design:attribute name="wide" label="Full Width?" default="false"  description="Use Wide mode with designated custom layouts only!"/>
+</design:component>

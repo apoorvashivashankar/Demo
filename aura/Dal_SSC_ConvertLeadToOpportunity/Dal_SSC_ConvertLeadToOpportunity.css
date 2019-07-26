@@ -1,0 +1,58 @@
+/**
+ * Created by ranja on 25-11-2018.
+ */
+.THIS {
+}
+
+.THIS .dal-convert-send-email {
+    margin-top: 1%;
+    margin-bottom: 2%;
+}
+
+.THIS .dal-convert-margin-bottom {
+    margin-bottom: 2%;
+}
+
+.THIS .dal-convert-margin-owner {
+     margin-top: 1%;
+     margin-bottom: 1%;
+}
+
+.THIS .dal-email-label {
+    padding-top: 2px;
+}
+
+.THIS .record-owner-label {
+    font-size: .75rem;
+    font-weight : bold;
+}
+
+.THIS .dal-lead-conversion-button-custom {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-weight: 600;
+}
+
+.THIS .spinner-fixed {
+     position: fixed;
+}
+
+.THIS .label-hidden .slds-form-element__label {
+    display : none;
+}
+
+.THIS .custom-label {
+    font-family: helvetica,arial,sans-serif;
+    font-size: .75rem;
+    font-weight: bold;
+}
+
+.THIS .record-lookup .slds-form-element {
+    padding-top: 3px
+}
+
+.THIS .error-message{
+    color: rgb(194, 57, 52);
+}

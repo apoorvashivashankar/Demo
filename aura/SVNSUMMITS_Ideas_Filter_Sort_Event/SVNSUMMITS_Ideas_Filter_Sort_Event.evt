@@ -1,0 +1,8 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francois korb on 12/12/16.
+ -->
+
+<aura:event type="APPLICATION" description="SVNSUMMITS_Ideas_Filter_Sort_Event" access="global">
+	<aura:attribute name="sortBy" type="String" access="global"/>
+</aura:event>

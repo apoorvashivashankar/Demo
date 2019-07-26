@@ -1,0 +1,11 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francoiskorb on 9/21/16.
+ -->
+
+<aura:component description="SVNSUMMITS_Include_LDS">
+
+    <!-- <ltng:require styles="{!$Resource.SLDS + '/assets/styles/salesforce-lightning-design-system.min.css'}"
+                  scripts="{!$Resource.svg4everybodyMod}"
+                  afterScr iptsLoaded="{!c.onInit}"/> -->
+</aura:component>

@@ -1,0 +1,128 @@
+<!--
+ - Created by 7Summits on 2/19/18.
+ -->
+
+<aura:component description="Dal_DataBlock" extends="c:Dal_Base">
+
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="id" type="String" default="" />
+    <aura:attribute name="valueLabel" type="String" default="" />
+    <aura:attribute name="value" type="String" default="" />
+    <aura:attribute name="valueType" type="String" default="" />
+    <aura:attribute name="valueFontSize" type="String" default="" />
+    <aura:attribute name="ctaLabel" type="String" default="" /> 
+    <aura:attribute name="ctaUrl" type="String" default="" />
+    <aura:attribute name="cta2Label" type="String" default="" />
+    <aura:attribute name="cta2Url" type="String" default="" />
+    <aura:attribute name="labelTopLeft" type="String" default="" />
+    <aura:attribute name="labelTopRight" type="String" default="" />
+    <aura:attribute name="hasInnerComponent" type="Boolean" default="false" />
+    <aura:attribute name="innerComponentLabelOpen" type="String" default=""/>
+    <aura:attribute name="innerComponentLabelClose" type="String" default="" />
+    <aura:attribute name="innerComponentName" type="String" default="" />
+    <aura:attribute name="isInnerComponentActive" type="Boolean" default="false"/>
+    <aura:attribute name="hasHeader" type="Boolean" default="false"/>
+    <aura:attribute name="iconType" type="String" default=""/>
+    <aura:attribute name="showInnerComponentBlock" type="Boolean" default="true"/>
+    <aura:attribute name="tempValue" type="String" default="" />
+
+    <!-- events -->
+    <aura:registerEvent name="toggleDetailEvt" type="c:Dal_DataBlocks_ToggleDetailEvt"/>
+
+    <lightning:layout class="{!'dal-dataBlock ' + v.iconType + ((v.isInnerComponentActive == true &amp;&amp; v.isSSC == true) ? ' innerComponent-active' : '')}" multipleRows="true">
+        <lightning:layoutItem size="12" padding="around-small" class="dal-dataBlockContent">
+            <lightning:layout class="slds-grid" multipleRows="true">
+
+                <aura:if isTrue="{!or(!empty(v.labelTopLeft), v.hasHeader == true)}">
+                    <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="4" class="headerLabel">
+                        <span>{!v.labelTopLeft}</span>
+                    </lightning:layoutItem>
+                </aura:if>
+
+                <aura:if isTrue="{!or(!empty(v.labelTopRight), v.hasHeader == true)}">
+                    <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="8" class="headerLabel slds-text-align_right">
+                        <span>{!v.labelTopRight}</span>
+                    </lightning:layoutItem>
+                </aura:if>
+
+                <lightning:layoutItem size="12" class="{!'bold value' + ((v.valueFontSize != '') ?  (' value-' + v.valueFontSize) : '' ) + ((v.hasHeader == true) ? ' slds-p-top_xx-small' : '')}">
+                    <span>
+                        <aura:if isTrue="{!v.tempValue != ''}">
+
+                                {!v.tempValue}
+                             <aura:set attribute="else">
+
+                                    <aura:if isTrue="{!v.valueType == 'currency'}">
+
+                                            <lightning:formattedNumber value="{!v.value}" style="currency" />
+                                        <aura:set attribute="else">
+                                            {!v.value}
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:set>
+                        </aura:if>
+                    </span>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="12" class="label slds-p-top_xx-small slds-p-bottom_x-small">
+                    <span>{!v.valueLabel}</span>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="12" class="bottomCta slds-col">
+                    <lightning:layout>
+
+                        <aura:if isTrue="{!v.hasInnerComponent == true}">
+                            <lightning:layoutItem size="6">
+                                <a href="javascript:void(0)" onclick="{!c.toggleInnerComp}" data-name="{!v.innerComponentName}">
+                                   <aura:if isTrue="{!v.showInnerComponentBlock}" >
+                                       {!v.innerComponentLabelClose}
+                                       <aura:set attribute="else" >
+                                           {!v.innerComponentLabelOpen}
+                                       </aura:set>
+                                   </aura:if>
+                                    <lightning:icon class="labelIcon" iconName="utility:chevrondown" />
+                                </a>
+                            </lightning:layoutItem>
+                        </aura:if>
+
+                        <lightning:layoutItem size="{!(v.hasInnerComponent == true) ? '6' : '12'}" class="slds-text-align_right">
+                            <aura:if isTrue="{!and(!empty(v.ctaLabel), !empty(v.ctaUrl))}">
+                                <a href="javascript:void(0)" data-url="{!v.ctaUrl}" onclick="{!c.gotoURL}">{!v.ctaLabel} <lightning:icon class="labelIcon" iconName="utility:chevronright" /></a>
+                            </aura:if>
+                            <aura:if isTrue="{!and(!empty(v.cta2Label), !empty(v.cta2Url))}">
+                                <span class="slds-p-horizontal_xx-small">|</span>
+                                <a href="javascript:void(0)" data-url="{!v.cta2Url}" onclick="{!c.gotoURL}">{!v.cta2Label} <lightning:icon class="labelIcon" iconName="utility:chevronright" /></a>
+                            </aura:if>
+                        </lightning:layoutItem>
+
+                    </lightning:layout>
+                </lightning:layoutItem>
+
+            </lightning:layout>
+        </lightning:layoutItem>
+
+        <!-- block icons -->
+        <aura:if isTrue="{!v.iconType == 'icon-invoice'}">
+            <div class="bkg-icon icon-custom">
+                <lightning:icon iconName="custom:custom40" />
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.iconType == 'icon-order'}">
+            <div class="bkg-icon icon-custom">
+                <lightning:icon iconName="custom:custom57" />
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.iconType == 'icon-opportunity'}">
+            <div class="bkg-icon">
+                <lightning:icon iconName="utility:questions_and_answers"/>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.iconType == 'icon-case'}">
+            <div class="bkg-icon">
+                <lightning:icon iconName="utility:inbox"/>
+            </div>
+        </aura:if>
+        
+    </lightning:layout>
+
+</aura:component>

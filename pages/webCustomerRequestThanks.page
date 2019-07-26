@@ -1,0 +1,11 @@
+<apex:page standardController="Change_Request__c" 
+  extensions="WebCustomerRequest" standardStylesheets="true" showHeader="false" sidebar="false">   
+  <apex:sectionHeader title="Customer Request" subtitle="Thank You"/>
+
+  <apex:form >
+    <apex:pageBlock title="Customer Request Info">
+
+
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

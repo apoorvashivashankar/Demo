@@ -1,0 +1,379 @@
+<aura:component implements="lightning:isUrlAddressable,lightning:utilityItem,force:appHostable,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction,force:hasSObjectName"
+                access="global" controller="NewCaseWizardController">
+    <aura:html tag="style">
+        .slds-modal__container{ width:90%; max-width: none!important; } lightning-input-field label{ display:none!important; }
+    </aura:html>
+    
+    <lightning:workspaceAPI aura:id="workspace" />
+    <lightning:utilityBarAPI aura:id="utilitybar" />
+    
+	<aura:attribute name="visualforceDomain" type="String" default="{!$Label.c.Domain_Visualforce}"/>
+    
+    <aura:attribute name="pageReference" type="Object"/>
+    <aura:attribute type="Boolean" name="sortAsc" />
+    <aura:attribute type="String" name="sortField" />
+    <aura:attribute type="String" name="recordtypeid" />
+    <aura:attribute name="case" type="Case" default="{}"/>
+    <aura:attribute name="orderNo" type="String" default=""/>
+    <aura:attribute name="custPoNo" type="String" default=""/>
+    <aura:attribute name="shippingNo" type="String" default=""/>
+    <aura:attribute name="accountOptions" type="List" default="[]"/>
+    <aura:attribute name="selectedAccount" type="String" default=""/>
+    <aura:attribute name="contactOptions" type="List" default="[]"/>
+    <aura:attribute name="selectedContact" type="String" default=""/>
+    <aura:attribute name="isAccount" type="Boolean" default="false"/>
+    <aura:attribute name="isContact" type="Boolean" default="false"/>
+    <aura:attribute name="SearchResults" type="List"/>
+    <aura:attribute name="showTable" type="Boolean" default="false"/>
+    <aura:attribute name="isAccountContactSearch" type="Boolean" default="false"/>
+    <aura:attribute name="showOrderError" type="Boolean" default="false"/>
+    <aura:attribute name="sapNo" type="String" default=""/>
+    <aura:attribute name="sapId" type="String" default="" />
+    <aura:attribute name="supportsPopOut" type="Boolean" default="true" />
+    
+    <aura:attribute name="contactRecordId" type="String" default=""/>
+    <aura:attribute name="sObjCont" type="String" default=""/>
+    <aura:attribute name="hasBoth" type="Boolean" default="false"/>
+          
+    <aura:attribute name="filterData" type="Map" default="{}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.recordId}" action="{!c.onRecordIdChange}"/>
+    
+    <h1 class="slds-section-title--divider slds-text-align_center" title="Search Cases">Search Cases/ New Cases</h1>
+    <div class="slds-p-bottom_medium"></div>
+    
+    <lightning:recordEditForm objectApiName="Case" onload="{!c.onLoad}">
+        <div class="slds-form slds-p-around_medium slds-border_top slds-border_right slds-border_bottom slds-border_left" role="list">
+            <div class="slds-grid slds-gutters_small slds-grid_align-center">
+                <div class="slds-col slds-size_5-of-12 slds-has-flexi-truncate" role="listitem">
+                    <div class="slds-form-element slds-form-element_edit slds-hint-parent">
+                        <label class="slds-form-element__label slds-text-heading_small" for="Account">Account</label>
+                        <aura:if isTrue="{!!v.isContact}">
+                            <div class="slds-form-element__control slds-p-top_medium">
+                                <lightning:inputField label=" " tabIndex="-1" aura:id="accountId" fieldName="AccountId" onchange="{!c.loadContacts}"/>
+                            </div>
+                            <aura:set attribute="else">
+                                <div class="slds-form-element__control slds-p-top_medium">
+                                    <lightning:combobox aura:id="accountIdcom" name="Account" variant="label-hidden" placeholder="Select an Account" options="{!v.accountOptions}" onchange="{!c.handleAccountChange}"/>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                        <div aura:id="customer" class="slds-hide slds-p-top_medium slds-p-bottom_medium slds-text-body_regular slds-text-color_error">Account is Required to Search by Shipment</div>
+                        <div aura:id="customeracc" class="slds-hide slds-p-top_medium slds-p-bottom_medium slds-text-body_regular slds-text-color_error">Please select the Account above before creating case</div>
+                    </div>                    
+                </div>
+                <div class="slds-col slds-size_2-of-12" style="padding-top: 2rem; padding-left:2rem;">
+                    <div class="slds-form-element slds-form-element_edit slds-hint-parent">
+                        <div class="slds-text-heading_small">and/or</div>
+                    </div>
+                </div>
+                <div class="slds-col  slds-size_5-of-12 slds-has-flexi-truncate" role="listitem">
+                    <div class="slds-form-element slds-form-element_edit slds-hint-parent">
+                        <label class="slds-form-element__label slds-text-heading_small" for="Contact">Contact</label>
+                        
+                        <aura:if isTrue="{!!v.isAccount}">
+                            <div class="slds-form-element__control slds-p-top_medium">
+                                <lightning:inputField tabIndex="-1" aura:id="contactId" fieldName="ContactId" onchange="{!c.loadAccounts}"/>
+                            </div>
+                            <aura:set attribute="else">
+                                <div class="slds-form-element__control slds-p-top_medium">
+                                    <lightning:combobox aura:id="contactIdcom" name="Contact" variant="label-hidden" placeholder="Select a Contact" options="{!v.contactOptions}" onchange="{!c.handleContactChange}"/>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                    </div>  
+                </div>
+                
+
+            </div>
+            <div class="slds-p-bottom_small"></div>
+            <div class="slds-border_bottom" style="border-bottom: 10px solid rgb(211, 211, 211) !important;">&nbsp;&nbsp;&nbsp;</div>
+            <div class="slds-p-bottom_small"></div>
+            <div class="slds-text-heading_small">OR Enter one field below -</div>
+            <div class="slds-p-bottom_small"></div>
+            <div class="slds-grid slds-gutters_small">
+                <div class="slds-col slds-has-flexi-truncate" role="listitem">
+                    <div class="slds-form-element slds-form-element_edit slds-hint-parent">
+                        <label class="slds-form-element__label slds-text-heading_small" for="Order-No">Sales Order</label>
+                        <div class="slds-form-element__control">
+                            <lightning:input aura:id="orderNo" type="Text" label=" " name="red" value="{!v.orderNo}" onfocus="{!c.handleErrors}"/>
+                            <div aura:id="order-No" class="slds-hide slds-p-top_medium slds-p-bottom_medium slds-text-body_regular slds-text-color_error">Invalid Sales Order No</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-has-flexi-truncate" role="listitem">
+                    <div class="slds-form-element slds-form-element_edit slds-hint-parent">
+                        <label class="slds-form-element__label slds-text-heading_small" for="Shipment">Shipment</label>
+                        <div class="slds-form-element__control">
+                            <lightning:input type="Text" label=" " name="red" value="{!v.shippingNo}" onfocus="{!c.handleErrors}"/>
+                            <div aura:id="Shipment-No" class="slds-hide slds-p-top_medium slds-p-bottom_medium slds-text-body_regular slds-text-color_error">Invalid Shipment No</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br></br>
+            <div class="slds-grid slds-gutters_small">
+                <div class="slds-col slds-has-flexi-truncate" role="listitem">
+                    <div class="slds-form-element slds-form-element_edit slds-hint-parent">
+                        <label class="slds-form-element__label slds-text-heading_small" for="Order-No">Customer PO </label>
+                        <div class="slds-form-element__control">
+                            <lightning:input aura:id="Customer-Po-No" type="Text" label=" " name="red" value="{!v.custPoNo}" onfocus="{!c.handleErrors}"/>
+                            <div aura:id="customer-Po" class="slds-hide slds-p-top_medium slds-p-bottom_medium slds-text-body_regular slds-text-color_error">Invalid Customer PO No</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-has-flexi-truncate" role="listitem">
+                    <div class="slds-form-element slds-form-element_edit slds-hint-parent">
+                        <label class="slds-form-element__label slds-text-heading_small" for="SAPTransferOrder">Stock Transfer Order</label>
+                        <div class="slds-form-element__control">
+                            <lightning:input type="text" value ="{!v.sapNo}" label=" " name="SAP" onfocus="{!c.handleErrors}"/>
+                            <div aura:id="TransferOrderHeader" class="slds-hide slds-p-top_medium slds-p-bottom_medium slds-text-body_regular slds-text-color_error">Invalid Stock Transfer Order</div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class="slds-p-bottom_small"></div>
+            <div class="slds-border_bottom" style="border-bottom: 10px solid rgb(211, 211, 211) !important;">&nbsp;&nbsp;</div>
+            
+        </div>
+        
+        
+        <div class="slds-col">
+            <div class="slds-grid slds-grid_align-center">
+                
+                <div class="slds-col slds-p-vertical_medium">
+                    <lightning:button label="Search" onclick="{!c.doSearch}"/>
+                    <lightning:button label="New Case" onclick="{!c.createNewCase}"/>
+                    <lightning:spinner aura:id="mySpinner" alternativeText="Searching.." title="Searching.." variant="brand" size="large" class="slds-hide" />
+                </div>
+            </div>
+            <div aura:id="allfields" style="text-align: center;font-size: 18px;" class="slds-hide slds-p-top_medium slds-p-bottom_medium slds-text-body_regular slds-text-color_error">Please enter at least one search field above</div><br/>
+        </div>
+    </lightning:recordEditForm>
+    
+    <aura:if isTrue="{!v.showTable}">
+        <aura:if isTrue="{!v.SearchResults.length == 0}">
+            <div class="slds-text-heading_large slds-text-align_center slds-p-top_medium slds-p-bottom_medium">No Records Found</div>
+            <aura:set attribute="else">
+                <div class="slds-grid slds-p-top_medium slds-p-bottom_medium slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                    <table class="slds-table slds-table_bordered slds-table_resizable-cols slds-table_fixed-layout" role="grid">
+                        <thead>
+                            <tr class="slds-line-height_reset slds-is-selected">
+                                <!--<th class="slds-text-align_right" scope="col" style="width: 3.25rem;">
+                                    <span id="check-group-header" class="slds-assistive-text">Choose a row</span>
+                                    <div class="slds-th__action slds-th__action_form">
+                                        <span class="slds-checkbox">
+                                            <input type="checkbox" name="options" id="checkbox-21" value="checkbox-21" tabindex="-1" aria-labelledby="check-select-all-label check-group-header"/>
+                                            <label class="slds-checkbox__label" for="checkbox-21" id="check-select-all-label">
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                                            </label>
+                                        </span>
+                                    </div>
+                                </th>-->
+                                <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Case Number" scope="col">
+                                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                                        <span class="slds-truncate" title="Case Number">Case Number</span>
+                                    </a>
+                                    <div class="slds-resizable">
+                                        <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                        <span class="slds-resizable__handle">
+                                            <span class="slds-resizable__divider"></span>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Account" scope="col">
+                                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                                        <span class="slds-truncate" title="Account">Account</span>
+                                    </a>
+                                    <div class="slds-resizable">
+                                        <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                        <span class="slds-resizable__handle">
+                                            <span class="slds-resizable__divider"></span>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Contact" scope="col">
+                                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                                        <span class="slds-truncate" title="Contact">Contact</span>
+                                    </a>
+                                    <div class="slds-resizable">
+                                        <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                        <span class="slds-resizable__handle">
+                                            <span class="slds-resizable__divider"></span>
+                                        </span>
+                                    </div>
+                                </th>
+                                <aura:if isTrue="{!v.isAccountContactSearch}">
+                                    <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Contact" scope="col">
+                                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                                            <span class="slds-truncate" title="Ship To Account">Ship To Account</span>
+                                        </a>
+                                        <div class="slds-resizable">
+                                            <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                            <span class="slds-resizable__handle">
+                                                <span class="slds-resizable__divider"></span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Contact" scope="col">
+                                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                                            <span class="slds-truncate" title="Division">Division</span>
+                                        </a>
+                                        <div class="slds-resizable">
+                                            <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                            <span class="slds-resizable__handle">
+                                                <span class="slds-resizable__divider"></span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                </aura:if>
+                                <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Status" scope="col">
+                                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1" onclick="{!c.sortByStatus}">
+                                        <span class="slds-truncate" title="Status">Status</span>
+                                    </a>
+                                    <div class="slds-resizable">
+                                        <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                        <span class="slds-resizable__handle">
+                                            <span class="slds-resizable__divider"></span>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th aria-sort="ascending" class="slds-is-sortable slds-is-resizable slds-text-title_caps slds-is-sorted slds-is-sorted_asc" aria-label="Opened Date" scope="col">
+                                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1" onclick="{!c.sortByOpenDate}">
+                                        <span class="slds-truncate" title="Opened Date" >Opened Date</span>
+                                    </a>
+                                    <div class="slds-resizable">
+                                        <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                        <span class="slds-resizable__handle">
+                                            <span class="slds-resizable__divider"></span>
+                                        </span>
+                                    </div>
+                                </th>
+                                <th aria-sort="ascending" class="slds-is-sortable slds-is-resizable slds-text-title_caps slds-is-sorted slds-is-sorted_asc" aria-label="Opened Date" scope="col">
+                                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                                        <span class="slds-truncate" title="Subject">Subject</span>
+                                    </a>
+                                    <div class="slds-resizable">
+                                        <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                        <span class="slds-resizable__handle">
+                                            <span class="slds-resizable__divider"></span>
+                                        </span>
+                                    </div>
+                                </th>
+                                <aura:if isTrue="{!!v.isAccountContactSearch}">
+                                    <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Order Number" scope="col">
+                                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                                            <span class="slds-truncate" title="Order Number">Sales Order</span>
+                                        </a>
+                                        <div class="slds-resizable">
+                                            <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                            <span class="slds-resizable__handle">
+                                                <span class="slds-resizable__divider"></span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Customer PO#" scope="col">
+                                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                                            <span class="slds-truncate" title="Customer PO#">Customer PO</span>
+                                        </a>
+                                        <div class="slds-resizable">
+                                            <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                            <span class="slds-resizable__handle">
+                                                <span class="slds-resizable__divider"></span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Shipment #" scope="col">
+                                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                                            <span class="slds-truncate" title="Shipment #">Shipment #</span>
+                                        </a>
+                                        <div class="slds-resizable">
+                                            <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                            <span class="slds-resizable__handle">
+                                                <span class="slds-resizable__divider"></span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="STO NO" scope="col">
+                                        <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="-1">
+                                            <span class="slds-truncate" title="STO NO #">Stock Transfer Order</span>
+                                        </a>
+                                        <div class="slds-resizable">
+                                            <input type="range" min="20" max="1000" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-36" tabindex="-1"/>
+                                            <span class="slds-resizable__handle">
+                                                <span class="slds-resizable__divider"></span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                </aura:if>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.SearchResults}" var="cas"> 
+                                <tr class="slds-hint-parent">
+                                    <!--  <td class="slds-text-align_right" role="gridcell">
+                                        <span class="slds-checkbox">
+                                            <input type="checkbox" name="options" id="checkbox-01" value="checkbox-01" tabindex="-1" aria-labelledby="check-button-label-01 check-group-header"/>
+                                            <div class="slds-p-bottom_medium"></div>
+                                            <label class="slds-checkbox__label" for="checkbox-01" id="check-button-label-01">
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label slds-assistive-text">Select item 1</span>
+                                            </label>
+                                        </span>
+                                    </td>-->
+                                    <th scope="row" tabindex="0">
+                                        <div class="slds-truncate" title="{!cas.CaseNumber}">
+                                            <!--<a href="{!'../r/Case/' + cas.Id +'/view'}">{!cas.CaseNumber}</a> -->
+                                            <a href="" onclick="{!c.openCaseInTab}" id="{!cas.Id}">{!cas.CaseNumber}</a>
+                                        </div>
+                                    </th>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate" title="{!cas.Account.Name}">{!cas.Account.Name}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate" title="{!cas.Contact.Name}">{!cas.Contact.Name}</div>
+                                    </td>
+                                    <aura:if isTrue="{!v.isAccountContactSearch}">
+                                        <td role="gridcell">
+                                            <div class="slds-truncate" title="{!cas.ShipToAccount__c}">{!cas.ShipToAccount__c}</div>
+                                        </td>
+                                        <td role="gridcell">
+                                            <div class="slds-truncate" title="{!cas.Division__c}">{!cas.Division__c}</div>
+                                        </td>
+                                    </aura:if>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate" title="{!cas.Status}">{!cas.Status}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate" title="{!cas.CreatedDate}"><lightning:formattedDateTime value="{!cas.CreatedDate}" year="numeric" day="2-digit" month="long"/></div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate" title="{!cas.Subject}" style="max-width:128px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap; ">{!cas.Subject}</div>
+                                    </td>
+                                    <aura:if isTrue="{!!v.isAccountContactSearch}">
+                                        <td role="gridcell">
+                                            <div class="slds-truncate" title="{!cas.Order_Number__c}">{!cas.Order_Number__c}</div>
+                                        </td>
+                                        <td role="gridcell">
+                                            <div class="slds-truncate" title="{!cas.Customer_PO__c}">{!cas.Customer_PO__c}</div>
+                                        </td>
+                                        <td role="gridcell">
+                                            <div class="slds-truncate" title="{!cas.Shipment__c}">{!cas.Shipment__c}</div>
+                                        </td>
+                                        <td role="gridcell">
+                                            <div class="slds-truncate" title="{!cas.SAP_TransferOrderHeader__c}">{!cas.SAP_TransferOrderHeader__c}</div>
+                                        </td> 
+                                    </aura:if>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+            </aura:set>
+        </aura:if>
+    </aura:if>
+    
+</aura:component>

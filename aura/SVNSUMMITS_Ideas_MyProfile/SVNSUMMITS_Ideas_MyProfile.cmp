@@ -1,0 +1,34 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaListController"
+                access="global">
+
+    <aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="recordId" type="String" default="{!recordId}" access="global"/>
+    <aura:attribute name="zoneid" type="String" default="" access="global"/>
+    <aura:attribute name="zoneName" default="" type="String" required="true" access="global"/>
+    <aura:attribute name="description" type="String" default="{!$Label.c.ss_idea_label_SubmittedIdeas}" access="global"/>
+    <aura:attribute name="linkToURL" type="String" default="/my-ideas/" access="global"/>
+    <aura:attribute name="doNotLink" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="type" type="String" default="My Ideas" access="global"/>
+    <aura:attribute name="userId" type="String" access="global"/>
+    <aura:attribute name="count" type="Integer" default="0" access="global"/>
+    <aura:attribute name="sitePath" type="String" access="global"/>
+    <aura:attribute name="sitePrefix" type="String" access="global"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:if isTrue="{! and(v.userId, v.recordId, v.zoneId != '') }">
+        <a aura:id="myIdeasLink" class="slds-text-align--center" style="text-decoration: none;">
+            <div class="slds">
+                <div>
+                    <h1 class="slds-text-heading--medium slds-truncate">{!v.count}</h1>
+                </div>
+                <div>
+                    <h3 class="slds-text-heading--smaller slds-truncate"
+                        title="{!v.description}">{!v.description}</h3>
+                </div>
+            </div>
+        </a>
+    </aura:if>
+
+</aura:component>

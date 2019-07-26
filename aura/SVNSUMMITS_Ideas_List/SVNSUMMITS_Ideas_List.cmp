@@ -1,0 +1,174 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaListController"
+                extensible="true"
+                implements="force:appHostable,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes"
+                extends="c:SVNSUMMITS_Ideas_Base"
+                access="global">
+
+	<c:SVNSUMMITS_Include_MomentJS />
+
+	<!-- Custom Settings -->
+	<aura:attribute name="debugMode" type="Boolean" default="true" access="global"/>
+
+	<!-- PROPERTY EDITOR -->
+	<aura:attribute name="zoneName" default="" type="String" required="true" access="global"/>
+	<aura:attribute name="displayMode" type="String" default="Tile View"
+	                description="Tile View,Tile Carousel View,List View"
+	                required="true" access="global"/>
+	<aura:attribute name="displayImages" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="displayPostDateAuthor" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="listSize" type="Integer" default="12" access="global"/>
+	<aura:attribute name="displayPagination" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="paginationPosition" type="String" default="Bottom" access="global"/>
+	<aura:attribute name="displayViewMore" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="sortBy" type="String" access="global"/>
+	<aura:attribute name="searchByTopics" type="String" access="global"/>
+	<aura:attribute name="searchByTheme" type="String" access="global"/>
+	<aura:attribute name="searchByStatus" type="String" access="global"/>
+	<aura:attribute name="searchByCategories" type="String" access="global"/>
+	<aura:attribute name="searchMyIdeas" type="String" access="global"/>
+	<aura:attribute name="ideasListURL" type="String" default="/ideas/" access="global"/>
+	<aura:attribute name="ideaDetailURL" type="String" default="/idea/" access="global"/>
+
+	<aura:attribute name="labelViewMore" type="String" default="{!$Label.c.ss_idea_label_ViewMore}" access="global"/>
+	<aura:attribute name="labelPagePrev" type="String" default="{!$Label.c.ss_idea_label_PreviousPage}"
+	                access="global"/>
+	<aura:attribute name="labelPageNext" type="String" default="{!$Label.c.ss_idea_label_NextPage}" access="global"/>
+
+	<aura:attribute name="zoneId" type="String" default="" access="global"/>
+	<aura:attribute name="enableDownVoting" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="searchString" type="String" access="global"/>
+	<aura:attribute name="previousSearch" type="String" access="global" default=""/>
+
+	<aura:attribute name="ideaImageURL" type="String" default="/servlet/fileField?field=AttachmentBody"
+	                access="global"/>
+	<aura:attribute name="userProfileURL" type="String" default="/profile/" access="global"/>
+	<aura:attribute name="allowVoting" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="limitVoteToEmailDomain" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="showCategoryFilter" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="filterOn" type="String" default="None" required="true" access="global"/>
+	<aura:attribute name="topicValue" type="String" default="" access="global"/>
+	<aura:attribute name="searchTermValue" type="String" access="global"/>
+	<aura:attribute name="categories" type="String" access="global"/>
+	<aura:attribute name="categoriesSelected" default="" type="Set" access="global"/>
+	<aura:attribute name="categoriesSet" type="Set" access="global"/>
+	<aura:attribute name="userId" type="String" access="global"/>
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="sitePrefix" type="String" access="global"/>
+	<aura:attribute name="currentURL" type="String" access="global"/>
+	<aura:attribute name="ideaListWrapper" type="SVNSUMMITS_ideaListWrapper" access="global"/>
+
+	<aura:registerEvent name="appIdea" type="c:SVNSUMMITS_Ideas_Header_Event"/>
+	<aura:registerEvent name="sortEvent" type="c:SVNSUMMITS_Ideas_Filter_Sort_Event"/>
+
+	<aura:handler event="c:SVNSUMMITS_Ideas_Filters_Event" action="{!c.setIdeasFilters}"/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:attribute name="baseLoaded" type="Boolean" access="global" default="false"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_BaseReady" action="{!c.doInit}"/>
+
+		{!v.body}
+
+	<lightning:layout multipleRows="true"
+	                  verticalAlign="center">
+		<!-- PAGINATION TOP -->
+		<aura:if isTrue="{! and(v.displayPagination, or(v.paginationPosition == 'Top',v.paginationPosition == 'Both')) }">
+			<lightning:layoutItem size="12"
+			                      class="slds-p-around--small">
+				<lightning:layout multipleRows="false"
+				                  verticalAlign="center"
+				                  horizontalAlign="end">
+
+					<lightning:layoutItem class="slds-text-body_small slds-text-color--weak slds-p-around--small">
+					{!$Label.c.ss_idea_label_Page}&nbsp;{!v.ideaListWrapper.pageNumber}
+						/ {!v.ideaListWrapper.totalPages}
+					</lightning:layoutItem>
+
+					<lightning:layoutItem >
+						<lightning:button name="prevPage"
+						                  variant="brand"
+						                  label="{!$Label.c.ss_idea_label_PreviousPage}"
+						                  disabled="{! !v.ideaListWrapper.hasPreviousSet}"
+						                  onclick="{!c.getPreviousPage}"/>
+
+						<lightning:button name="nextPage"
+						                  variant="brand"
+						                  label="{!$Label.c.ss_idea_label_NextPage}"
+						                  disabled="{! !v.ideaListWrapper.hasNextSet}"
+						                  onclick="{!c.getNextPage}"/>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</lightning:layoutItem>
+		</aura:if>
+
+		<!-- SPINNER -->
+		<lightning:layoutItem size="12">
+			<lightning:spinner size="small"
+			                   class="slds-hide"
+			                   aura:id="listSpinner"
+			                   variant="brand"
+			                   alternativeText="Loading..."/>
+		</lightning:layoutItem>
+
+		<!-- TILES -->
+		<lightning:layoutItem size="12">
+			<c:SVNSUMMITS_Ideas_Tile wrappedIdeasObj="{!v.ideaListWrapper}"
+			                         displayMode="{!v.displayMode}"
+			                         displayImages="{!v.displayImages}"
+			                         displayPostDateAuthor="{!v.displayPostDateAuthor}"
+			                         isNicknameDisplayEnabled="{!v.isNicknameDisplayEnabled}"
+			                         allowVoting="{!v.allowVoting}"
+			                         enableDownVoting="{!v.enableDownVoting}"
+			                         ideaDetailURL="{!v.ideaDetailURL}"
+			                         sitePath="{!v.sitePath}"
+			                         listSize="{!v.listSize}"
+			                         sitePrefix="{!v.sitePrefix}"
+			                         debugMode="{!v.debugMode}"/>
+		</lightning:layoutItem>
+
+		<!-- PAGINATION BOTTOM -->
+		<aura:if isTrue="{! and(v.displayPagination, or(v.paginationPosition == 'Bottom', v.paginationPosition == 'Both')) }">
+			<lightning:layoutItem size="12"
+			                      class="slds-p-around--small">
+				<lightning:layout multipleRows="false"
+				                  verticalAlign="center"
+				                  horizontalAlign="end">
+
+					<lightning:layoutItem class="slds-text-body_small slds-text-color--weak slds-p-around--small">
+					{!$Label.c.ss_idea_label_Page}&nbsp;{!v.ideaListWrapper.pageNumber}
+						/ {!v.ideaListWrapper.totalPages}
+					</lightning:layoutItem>
+
+					<lightning:layoutItem >
+						<lightning:button name="prevPage"
+						                  variant="brand"
+						                  label="{!$Label.c.ss_idea_label_PreviousPage}"
+						                  disabled="{! !v.ideaListWrapper.hasPreviousSet}"
+						                  onclick="{!c.getPreviousPage}"/>
+
+						<lightning:button name="nextPage"
+						                  variant="brand"
+						                  label="{!$Label.c.ss_idea_label_NextPage}"
+						                  disabled="{! !v.ideaListWrapper.hasNextSet}"
+						                  onclick="{!c.getNextPage}"/>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</lightning:layoutItem>
+		</aura:if>
+
+		<!-- MORE (Featured) -->
+		<aura:if isTrue="{! and(v.displayPagination,  v.displayViewMore)}">
+			<lightning:layoutItem size="12"
+			                      class="slds-align--absolute-center slds-p-around--small">
+				<lightning:button name="viewMore"
+				                  variant="brand"
+				                  label="{!v.labelViewMore}"
+				                  onclick="{!c.gotoListView}"/>
+			</lightning:layoutItem>
+		</aura:if>
+
+	</lightning:layout>
+</aura:component>

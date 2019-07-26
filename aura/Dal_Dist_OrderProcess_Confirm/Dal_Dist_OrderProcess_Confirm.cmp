@@ -1,0 +1,21 @@
+<!--
+ - Created by 7Summits on 3/22/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderProcess_Confirm">
+    <aura:attribute name="store" type="Map" required="true" />
+
+    <aura:attribute name="labelHeader" type="String" default="Confirm Order &amp; Submit"/>
+    <aura:attribute name="labelHeaderInfo" type="String" default="Instructions for this page would appear here."/>
+
+    <lightning:layout verticalAlign="center" multipleRows="true" horizontalAlign="center" pullToBoundary="small">
+        <lightning:layoutItem padding="around-small" size="12">
+            <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.labelHeader}" />
+        </lightning:layoutItem>
+    </lightning:layout>
+
+ <!--   <p>{!v.labelHeaderInfo}</p> -->
+
+    <c:Dal_Dist_Order store="{!v.store}" isDetailView="false" />
+
+</aura:component>

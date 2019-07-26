@@ -1,0 +1,48 @@
+/**
+ * Created by ranja on 27-11-2018.
+ */
+.THIS {
+}
+
+.THIS .dal-cancel-order-header-subheader {
+    margin-top: 3px;
+    margin-bottom: 4px;
+}
+
+.THIS .dal-cancelorder-modal-body {
+    margin-bottom: 10px;
+}
+
+.THIS .dal-modal-footer-cancel {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.THIS .dal-modal-footer-close {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.THIS .dal-pickup-modal-product {
+    font-size: large;
+}
+
+.THIS .dal-cancel-expected-price {
+    color: green;
+    font-weight: 800;
+    margin-right : 1rem;
+    font-size : 1.2rem;
+}
+
+.THIS .sku-seperator {
+    border-bottom: 1px solid #a6a6a6;
+    padding-top: 1rem;
+}
+
+.THIS button {
+    font-weight: 800;
+}

@@ -1,0 +1,4 @@
+<apex:page standardcontroller="Account" extensions="ChangeRequestExtension" action="{!createCR}" >
+
+
+</apex:page>

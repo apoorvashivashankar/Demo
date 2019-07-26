@@ -1,0 +1,78 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaListController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+                access="global">
+
+	<c:SVNSUMMITS_Include_SemanticUI />
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="zoneName" type="String" default="" access="global" required="true"/>
+	<aura:attribute name="zoneid" type="String" default="" access="global"/>
+
+	<aura:attribute name="numberOfIdeas" type="Integer" default="" access="global"/>
+	<aura:attribute name="showNumberOfIdeas" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="isObjectCreatable" type="Boolean" access="global"/>
+	<aura:attribute name="ideaTitle" type="String" default="{!$Label.c.ss_idea_label_Ideas}" required="true"
+	                access="global"/>
+	<aura:attribute name="sortBy" type="String" default="" access="global"/>
+
+	<aura:attribute name="newIdeaURL" type="String" default="/new-idea" access="global"/>
+	<aura:attribute name="showSearch" type="Boolean" default="true" access="global"/>
+
+	<!-- Filter settings -->
+	<aura:attribute name="searchText" type="String" default="" access="public"/>
+	<aura:attribute name="showMyIdeas" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showCategoryFilter" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showTopicFilter" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showStatusFilter" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showThemesFilter" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showViewSelector" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showSortByFilter" type="Boolean" default="true" access="global"/>
+
+	<!-- UI -->
+	<aura:attribute name="newIdeaLabel" type="String" default="SUBMIT NEW IDEA" access="global"/>
+	<aura:attribute name="labelSearch" type="String" default="Search Ideas" access="global"/>
+	<aura:attribute name="toolTipAllIdeas" type="String" default="All Ideas" access="global"/>
+
+	<aura:registerEvent name="appEvent" type="c:SVNSUMMITS_Ideas_Filters_Event"/>
+
+	<aura:handler event="c:SVNSUMMITS_Ideas_Header_Event" action="{!c.setNoOfIdeasGet}" access="global"/>
+	<aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+
+	<div class="slds-page-header" role="banner">
+		<div class="slds-grid slds-wrap slds-grid--vertical-align-center ideas-header">
+			<div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--3-of-12">
+				<lightning:icon iconName="standard:solution" size="large" alternativeText="Ideas"/>
+				<h1 class="slds-text-heading--medium slds-text-heading--weighted" title="{!v.toolTipAllIdeas}">
+					<aura:if isTrue="{!v.showNumberOfIdeas}"> {!v.numberOfIdeas || 0} </aura:if>&nbsp;{!$Label.c.ss_idea_label_Ideas}
+				</h1>
+			</div>
+			<aura:if isTrue="{!v.showSearch}">
+				<div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--2-of-3 slds-large-size--6-of-12 searchContain">
+					<lightning:input type="search"
+					                 name="searchIdeas"
+					                 label="{!$Label.c.ss_idea_label_searchText}"
+					                 onchange="{!c.getSearchString}"
+					                 value="{!v.searchText}"/>
+
+				</div>
+			</aura:if>
+			<div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-3 slds-large-size--3-of-12 slds-text-align--right">
+				<lightning:button label="{!$Label.c.ss_idea_label_SubmitNewIdea}"
+				                  onclick="{!c.gotoUrl}"
+				                  value="{!v.newIdeaURL}"/>
+			</div>
+		</div>
+	</div>
+	<div class="ideas-filters">
+		<c:SVNSUMMITS_Ideas_Filters debugMode="{!v.debugMode}"
+		                            showMyIdeas="{!v.showMyIdeas}"
+		                            showCategoryFilter="{!v.showCategoryFilter}"
+		                            showTopicFilter="{!v.showTopicFilter}"
+		                            showStatusFilter="{!v.showStatusFilter}"
+		                            showThemesFilter="{!v.showThemesFilter}"
+		                            showViewSelector="{!v.showViewSelector}"
+		                            showSortByFilter="{!v.showSortByFilter}"/>
+	</div>
+</aura:component>

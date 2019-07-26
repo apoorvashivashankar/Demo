@@ -1,0 +1,22 @@
+<!--
+ - Created by ranja on 07-09-2018.
+ -->
+
+<aura:component description="Dal_AccountDetailFixes" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <aura:html tag="style">
+        .forceRecordLayout .slds-section:nth-child(2) .forcePageBlockSectionRow:first-child .forcePageBlockItem:first-child .slds-form-element_readonly {
+        border : none;
+        }
+
+        .forceRecordLayout .slds-section:nth-child(2) .forcePageBlockSectionRow:first-child .forcePageBlockItem:last-child .slds-form-element_readonly {
+        border : none;
+        }
+
+        .map.forceOutputAddressText{
+        border-bottom: 4px solid #FFF;
+        margin-bottom: -4px;
+        }
+
+    </aura:html>
+</aura:component>

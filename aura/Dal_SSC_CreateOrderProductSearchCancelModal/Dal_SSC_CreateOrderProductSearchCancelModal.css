@@ -1,0 +1,27 @@
+.THIS .order-button-custom {
+    padding-left: 8rem;
+    padding-right: 8rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-weight: 800;
+}
+
+.THIS .font-color {
+    color: #CF0A2C;
+}
+
+.THIS .error-label {
+    font-size: 1.5rem;
+}
+
+.THIS .error-hold {
+    margin-top: 4rem;
+}
+
+.THIS .header-close {
+    float: right;
+}
+
+.THIS .dal-phone-icon {
+    padding-top: 4px;
+}

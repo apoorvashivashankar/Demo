@@ -1,0 +1,8 @@
+<!--
+ - Created by 7Summits on 5/9/18.
+ -->
+<aura:event type="APPLICATION" description="Dal_PricingByMaterialDatePromoChangeEvt">
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="effectiveDate" type="String" default=""/>
+    <aura:attribute name="appliedPromotionCode" type="String" default=""/>
+</aura:event>

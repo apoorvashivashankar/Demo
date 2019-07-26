@@ -1,0 +1,5 @@
+<aura:tokens extends="force:base">
+    <aura:token name="headerImageUrl" value='' />
+    <aura:token name="brandLogoImage" value='' />
+    <aura:token name="custom_fontSizeMedium" value="13px"/>
+</aura:tokens>

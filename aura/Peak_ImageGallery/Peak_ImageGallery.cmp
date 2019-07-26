@@ -1,0 +1,39 @@
+<aura:component description="Peak_ImageGallery" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" extends="c:Peak_Base" controller="Peak_ImageGalleryController">
+
+    <ltng:require styles="{!join(',', $Resource.slickCarousel + '/slick.css', $Resource.slickCarousel + '/slick-theme.css')}"
+                  scripts="{!join(',', $Resource.jquery224 + '/jquery.2.2.4.min.js' )}" afterScriptsLoaded="{!c.initPeakImageGallery}" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+    <aura:attribute name="GalleryID" type="String" default="" />
+    <aura:attribute name="peakResponse" type="Peak_Response" default="" />
+    <aura:attribute name="isInit" type="Boolean" default="false" />
+
+    <aura:attribute name="optionAutoplaySpeed" type="Integer" default="4000" />
+    <aura:attribute name="optionAutoplay" type="Boolean" default="true" />
+    <aura:attribute name="optionShowArrows" type="Boolean" default="false" />
+    <aura:attribute name="optionShowDots" type="Boolean" default="false" />
+    <aura:attribute name="optionShowDescription" type="Boolean" default="false" />
+    <aura:attribute name="optionInvertArrowColor" type="Boolean" default="false"/>
+    <aura:attribute name="optionInvertDotColor" type="Boolean" default="false"/>
+    <aura:attribute name="optionInvertDescription" type="Boolean" default="false"/>
+
+    <section class="{!'peak-gallery peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <aura:if isTrue="{!v.isInit}">
+            <div aura:id="carousel" class="{!'slider' + if(v.optionInvertDescription, ' invert-caption', '')}">
+                <aura:if isTrue="{!v.peakResponse.results[0].Gallery_Entries__r.length > 0}">
+                    <aura:iteration items="{!v.peakResponse.results[0].Gallery_Entries__r}" var="entry" indexVar="counter">
+                        <div class="{!'slide slide-' + counter}">
+                            <c:Peak_ImageGalleryEntry image="{!entry}" showDescription="{!v.optionShowDescription}"/>
+                        </div>
+                    </aura:iteration>
+                    <aura:set attribute="else">
+                        <div class="slide slide-0 slide-default">
+                            <img src="{!v.peakResponse.results[0].Default_Image__c}" alt="" />
+                        </div>
+                    </aura:set>
+                </aura:if>
+            </div>
+        </aura:if>
+    </section>
+</aura:component>

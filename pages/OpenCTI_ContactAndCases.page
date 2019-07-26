@@ -1,0 +1,480 @@
+<apex:page sidebar="false" docType="html-5.0" controller="OpenCTI_ContactAndCasesController" id="thePage"
+           >
+    
+    <html>
+        <title>Contacts and cases</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.bootstrap3, 'css/bootstrap-sfdc.css')}" media="all"/>
+        <link rel="stylesheet" href="{!URLFOR($Resource.jqDataTables, 'dataTables.bootstrap.min.css')}" media="all"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="all"/>
+        
+        <script src="/soap/ajax/44.0/connection.js"/>
+        
+        
+        <!-- JavaScript Libraries -->
+            <apex:includeScript value="/support/console/44.0/integration.js"/>
+                <script type="text/javascript" src="/sdk/js/canvas-all.js"></script>
+        <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+        <apex:includeScript value="{!URLFOR($Resource.svg4everybody)}"/>
+        <apex:includeScript value="{!URLFOR($Resource.bootstrap3, 'js/bootstrap.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.jqDataTables, 'datatables.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.jQueryMask)}"/>
+        
+        <apex:includeScript value="/lightning/lightning.out.js"/>
+        <apex:includeLightning />
+        <style>
+            
+            .slds-vf-scope input[type="radio"][disabled]:after, .slds-vf-scope input[type="checkbox"][disabled]:after { 
+                border-color: black; 
+            } 
+            
+            div.dataTables_wrapper {
+            
+            }
+            
+            .fixed-navbar-header{
+            position: fixed;
+            width: 100%;
+            z-index: 999;
+            background: #fff;
+            top: 0;
+            padding: 20px 0;
+            border-bottom: 1px solid #ececec; 
+            }
+            
+            .empty-table{
+            display: block;
+            margin-top: 100px!important;
+            }
+            
+            .fixed-navbar-header + * {
+            margin-top: 50px;
+            }
+            
+            .small-table th, .small-table td{
+            font-size: 0.8em;
+            }
+            
+            
+            .displayHidden{
+            display:none;
+            }
+            
+            
+            .myChk:checked { color: #000; }
+            .myChk:checked { color: #F00; }            
+            
+            
+            .newcasebtn{
+            color: #333;
+            margin: 1px;
+            padding: 2px 3px;
+            border: 1px solid #b5b5b5;
+            border-bottom-color: #7f7f7f;
+            background: #e8e8e9 url(/img/alohaSkin/btn_sprite.png) repeat-x right top;
+            font-weight: bold;
+            font-size: .9em;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            }
+            .buttonali{
+            display: inline-flex;
+            padding-left: 20%!important;
+            flex-direction: row;
+            
+            }
+            .casetablecount{
+            position: absolute;
+            right: 20%;
+            line-height: 26px;
+            }
+            .anistyle{
+            margin-top: 3%;
+            font-weight: bold;
+            font-size: large;
+            
+            }
+            
+            
+        </style>
+        <!--<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" media="all"/>-->
+        
+        <apex:form id="theForm">
+            
+            <br/>
+            <div class="bootstrap3-sfdc fixed-navbar-header">
+                <div class="row" style="padding-left: 19%;">
+                    <div class="col-sm-3">
+                        <div class="anistyle">
+                            <apex:outputText value="DNIS Number:"></apex:outputText>
+                        </div>
+                        
+                        {!DNIS}
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="anistyle">
+                            <apex:outputText value="Phone Number:"></apex:outputText>
+                        </div>
+                        
+                        {!ANI}
+                   </div>
+                   
+                <!--    <div class="col-sm-6 buttonali">-->
+                <!--        <div id="noseletedContact">-->
+                <!--            <apex:outputLink styleClass="btn newcasebtn btn-default" id="newCaseID"-->
+                <!--                             onClick="createcase();return false;"> CSR New Case-->
+                <!--            </apex:outputLink>-->
+                <!--        </div>-->
+                <!--        <div id="noseletedContact">-->
+                <!--            <apex:outputLink styleClass="btn newcasebtn btn-default" id="newCaseIDDis"-->
+                                             
+                <!--                             onClick="createcasedisconnected();return false;"> CSR Disconnected-->
+                <!--            </apex:outputLink>-->
+                <!--        </div>-->
+                <!--    </div>-->
+                    
+                </div>
+                
+            </div>
+            <apex:outputPanel rendered="{!allWrapGlobal =null}" styleclass="empty-table">
+                <div style="width:100%;padding-left: 19%;">
+                    <table id="contact1" class="display table table-striped table-bordered" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th style="width: 2%;"></th>
+                                <th style="width: 16%;">Contact Name</th>
+                                <th style="width: 12%;">Phone</th>
+                                <th style="width: 10%;">Customer Account</th>
+                                <th style="width: 33%;">Account Name</th>
+                                <th style="width: 2%;">Dir</th>
+                                <th style="width: 2%;">DIV</th>
+                                <th style="width: 8%;">Sold-To</th>
+                                <th style="width: 8%;">Ship-To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="10" align="center">
+                                    No Matching Records for Contact found.
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!noServiceCon}" styleclass="empty-table">
+                <div style="width:100%;padding-left: 19%;">
+                    <table id="contact1" class="display table table-striped table-bordered" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th style="width: 2%;"></th>
+                                <th style="width: 16%;">Contact Name</th>
+                                <th style="width: 12%;">Phone</th>
+                                <th style="width: 10%;">Customer Account</th>
+                                <th style="width: 33%;">Account Name</th>
+                                <th style="width: 2%;">Dir</th>
+                                <th style="width: 2%;">DIV</th>
+                                <th style="width: 8%;">Sold-To</th>
+                                <th style="width: 8%;">Ship-To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="10" align="center">
+                                    No Matching Records for Service Contact found.
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </apex:outputPanel>
+            <div class="container" style="width:100%; padding-left: 19%;">
+                
+                <apex:repeat value="{!allWrapGlobalsorted}" var="wrapRecd" id="theRepeat">
+                    
+                    <br/>
+                    <table id="" class="contacttbl table table-striped table-bordered" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th style="width: 2%;"></th>
+                                <th style="width: 16%;">Contact Name</th>
+                                <th style="width: 12%;">Phone</th>
+                                <th style="width: 10%;">Customer Account</th>
+                                <th style="width: 33%;">Account Name</th>
+                                <th style="width: 2%;">Dir</th>
+                                <th style="width: 2%;">DIV</th>
+                                <th style="width: 8%;">Sold-To</th>
+                                <th style="width: 8%;">Ship-To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                
+                                <td style="width: 2%;">
+                                    
+                                    <apex:inputCheckbox id="selectedContact" styleClass="myChk" disabled="false" style=""
+                                                        onclick="clickedContact(this,'{!wrapRecd.conObj.id}');" html-data-contactid="{!JSENCODE(wrapRecd.conObj.id)}" html-data-accountid="{!JSENCODE(wrapRecd.accountObj.id)}" />
+                                </td>
+                                <td style="width: 16%;">
+                                    <apex:outputLink value="{!URLFOR($Action.Contact.View, wrapRecd.conObj.id)}">{!wrapRecd.conObj.FirstName}
+                                    </apex:outputLink>
+                                </td>
+                                
+                                <td style="width: 10%;">
+                                    {!wrapRecd.conObj.phone}
+                                </td>
+                                <td style="width: 10%;">
+                                     <apex:outputLink value="{!URLFOR($Action.Account.View, wrapRecd.accountObj.Id)}">
+                                        {!IF(wrapRecd.accountObj.Customer_Base__c == null,'No Account No.',wrapRecd.accountObj.Customer_Base__c)}
+                                    </apex:outputLink>
+                                    
+                                </td>
+                                <td style="width: 33%;">
+                                    {!wrapRecd.accountObj.name}
+                                </td>
+                                
+                                <td style="width: 2%;">
+                                    {!wrapRecd.isDirect}
+                                </td>
+                                <td style="width: 2%;">
+                                    {!wrapRecd.accountObj.Division__c}
+                                </td>
+                                <td style="width: 8%;">
+                                    {!wrapRecd.accountObj.SoldToAccount__c}
+                                </td>
+                                <td style="width: 8%;">
+                                    {!wrapRecd.accountObj.SAP_Account_Id__c}
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                        
+                        
+                        <table id="" class="phtbl table table-striped table-bordered small-table">
+                            <div></div>
+                            <thead>
+                                <tr>
+                                    <th style="width: 8%;">Case Number</th>
+                                    <th style="width: 12%;">Date/Time Opened</th>
+                                    <th style="width: 36%;">Subject</th>
+                                    <th style="width: 5%;">Status</th>
+                                    <th style="width: 10%;">Team Sub</th>
+                                    <th style="width: 10%;">Owner</th>
+                                    <th style="width: 10%;">Customer Account</th>
+                                </tr>
+                            </thead>
+                            
+                            <div class="casetablecount">{!wrapRecd.cases.size} Items</div>
+                            <tbody>
+                                <apex:repeat value="{!wrapRecd.cases}" var="caserec">
+                                    
+                                    
+                                    <tr>
+                                        <td style="width: 8%;">
+                                            <apex:outputLink value="{!URLFOR($Action.Case.View, caserec.id)}">{!caserec.CaseNumber}</apex:outputLink>
+                                        </td>
+                                        <td style="width: 12%;">
+                                            <apex:outputText value="{0,date, MM/d/yyyy hh:mm a}">
+                                                <apex:param value="{!caserec.CreatedDate}"/>
+                                            </apex:outputText>
+                                            
+                                        </td>
+                                        <td style="width: 36%;">
+                                            {! caserec.Subject}
+                                        </td>
+                                        <td style="width: 8%;">
+                                            {!caserec.Status}
+                                        </td>
+                                        <td style="width: 10%;">
+                                            {!caserec.Team_Sub_Category__c}
+                                        </td>
+                                        <td style="width: 10%;">
+                                            {!caserec.Owner.name}
+                                        </td>
+                                        <td style="width: 10%;">
+                                            {!caserec.Customer_Account__c}
+                                        </td>
+                                        
+                                    </tr>
+                                    
+                                    
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                        
+                        
+                    </table>
+                    
+                    
+                </apex:repeat>
+            </div>
+            <div style="width:30%;height:100px;" id="FlipcardContainer" />
+            
+        </apex:form>
+        <script>
+        
+        var lightningDomain = "https://" + '{!$Label.Domain_Lightning}';
+        
+        console.log('lightningDomain =...: ' + lightningDomain);
+        
+        $(document).ready(function() {
+            $('.phtbl').DataTable({
+                "language": { "emptyTable": "No Associated Case Found." },
+                "bLengthChange":false,
+                "pageLength" : 5,
+                "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
+                "info":     true,
+                "ordering": false,
+                "order": [[1, 'desc']]
+            });
+            
+            
+            $('.contacttbl').DataTable( {
+                "paging":   false,
+                "ordering": false,
+                "info":     false,
+                "searching": false,
+                
+            } );
+            
+            $('#contact1').DataTable( {
+                "paging":   false,
+                "ordering": false,
+                "info":     false,
+                "searching": false,
+                "language": { "emptyTable": "No Matching Records for Contact found." }
+            } );
+            
+        } );
+        
+    window.addEventListener('message', function(data) {
+      window.d = data; // Remember to check origin before blindly accepting data
+    });        
+        
+        function openSuccess(result){
+            if (!result.success) {
+                alert('Case cannot be opened');
+            }
+        }
+        function  createcase(){
+            let allCheckBoxes = document.getElementsByClassName('myChk');
+            var createNewUrl;
+            for(let i=0;i<allCheckBoxes.length;i++){
+                if(allCheckBoxes[i].checked === true){
+                    var conId = allCheckBoxes[i].getAttribute('data-contactid');
+                    var accId = allCheckBoxes[i].getAttribute('data-accountid');
+                    /* createNewUrl = '/apex/CSRNewCase_CTI?ContactId='+conId+'&AccountId='+accId;*/
+                    if(!conId)
+                    	createNewUrl = '/lightning/cmp/c__NewCaseWizard?recordId='+accId+'&sObjectName=Account';
+                    else
+                        createNewUrl = '/lightning/cmp/c__NewCaseWizard?recordId='+accId+'&sObjectName=Account&contactRecordId='+conId+'&sObjectContact=Contact';
+                    
+                    sforce.connection.sessionId='{!GETSESSIONID()}';
+                    /*  var testurl ='/apex/OpenCTI_ContactAndCases?ANI=3013857474&DNIS=13456'*/
+                    
+                    sforce.console.openPrimaryTab(null,createNewUrl,true,'New Case Search');
+                }
+            }
+            if(!createNewUrl){
+                
+                
+                sforce.connection.sessionId='{!GETSESSIONID()}';
+                sforce.console.openPrimaryTab(null,'/lightning/cmp/c__NewCaseWizard',true,'New Case Search');
+                
+            }
+            
+            
+        }
+        //End Creatcase
+        function  createcasedisconnected(){
+            let allCheckBoxes = document.getElementsByClassName('myChk');
+            var csrdisrecid = '{!csrDisconnectRecID}';
+            console.log('test',csrdisrecid);
+            
+            
+            var createNewUrl;
+            
+            for(let i=0;i<allCheckBoxes.length;i++){
+                if(allCheckBoxes[i].checked === true){
+                    var conId = allCheckBoxes[i].getAttribute('data-contactid');
+                    var accId = allCheckBoxes[i].getAttribute('data-accountid');
+                    
+                    createNewUrl = '/apex/';
+                    sforce.one.createRecord('Case',csrdisrecid,{
+                        AccountId : accId,
+                        ContactId : conId,
+                    });
+                    
+                }
+            }
+            if(!createNewUrl){
+                
+                sforce.one.createRecord('Case',csrdisrecid);
+            }
+            
+        }
+        
+        
+        function changeValue(checkbox, data) {
+            console.log(data);
+            console.log('changeValue + checkbox.checked:...' + checkbox.checked);
+            let allCheckBoxes = document.getElementsByClassName('myChk');
+            if(checkbox.checked === true){
+                for(let i=0;i<allCheckBoxes.length;i++){
+                    if(allCheckBoxes[i].name === checkbox.name){
+                        continue;
+                    }else{
+                        allCheckBoxes[i].checked = false;
+                    }
+                }
+                checkbox.checked = true;
+            }
+            
+        }
+        
+		/**
+		* JR: 2/28/2019
+		* Adding event listener on send button 
+		* to send message to lightning component
+		**/
+
+        function clickedContact(checkbox, data) {
+    		console.log('clickedContact...: ');
+            changeValue(checkbox, data);
+            changeLightning(checkbox, data);
+            // checkbox.checked = true;
+        }
+        
+        function changeLightning(checkbox, data) {
+    		console.log('changeLightning...: ');
+            console.log('changeLightning + checkbox.checked:...' + checkbox.checked);
+            let allCheckBoxes = document.getElementsByClassName('myChk');
+            var createNewUrl;
+            for(let i=0;i<allCheckBoxes.length;i++){
+                if(allCheckBoxes[i].checked === true){
+                    var conId = allCheckBoxes[i].getAttribute('data-contactid');
+                    var accId = allCheckBoxes[i].getAttribute('data-accountid');
+                    if(conId != null) {
+    		            console.log('changeLightning & conId =...: ' + conId);
+                        parent.postMessage(conId, lightningDomain);
+                    }		    
+                    if(accId != null) {
+    		            console.log('changeLightning & accId =...: ' + accId);
+                        parent.postMessage(accId, lightningDomain);
+                    }		    
+        			console.log('Visualforce Sends conId...: ' + conId + ' / and accId...:' + accId);
+        			//Posting message to parent window object (in our case its lightning component's window object)
+        // 			event.preventDefault();            
+                }
+            }
+        }
+                  
+        
+        </script>
+    </html>
+</apex:page>

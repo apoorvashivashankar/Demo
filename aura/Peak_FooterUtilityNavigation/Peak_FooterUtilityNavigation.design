@@ -1,0 +1,34 @@
+<design:component label="7S Footer Utility Navigation">
+    <design:attribute name="MobileHamburger" label="Show Mobile Hamburger?" description="If true hamburger will display on mobile" />
+
+    <design:attribute name="CopyrightName" label="Your business name" />
+    <design:attribute name="PoweredByText" label="Powered by text" />
+    <design:attribute name="PoweredByLink" label="Powered by link" />
+
+    <design:attribute name="Link1" label="Link Link 1" />
+    <design:attribute name="Link1Text" label="Link Link 1 Text" />
+    <design:attribute name="Link1OpenInNewPage" label="Open Link 1 in new page?"/>
+
+    <design:attribute name="Link2" label="Link Link 2" />
+    <design:attribute name="Link2Text" label="Link Link 2 Text" />
+    <design:attribute name="Link2OpenInNewPage" label="Open Link 2 in new page?"/>
+
+    <design:attribute name="Link3" label="Link Link 3" />
+    <design:attribute name="Link3Text" label="Link Link 3 Text" />
+    <design:attribute name="Link3OpenInNewPage" label="Open Link 3 in new page?"/>
+
+    <design:attribute name="Link4" label="Link Link 4" />
+    <design:attribute name="Link4Text" label="Link Link 4 Text" />
+    <design:attribute name="Link4OpenInNewPage" label="Open Link 4 in new page?"/>
+
+    <design:attribute name="Link5" label="Link Link 5" />
+    <design:attribute name="Link5Text" label="Link Link 5 Text" />
+    <design:attribute name="Link5OpenInNewPage" label="Open Link 5 in new page?"/>
+
+    <design:attribute name="Link6" label="Link Link 6" />
+    <design:attribute name="Link6Text" label="Link Link 6 Text" />
+    <design:attribute name="Link6OpenInNewPage" label="Open Link 6 in new page?"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+</design:component>

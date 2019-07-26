@@ -1,0 +1,59 @@
+<!--
+ - Created by ranja on 07-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_MultiplePickupDeliveryItemList" extends="c:Dal_Base"
+                controller="Dal_ScheduleOrderController">
+
+    <aura:attribute name="orderNumber" type="String" default=""/>
+    <aura:attribute name="maxListLength" type="Integer" default="5"/>
+    <aura:attribute name="items" type="List" default="[]"/>
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="orders" type="Map" default="{}"/>
+    <aura:attribute name="totalOrders" type="Integer" default="0"/>
+    <aura:attribute name="orderList" type="List" default="[]"/>
+    <aura:attribute name="skuNumber" type="Integer" default="0"/>
+    <aura:attribute name="orderWrapper" type="Object"/>
+    <aura:attribute name="totalSkus" type="Integer"/>
+    <aura:attribute name="successedSkus" type="List" default="[]" />
+
+    <!-- For Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="hasMoreItems" type="Boolean" default="false"/>
+    <aura:attribute name="showMoreItems" type="Boolean" default="false"/>
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="showSpinner" type="boolean" default="false" />
+
+    <!-- BODY --> 
+    <lightning:layout verticalAlign="center" class="dal-right slds-p-bottom_medium" multipleRows="true">
+        <lightning:layout verticalAlign="center" multipleRows="true">
+            <lightning:layoutItem size="12"
+                                  class="slds-p-horizontal_large slds-grid slds-p-top_large slds-p-bottom_medium">
+                <div class="slds-grid dal-font"><h4><b>{!v.totalOrders} &nbsp;Orders &nbsp; - </b></h4> </div>
+                <div class="dal-order-item"> &nbsp;{!v.totalSkus} &nbsp;items</div>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <aura:if isTrue="{!v.showSpinner}" >
+            <lightning:spinner  variant="brand"/>
+        </aura:if>
+        <div class="slds-size_12-of-12 slds-p-horizontal_large dal-body" >
+            <aura:iteration items="{!v.orderWrapper}" var="order" indexVar="index">
+                <div class="slds-grid_align-spread slds-grid  slds-p-vertical_x-small slds-border_bottom slds-border_top">
+
+                    <div class="slds-col">
+                       <a class="" onclick="{!c.openProductSkus}" name="{!index}"><u> {!order.orderNumber}</u></a>
+                    </div>
+
+                    <div class="slds-col">
+                        {!order.countOfSkus} items
+                    </div>
+                </div>
+            </aura:iteration>
+        </div>
+    </lightning:layout>
+
+</aura:component>

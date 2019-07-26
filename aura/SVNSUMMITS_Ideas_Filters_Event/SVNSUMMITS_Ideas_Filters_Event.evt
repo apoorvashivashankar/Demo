@@ -1,0 +1,10 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:event type="APPLICATION" description="Idea template" access="global">
+    <aura:attribute name="searchString" type="String" access="global"/>
+    <aura:attribute name="searchMyIdeas" type="String" access="global"/>
+    <aura:attribute name="searchByCategories" type="String" access="global"/>
+    <aura:attribute name="searchByTopics" type="String" access="global"/>
+    <aura:attribute name="searchByStatus" type="String" access="global"/>
+    <aura:attribute name="searchByThemes" type="String" access="global"/>
+    <aura:attribute name="sortBy" type="String" access="global"/>
+</aura:event>

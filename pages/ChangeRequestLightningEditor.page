@@ -1,0 +1,561 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="true"
+           standardController="Change_Request__c" applyHTmlTag="false">
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.lightningdesignsystem.com/assets/styles/slds.css"/>
+ 
+<style>
+.msgIcon {
+    display: none!important
+}
+.customMessage * {
+    color: #fff!important
+}
+.customMessage {
+    margin: 5px 0!important;
+    max-width: 1280px;
+    opacity: 1!important;
+    width: 100%;
+    font-size: 12px;
+    border: 0px;
+    padding-left: 10px;
+}
+.message {
+    opacity: .1
+}
+.html-style{
+    height: 100%;
+    width: 590px;
+}
+</style>
+ 
+ 
+<script>
+    $(document).ready(function(){
+       overridePageMessages();    
+    });
+        
+    function overridePageMessages(){    
+        var textureEffect = '';
+        //Uncomment below line for texture effect on page messages
+        textureEffect = 'slds-theme--alert-texture';
+                     
+        $('.warningM3').addClass('slds-notify slds-notify--toast slds-theme--warning customMessage '+textureEffect);          
+        $('.confirmM3').addClass('slds-notify slds-notify--alert slds-theme--success  customMessage '+textureEffect);    
+        $('.errorM3').addClass('slds-notify slds-notify--alert slds-theme--error customMessage '+textureEffect);                  
+        $('.infoM3').addClass('slds-notify slds-notify--toast customMessage '+textureEffect);    
+                         
+        $('.errorM3').removeClass('errorM3'); 
+        $('.confirmM3').removeClass('confirmM3'); 
+        $('.infoM3').removeClass('infoM3');   
+        $('.warningM3').removeClass('warningM3');  
+    }
+</script>
+
+
+<script src='/canvas/sdk/js/42.0/publisher.js'></script> 
+
+
+
+<apex:pagemessages />
+
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope" >
+            <apex:form >
+            <div class="slds-page-header" role="banner">
+                <div class="slds-grid">
+                    <div class="slds-col slds-has-flexi-truncate">
+                        <div class="slds-media slds-no-space slds-grow">
+                            <div class="slds-media__figure">
+                                <svg aria-hidden="true" class="slds-icon slds-icon-standard-Change_Request__c">
+                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/standard-sprite/svg/symbols.svg#Change_Request__c')}"></use>
+                                </svg>
+                            </div>
+                            <apex:outputPanel styleClass="slds-media__body" rendered="{!LEN(Change_Request__c.Name)>0}">
+                                <p class="slds-text-title--caps slds-line-height--reset">Edit Change Request</p>
+                                <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate" title="{!Change_Request__c.Name}">{!Change_Request__c.Name}</h1>
+                            </apex:outputPanel>
+                            <apex:outputPanel styleClass="slds-media__body" rendered="{!LEN(Change_Request__c.Name)==0}">
+                                <p class="slds-text-title--caps slds-line-height--reset">Create Change Request</p>
+                                <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate" title="New Change Request">New Change Request</h1>
+                            </apex:outputPanel>
+                            <div class="slds-col slds-no-flex slds-grid slds-align-right">
+                                <div class="slds-button-group" role="group">
+                                    <apex:commandButton styleClass="slds-button slds-button-space-left slds-button--neutral" value="Cancel" action="{!cancel}" immediate="true" html-formnovalidate="formnovalidate" />
+                                    <apex:commandButton styleClass="slds-button slds-button-space-left slds-button--brand" value="Save" action="{!save}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-text-color_error">Once all approvals are final, allow 3 business days for processing.</div>   
+            </div>    
+                
+                <div class="slds-grid slds-wrap">
+
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-m-top--large">
+                        <h3 class="slds-text-heading--small slds-m-bottom--medium">Customer {!Change_Request__c.Customer_Base__c} Information</h3>
+                    </div>                    
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Account</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Account__r.Name}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Name Change</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="accountNameChange" value="{!Change_Request__c.Customer_Name_Change__c}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">DBA Name</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.DBA_Name__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">DBA Name Change</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="dbaNameChange" value="{!Change_Request__c.DBA_Name_Change__c}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-m-top--small">If requesting a New ShipTo Account/New Suffix check the checkbox and provide a reason, then make updates to the Customer Details that will be changing</div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-m-top--small"> </div>
+
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">New Ship To Account?</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newShipTo" value="{!Change_Request__c.New_ShipTo_Request__c}"/>
+                            </div>
+                        </div>
+                    </div>   
+                   
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">New Ship To Reason</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newShipToReason" value="{!Change_Request__c.Reason_for_New_Suffix__c}"/>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-m-top--large">
+                        <h3 class="slds-text-heading--small slds-m-bottom--medium">Customer Details</h3>
+                    </div>                    
+
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Region</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Region__r.Name}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Region (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField style="width:97%; line-height:1.875em;" id="newRegion" value="{!Change_Request__c.Region_n__c}"/>
+                            </div>
+                        </div>
+                    </div>                  
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Sales Rep</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Sales_Representative__r.Name}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">New Rep</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField style="width:97%; line-height:1.875em;" id="newRep" value="{!Change_Request__c.Sales_Representative_n__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">SSC</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.SSC__r.Name}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">New SSC</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField style="width:97%; line-height:1.875em;" id="newSSC" value="{!Change_Request__c.SSC_N__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Customer Type</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Customer_Type__r.Name}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">New Customer Type</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField style="width:97%; line-height:1.875em;" id="newCusType" value="{!Change_Request__c.Customer_Type_N__c}"/>
+                            </div>
+                        </div>
+                    </div>                  
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Customer Class</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Customer_Class__r.Name}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">New Customer Class</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField style="width:97%; line-height:1.875em;" id="newCusClass" value="{!Change_Request__c.Customer_Class_N__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Customer Class Details</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Customer_Class__r.Customer_Class_Details__c}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Business Reason for Class</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newReasonForClass" value="{!Change_Request__c.Business_Reason__c}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Phone</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Phone__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Phone (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newShipPhone" value="{!Change_Request__c.Ship_To_Phone__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Fax</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Fax__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Fax (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newShipFax" value="{!Change_Request__c.Fax_N__c}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Website</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Website__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Website (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newWebsite" value="{!Change_Request__c.Website_N__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                   <div class="slds-p-horizontal--small slds-size--1-of-2"> 
+                        <!-- empty space -->
+                    </div> 
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">PO # Required?</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newPoNeeded" value="{!Change_Request__c.ponumber__c}"/>
+                            </div>
+                        </div>
+                    </div>                  
+
+                    <div class="slds-p-horizontal--small slds-size--2-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Comments</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newComments" value="{!Change_Request__c.Comments__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                   <!-- <div class="slds-p-horizontal--small slds-size--1-of-1 slds-m-top--large">
+                        <h3 class="slds-text-heading--small slds-m-bottom--medium">Address Change Information</h3>
+                    </div>     -->             
+
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-m-top--large">
+                        <h1 class="slds-text-heading--small slds-m-bottom--small">Billing Address</h1>
+                    </div>              
+                                        
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Bill Country</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Bill_Country__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Bill Country (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newBillCountry" value="{!Change_Request__c.Bill_Country_N__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Bill Address 1</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Bill_Address_1__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Bill Address 1 (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newBillAdd" value="{!Change_Request__c.Billing_Street_N__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Billing Address 2</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Bill_Address_2__c}
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Billing Address 2 (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newBillAdd2" value="{!Change_Request__c.Shipping_Address_2__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Billing City</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Billing_City_Account__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Billing City (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newBillCity" value="{!Change_Request__c.Billing_City_N__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Billing State</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Billing_State_Account__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Billing State (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newBillState" value="{!Change_Request__c.Billing_State_N2__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Billing Zip</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Billing_Zip_Account__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Billing Zip (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newBillZip" value="{!Change_Request__c.Billing_Zip_N__c}"/>
+                            </div>
+                        </div>
+                    </div>                  
+
+                    
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-m-top--large">
+                        <h1 class="slds-text-heading--small slds-m-bottom--small">Shipping Address</h1>
+                    </div>  
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">                                    
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Copy Bill-To Address</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-checkbox" id="newCopyBillTo" value="{!Change_Request__c.Copy_Bill_To_Address__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Ship Country</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Billing_Country__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Ship Country (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newshipCountry" value="{!Change_Request__c.Country_N2__c}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Ship Address 1</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Billing_Street__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Ship Address 1 (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newShipAdd" value="{!Change_Request__c.Shipping_street__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Ship Address 2 </span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Shipping_Address_2__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Ship Address 2 (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newShipAdd2" value="{!Change_Request__c.Shipping_Address_2__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Shipping City</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Billing_City__c} 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Shipping City (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newShipCity" value="{!Change_Request__c.Shipping_City__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Shipping State</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Billing_State__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Shipping State (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newShipState" value="{!Change_Request__c.Shipping_State_N2__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Shipping Zip</span>
+                            <div class="slds-form-element__control">
+                                {!Change_Request__c.Billing_Zip__c}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-2">
+                        <div class="slds-form-element slds-hint-parent">
+                            <span class="slds-form-element__label">Shipping Zip (N)</span>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" id="newShipZip" value="{!Change_Request__c.Shipping_Zip_N__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-p-horizontal--small slds-size--1-of-1 slds-m-top--small"> </div>
+                                        
+                </div>
+            </apex:form>
+        </body>
+    </html>
+    <!-- SFDC Support J McCarthy addition below for picklist scrolling behavior on iOS 5/16/2017 -->
+    <script>
+        var a = navigator.userAgent; 
+        if ((a.indexOf('Salesforce') != -1) && (a.indexOf('iPhone') != -1 || a.indexOf('iPad') != -1) && (a.indexOf('Safari') == -1)) { 
+        var s = document.createElement('style'); 
+        s.innerHTML = "html,html body{overflow:scroll;-webkit-overflow-scrolling:touch;z-index:0;}body{position:absolute;left:0;right:0;top:0;bottom:0;}"; 
+        document.getElementsByTagName('head')[0].appendChild(s); 
+        };
+    </script>
+</apex:page>

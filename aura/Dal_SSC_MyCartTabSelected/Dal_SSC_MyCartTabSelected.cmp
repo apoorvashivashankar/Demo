@@ -1,0 +1,40 @@
+<!--
+ - Created by Preshit on 02-01-2019.
+ -->
+
+<aura:component description="Dal_SSC_MyCartTabSelected" access="global"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+    <!--Internal Attributes-->
+    <aura:attribute name="myCartPageNumber" type="Integer" default="1" />
+    
+
+    <!--BODY-->
+    <lightning:layout class="slds-size_11-of-12 slds-medium-size_12-of-12 slds-small-size_8-of-12 dal-my-cart-header">
+        <a onclick="{!c.navigateToProductSearch}">
+            <lightning:layoutItem padding="around-small" class="slds-m-right_xx-large slds-grid slds-wrap">
+                <div class="slds-m-right_xx-small">
+                    <lightning:icon class="" iconName="utility:chevronleft" alternativeText="Back" size="small"/>
+                </div>
+                <div>
+                    <span class="dal-my-cart-back-button">Continue Shopping </span>
+                </div>
+            </lightning:layoutItem>
+        </a>
+
+        <div class="slds-align_absolute-center slds-wrap">
+            <lightning:layoutItem padding="around-small">
+                1. <span class="{!v.myCartPageNumber == 1 ? 'page-selected' : ''}">MY CART </span>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                2. <span class="{!v.myCartPageNumber == 2 ? 'page-selected' : ''}">CHECKOUT </span>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                3. <span class="{!v.myCartPageNumber == 3 ? 'page-selected' : ''}">REVIEW </span>
+            </lightning:layoutItem>
+        </div>
+
+    </lightning:layout>
+
+
+</aura:component>

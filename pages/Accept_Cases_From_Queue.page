@@ -1,0 +1,23 @@
+<apex:page standardController="Case" extensions="Accept_Cases_From_Queues_Controller" recordSetVar="Cases">
+	<apex:form >
+		<apex:pageBlock title="Accept the following Cases" mode="edit">
+			<apex:pageMessages />
+			<apex:pageBlockButtons location="top">
+				<apex:commandButton value="Save" action="{!save}"/>
+				<apex:commandButton value="Cancel" action="{!cancel}"/>
+			</apex:pageBlockButtons>
+			<apex:pageBlockTable value="{!selected}" var="cas">
+				<apex:column value="{!cas.CaseNumber}"/>
+				<apex:column headerValue="Status">
+					<apex:outputField value="{!cas.Status}"/>
+				</apex:column>
+				<apex:column headerValue="Owner Name">
+					<apex:inputField value="{!cas.Owner.Name}"/>
+				</apex:column>
+				<apex:column headerValue="CreatedDate">
+					<apex:inputField value="{!cas.CreatedDate}"/>
+				</apex:column>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

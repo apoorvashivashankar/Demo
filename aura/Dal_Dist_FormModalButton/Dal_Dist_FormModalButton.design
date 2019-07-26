@@ -1,0 +1,11 @@
+<!--
+ - Created by 7Summits on 2/14/18.
+ -->
+
+<design:component label="Daltile - Form Overlay Button">
+    <design:attribute name="linkText" label="Button label"/>
+    <design:attribute name="linkType" label="Type of button" dataSource="button,link"/>
+    <design:attribute name="content" label="Component name that will be opened in the overlay"/>
+    <design:attribute name="customButtonClasses" label="Custom classes added to button"/>
+    <design:attribute name="customOverlayClasses" label="Custom classes added to overlay"/>
+</design:component>

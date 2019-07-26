@@ -1,0 +1,21 @@
+<!--
+ - Created by 7Summits on 3/1/18.
+ -->
+
+<aura:component description="Dal_SSC_ScheduledDelivery" extends="c:Dal_ListBase" controller="Dal_OrderSearchController">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <!-- internal -->
+    <aura:attribute name="showMoreLabel" type="String" default="Show More"/>
+    <aura:attribute name="viewAllOpenOrdersLabel" type="String" default="View All Open Orders"/>
+    <aura:attribute name="viewAllOpenOrdersUrl" type="String" default="{!$Label.c.Dal_SSC_ScheduledDelivery_viewAllOpenOrdersUrl_Label}"/>
+
+    <lightning:layout class="slds-p-top_small" multipleRows="true" verticalAlign="center" horizontalAlign="end">
+        <lightning:layoutItem class="slds-p-around_x-small slds-text-align_right" size="12">
+            <a class="dal-list-ctaLink" href="javascript:void(0)" data-url="{!v.viewAllOpenOrdersUrl}" onclick="{!c.gotoURL}">
+                {!v.viewAllOpenOrdersLabel}
+            </a>
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

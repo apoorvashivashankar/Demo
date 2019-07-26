@@ -1,0 +1,68 @@
+/**
+ * Created by ranja on 09-08-2018.
+ */
+.THIS {
+}
+
+.THIS .searchResult .outputDataContainer {
+  margin: 0 -0.75rem;
+}
+.THIS .searchResult .outputDataContainer > div {
+  display: inline-block;
+  padding: 0.125rem token(spacingSmall);
+}
+.THIS .searchResult .outputDataContainer > div label {
+  font-size: .75rem;
+  padding: .125rem 0;
+  text-transform: uppercase;
+  color: #5f5f5f;
+}
+.THIS .searchResult .outputDataContainer > div span {
+  font-size: .9375rem;
+  font-weight: bold;
+  padding-left: .5rem;
+}
+
+.THIS .button-bold {
+    font-weight: bold;
+}
+
+.THIS.cDal_ModalBase .dal-form-order .section-border-bottom {
+    border-bottom : 1px solid !important;
+}
+
+.THIS.cDal_ModalBase .dal-form-order .section-border-top {
+    border-top : 1px solid !important;
+}
+
+.THIS.cDal_ModalBase .slds-button.slds-button_neutral {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 1px;
+    padding-bottom : 1px;
+    width : 100%;
+    max-width : 180px !important;
+}
+
+.THIS.cDal_Dist_SampleOrderProductSearch .top-search-button {
+     padding-top : 3px !important;
+     padding-bottom : 3px !important;
+     margin-top : 5px !important;
+}
+
+.THIS .ADDED {
+  background-color: #fcf8c8;
+}
+
+.THIS.cDal_ModalBase .dal-form-order .defaultPriceRecord-cta-label .slds-select_container {
+    width : 100%;
+}
+
+.THIS .button-hover-toAdd {
+  background-color: rgb(255, 255, 255)!important;
+  color: rgb(217, 219, 221)!important;
+}
+
+.THIS .spinner-fixed {
+    position: fixed;
+}

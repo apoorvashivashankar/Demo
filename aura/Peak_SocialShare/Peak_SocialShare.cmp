@@ -1,0 +1,180 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+                access="global">
+    <ltng:require afterScriptsLoaded="{!c.doInit}"/>
+
+    <aura:attribute name="Email" type="Boolean" default="true" access="global"/>
+    <aura:attribute name="Print" type="Boolean" default="true" access="global"/>
+    <aura:attribute name="Facebook" type="Boolean" default="true" access="global"/>
+    <aura:attribute name="Tumblr" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="LinkedIn" type="Boolean" default="true" access="global"/>
+    <aura:attribute name="Twitter" type="Boolean" default="true" access="global"/>
+    <aura:attribute name="Reddit" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="GooglePlus" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="Pocket" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="Pinterest" type="Boolean" default="true" access="global"/>
+    <aura:attribute name="WhatsApp" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="VK" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="titletext" type="String" default="Share This Page" access="global"/>
+	<aura:attribute name="align" type="String" default="center" access="global"/>
+	<aura:attribute name="headeralign" type="String" default="center" access="global"/>
+    <aura:attribute name="headerposition" type="String" default="top" access="global"/>
+    <aura:attribute name="hasborder" type="Boolean" default="true" access="global"/>
+    <aura:attribute name="isbranded" type="Boolean" default="true" access="global"/>
+
+    <aura:attribute name="pageTitle" type="String" />
+    <aura:attribute name="pageURL" type="String" />
+
+    <section style="{!'text-align:' + v.align}" data-border="{!v.hasborder}"  data-branded="{!v.isbranded}">
+        <aura:if isTrue="{!v.titletext}"><h2 style="{!'text-align:' + v.headeralign}" class="slds-text-heading_medium slds-m-bottom_small" data-position="{!v.headerposition}">{!v.titletext}</h2></aura:if>
+
+        <ul class="rrssb-buttons">
+            <!-- Email -->
+            <aura:if isTrue="{!v.Email}">
+                <li class="rrssb-email">
+                    <a title="Email" href="{!'mailto:?subject='+v.pageTitle+'&amp;body='+v.pageURL}">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/mail.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End Email -->
+
+            <!-- Print -->
+            <aura:if isTrue="{!v.Print}">
+                <li class="rrssb-print">
+                    <a title="Print" href="javascript:window.print()">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/print.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End Print -->
+
+            <!-- Facebook -->
+            <aura:if isTrue="{!v.Facebook}">
+                <li class="rrssb-facebook">
+                    <a title="Facebook" onclick="{!c.doPopup}" data-href="{!'https://www.facebook.com/sharer.php?u='+v.pageURL}">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/facebook.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End Facebook -->
+
+            <!-- Twitter -->
+            <aura:if isTrue="{!v.Twitter}">
+                <li class="rrssb-twitter">
+                    <a title="Twitter" onclick="{!c.doPopup}" data-href="{!'https://twitter.com/intent/tweet?url='+v.pageURL+'&amp;text='+v.pageTitle}">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/twitter.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End Twitter -->
+
+            <!-- LinkedIn -->
+            <aura:if isTrue="{!v.LinkedIn}">
+                <li class="rrssb-linkedin">
+                    <a title="LinkedIn" onclick="{!c.doPopup}" data-href="{!'https://www.linkedin.com/shareArticle?url='+v.pageURL+'&amp;title='+v.pageTitle}">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/linkedin.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End LinkedIn -->
+
+            <!-- Pinterest -->
+            <aura:if isTrue="{!v.Pinterest}">
+                <li class="rrssb-pinterest" title="Pinterest">
+                    <a onclick="{!c.doPopup}" data-href="{!'https://pinterest.com/pin/create/bookmarklet/?url='+v.pageURL+'&amp;description='+v.pageTitle}">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/pinterest.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End Pinterest -->
+
+            <!-- Tumblr -->
+            <aura:if isTrue="{!v.Tumblr}">
+                <li class="rrssb-tumblr">
+                    <a title="Tumblr" onclick="{!c.doPopup}" data-href="{!'https://www.tumblr.com/widgets/share/tool?canonicalUrl='+v.pageURL+'&amp;title='+v.pageTitle}">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/tumblr.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End Tumblr -->
+
+            <!-- GooglePlus -->
+            <aura:if isTrue="{!v.GooglePlus}">
+                <li class="rrssb-googleplus">
+                    <a title="Google+" onclick="{!c.doPopup}" data-href="{!'https://plus.google.com/share?url='+v.pageURL}">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/google_plus.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End GooglePlus -->
+
+            <!-- Reddit -->
+            <aura:if isTrue="{!v.Reddit}">
+                <li class="rrssb-reddit">
+                    <a title="Reddit" onclick="{!c.doPopup}" data-href="{!'https://reddit.com/submit?url='+v.pageURL+'&amp;title='+v.pageTitle}">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/reddit.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End Reddit -->
+
+            <!-- Pocket -->
+            <aura:if isTrue="{!v.Pocket}">
+                <li class="rrssb-pocket">
+                    <a title="Pocket" onclick="{!c.doPopup}" data-href="{!'https://getpocket.com/save?url='+v.pageURL}">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/pocket.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End Pocket -->
+
+            <!-- WhatsApp -->
+            <aura:if isTrue="{!v.WhatsApp}">
+                <li class="rrssb-whatsapp">
+                    <a title="Whats App" onclick="{!c.doPopup}" data-href="whatsapp://send?text='+v.pageURL">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/whatsapp.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End WhatsApp -->
+
+            <!-- VK -->
+            <aura:if isTrue="{!v.VK}">
+                <li class="rrssb-vk">
+                    <a class="popup" title="VK" onclick="{!c.doPopup}" data-href="{!'http://vk.com/share.php?url='+v.pageURL}">
+                        <span class="rrssb-icon">
+                            <img width="28" height="28" src="{!$Resource.Peak_SocialShare_Icons+'/icons/vk.min.svg'}" />
+                        </span>
+                    </a>
+                </li>
+            </aura:if>
+            <!-- End VK -->
+
+        </ul>
+        <!-- Buttons end here -->
+
+        <!--<div id="attr">Powered by&nbsp;<a href="http://www.7summitsinc.com/">7Summits</a></div>-->
+    </section>
+</aura:component>

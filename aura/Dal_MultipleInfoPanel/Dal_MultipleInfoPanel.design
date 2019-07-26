@@ -1,0 +1,36 @@
+<!--
+ - Created by 7Summits on 2/21/18.
+ -->
+<design:component label="DalTile Info Panel">
+    <design:attribute name="panel1Title" label="Info Panel One"  />
+    <design:attribute name="showTile1" label="Show Info Panel One"  />
+    <design:attribute name="iconBG1" label="Icon Background Color" datasource="#555759, #00416A, #CF0A2C" />
+    <design:attribute name="icon1" label="Select Icon" dataSource="utility:call, utility:help, utility:questions_and_answers" />
+    <design:attribute name="size1" label="Panel Size" dataSource="small, big" />
+    <design:attribute name="subText1" label="Sub Text"  />
+    <design:attribute name="mainText1" label="Main Text"  />
+    <design:attribute name="panelURL1" label="URL"  />
+    <design:attribute name="OpenInNewTab1" label="Open in New Tab"  />
+
+    <design:attribute name="panel2Title" label="Info Panel One"  />
+    <design:attribute name="showTile2" label="Show Info Panel One"  />
+    <design:attribute name="iconBG2" label="Icon Background Color" datasource="#555759, #00416A, #CF0A2C" />
+    <design:attribute name="icon2" label="Select Icon" dataSource="utility:call, utility:help, utility:questions_and_answers" />
+    <design:attribute name="size2" label="Panel Size" dataSource="small, big" />
+    <design:attribute name="subText2" label="Sub Text"  />
+    <design:attribute name="mainText2" label="Main Text"  />
+    <design:attribute name="panelURL2" label="URL"  />
+    <design:attribute name="OpenInNewTab2" label="Open in New Tab"  />
+
+    <design:attribute name="panel3Title" label="Info Panel One"  />
+    <design:attribute name="showTile3" label="Show Info Panel One"  />
+    <design:attribute name="iconBG3" label="Icon Background Color" datasource="#555759, #00416A, #CF0A2C" />
+    <design:attribute name="icon3" label="Select Icon" dataSource="utility:call, utility:help, utility:questions_and_answers" />
+    <design:attribute name="size3" label="Panel Size" dataSource="small, big" />
+    <design:attribute name="subText3" label="Sub Text"  />
+    <design:attribute name="mainText3" label="Main Text"  />
+    <design:attribute name="panelURL3" label="URL"  />
+    <design:attribute name="OpenInNewTab3" label="Open in New Tab"  />
+
+    <design:attribute name="className" label="Custom Class"  />
+</design:component>

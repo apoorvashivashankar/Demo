@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 2/28/18.
+ -->
+
+<aura:component description="Dal_AccountPayments" extends="c:Dal_ListBase" controller="Dal_AccountPaymentsController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+</aura:component>

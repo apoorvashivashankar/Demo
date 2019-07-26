@@ -1,0 +1,158 @@
+<!--
+ - Created by 7Summits on 4/24/18.
+ -->
+
+<aura:component description="Dal_SSC_SchedulePickupDelivery" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" extends="c:Dal_SSC_SchedulePickupDeliveryBase">
+    <ltng:require styles="{!$Resource.fontawesome_5_0_13 + '/fontawesome-free-5.0.13/css/fontawesome-all.min.css'}" />
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="activeTab" type="String" default="pickupAll"/>
+    <aura:attribute name="currentOrder" type="Map" default="{}"/>
+    <aura:attribute name="currentOrderScheduling" type="String" default=""/>
+    <aura:attribute name="totalOrdersToSchedule" type="String" default=""/>
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+    <aura:attribute name="isReschedule" type="Boolean" default="false" />
+    <aura:attribute name="isMultiple" type="Boolean" default="false" />
+    <aura:attribute name="totalOrders" type="Integer" default="1" />
+    <aura:attribute name="orderNumbers" type="List" default="[]" />
+    <aura:attribute name="isMultipleHeader" type="Boolean" default="false" />
+
+    <aura:registerEvent name="tabChange" type="c:Dal_SSC_HandleTabChangeEvent"/>
+    <!-- labels -->
+    <aura:attribute name="labelOrderNumber" type="String" default="Order Number:" />
+    <aura:attribute name="labelPoNumber" type="String" default="Purchase Order:" />
+    <aura:attribute name="labelJobName" type="String" default="Job Name:" />
+    <aura:attribute name="labelTabPickupAll" type="String" default="Pick Up All Items" />
+    <aura:attribute name="labelTabDeliverAll" type="String" default="Deliver All Items" />
+    <aura:attribute name="labelTabScheduleByLineItem" type="String" default="Schedule By Line Item" />
+    <aura:attribute name="labelLoadingError" type="String" default="Error loading order number: "/>
+
+    <!-- ******************** -->
+    <!-- current order header section -->
+    <!-- ******************** -->
+    <lightning:layout verticalAlign="center" multipleRows="true" horizontalAlign="center" pullToBoundary="small">
+
+        <aura:if isTrue="{!!v.isMultipleHeader}">
+            <lightning:layoutItem padding="around-small" size="12">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading"
+                                      headingText="{!'Order ' + v.currentOrderScheduling + ' of ' + v.totalOrdersToSchedule + ':'}"/>
+                <dl class="dal-bullet-list-horizontal">
+                    <aura:if isTrue="{!!empty(v.currentOrder.orderNumber)}">
+                        <dt>{!v.labelOrderNumber}</dt>
+                        <dd class="bold">{!v.currentOrder.orderNumber}</dd>
+                    </aura:if>
+                    <aura:if isTrue="{!!empty(v.currentOrder.poNumber)}">
+                        <dt>{!v.labelPoNumber}</dt>
+                        <dd class="bold">{!v.currentOrder.poNumber}</dd>
+                    </aura:if>
+                    <aura:if isTrue="{!!empty(v.currentOrder.jobName)}">
+                        <dt>{!v.labelJobName}</dt>
+                        <dd class="bold">{!v.currentOrder.jobName}</dd>
+                    </aura:if>
+                </dl>
+            </lightning:layoutItem>
+
+            <aura:set attribute="else">
+                <lightning:layoutItem padding="around-small" size="12">
+                    <c:Peak_HTML_Headings headingTag="H2 - Section Heading"
+                                          headingText="Schedule All Orders"/>
+
+                    <dl class="dal-bullet-list-horizontal dal-schedule-header">
+                        Scheduling  {!v.totalOrders} Orders:
+                        <aura:iteration items="{!v.orderNumbers}" var="ord" indexVar="index">
+                            <aura:if isTrue="{!index == (v.totalOrders-1)}">
+                                {!ord}
+                                <aura:set attribute="else" >
+                                    {!ord},
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </dl>
+                </lightning:layoutItem>
+            </aura:set>
+        </aura:if>
+
+    </lightning:layout>
+    <!-- ******************** -->
+    <!-- end current order header section -->
+    <!-- ******************** -->
+
+    <!-- ******************** -->
+    <!-- tabs -->
+    <!-- ******************** -->
+    <aura:if isTrue="{!and(v.isPickupDeliveryBaseLoading == false, v.currentOrder.hasLoadingError != true)}"> <!-- Previuosly there was only loading error condition was there -->
+        <lightning:tabset aura:id="tabs" variant="scoped" class="outerTabs slds-m-top_large" selectedTabId="{!v.activeTab}">
+
+            <!-- ******************** -->
+            <!-- pickup all -->
+            <!-- ******************** -->
+            <lightning:tab label="{!v.labelTabPickupAll}" onactive="{!c.handleActive}" id="pickupAll">
+                <c:Dal_SSC_ScheduleAllPickups store="{!v.store}" currentOrder="{!v.currentOrder}"
+                                              currentOrderScheduling="{!v.currentOrderScheduling}" totalOrdersToSchedule="{!v.totalOrdersToSchedule}" activeTab="{!v.activeTab}"/>
+            </lightning:tab>
+            <!-- ******************** -->
+            <!-- end pickup all -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- deliver all -->
+            <!-- ******************** -->
+            <lightning:tab label="{!v.labelTabDeliverAll}" onactive="{!c.handleActive}" id="deliverAll">
+                <c:Dal_SSC_ScheduleAllDeliveries store="{!v.store}" currentOrder="{!v.currentOrder}"
+                                                 currentOrderScheduling="{!v.currentOrderScheduling}" totalOrdersToSchedule="{!v.totalOrdersToSchedule}" />
+            </lightning:tab>
+            <!-- ******************** -->
+            <!-- end deliver all -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- schedule by line item -->
+            <!-- ******************** -->
+            <aura:if isTrue="{!or(!v.isReschedule,!v.isMultiple)}">
+                <lightning:tab label="{!v.labelTabScheduleByLineItem}" onactive="{!c.handleActive}"
+                               id="scheduleByLineItem">
+                    <c:Dal_SSC_ScheduleByLineItem store="{!v.store}" currentOrder="{!v.currentOrder}"
+                                                  currentOrderScheduling="{!v.currentOrderScheduling}"
+                                                  totalOrdersToSchedule="{!v.totalOrdersToSchedule}"/>
+                </lightning:tab>
+            </aura:if>
+            <!-- ******************** -->
+            <!-- end schedule by line item -->
+            <!-- ******************** -->
+        </lightning:tabset>
+    </aura:if>
+
+
+
+    <!-- ******************** -->
+    <!-- end tabs -->
+    <!-- ******************** -->
+
+    <!-- ******************** -->
+    <!-- error loading order -->
+    <!-- ******************** -->
+    <aura:if isTrue="{!v.currentOrder.hasLoadingError == true}">
+        <lightning:layout class="slds-p-vertical_large">
+            <lightning:layoutItem size="12">
+                <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="error" closable="false">
+                    {!v.labelLoadingError + ' ' + v.currentOrder.orderNumber}
+                </ui:message>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+    <!-- ******************** -->
+    <!-- end error loading order -->
+    <!-- ******************** -->
+
+    <!-- ******************** -->
+    <!-- loader -->
+    <!-- ******************** -->
+    <aura:if isTrue="{!v.isLoading == true}">
+        <lightning:spinner class="slds-is-fixed" variant="brand" />
+    </aura:if>
+    <!-- ******************** -->
+    <!-- end loader -->
+    <!-- ******************** -->
+
+</aura:component>

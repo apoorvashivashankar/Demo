@@ -1,0 +1,850 @@
+<apex:page sidebar="false" docType="html-5.0" controller="OpenCTI_SFDCScriptController">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{!URLFOR($Resource.bootstrap3, 'css/bootstrap-sfdc.css')}" media="all" />
+  <link rel="stylesheet" href="{!URLFOR($Resource.jqDataTables, 'dataTables.bootstrap.min.css')}" media="all" />
+
+  <!-- JavaScript Libraries -->
+  <apex:includeScript value="/support/console/22.0/integration.js"/> 
+  <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+  <apex:includeScript value="{!URLFOR($Resource.svg4everybody)}"/>
+  <apex:includeScript value="{!URLFOR($Resource.bootstrap3, 'js/bootstrap.min.js')}"/>
+  <apex:includeScript value="{!URLFOR($Resource.jqDataTables, 'datatables.min.js')}"/>
+  <apex:includeScript value="{!URLFOR($Resource.jQueryMask)}"/>
+ 
+
+  <!-- Import the Design System style sheet -->
+  <apex:slds />
+  
+  <style>
+    body {
+        margin: 0px !important;
+        background-color: #fff;
+    }
+    /* remove page padding whenever added by salesforce */
+    .slds-scope.noSidebarCell  {
+        padding: 0px;
+    }
+    .form-css {
+        padding:15px 10px
+    }
+    .force-bs .pagination {
+        margin: 0px;
+    }
+    .pbs-account--search {
+        margin: 0px 15px;
+    }
+    .contact-related-list--container {
+        background: #f4f6f9;
+    }
+    #acc-lookup1 {
+        display: none;
+    }
+    #acc-lookup2 {
+        display: none;
+    }
+    td.details-control {
+        background: url('/img/colTitle_downarrow.gif') no-repeat center center;
+        background-size: 12px;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('/img/colTitle_uparrow.gif') no-repeat center center;
+        background-size: 12px;
+    }
+  </style>
+  
+  <script>
+      var ds_SSC = [];
+      var SSC_No;
+      var SSC_Id;
+      var ds_accounts = [];
+      var ds_accountsMatched = [];
+      var ds_contacts = [];
+      var screen_pop_ani = '';
+      var screen_pop_vdn = '';
+      var screen_pop_dnis = '';
+      var labelCaseRecordTypeId = '{!($Label.CaseRecordTypeId)}';
+      console.log('labelCaseRecordTypeId: ' + labelCaseRecordTypeId);
+      var on_ssc_info_pulled = function(result, event){
+        if(event.status) {
+            ds_SSC.length = 0;
+            if( result.length > 0 ){
+                for( i=0; i<result.length; i++ ){
+                    var ssc = result[i];
+                    ds_SSC.push([ssc.Name, ssc.SSC_Phone_Number__c, ssc.VDN__c]);
+                    SSC_Id = ssc.Id;
+                }
+              SSC_No = ds_SSC[0][0];
+              console.log(ds_SSC);
+              console.log('SSC_Id:...' + SSC_Id);
+              console.log('#### saving...SSC_No='+SSC_No);
+              $('#script--sscname').html(SSC_No);
+              $('#script--sscphone').html(ds_SSC[0][1]);
+            }
+            else{
+               $('#script--sscname').html('No Matching Record for SSC found.');
+               SSC_No = url_param.DNIS;
+            }
+        } else if (event.type === 'exception') {
+            alert(event.message + ' ' +   event.where);
+        } else {
+            alert(event.message);
+        }
+      };
+      
+      var on_ani_lookup_completed = function(result, event){
+        if(event.status) {
+            var showSection = result.showSection;
+            //------------------------------------------------------------------
+            //  accounts (ANI found in contacts)
+            //------------------------------------------------------------------
+            if( result.accounts && result.accounts.length > 0 ){
+                ds_accounts.length = 0;
+                for( i=0; i<result.accounts.length; i++ ){
+                    var a = result.accounts[i];
+                    var dt_a = {
+                            "ID" : a.Id,
+                            "Name" : a.Name,
+                            "DW_ID" : ((a.DW_ID__c)?a.DW_ID__c:""),
+                            "CustomerType" : ((a.Customer_Type__r)?a.Customer_Type__r.Name:""),
+                            "BillingStreet" : ((a.BillingStreet)?a.BillingStreet:""),
+                            "BillingCity" : ((a.BillingCity)?a.BillingCity:""),
+                            "BillingState" : ((a.BillingState)?a.BillingState:""),
+                            "BillingPostalCode" : ((a.BillingPostalCode)?a.BillingPostalCode:""),
+                            "BillingCountry" : ((a.BillingCountry)?a.BillingCountry:""),
+                            "Phone" : ((a.Phone)?a.Phone:"")
+                        };
+                    ds_accounts.push( dt_a );
+                }
+                $("#acc-lookup1").show();
+                $('#account-lookup1-grid').DataTable( {
+                        data: ds_accounts,
+                        columns: [
+                            { render: function(data, type, row){
+                                    return '<a href="#" onclick="createNewContact(\''+dt_a.ID+'\')" >Create Contact</a>';
+                                }, title : "", "orderable": false
+                            },
+                            { "data" : "Name", title : "Name & Owner"},
+                            { "data" : "DW_ID", title : "Account"},
+                            { "data" : "CustomerType", title : "Customer Type"},
+                            {  render: function(data, type, row){
+                                    return row.BillingStreet + " " + row.BillingCity + "<br/>" 
+                                        + row.BillingState + ", " + row.BillingPostalCode + " " + row.BillingCountry; 
+                                }, title : "Address"
+                            },
+                            { "data" : "Phone", title : "Phone"}
+                        ]
+                    } );
+            }
+            //------------------------------------------------------------------
+
+            //------------------------------------------------------------------
+            //  accounts matched (Contact Not matched and Account matched)
+            //------------------------------------------------------------------
+            if( result.accountsMatched && result.accountsMatched.length > 0 ){
+                ds_accountsMatched.length = 0;
+                for( i=0; i<result.accountsMatched.length; i++ ){
+                    var a = result.accountsMatched[i];
+                    var dt_a = {
+                        "ID" : a.Id,
+                        "Name" : a.Name.replace(/&amp;/, "AND"),
+                        "DW_ID" : ((a.DW_ID__c)?a.DW_ID__c:""),
+                        "CustomerType" : ((a.Customer_Type__r)?a.Customer_Type__r.Name:""),
+                        "BillingStreet" : ((a.BillingStreet)?a.BillingStreet:""),
+                        "BillingCity" : ((a.BillingCity)?a.BillingCity:""),
+                        "BillingState" : ((a.BillingState)?a.BillingState:""),
+                        "BillingPostalCode" : ((a.BillingPostalCode)?a.BillingPostalCode:""),
+                        "BillingCountry" : ((a.BillingCountry)?a.BillingCountry:""),
+                        "Phone" : ((a.Phone)?a.Phone:""),
+                        "Contacts" : a.Contacts
+                    };
+                    ds_accountsMatched.push( dt_a );
+                }
+                $("#acc-lookup2").show();
+                var account_lookup2_grid_table = $('#account-lookup2-grid').DataTable( {
+                        "order": [[ 1, "asc" ]],
+                        data: ds_accountsMatched,
+                        columns: [
+                            { render: function(data, type, row){
+                                    return '<a href="#" onclick="createNewContact(\''+dt_a.ID+'\')" >Create Contact</a>';
+                                }, title : "", "orderable": false
+                            },
+                            {
+                                "className":      'details-control',
+                                "orderable":      false,
+                                "data":           null,
+                                "defaultContent": ''
+                            },
+                            { "data" : "Name", title : "Name"},
+                            { "data" : "DW_ID", title : "Account"},
+                            { "data" : "CustomerType", title : "Customer Type"},
+                            {  render: function(data, type, row){
+                                    return row.BillingStreet + " " + row.BillingCity + "<br/>" 
+                                        + row.BillingState + ", " + row.BillingPostalCode + " " + row.BillingCountry; 
+                                }, title : "Address"
+                            },
+                            { "data" : "Phone", title : "Phone"}
+                        ]
+                    } );
+            }
+            // Add event listener for opening and closing details
+            $('#account-lookup2-grid tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = account_lookup2_grid_table.row( tr );
+                if ( row.child.isShown() ) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child( contact_related_list(row.data()) ).show();
+                    tr.addClass('shown');
+                }
+            } );
+            //------------------------------------------------------------------
+            
+            //------------------------------------------------------------------
+            //  contacts
+            //------------------------------------------------------------------
+            if( result.contacts && result.contacts.length > 0 ){
+                ds_contacts.length = 0;
+                for( i=0; i<result.contacts.length; i++ ){
+                    var c = result.contacts[i];
+                    ds_contacts.push({
+                        "Id" : c.Id, 
+                        "Name" : c.Name,
+                        "Email" : ((c.Email)?c.Email:""),
+                        "Phone" : ((c.Phone)?c.Phone:""),
+                        "AccountName" : ((c.AccountId)?c.Account.Name:""),
+                        "AccountId" : ((c.AccountId)?c.AccountId:""),
+                        "MobilePhone" : ((c.MobilePhone)?c.MobilePhone:""),
+                        "OtherPhone": ((c.OtherPhone)?c.OtherPhone:"")
+                    });
+                }
+                console.log('2 SSC_Id:...' + SSC_Id);
+                $("#contact-grid").show();
+                $('#contact-grid').DataTable( {
+                        data: ds_contacts,
+                        columns: [
+                            { render: function(data, type, row){
+                                    return '<a href="#" onclick="createNewCase(\''+ escape_string(row.Id) +'\', \''+ escape_string(row.AccountId) +'\',\''+ row.Phone +'\',\'' + SSC_Id +'\',\'ssc\');" >Create Case</a>';
+                                }, title : "", "orderable": false
+                            },
+                            { "data" : "Name", title: "Contact Name" },
+                            { "data" : "AccountName", title: "Account Name & Owner" },
+                            { "data" : "Phone", title: "Phone" },
+                            { "data" : "MobilePhone", title: "Mobile Phone" },
+                            { "data" : "OtherPhone", title: "Other Phone" },
+                            { "data" : "Email", title: "Email" }
+                        ]
+                    } );
+            }
+            else{
+                $("#contact-grid").hide();
+                $("#contact-lookup-result").html("No Matching Records for Contact found.");
+            }
+            //------------------------------------------------------------------
+            
+            if( showSection === true ){
+                $(".pbs-account--search").show();
+                register_search_action();
+                register_pagination_controls();
+            }
+        } else if (event.type === 'exception') {
+            alert(event.message + ' ' +   event.where);
+        } else {
+            alert(event.message);
+        }
+      
+      };
+	 
+	 var escape_string = function( str ){
+	 	var eStr = str.replace(/'/g, "\\'");
+	 	eStr = str.replace(/&#39;/g, "\\'");
+	 	return eStr;
+	 };
+	 
+        /* Formatting function for row details - modify as you need */
+      var contact_related_list = function( d ) {
+           // `d` is the original data object for the row
+           var acc_row_id = d.ID;
+           var acc_con_list = [];
+           var contact_table = '<table style="border: 1px solid #606160;"><tr><td colspan="6" style="background-color: #606160; color: #fff;text-align: center;">Related Contacts</td></tr>'
+                +'<tr><td>&nbsp;</td><td>Contact Name</td><td>Phone</td><td>Mobile Phone</td><td>Other Phone</td><td>Email</td></tr>';
+           var has_contacts = false;
+           for( i=0; i<ds_accountsMatched.length; i++ ){
+            var a_row = ds_accountsMatched[i];
+            if( a_row.ID === acc_row_id ){
+                has_contacts = true;
+                for( i=0; i<a_row.Contacts.length; i++ ){
+                    var c_row = a_row.Contacts[i];
+                    console.log( c_row );
+
+                    contact_table += '<tr>';
+                    contact_table += '<td><a href="#" onclick="createNewCase(\''+ escape_string(c_row.Name) +'\', \''+ escape_string(c_row.Account.Name) +'\', \''+screen_pop_ani+'\', \'sscName\')">Create Case</a></td>'; 
+                    contact_table += '<td>'+((c_row.Name)?c_row.Name:'')+'</td>';
+                    contact_table += '<td>'+((c_row.Phone)?c_row.Phone:'')+'</td>';
+                    contact_table += '<td>'+((c_row.MobilePhone)?c_row.MobilePhone:'')+'</td>';
+                    contact_table += '<td>'+((c_row.OtherPhone)?c_row.OtherPhone:'')+'</td>';
+                    contact_table += '<td>'+((c_row.Email)?c_row.Email:'')+'</td>';
+                    contact_table += '</tr>';
+                }
+                break;
+            }
+           }
+           if( has_contacts === false ){
+            contact_table += '<td colspan="6">No Contact Records Related to Account.</td>';
+            
+           }
+           contact_table += '</table>';
+           return contact_table;
+      };
+      
+      var getSSCData = function(){
+          // looking up the SSC record using the DNIS
+        console.log('** inside getSSCData()');  
+        console.log( 'DNIS->'+screen_pop_dnis );
+          
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.OpenCTI_SFDCScriptController.getSSCData}',
+            screen_pop_dnis, 
+            on_ssc_info_pulled, 
+            {escape: true}
+        );          
+          
+      };
+
+      var getContactAccountData = function(){
+          console.log( 'ANI->'+ $('[id$=ANI]').val() );
+          Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.OpenCTI_SFDCScriptController.getContactAccountData}',
+            $('[id$=ANI]').val(), 
+            on_ani_lookup_completed, 
+            {escape: true}
+          );          
+      };
+      
+      var get_url_vars = function(){
+        var p = {};
+        var URL = decodeURI( window.location.href );
+        URL = URL.replace(/%24/g,'$')
+        var parts = URL.replace(/[?&]+([^=&]+)=([^&]*)/gi, 
+            function(m,key,value) {
+                if( p[key] ){
+                    if(p[key] instanceof Array){
+                        p[key].push(value);
+                    }
+                    else{
+                        p[key] = [p[key], value];
+                    }
+                }
+                else{
+                    p[key] = value;
+                }
+            });
+        return p;
+      };
+      
+      var render_page_header = function(){
+        url_param = get_url_vars();
+        // normalize ANI
+        if( url_param && url_param.ANI ){
+            url_param.ANI = url_param.ANI.replace(/\D/g,'');
+            if( url_param.ANI.length == 11 ){
+                //url_param.ANI = url_param.ANI.substring(1, url_param.ANI.length);
+                url_param.ANI = $("<span />").html( url_param.ANI ).mask('+0 (000) 000-0000').text();
+            }
+            else{
+                url_param.ANI = $("<span />").html( url_param.ANI ).mask('(000) 000-0000').text();
+            }
+            if( sforce.console.isInConsole() ){
+                var set_enclosingtab_label = function(r){
+                    var tabId = r.id;
+                    sforce.console.setTabTitle(url_param.ANI, tabId);
+                };
+                sforce.console.getEnclosingPrimaryTabId( set_enclosingtab_label );
+            }
+            else{
+                window.document.title='Ph: '+url_param.ANI;
+            }
+            $("#script--ani").html( url_param.ANI );
+            $("#inbound--ani").html( url_param.ANI );
+        }
+        // not supporting VDN
+        //if( url_param && url_param.VDN ){
+        //  $("#script--vdn").html( url_param.VDN );
+        //}
+        if( url_param && url_param.DNIS ){
+            $("#script--DNIS").html( url_param.DNIS );
+        }
+        
+        screen_pop_ani = url_param.ANI;
+        screen_pop_vdn = url_param.VDN;
+        screen_pop_dnis = url_param.DNIS;
+      };
+      
+      var on_account_search_click = function(e){
+        e.preventDefault();
+        searchAccountContactsJS( $("#lookup--search-value").val() );
+      };
+      
+      var register_search_action = function(){
+        $("#account--lookup-searchbtn").on('click', on_account_search_click);
+      };
+      
+      var register_pagination_controls = function(){
+        //next--btn
+        $("#next--btn").on('click', function(e){
+            e.preventDefault();
+            nextJS();
+        });
+        //prev--btn
+        $("#prev--btn").on('click', function(e){
+            e.preventDefault();
+            previousJS();
+        });
+      };
+      
+      var on_grid_render_complete = function( hasPrevious, hasNext){
+        $("#next--btn").prop( "disabled", !hasNext );
+        $("#prev--btn").prop( "disabled", !hasPrevious );
+        register_pagination_controls();
+      };
+
+      var hideRelatedList = function(currentElm){
+        //alert(currentElm.parentElement.parentElement.nextSibling.tagName);
+        currentElm.parentElement.parentElement.parentElement.nextSibling.style.display = 'none';
+        currentElm.nextElementSibling.style.display = 'inline';
+        currentElm.style.display = 'none';
+      }
+
+      var showRelatedList = function(currentElm){
+        //alert(currentElm.parentElement.parentElement.nextSibling.tagName);
+        currentElm.parentElement.parentElement.parentElement.nextSibling.style.display = 'table-row';
+        currentElm.previousElementSibling.style.display = 'inline';
+        currentElm.style.display = 'none';
+      }
+
+      //Open case in a new tab
+        function openSuccess(result){
+            if (!result.success) {
+               alert('Case cannot be opened');
+            }
+        }
+
+      //Open case in a new tab
+      var createNewCase = function(contactName,accountName,phoneNo,sscName){
+																		   
+        console.log('**** createNewCase + contactName:...>' + contactName);
+        console.log('**** createNewCase + accountName:...>' + accountName);
+        console.log('**** createNewCase + phoneNo:...>' + phoneNo);
+        console.log('**** createNewCase + sscName:...>' + sscName);
+            var caseUrl = '/500/e?{!$Label.SSCLookupFieldId}=' +sscName+ 
+                            '&{!$Label.SSCLookupFieldText}=' +SSC_No+ 
+                            '&{!$Label.ContactLookupFieldName}='+contactName+
+                            '&{!$Label.CaseFieldAccountName}='+accountName+
+                            '&{!$Label.CaseCallerIDNameAttr}=' + phoneNo;
+                           
+            sforce.console.openPrimaryTab(null, caseUrl, true, '', openSuccess, 'salesforceTab');
+        }
+       
+       var open_primary_tab = function(url, uid){
+            var open_success = function(result){
+                if (!result.success) {
+                   alert('Cannot open new tab');
+                }
+            };
+            sforce.console.openPrimaryTab(null, url, true, '', open_success, 'salesforceTab'+uid);
+       };
+       
+       var createNewContact = function(accountId){
+            console.log('in createNewContact: ' + accountId);
+            var createNewUrl = '/apex/CreateContactAndCase?ANI='+$('[id$=ANI]').val()+'&VDN='+url_param.DNIS+'&accId='+accountId;
+            sforce.console.openPrimaryTab(null, createNewUrl, true, '', openSuccess, 'salesforceTab');
+        }
+      
+    //
+    //  @DOM Ready
+    //
+     $(document).ready( function(){
+        render_page_header();
+        console.log('**** recovering ssc...');
+        getSSCData();
+        getContactAccountData();
+        svg4everybody();
+     } );
+      
+  </script>
+  
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds-scope" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  
+    <!-- PAGE HEADER -->
+    <div class="slds-page-header" id="cti-script-pheader">
+      <div class="slds-grid">
+        <div class="slds-col slds-has-flexi-truncate">
+          <div class="slds-media slds-no-space slds-grow">
+            <div class="slds-media__figure">
+              <svg class="slds-icon slds-icon-custom-custom22" aria-hidden="true">
+                <use xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/custom-sprite/svg/symbols.svg#custom22')}"></use>
+              </svg>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-title--caps slds-line-height--reset">Inbound Call</p>
+              <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate" id="inbound--ani">--</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="slds-grid slds-page-header__detail-row">
+        <!-- 
+        <li class="slds-page-header__detail-block">
+          <p class="slds-text-title  slds-truncate slds-m-bottom--xx-small" title="Script">VDN</p>
+          <p class="slds-text-body--regular" id="script--vdn">--</p>
+        </li>
+         -->
+        <li class="slds-page-header__detail-block">
+          <p class="slds-text-title  slds-truncate slds-m-bottom--xx-small" title="Script">DNIS</p>
+          <p class="slds-text-body--regular" id="script--DNIS">--</p>
+        </li>
+        <li class="slds-page-header__detail-block">
+          <p class="slds-text-title  slds-truncate slds-m-bottom--xx-small" title="Script">SSC</p>
+          <p class="slds-text-body--regular" id="script--sscname">--</p>
+        </li>
+        <li class="slds-page-header__detail-block">
+          <p class="slds-text-title  slds-truncate slds-m-bottom--xx-small" title="Script">SSC Phone</p>
+          <p class="slds-text-body--regular" id="script--sscphone">--</p>
+        </li>
+        <li class="slds-page-header__detail-block">
+          <p class="slds-text-title slds-truncate slds-m-bottom--xx-small" title="ANI">ANI</p>
+          <p class="slds-text-body--regular">
+              <svg class="slds-button__icon slds-button__icon--small" aria-hidden="true">
+                <use xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#call')}"></use>
+              </svg>
+              <span id="script--ani" >--</span>
+          </p>
+        </li>
+      </ul>
+      
+      <!-- custom dynamic scripting -->
+      
+    </div>
+    <!-- / PAGE HEADER -->
+    
+    <!-- PAGE FORM -->
+    <apex:form styleClass="form-css">
+        
+        <!-- Shared info -->
+        <apex:inputHidden value="{!sscName}" id="sscName"/>
+        <apex:inputHidden value="{!VDN}" id="VDN"/>
+        <apex:inputHidden value="{!DNIS}" id="DNIS"/>
+        <apex:inputHidden value="{!ANI}" id="ANI"/>
+        
+        <!-- Account Lookup1 Results -->
+        <article class="slds-card" id="acc-lookup1">
+          <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+              <div class="slds-media__figure">
+                <span class="slds-icon_container slds-icon-standard-contact">
+                  <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS,'/assets/icons/standard-sprite/svg/symbols.svg#account')}"></use>
+                  </svg>
+                </span>
+              </div>
+              <div class="slds-media__body">
+                <h2>
+                    <span class="slds-text-heading_small">Accounts (ANI found in contacts)</span>
+                </h2>
+              </div>
+            </header>
+          </div>
+          <div class="slds-card__body slds-card__body_inner bootstrap3-sfdc" style="background-color: white;padding-top:15px;">
+          <!-- Select ssc Repeater -->
+              <div class="custom-left-grid-section">
+                  <table id="account-lookup1-grid" class="slds-table slds-table--bordered slds-table--cell-buffer" cellspacing="0" width="100%"></table>
+              </div>
+          <!-- /Select ssc Repeater -->
+          </div>          
+        </article>
+        <!-- /Account Lookup1 Results -->
+        
+        <!-- Account Lookup2 Results -->
+        <article class="slds-card" id="acc-lookup2">
+          <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+              <div class="slds-media__figure">
+                <span class="slds-icon_container slds-icon-standard-contact">
+                  <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS,'/assets/icons/standard-sprite/svg/symbols.svg#account')}"></use>
+                  </svg>
+                </span>
+              </div>
+              <div class="slds-media__body">
+                <h2>
+                    <span class="slds-text-heading_small">Accounts (Contact Not matched and Account matched)</span>
+                </h2>
+              </div>
+            </header>
+          </div>
+          <div class="slds-card__body slds-card__body_inner bootstrap3-sfdc" style="background-color: white;padding-top:15px;">
+          <!-- Select ssc Repeater -->
+              <div class="custom-left-grid-section">
+                  <table id="account-lookup2-grid" class="slds-table slds-table--bordered slds-table--cell-buffer" cellspacing="0" width="100%"></table>
+              </div>
+          <!-- /Select ssc Repeater -->
+          </div>          
+        </article>
+        <!-- /Account Lookup2 Results -->
+
+
+        <!-- Account Lookup Results -->
+        <apex:outputPanel styleClass="pbs-account--search" Style="display:none;">
+            
+            <!-- section header -->
+            <div class="demo-only" style="padding:0.5rem;background:#16325c;">
+              <div class="slds-text-color_inverse">
+                <div class="slds-text-heading_medium">Lookup Account</div>
+              </div>
+            </div>
+            <!-- /section header -->
+            
+            <table cellpadding="0" cellspacing="0" width="100%" style="border-left: 1px solid #d8dde6;border-right: 1px solid #d8dde6;">
+                <tr>
+                    <td width="75%" height="100">
+                        <div class="slds-form slds-form_horizontal">
+                          <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="lookup--search-value">Enter Search Value:</label>
+                            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                                <svg class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" aria-hidden="true">
+                                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#search')}"></use>
+                                </svg>
+                              <input type="text" class="slds-input" placeholder="Search Value" id="lookup--search-value" autocomplete="off"/>
+                            </div>
+                          </div>
+                        </div>
+                    </td>
+                    <td width="25%">
+                        <button class="slds-button slds-button_brand" style="margin-left:1rem" id="account--lookup-searchbtn">Search</button>                           
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <!-- results grid -->
+                        <apex:outputPanel id="accountLookupRepeater">
+                        <table class="slds-table slds-table_bordered slds-no-row-hover">
+                          <thead>
+                            <tr class="slds-text-title_caps">
+                              <th scope="col">
+                                <div class="slds-truncate" title="Action">&nbsp;</div>
+                              </th>
+                              <th scope="col">
+                                <div class="slds-truncate" title="Action">Action</div>
+                              </th>
+                              <th scope="col">
+                                <div class="slds-truncate" title="Name">Name</div>
+                              </th>
+                              <th scope="col">
+                                <div class="slds-truncate" title="Account">Account</div>
+                              </th>
+                              <th scope="col">
+                                <div class="slds-truncate" title="Customer Type">Customer Type</div>
+                              </th>
+                              <th scope="col">
+                                <div class="slds-truncate" title="Address">Address</div>
+                              </th>
+                              <th scope="col">
+                                <div class="slds-truncate" title="Phone">Phone</div>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          
+                          <!-- Account section -->
+                          <apex:repeat value="{!searchedAccounts}" var="account">
+                            <tr>
+                              <td data-label="toogle">
+                                <div class="slds-truncate" title="toogle" >
+                                    <span class="slds-icon_container slds-icon-utility-dash" onclick="hideRelatedList(this);">
+                                        <svg class="slds-icon slds-icon--small slds-icon-text-default" aria-hidden="true">
+                                        <!-- /assets/icons/utility-sprite/svg/symbols.svg#case -->
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#dash')}"></use>  
+                                        </svg>
+                                    </span> 
+
+                  <span class="slds-icon_container slds-icon-utility-dash" onclick="showRelatedList(this);" style="display: none">
+                    <svg class="slds-icon slds-icon--small slds-icon-text-default" aria-hidden="true">
+                    <!-- /assets/icons/utility-sprite/svg/symbols.svg#case -->
+                      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#add')}"></use>  
+                    </svg>
+                  </span>               
+                                </div>
+                              </td>
+                              <td data-label="Create Contact">
+                                <div class="slds-truncate" title="Create contact">
+                                  <a href="javascript:void(0);" onclick="createNewContact('{!account.Id}');">Create contact</a>
+                                </div>
+                              </td>
+                              <td data-label="Name">
+                                <div class="slds-truncate" title="{!account.Name}">{!account.Name}</div>
+                              </td>
+                              <td data-label="Account">
+                                <div class="slds-truncate" title="{!account.DW_ID__c}">{!account.DW_ID__c}</div>
+                              </td>
+                              <td data-label="Customer Type">
+                                <div class="slds-truncate" title="{!account.Customer_Type__r.Name}">{!account.Customer_Type__r.Name}</div>
+                              </td>
+                              <td data-label="Address">
+                                <div class="slds-truncate" title="Address">
+                                     {!account.BillingStreet} &nbsp;
+                                     {!account.BillingCity} <br/>
+                                     {!account.BillingState}&nbsp;
+                                     {!account.BillingPostalCode} <br/>
+                                     {!account.BillingCountry}
+                                </div>
+                              </td>
+                              <td data-label="Phone">
+                                <div class="slds-truncate" title="{!account.Phone}">{!account.Phone}</div>
+                              </td>
+                            </tr>
+                            <!-- contact related list -->
+                            <tr class="contact-related-list--container">
+                                <td>&nbsp;</td>
+                                <td colspan="6">
+                                
+                  <apex:outputPanel rendered="{!account.Contacts.size>0}">
+                                    <table class="slds-table slds-no-row-hover">
+                                      <thead>
+                                        <tr class="slds-text-title_caps" style="background-color: #6182C5; color: #fff;">
+                                          <th scope="col">
+                                            <div class="slds-truncate" title="Action">Action</div>
+                                          </th>
+                                          <th scope="col">
+                                            <div class="slds-truncate" title="Name">Contact Name</div>
+                                          </th>
+                                          <th scope="col">
+                                            <div class="slds-truncate" title="Account">Account Name</div>
+                                          </th>
+                                          <th scope="col">
+                                            <div class="slds-truncate" title="Customer Type">Phone</div>
+                                          </th>
+                                          <th scope="col">
+                                            <div class="slds-truncate" title="Address">Mobile</div>
+                                          </th>
+                                          <th scope="col">
+                                            <div class="slds-truncate" title="Phone">Other Phone</div>
+                                          </th>
+                                          <th scope="col">
+                                            <div class="slds-truncate" title="Phone">Email</div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <!-- Contact section -->
+                                        <apex:repeat value="{!account.Contacts}" var="relatedContact">
+                                        <tr>
+                                          <td data-label="Contact">
+                                            <div class="slds-truncate" title="Create contact">
+                                              <a href="javascript:void(0);" onclick="createNewCase('{!JSENCODE(relatedContact.Id)}','{!JSENCODE(relatedContact.Account.Id)}','{!JSENCODE(relatedContact.Phone)}',SSC_Id);">Create Case</a>
+                                            </div>
+                                          </td>
+                                          <td data-label="Name">
+                                            <div class="slds-truncate" title="{!relatedContact.Name}">{!relatedContact.Name}</div>
+                                          </td>
+                                          <td data-label="Account">
+                                            <div class="slds-truncate" title="{!relatedContact.Account.Name}">{!relatedContact.Account.Name}</div>
+                                          </td>
+                                          <td data-label="Phone">
+                                            <div class="slds-truncate" title="{!relatedContact.Phone}">{!relatedContact.Phone}</div>
+                                          </td>
+                                          <td data-label="Mobile">
+                                            <div class="slds-truncate" title="{!relatedContact.MobilePhone}">{!relatedContact.MobilePhone}</div>
+                                          </td>
+                                          <td data-label="Other Phone">
+                                            <div class="slds-truncate" title="{!relatedContact.OtherPhone}">{!relatedContact.OtherPhone}</div>
+                                          </td>
+                                          <td data-label="Email">
+                                            <div class="slds-truncate" title="{!relatedContact.Email}">{!relatedContact.Email}</div>
+                                          </td>
+                                        </tr>
+                                        </apex:repeat>
+                                        <!-- /Contact section -->
+                                        
+                                      </tbody>
+                                    </table>
+                  </apex:outputPanel>
+                            
+                                </td>
+                            </tr>
+                            </apex:repeat>
+                            <!-- contact related list -->
+                            <!-- /Account section -->
+                            
+                          </tbody>
+                        </table>            
+                        <div class="slds-card__footer slds-grid" style="padding: .5rem; background-color: #f4f6f9;margin-top: 0px; border-bottom-left-radius: .25rem; border-bottom-right-radius: .25rem; border: 1px solid #d8dde6;">
+                            <div class="slds-col slds-size--1-of-2" style="text-align:left">Showing {!(pageNumber * size)+1-size} - {!IF((pageNumber * size)>noOfRecords, noOfRecords,(pageNumber * size))} of {!noOfRecords} records</div>
+                            <div class="slds-col slds-size--1-of-2">
+                                <button class="slds-button slds-button--brand " id="prev--btn">Previous</button>
+                                <button class="slds-button slds-button--brand " id="next--btn">Next</button>
+                            </div>
+                        </div>
+                        </apex:outputPanel>
+                        <!-- results grid -->
+                    </td>
+                </tr>
+            </table>
+            
+        </apex:outputPanel>
+        <!-- /Account Lookup Results -->
+        
+        <!-- Contact Lookup Results -->
+        <article class="slds-card" style="margin-top: 1rem">
+          <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+              <div class="slds-media__figure">
+                <span class="slds-icon_container slds-icon-standard-contact">
+                  <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS,'/assets/icons/standard-sprite/svg/symbols.svg#contact')}"></use>
+                  </svg>
+                </span>
+              </div>
+              <div class="slds-media__body">
+                <h2>
+                    <span class="slds-text-heading_small">Contacts</span>
+                </h2>
+              </div>
+            </header>
+          </div>
+          <div class="slds-card__body slds-card__body_inner bootstrap3-sfdc" style="background-color: white;padding-top:15px;">
+          <!-- Select ssc Repeater -->
+              <div class="custom-left-grid-section">
+                  <div id="contact-lookup-result" style="padding-bottom: .75rem;"></div>
+                  <table id="contact-grid" class="slds-table slds-table--bordered slds-table--cell-buffer" cellspacing="0" width="100%" style="display:none;"></table>
+              </div>
+          <!-- /Select ssc Repeater -->
+          </div>
+        </article>
+        <!-- Contact Lookup Results -->
+        
+        <!-- Page actions -->
+        <apex:actionFunction name="searchAccountContactsJS" action="{!searchAccountContacts}" reRender="accountLookupRepeater" onComplete="on_grid_render_complete({!hasPrevious}, {!hasNext})">
+            <apex:param name="searchParam" value="" assignTo="{!searchParam}"/>
+        </apex:actionFunction>
+        
+        <apex:outputPanel id="paginationActions">
+            <apex:actionFunction name="previousJS" action="{!previous}" reRender="paginationActions,accountLookupRepeater" onComplete="on_grid_render_complete({!hasPrevious}, {!hasNext})"/>
+            <apex:actionFunction name="nextJS" action="{!next}" reRender="paginationActions,accountLookupRepeater" onComplete="on_grid_render_complete({!hasPrevious}, {!hasNext})"/>
+        </apex:outputPanel>
+            
+        
+        <!-- /Page actions -->
+        
+    </apex:form>
+    <!-- / PAGE FORM -->
+  
+  </div>
+  <!-- /REQUIRED SLDS WRAPPER -->
+  
+</apex:page>

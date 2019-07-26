@@ -1,0 +1,17 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francoiskorb on 9/21/16.
+ -->
+
+<aura:component description="SVNSUMMITS_Include_SemanticUI">
+
+    <ltng:require styles="{!join(',',
+                    $Resource.SemanticUI_224 + '/dist/components/dropdown.min.css',
+                    $Resource.SemanticUI_224 + '/dist/components/transition.min.css',
+                    $Resource.SemanticUI_224 + '/dist/components/icon.min.css',
+                    $Resource.SemanticUI_224 + '/dist/components/label.min.css')}"
+                  scripts="{!join(',',
+                    $Resource.jquery_2_2_4,
+                    $Resource.SemanticUI_224 + '/dist/components/dropdown.min.js',
+                    $Resource.SemanticUI_224 + '/dist/components/transition.min.js')}"/>
+</aura:component>

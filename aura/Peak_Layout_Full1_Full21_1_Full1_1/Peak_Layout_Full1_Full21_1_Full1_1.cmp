@@ -1,0 +1,40 @@
+<aura:component implements="forceCommunity:layout" description="7Summits Lead Banner, Banner 2:1, 1 column, Banner, 1 column">
+    <aura:attribute name="leadBanner" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="full" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="bannerLeftColumn" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="bannerRightColumn" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="leftColumn" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="rightColumn" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="banner" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="full2" type="Aura.Component[]" required="false"/>
+
+    <section>
+            {!v.leadBanner}
+    </section>
+
+    <section class="peak-banner-plain slds-m-bottom_xx-large banner-bg">
+        <div class="slds-container_x-large  slds-container_center ">
+            <div class="slds-grid slds-wrap slds-grid_pull-padded no-medium-pull slds-grid_vertical-align-center">
+                <div class="slds-p-horizontal_small slds-size_1-of-1 slds-large-size_2-of-3 slds-p-vertical_xx-large">
+                        {!v.bannerLeftColumn}
+                </div>
+                <div class="slds-p-horizontal_small slds-size_1-of-1 slds-large-size_1-of-3 slds-p-vertical_xx-large">
+                        {!v.bannerRightColumn}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slds-container_x-large  slds-container_center slds-p-bottom_xx-large slds-p-horizontal_medium">
+            {!v.full}
+    </section>
+
+    <section class="banner-bg slds-p-vertical_x-large slds-m-bottom_xx-large">
+        <div class="slds-container_x-large  slds-container_center ">{!v.banner}</div>
+    </section>
+
+    <section class="slds-container_x-large  slds-container_center slds-p-bottom_xx-large slds-p-horizontal_medium">
+            {!v.full2}
+    </section>
+
+</aura:component>

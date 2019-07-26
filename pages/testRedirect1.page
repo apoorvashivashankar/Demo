@@ -1,0 +1,83 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="true" lightningStylesheets="true" id="thePage" docType="html-5.0" applyHTmlTag="false">
+    <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+        <script type='text/javascript'>
+            function navigateAway() {
+                if( (typeof sforce != 'undefined') && sforce && (!!sforce.one) ) {
+                    // Salesforce app navigation
+                    sforce.one.navigateToURL('/apex/testRedirect2');                
+                }
+                else {
+                    // Set the window's URL using a Visualforce expression
+                    window.location.href = 
+                        '/apex/testRedirect2';
+                }
+            }     
+        </script>
+
+        <style>
+            .slds-scope .slds-grid--frame, .slds-scope .slds-grid_frame {
+                /*min-width: 80vw;*/
+                min-height: 80vh;
+                overflow: hidden;
+                }
+        </style>
+
+
+        <head>
+        <apex:slds />
+        </head>
+        <apex:form id="theForm" >
+            <body class="slds-scope" >
+                <div class="slds-page-header">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <span class="slds-avatar slds-avatar_large">
+                                <img alt="Daltile" src="{!$Resource.dLogo}" title="User avatar" />
+                            </span>                          
+                        </div>
+                    <div class="slds-media__body">
+                          <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Welcome to Daltile">Welcome to Daltile</h1>
+                    </div>
+                    </div>
+                </div>
+            
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+                <link type="text/css" rel="stylesheet" href="https://www.lightningdesignsystem.com/assets/styles/slds.css"/>
+                <input type="hidden" name="currentvfpage" value="{!$CurrentPage.Name}"/>
+                <!-- Import the Design System style sheet -->
+                <apex:slds />
+                
+                <!-- REQUIRED SLDS WRAPPER -->
+                <div class="slds-scope" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" >
+                <div class="slds-grid slds-grid--frame slds-grid--vertical-align-center slds-grid--align-center ">
+                    <!-- form wrapper -->
+                    <div>
+                        <div class="slds-grid slds-einstein-header slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div >
+                                    <h2>
+                                        <span class="slds-text-heading_large" style="font-size: 2.5rem;">Lets Test Redirects!</span>
+                                    </h2>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner"> 
+                            <div class="slds-form-element__control slds-align_absolute-center">
+                                <div class="slds-form-element slds-hint-parent">
+                                    <apex:commandLink value="Next" onClick="navigateAway();" />
+                                </div>
+                            </div>                      
+                        </div>
+                        <footer class="slds-card__footer">
+                
+                        </footer>
+                    </div>
+                    <!-- /form wrapper -->
+                </div>      
+              </div> 
+        </body>
+    </apex:form>
+    </html>
+</apex:page>

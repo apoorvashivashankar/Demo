@@ -1,0 +1,8 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+	
+    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+        <c:Peak_HTML_Headings headingTag="H1 - Section Heading"
+                              headingText="Create Opportunity" />
+    </lightning:layoutItem>
+    
+</aura:component>

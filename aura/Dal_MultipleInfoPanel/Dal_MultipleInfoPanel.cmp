@@ -1,0 +1,88 @@
+<!--
+ - Created by 7Summits on 2/21/18.
+ -->
+<aura:component description="Dal_InfoPanel">
+
+    <aura:attribute name="showTile1" type="Boolean" default="false" />
+    <aura:attribute name="showTile2" type="Boolean" default="false" />
+    <aura:attribute name="showTile3" type="Boolean" default="false" />
+
+    <aura:attribute name="type" type="String" default="2 Columns" />
+    <aura:attribute name="panel1Title" type="String" />
+    <aura:attribute name="icon1" type="String" default="" />
+    <aura:attribute name="iconBG1" type="String" default="" />
+    <aura:attribute name="subText1" type="String" default="" />
+    <aura:attribute name="mainText1" type="String" default="" />
+    <aura:attribute name="panelURL1" type="String" default=""  />
+    <aura:attribute name="isLink1" type="String" default="false"  />
+    <aura:attribute name="size1" type="String" default=""  />
+    <aura:attribute name="OpenInNewTab1" type="Boolean" default="false" />
+
+    <aura:attribute name="panel2Title" type="String" />
+    <aura:attribute name="icon2" type="String" default="" />
+    <aura:attribute name="iconBG2" type="String" default="" />
+    <aura:attribute name="subText2" type="String" default="" />
+    <aura:attribute name="mainText2" type="String" default="" />
+    <aura:attribute name="panelURL2" type="String" default=""  />
+    <aura:attribute name="isLink2" type="String" default="false"  />
+    <aura:attribute name="size2" type="String" default=""  />
+    <aura:attribute name="OpenInNewTab2" type="Boolean" default="false" />
+
+    <aura:attribute name="panel3Title" type="String" />
+    <aura:attribute name="icon3" type="String" default="" />
+    <aura:attribute name="iconBG3" type="String" default="" />
+    <aura:attribute name="subText3" type="String" default="" />
+    <aura:attribute name="mainText3" type="String" default="" />
+    <aura:attribute name="panelURL3" type="String" default=""  />
+    <aura:attribute name="isLink3" type="String" default="false"  />
+    <aura:attribute name="size3" type="String" default=""  />
+    <aura:attribute name="OpenInNewTab3" type="Boolean" default="false" />
+
+    <aura:attribute name="className" type="String"  />
+
+    <section class="{!'peak-component ' + v.className}">
+
+        <lightning:layout verticalAlign="start" class="container vertical" >
+            <aura:if isTrue="{!v.showTile1}">
+                <lightning:layoutItem flexibility="auto" size="12" mediumDeviceSize="{!v.type == '2 Column' ? '6' : ((v.type == '3 Column') ? '4' : '6')}"
+                                      largeDeviceSize="{!v.type == '2 Column' ? '6' : ((v.type == '3 Column') ? '4' : '6')}">
+                    <c:Dal_SupportPanel icon="{!v.icon1}"
+                            iconBG="{!v.iconBG1}"
+                            subText="{!v.subText1}"
+                            mainText="{!v.mainText1}"
+                            panelURL="{!v.panelURL1}"
+                            isLink="{!v.isLink1}"
+                            size="{!v.size1}"
+                            OpenInNewTab="{!v.OpenInNewTab1}"
+                    />
+                </lightning:layoutItem>
+            </aura:if>
+            <aura:if isTrue="{!v.showTile2}">
+                <lightning:layoutItem flexibility="auto" size="12" mediumDeviceSize="4">
+                    <c:Dal_SupportPanel icon="{!v.icon2}"
+                            iconBG="{!v.iconBG2}"
+                            subText="{!v.subText2}"
+                            mainText="{!v.mainText2}"
+                            panelURL="{!v.panelURL2}"
+                            isLink="{!v.isLink2}"
+                            size="{!v.size2}"
+                            OpenInNewTab="{!v.OpenInNewTab2}" />
+                </lightning:layoutItem>
+            </aura:if>
+            <aura:if isTrue="{!v.showTile3}">
+                <lightning:layoutItem flexibility="auto" size="12" mediumDeviceSize="4">
+                    <c:Dal_SupportPanel icon="{!v.icon3}"
+                            iconBG="{!v.iconBG3}"
+                            subText="{!v.subText3}"
+                            mainText="{!v.mainText3}"
+                            panelURL="{!v.panelURL3}"
+                            isLink="{!v.isLink3}"
+                            size="{!v.size3}"
+                            OpenInNewTab="{!v.OpenInNewTab3}" />
+                </lightning:layoutItem>
+            </aura:if>
+
+        </lightning:layout>
+    </section>
+
+</aura:component>

@@ -1,0 +1,18 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S Ideas Header">
+    <design:attribute name="zoneName" label="Zone Name:" description="Enter the zone name"/>
+    <design:attribute name="showNumberOfIdeas" label="Display number of Ideas" description="Enable or disable number of ideas." />
+	<design:attribute name="ideaTitle" label="Ideas Header" description="Enter Title to display in header with a maximum of 16 characters."/>
+    <design:attribute name="newIdeaLabel" label="Button text to submit New Idea" description="Enter the text to display on button for submitting new idea" />
+    <design:attribute name="newIdeaURL" label="Link to submit New Idea" description="Enter the link where users would be routed to submit new idea"/>
+
+
+    <design:attribute name="showMyIdeas"        label="Show My Ideas Filter"    description="Show My Ideas Filter" />
+    <design:attribute name="showTopicFilter"    label="Show Topic Filter"       description="Show Topic Filter" />
+    <design:attribute name="showCategoryFilter" label="Show Category Filter"    description="Show Category Filter" />
+    <design:attribute name="showStatusFilter"   label="Show Status Filter"      description="Show Status Filter" />
+    <design:attribute name="showThemesFilter"   label="Show Themes Filter"      description="Show Themes Filter" />
+
+    <design:attribute name="showViewSelector"   label="Show View Selector"      description="Show List/Grid View selector"/>
+    <design:attribute name="showSortByFilter"   label="Show Sort Order Selector"   description="Show SortBy Filter" />
+</design:component>

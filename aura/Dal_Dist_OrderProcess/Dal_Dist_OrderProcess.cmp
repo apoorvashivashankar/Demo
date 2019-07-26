@@ -1,0 +1,39 @@
+<!--
+ - Created by 7Summits on 3/6/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderProcess" extends="c:Dal_Dist_OrderBase" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    
+    <!-- attributes -->
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="labelHeaderInfo" type="String" default="Instructions for this page would appear here."/>
+    <aura:attribute name="labelCanShipSmallPackage" type="String" default="Small package shipping available for this order."/>
+    <aura:attribute name="labelPage3HeaderInfo" type="String" default="Please review your order before submitting."/>
+    <aura:attribute name="savedOrdersUrl" type="String" default="{!$Label.c.Dal_Dist_OrderProcess_SavedOrder_Label}"/>
+
+    <!-- events -->
+    <aura:registerEvent name="orderProcessEvt" type="c:Dal_Dist_OrderProcessStepEvt"/>
+
+    <aura:if isTrue="{!v.isLoading == false}">
+
+        <aura:if isTrue="{!v.store.currentPos == 1}">
+            <c:Dal_Dist_OrderProcess_Sku store="{!v.store}" savedOrdersUrl="{!v.savedOrdersUrl}"/>
+        </aura:if>
+
+        <aura:if isTrue="{!v.store.currentPos == 2}">
+            <c:Dal_Dist_OrderProcess_Details store="{!v.store}" labelHeaderInfo="{!v.labelHeaderInfo}" labelCanShipSmallPackage="{!v.labelCanShipSmallPackage}" savedOrdersUrl="{!v.savedOrdersUrl}"/>
+        </aura:if>
+
+        <aura:if isTrue="{!v.store.currentPos == 3}">
+            <c:Dal_Dist_OrderProcess_Confirm store="{!v.store}" />
+        </aura:if>
+
+        <aura:set attribute="else">
+            <div class="slds-is-relative slds-p-vertical_x-large">
+                <lightning:spinner variant="brand" size="medium" />
+            </div>
+        </aura:set>
+    </aura:if>
+
+</aura:component>

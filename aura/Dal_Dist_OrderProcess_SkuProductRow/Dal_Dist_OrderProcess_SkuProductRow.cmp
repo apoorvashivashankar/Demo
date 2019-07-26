@@ -1,0 +1,408 @@
+<!--
+ - Created by 7Summits on 3/7/18.
+ -->
+<aura:component description="Dal_Dist_OrderProcess_SkuProductRow" extends="c:Dal_Base" controller="Dal_OrderProcessController">
+    <aura:attribute name="store" type="Map" default="" required="true"/>
+    <aura:attribute name="checkAvailability" type="Boolean" default="false" />
+    <aura:attribute name="priceBySku" type="Boolean" default="false" />
+
+    <aura:attribute name="cartId" type="String" default=""/>
+    <aura:attribute name="sku" type="String" default=""/>
+    <aura:attribute name="productName" type="Map" />
+    <aura:attribute name="quantity" type="String" default=""/>
+    <aura:attribute name="originalQuantityRequested" type="String" default=""/>
+    <aura:attribute name="quantityRounded" type="Boolean" default="false"/>
+    <aura:attribute name="unitOfMeasure" type="List" default="[]"/>
+    <aura:attribute name="sourceOfSupply" type="List" default="[]"/>
+    <aura:attribute name="requestShipDate" type="Date" default=""/>
+    <aura:attribute name="priceRecord" type="List" default="[]"/>
+    <aura:attribute name="netPrice" type="String" default=""/>
+    <aura:attribute name="qtyPrice" type="String" default=""/>
+    <aura:attribute name="extendedWeight" type="String" default=""/>
+    <aura:attribute name="estimatedShipDate" type="String" default=""/>
+    <aura:attribute name="onTimeFlag" type="String" default=""/>
+    <aura:attribute name="isQtyAvailable" type="String" default=""/>
+    <aura:attribute name="unitOfMeasureSelected" type="String" default=""/>
+    <aura:attribute name="showProductInfo" type="Boolean" default="false"/>
+    <aura:attribute name="productInfoError" type="Boolean" default="false"/>
+    <aura:attribute name="isAtpLoading" type="Boolean" default="false"/>
+    <aura:attribute name="canPrimarySosFulfill" type="Boolean" default="false"/>
+    <aura:attribute name="isPriceRecordsLoading" type="Boolean" default="false"/>
+    <aura:attribute name="isProductSupplyLoading" type="Boolean" default="false"/>
+    <aura:attribute name="showProductSupply" type="Boolean" default="false"/>
+    <aura:attribute name="futureProductSupply" type="List" default="[]"/>
+    <aura:attribute name="sourceOfSupplySelectedName" type="String" default=""/>
+    <aura:attribute name="isPriceBySkuLoading" type="Boolean" default="false"/>
+    <aura:attribute name="showPriceBySku" type="Boolean" default="false"/>
+    <aura:attribute name="pricedUom" type="String" default=""/>
+    <aura:attribute name="isValidData" type="Boolean" default="false"/>
+  
+
+    <!-- internal attributes -->
+    <aura:attribute name="inputValueUnitOfMeasureSelected" type="String" default=""/>
+    <aura:attribute name="inputValueSourceOfSupplySelected" type="String" default=""/>
+    <aura:attribute name="inputValuePriceRecordSelected" type="String" default=""/>
+    <aura:attribute name="searchDebounce" type="Object" />
+    <aura:attribute name="skuDebounce" type="Object" />
+    <aura:attribute name="productInfoErrorMsg" type="String" default="Unable to get product data. Please check the SKU number and try again." />
+    <aura:attribute name="loadingSkuSearch" type="Boolean" default="false" />
+    <aura:attribute name="showSkuSearchResults" type="Boolean" default="false" />
+    <aura:attribute name="skuSearchResults" type="List" default="[]" />
+    <aura:attribute name="sitesWithInventory" type="List" default="[]"/>
+    <aura:attribute name="errorsShippingDate" type="List" default="[]"/>
+
+    <!-- constant labels -->
+    <aura:attribute name="labelExtendedWeightUnitOfMeasure" type="String" default="lbs"/>
+    <aura:attribute name="labelShipDateUnavailable" type="String" default="Will Advise"/>
+    <aura:attribute name="labelProductSku" type="String" default="Product / SKU #"/>
+    <aura:attribute name="labelQuantity" type="String" default="Quantity"/>
+    <aura:attribute name="labelUnitOfMeasure" type="String" default="Unit of Measure"/>
+    <aura:attribute name="labelSourceOfSupply" type="String" default="Source of Supply"/>
+    <aura:attribute name="labelRequestedShipDate" type="String" default="Requested Ship Date"/>
+    <aura:attribute name="labelPriceRecord" type="String" default="Applied Promotion"/>
+    <aura:attribute name="labelClearRow" type="String" default="Clear"/>
+    <aura:attribute name="labelUnitPrice" type="String" default="Unit Price"/>
+    <aura:attribute name="labelExtendedWeight" type="String" default="Extended Weight"/>
+    <aura:attribute name="labelExtendedPrice" type="String" default="Extended Price"/>
+    <aura:attribute name="labelSitesWithInventory" type="String" default="Sites with Inventory:"/>
+    <aura:attribute name="labelPricePerUnit" type="String" default="Price Per Unit"/>
+    <aura:attribute name="labelTotalPrice" type="String" default="Total Price"/>
+    <aura:attribute name="msgProductSupplyEmpty" type="String" default="No inventory data found."/>
+    <aura:attribute name="msgSkuNotFound" type="String" default="No Results Found"/>
+
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+    <lightning:layoutItem size="12">
+
+        <lightning:layout multipleRows="true" verticalAlign="center" horizontalAlign="center">
+
+            <!-- ******************** -->
+            <!-- Inputs -->
+            <!-- ******************** -->
+            <lightning:layoutItem class="productInput slds-grid slds-wrap slds-p-horizontal_small slds-p-vertical_small slds-is-relative" size="12">
+
+                <!-- ******************** -->
+                <!-- Product SKU -->
+                <!-- ******************** -->
+                <div class="productSku slds-grid dal-medium-inputThird dal-small-inputFull slds-m-around_small">
+
+                    <!-- ******************** -->
+                    <!-- SKU Search -->
+                    <!-- ******************** -->
+                    <lightning:layout >
+                        <lightning:layoutItem >
+                            <lightning:input aura:id="productSku" name="productSku" class="input-medium"
+                                 label="{!v.labelProductSku}"
+                                 value="{!v.sku}"
+                                 required="true"
+                                 onchange="{!c.handleSkuInputChange}"
+                                 maxlength="20"
+                                 messageWhenValueMissing="Required"
+                                 disabled="{!or(v.isAtpLoading == true, v.isPriceBySkuLoading == true)}"
+                                 onblur="{!c.handleSkuOnBlur}"
+                                 onfocus="{!c.handleSkuOnFocus}"
+                            />
+                        </lightning:layoutItem>
+                        <lightning:layoutItem class="slds-p-left_x-small">
+                            <lightning:buttonIcon class="dal-btn-sku-search" iconName="utility:search" variant="bare" alternativeText="Search" iconClass="dark" size="large" onclick="{!c.showProductSearch}"/>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+
+                    <!-- show results data -->
+                    <aura:if isTrue="{!and(v.showSkuSearchResults == true, v.loadingSkuSearch == false)}">
+                        <ul class="dal-lookup">
+                        <aura:if isTrue="{!v.skuSearchResults.length > 0}">
+                                <aura:iteration items="{!v.skuSearchResults}" var="result">
+                                    <li class="{! if(v.priceBySku == false) ? '' : 'dal-dropdown-css-li'}">
+                                        <a href="javascript:void(0)" data-cartid="{!v.cartId}" data-skuid="{!result.Id}"
+                                            class="{! if(v.priceBySku == false) ? '' : 'dal-dropdown-css-li-a'}" onclick="{!c.handleOnSkuSelect}" tabindex="-1">
+                                            <span class="name">{!result.DW_ID__c} - {!result.Description}</span>
+                                        </a>
+                                    </li>
+                                </aura:iteration>
+                        	<aura:set attribute="else">
+                                <li class="slds-p-around_medium">{!v.msgSkuNotFound}</li>
+                        	</aura:set>
+                        </aura:if>
+                        </ul>
+                    </aura:if>
+
+                    <!-- check if loading or has sku results data -->
+                    <aura:if isTrue="{!and(v.loadingSkuSearch == true, v.showSkuSearchResults == false)}">
+                        <div class="dal-lookup">
+                            <lightning:spinner variant="brand" size="small" />
+                        </div>
+                    </aura:if>
+
+                </div>
+                <!-- end product sku -->
+
+                <!-- ******************** -->
+                <!-- Quantity -->
+                <!-- ******************** -->
+                <lightning:input aura:id="quantity" label="{!v.labelQuantity}" name="quantity" class="slds-p-around_small input-x-small dal-medium-inputThird dal-small-inputHalf"
+                     value="{!v.quantity}"
+                     required="true"
+                     onchange="{!c.handleInputChange}"
+                     messageWhenValueMissing="Required"
+                     pattern="[0-9]+(\.)?([0-9]{1,3})?"
+                     messageWhenPatternMismatch="Invalid Quantity"
+                     maxlength="10"
+                     disabled="{!or(v.isAtpLoading == true, v.isPriceBySkuLoading == true)}"
+                     />
+
+                <!-- ******************** -->
+                <!-- Unit of Measure -->
+                <!-- ******************** -->
+                <lightning:select aura:id="unitOfMeasure" label="{!v.labelUnitOfMeasure}" name="unitOfMeasure" class="slds-p-around_small input-x-small dal-medium-inputThird dal-small-inputHalf"
+                    disabled="{!or(v.unitOfMeasure.length == 0, or(v.isAtpLoading == true, v.isPriceBySkuLoading == true))}"
+                    required="{!v.unitOfMeasure.length > 0}"
+                    onchange="{!c.handleUnitOfMeasureChange}"
+                    messageWhenValueMissing="Required"
+                    value="{!v.inputValueUnitOfMeasureSelected}">
+                    <aura:iteration items="{!v.unitOfMeasure}" var="option">
+                        <option value="{!option.value}" selected="{!option.selected}">{!option.label}</option>
+                    </aura:iteration>
+                </lightning:select>
+
+                <!-- ******************** -->
+                <!-- Source of Supply -->
+                <!-- ******************** -->
+                <aura:if isTrue="{!v.priceBySku == false}">
+                    <lightning:select aura:id="sourceOfSupply" label="{!v.labelSourceOfSupply}" name="sourceOfSupply" class="slds-p-around_small input-medium dal-medium-inputThird dal-small-inputHalf"
+                        disabled="{!or(v.sourceOfSupply.length == 0, or(v.isAtpLoading == true, v.isPriceBySkuLoading == true))}"
+                        required="{!v.sourceOfSupply.length > 0}"
+                        onchange="{!c.handleSourceOfSupplyChange}"
+                        messageWhenValueMissing="Required"
+                        value="{!v.inputValueSourceOfSupplySelected}">
+                        <aura:iteration items="{!v.sourceOfSupply}" var="option">
+                            <option value="{!option.value}" selected="{!option.selected}">{!option.label}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                </aura:if>
+
+                <!-- ******************** -->
+                <!-- Shipping Date -->
+                <!-- ******************** -->
+                <aura:if isTrue="{!v.priceBySku == false}">
+                    <div class="slds-p-around_small input-small dal-medium-inputThird dal-small-inputHalf slds-has-error">
+                        <ui:inputDate aura:id="requestShipDate" label="{!v.labelRequestedShipDate}" displayDatePicker="true"
+                            value="{!v.requestShipDate}"
+                            format="MM/DD/YYYY"
+                            required="true"
+                            change="{!c.handleShipDateChange}"
+                            disabled="{!or(v.isPriceRecordsLoading, or(v.isAtpLoading == true, v.isPriceBySkuLoading == true))}"
+                            errors="{!v.errorsShippingDate}"/>
+                    </div>
+                </aura:if>
+
+                <!-- ******************** -->
+                <!-- Price Record -->
+                <!-- ******************** -->
+                <aura:if isTrue="{!and(v.checkAvailability == false, v.priceBySku == false)}">
+                    <lightning:select aura:id="priceRecord" label="{!v.labelPriceRecord}" name="priceRecord" class="slds-p-around_small input-medium dal-medium-inputThird dal-small-inputFull"
+                      onchange="{!c.handlePriceRecordChange}"
+                      messageWhenValueMissing="Required"
+                      disabled="{!or(v.isAtpLoading, v.isPriceRecordsLoading)}"
+                      value="{!v.inputValuePriceRecordSelected}">
+                        <aura:iteration items="{!v.priceRecord}" var="option">
+                            <option value="{!option.value}" selected="{!option.selected}">{!option.label}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                </aura:if>
+
+
+                <!-- ******************** -->
+                <!-- Price By Sku Values-->
+                <!-- ******************** -->
+                <aura:if isTrue="{!v.priceBySku == true}">
+
+                    <aura:if isTrue="{!and(v.isPriceBySkuLoading == false, v.showPriceBySku == true)}">
+                        <div class="priceBySku-price orderStats slds-is-relative dal-medium-inputFull dal-small-inputFull">
+                            <dl>
+                                <dt>{!v.labelPricePerUnit}</dt>
+                                <dd class="price"><lightning:formattedNumber value="{!v.netPrice}" style="currency" currencyCode="USD" /> / {!v.pricedUom}</dd>
+                            </dl>
+                            <!--dl class="slds-p-left_x-large">
+                                <dt>{!v.labelTotalPrice}</dt>
+                                <dd class="price"><lightning:formattedNumber value="{!v.qtyPrice}" style="currency" currencyCode="USD" /></dd>
+                            </dl-->
+                        </div>
+                    </aura:if>
+
+                    <!-- ******************** -->
+                    <!-- Price By Sku Loading-->
+                    <!-- ******************** -->
+                    <aura:if isTrue="{!v.isPriceBySkuLoading == true}">
+                        <div class="priceBySku-loader slds-is-relative dal-medium-inputFull dal-small-inputFull">
+                            <lightning:spinner class="bkg-transparent" variant="brand" size="small" />
+                        </div>
+                    </aura:if>
+
+                </aura:if>
+                <!-- ******************** -->
+                <!-- End Price By Sku Values-->
+                <!-- ******************** -->
+
+                <!-- ******************** -->
+                <!-- Remove product record -->
+                <!-- ******************** -->
+                <button class="slds-button btn-product-clear" onclick="{!c.handleDeleteProduct}" disabled="{!v.isAtpLoading}">
+                    <lightning:icon iconName="utility:clear" size="small" alternativeText="Clear"/>&nbsp;{!v.labelClearRow}
+                </button>
+
+            </lightning:layoutItem>
+            <!-- ******************** -->
+            <!-- End Inputs -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!--  Show quantity rounding message (showRoundingMessage) -->
+            <!-- ******************** -->
+            <aura:if isTrue="{!and(v.quantityRounded == true, v.isAtpLoading == false)}">
+                <lightning:layoutItem class="rowInfo slds-grid slds-wrap slds-grid_align-spread slds-p-horizontal_large slds-p-bottom_medium" size="12">
+                    <p class="shippingStatus warning">
+                        <lightning:icon iconName="utility:warning" size="small" alternativeText="Quantity Rounded"/>
+                        The requested quantity of {!v.originalQuantityRequested + ' ' + v.unitOfMeasureSelected} has been rounded to the nearest complete {!v.unitOfMeasureSelected} for ordering.
+                    </p>
+                </lightning:layoutItem>
+            </aura:if>
+
+            <aura:if isTrue="{!!empty(v.productName)}">
+                <lightning:layoutItem class="{!'rowInfo slds-grid slds-wrap slds-grid_align-spread slds-p-horizontal_large' + (v.priceBySku == false ? ' slds-p-bottom_medium' : '')}" size="12">
+                    <div class="slds-p-bottom_small dal-medium-inputFull dal-small-inputFull">
+                        <h3 class="bold">{!v.productName}<!--<a href="javascript:void(0)" class="slds-p-left_x-small newWindow"><lightning:icon iconName="utility:new_window" size="small" alternativeText="Detail"/></a>--></h3>
+
+                        <aura:if isTrue="{!v.priceBySku == false}">
+                            <aura:if isTrue="{!and(v.isAtpLoading == false, and(v.showProductInfo == true, v.productInfoError == false))}">
+                                <p class="{!'shippingStatus slds-p-top_xx-small' + ((v.onTimeFlag == 'N') ? ' warning' : '')}">
+                                    <lightning:icon iconName="utility:event" size="small" alternativeText="Shipping Date"/>
+                                    Estimated Availability Date:
+                                    <aura:if isTrue="{!and(v.isQtyAvailable == 'Y', !empty(v.estimatedShipDate))}">
+                                            <ui:outputDate value="{!v.estimatedShipDate}" format="MM/DD/YY" />
+                                        <aura:set attribute="else">
+                                            {!v.labelShipDateUnavailable}
+                                        </aura:set>
+                                    </aura:if>
+                                    <a href="javascript:void(0)" class="slds-m-left_x-small" onclick="{!c.toggleAvailabiltyDetails}">({!v.showProductSupply == true ? 'hide' : 'show'} availability details)</a>
+                                    
+                                </p>
+                               <lightning:helptext iconName="utility:info" content="Availability date represents when sufficient inventory will be available to fulfill the amount ordered. Once the order is submitted the date field will populate with an estimated ship date determined by order cutoff times, lane dates, and site order processing lead times." />
+                            </aura:if>
+                        </aura:if>
+
+                    </div>
+
+                    <aura:if isTrue="{!and(v.priceBySku == false, v.checkAvailability == false)}">
+                        <aura:if isTrue="{!and(v.isAtpLoading == false, and(v.showProductInfo == true, v.productInfoError == false))}">
+                            <div class="orderStats slds-p-bottom_small dal-medium-inputFull dal-small-inputFull">
+                                <dl>
+                                    <dt>{!v.labelUnitPrice}</dt>
+                                    <dd><lightning:formattedNumber value="{!v.netPrice}" style="currency" currencyCode="USD" /> / {!v.pricedUom}</dd>
+                                </dl>
+                                <dl class="slds-p-left_x-large">
+                                    <dt>{!v.labelExtendedWeight}</dt>
+                                    <dd><lightning:formattedNumber value="{!v.extendedWeight}" maximumFractionDigits="2" />&nbsp;{!v.labelExtendedWeightUnitOfMeasure}</dd>
+                                </dl>
+                                <dl class="slds-p-left_x-large">
+                                    <dt>{!v.labelExtendedPrice}</dt>
+                                    <dd class="price"><lightning:formattedNumber value="{!v.qtyPrice}" style="currency" currencyCode="USD" /></dd>
+                                </dl>
+                            </div>
+                        </aura:if>
+                    </aura:if>
+                </lightning:layoutItem>
+            </aura:if>
+            <!-- ******************** -->
+            <!--  End SKU Info-->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!--  Product Info -->
+            <!-- ******************** -->
+            <aura:if isTrue="{!and(v.isAtpLoading == false,  or(v.showProductInfo == true, v.productInfoError == true))}">
+
+                <!-- ******************** -->
+                <!--  Check if there is an error loading product info -->
+                <!-- ******************** -->
+                <aura:if isTrue="{!v.productInfoError == false}">
+
+                    <!-- if this a price by sku flow don't show this -->
+                    <aura:if isTrue="{!v.priceBySku == false}">
+                        <!-- if the primary source of supply cant fulfill the order and there are other source of supply sites that can, show them -->
+                        <aura:if isTrue="{!and(v.canPrimarySosFulfill == false, v.sitesWithInventory.length > 0)}">
+                            <lightning:layoutItem class="rowInfo slds-grid slds-p-horizontal_large slds-p-top_xx-small slds-p-bottom_medium" size="12">
+                                <p class="infoInlineWithList">
+                                {!v.labelSitesWithInventory}&nbsp;
+                                    <span>
+                                    <aura:iteration items="{!v.sitesWithInventory}" var="sos" indexVar="index">
+                                        <aura:if isTrue="{!index >= 1}">; </aura:if>{!sos.label}
+                                    </aura:iteration>
+                                </span>
+                                </p>
+                            </lightning:layoutItem>
+                        </aura:if>
+
+                        <!-- ******************** -->
+                        <!--  End SKU Info-->
+                        <!-- ******************** -->
+
+                        <!-- ******************** -->
+                        <!--  Product Supply -->
+                        <!-- ******************** -->
+                        <c:Dal_Dist_TimePhaseTable store="{!v.store}"
+                           cartId="{!v.cartId}"
+                           sku="{!v.sku}"
+                           showProductSupply="{!v.showProductSupply}"
+                           isProductSupplyLoading="{!v.isProductSupplyLoading}"
+                           sourceOfSupplySelectedName="{!v.sourceOfSupplySelectedName}"
+                           futureProductSupply="{!v.futureProductSupply}"
+                           msgProductSupplyEmpty="{!v.msgProductSupplyEmpty}"
+                           customClasses="slds-p-horizontal_large slds-p-bottom_large"
+                        />
+                        <!-- ******************** -->
+                        <!--  End Product Supply -->
+                        <!-- ******************** -->
+                    </aura:if>
+                    <!-- end hide for price by sku flow -->
+
+                    <!-- error loading product info-->
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!empty(v.productName)}">
+                            <lightning:layoutItem class="slds-p-horizontal_large slds-p-bottom_medium" size="12">
+                                <ui:message severity="error" closable="false">{!v.productInfoErrorMsg}</ui:message>
+                            </lightning:layoutItem>
+                        </aura:if>
+                    </aura:set>
+                    <!-- end error loading product info-->
+
+                </aura:if>
+                <!-- ******************** -->
+                <!--  End check if there is an error loading product info -->
+                <!-- ******************** -->
+
+            </aura:if>
+            <!-- ******************** -->
+            <!--  End product info -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!--  product info loading -->
+            <!-- ******************** -->
+            <aura:if isTrue="{!and(v.isAtpLoading == true, v.priceBySku == false)}">
+                <lightning:layoutItem size="12" class="slds-is-relative slds-p-around_xx-large">
+                    <lightning:spinner class="bkg-transparent" variant="brand" size="small" />
+                </lightning:layoutItem>
+            </aura:if>
+            <!-- ******************** -->
+            <!--  end product info loading -->
+            <!-- ******************** -->
+
+        </lightning:layout>
+
+    </lightning:layoutItem>
+
+    <!-- used to display modal -->
+    <aura:attribute name="baseModal" type="Map" />
+
+</aura:component>

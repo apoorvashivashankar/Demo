@@ -1,0 +1,96 @@
+<!--
+ - Created by Yadav on 11/27/2018.
+ -->
+
+<aura:component description="Dal_SSC_PickupCancellation" extends="c:Dal_ModalBase" controller="Dal_ScheduleOrderController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes">
+
+    <!-- Labels -->
+    <aura:attribute name="topTextPickup" type="String" default="Pick Up Cancellation"/>
+    <aura:attribute name="topTextScheduled" type="String" default="Delivery Cancellation"/>
+
+    <!-- Internal Attributes -->
+    <aura:attribute name="indexToCancel" type="String" />
+    <aura:attribute name="productName" type="String" />
+    <aura:attribute name="sku" type="String" />
+    <aura:attribute name="extendedPrice" type="String" />
+    <aura:attribute name="pickupTime" type="DateTime" />
+    <aura:attribute name="unitPrice" type="String" />
+    <aura:attribute name="quantity" type="String"/>
+    <aura:attribute name="unitOfMeasure" type="String" />
+    <aura:attribute name="isFromHeader" type="boolean" default="false" />
+    <aura:attribute name="listOfAllSkus" type="List" default="[]" />
+    <aura:attribute name="orderNumber" type="String" />
+    <aura:attribute name="isPickup" type="Boolean" default="true"/>
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+
+    <!-- Header -->
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12">
+                <aura:if isTrue="{!v.isPickup}">
+                    <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.topTextPickup}"/>
+
+                    <aura:set attribute="else">
+                        <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.topTextScheduled}"/>
+                    </aura:set>
+                </aura:if>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" class="dal-cancel-order-header-subheader">
+                <aura:if isTrue="{!v.isPickup}">
+                    Please confirm pickup cancellation for following item:
+
+                    <aura:set attribute="else">
+                        Please confirm delivery cancellation for following item:
+                    </aura:set>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+
+
+    <!-- Body starts here -->
+    <lightning:layout class="dal-form dal-form-order dal-cancelorder-modal-body  slds-p-around_small slds-m-bottom_large" multipleRows="true">
+
+            <!-- For Sku iteration -->
+            <aura:iteration items="{!v.listOfAllSkus}" var="item" >
+                <c:Dal_SSC_PickupCancellationBody productName="{!item.productName}" sku="{!item.sku}" extendedPrice="{!item.extendedPrice}"
+                                                  pickupTime="{!item.pickupTime}" unitPrice="{!item.unitPrice}" quantity="{!item.quantity}"
+                                                  unitOfMeasure="{!item.unitOfMeasure}" isPickup="{!v.isPickup}"/>
+            </aura:iteration>
+
+
+    </lightning:layout>
+
+
+    <!-- Modal Footer -->
+    <lightning:layout class="footer-action-bar " multipleRows="true">
+        <lightning:layoutItem class="button-bold slds-p-horizontal_small slds-p-vertical_small" size="12"
+                              smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+
+            <lightning:layout class="slds-grid_align-spread slds-grid slds-wrap">
+                <lightning:layoutItem class="slds-col">
+                    <lightning:button variant="Neutral" label="CLOSE" class="dal-modal-footer-close"
+                                      onclick="{!c.handleClose}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-col">
+                    <aura:if isTrue="{!v.isPickup}">
+                        <lightning:button variant="destructive" label="CANCEL PICKUP" class="dal-modal-footer-cancel"
+                                      onclick="{!c.handleCancel}"/>
+
+                        <aura:set attribute="else">
+                            <lightning:button variant="destructive" label="CANCEL DELIVERY" class="dal-modal-footer-cancel"
+                                              onclick="{!c.handleCancel}"/>
+                        </aura:set>
+                    </aura:if>
+                </lightning:layoutItem>
+            </lightning:layout>
+
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

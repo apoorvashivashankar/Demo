@@ -1,0 +1,11 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francoiskorb on 9/22/16.
+ -->
+
+<aura:component description="SVNSUMMITS_Include_Carousel">
+
+    <ltng:require styles="{!$Resource.SlickCSS}"
+                  scripts="{!$Resource.SlickJS}"/>
+
+</aura:component>

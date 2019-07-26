@@ -1,0 +1,94 @@
+<aura:component description="Dal_SSC_Inventory_MyLead"
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" >
+
+    <div class="slds-grid slds-wrap tdx-card">
+        <div class="activity-box slds-col slds-text-align_center">
+            <div class="slds-col">
+                <span class="activity-text slds-border_bottom">Lead Conversion Rate</span>
+                <span class="activity-number">86%</span>
+            </div>
+        </div>
+        <div class="activity-box slds-col slds-text-align_center">
+            <div class="slds-col">
+                <span class="activity-text slds-border_bottom">Total Number of Leads</span>
+                <span class="activity-number">7</span>
+            </div>
+        </div>
+        <div class="activity-box slds-col slds-text-align_center">
+            <div class="slds-col">
+                <span class="activity-text slds-border_bottom">Total Numbers of Wins/Losses</span>
+                <span class="activity-number">Chart</span>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
+
+    <div>
+        <!-- data table start-->
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+            <thead>
+            <tr class="slds-text-title_caps">
+                <!--header checkbox for select all-->
+                <th scope="col">
+                    <div class="slds-truncate" title="Name">Name</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Phone">Company</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Type">Location</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Name">Product</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Phone">Status</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Type">Created</div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <aura:iteration items="" var="obj">
+                <tr>
+                    <th scope="row">
+                        <div class="slds-truncate" title="Name">
+                            Name
+                        </div>
+                    </th>
+                    <th scope="row">
+                        <div class="slds-truncate" title="Company">
+                            Company
+                        </div>
+                    </th>
+                    <th scope="row">
+                        <div class="slds-truncate" title="Location">
+                            Location
+                        </div>
+                    </th>
+                    <th scope="row">
+                        <div class="slds-truncate" title="Product">
+                            Product
+                        </div>
+                    </th>
+                    <th scope="row">
+                        <div class="slds-truncate" title="Status">
+                            Status
+                        </div>
+                    </th>
+                    <th scope="row">
+                        <div class="slds-truncate" title="Created">
+                            Created
+                        </div>
+                    </th>
+                </tr>
+            </aura:iteration>
+            </tbody>
+        </table>
+        <!-- DataTable End -->
+    </div>
+</aura:component>

@@ -1,0 +1,38 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  padding-left: 1rem;
+  border-left: 0.25rem solid #eee;
+}
+.THIS blockquote {
+  margin: 0 0 1rem .9375rem;
+  quotes: '“' '”' '‘' '’';
+  text-indent: -0.9375rem;
+}
+.THIS blockquote:before {
+  font-family: Arial;
+  content: open-quote;
+}
+.THIS blockquote:after {
+  font-family: Arial;
+  content: close-quote;
+}
+.THIS figcaption {
+  font-size: .9375rem;
+}
+.THIS figcaption:before {
+  content: ' - ';
+}
+.THIS figcaption span {
+  display: inline-block;
+  margin: 0 0 .25rem;
+}
+.THIS figcaption cite {
+  display: block;
+  margin: 0 0 0 .5rem;
+}

@@ -1,0 +1,7 @@
+<!--
+ - Created by Yadav on 2/9/2019.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_LocationSwitcherCartEvent">
+    <aura:attribute name="selectedAccountId" type="String"/>
+</aura:event>

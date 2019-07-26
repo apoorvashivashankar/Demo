@@ -1,0 +1,65 @@
+<!--
+ - Created by ranja on 06-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_ReSchedulePickupDeliveryItemList" extends="c:Dal_Base" controller="Dal_ScheduleOrderController">
+
+    <aura:attribute name="orderNumber" type="String" default=""/>
+    <aura:attribute name="itemList" type="List" default="[]"/>
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="orders" type="Map" default="{}"/>
+    <aura:attribute name="totalOrders" type="Integer" default="0"/>
+    <aura:attribute name="orderList" type="List" default="[]"/>
+    <aura:attribute name="skuNumber" type="Integer" default="0"/>
+    <aura:attribute name="orderWrapper" type="List"/>
+    <aura:attribute name="selectedIndex" type="String"  />
+    <aura:attribute name="showSpinner" type="boolean" default="false" />
+    <aura:attribute name="emptySkus" type="boolean" default="false" />
+
+    <!-- For Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="hasMoreItems" type="Boolean" default="false"/>
+    <aura:attribute name="showMoreItems" type="Boolean" default="false"/>
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+
+    <!-- BODY -->
+    <lightning:layout verticalAlign="center" class="dal-right slds-p-bottom_medium" multipleRows="true">
+        <lightning:layoutItem size="12" class="slds-p-horizontal_large slds-grid slds-p-top_large slds-p-bottom_medium">
+                <h5><b>{!v.totalOrders}&nbsp;Orders</b></h5>&nbsp;-&nbsp;{!v.skuNumber}&nbsp; items
+         </lightning:layoutItem>
+
+        <aura:if isTrue="{!v.showSpinner}" >
+            <lightning:spinner  variant="brand"/>
+        </aura:if>
+
+        <lightning:layoutItem size="12" class="slds-p-horizontal_large dal-right-bold ">
+            <aura:iteration items="{!v.orderWrapper}" var="item" indexVar="index">
+
+                <lightning:layout class="slds-size_12-of-12 slds-border_bottom slds-border_top ">
+                    <lightning:layoutItem size="2" class="slds-p-vertical_x-small bold">
+
+                        <b> {!index + 1}</b>
+
+                    </lightning:layoutItem>
+                    <aura:if isTrue="{!v.showSpinner}">
+                        <lightning:spinner variant="brand"/>
+                    </aura:if>
+                    <lightning:layoutItem size="6" class="slds-p-vertical_x-small">
+                        {!item.Material__c}
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="4" class="slds-p-vertical_x-small slds-text-align_right bold">
+                        <b>{!item.Quantity__c + ' ' + item.UOM__c}</b>
+                    </lightning:layoutItem>
+                </lightning:layout>
+
+            </aura:iteration>
+
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

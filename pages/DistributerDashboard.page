@@ -1,0 +1,496 @@
+<apex:page standardController="Account"
+	extensions="DistributorDashboardCtl" showHeader="false" sideBar="false"
+	StandardStyleSheets="true">
+	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+	<style>
+		.chartHeader {
+			background-color: lightgrey;
+			color: black;
+			padding: 5px 0px 0px 0px;
+			text-align: center;
+			height: 20px;
+			border:1px solid lightgrey;
+		}
+		
+		.odd {
+			background-color: lightgray;
+		}
+		
+		.tableFooter {
+			border-top: 1px solid gray;
+			padding: 5px 0px 0px 0px;
+			text-align: center;
+			height: 30px;
+		}
+	</style>
+
+	<table border="0" cellpadding="3" width="440">
+		<tr>
+		  <td collspan="3" align="center"><h1>Distributor Dashboard for {!account.Name}</h1></td>
+		</tr>
+		<tr>
+			<td valign="top" width="33%" align="center"> 
+			<!--YTD Sales To Goal-->
+			<script type='text/javascript'>
+		      google.load('visualization', '1', {packages:['gauge']});
+		      google.setOnLoadCallback(drawChart);
+		      function drawChart() {
+		        var data = google.visualization.arrayToDataTable([
+		          ['Label', 'Value'],
+		          [' ', {!YtdSalesToGoal.actualValue}]
+		        ]);
+		
+		        var options = {
+		          width: 500, height: 200,
+		          redFrom: {!YtdSalesToGoal.minValue}, redTo: {!YtdSalesToGoal.breakPoint1},
+		          yellowFrom: {!YtdSalesToGoal.breakPoint1}, yellowTo: {!YtdSalesToGoal.breakPoint2},
+		          greenFrom: {!YtdSalesToGoal.breakPoint2}, greenTo: {!YtdSalesToGoal.maxValue},
+		          minorTicks: 5,
+		          max:{!YtdSalesToGoal.maxValue}
+                  ,backgroundColor:{stroke:'LightGrey', strokeWidth: 1}
+		        };
+		        var formatter = new google.visualization.NumberFormat({
+											fractionDigits: 0,
+		      								prefix: '$' 
+										}); ///apex/DistributerDashboard?id=001A000000H75IX
+				 formatter.format(data, 1);
+				 
+		
+		        var chart = new google.visualization.Gauge(document.getElementById('stg'));
+		        chart.draw(data, options);
+		      }
+		    </script> 
+			<div class="chartHeader">
+			<h1>YTD Sales To Goal</h1>
+			</div>
+			<div id='stg' style="text-align:center;"></div>
+
+			<br />
+			<!--YTD Sales Plan By Period-->
+			<div class="chartHeader">
+			<h1>YTD Sales Plan By Period</h1>
+			</div>
+			<div id="spp"></div>
+			<script type="text/javascript">
+			    google.load('visualization', '1.0', {'packages':['corechart']});
+		       
+		        // Set a callback to run when the Google Visualization API is loaded.
+		        google.setOnLoadCallback(initCharts);
+		   
+		        function initCharts() { 
+		           
+		            var visualization = new google.visualization.ColumnChart(document.getElementById('spp'));
+		            // Prepare table model for chart with columns
+		            var  data = google.visualization.arrayToDataTable({!YtdSalesPlanByPeriod});
+		            var formatter = new google.visualization.NumberFormat({
+										  pattern: '$###,###,###.##' 
+									   }); 
+		            
+					try{formatter.format(data, 1);}catch(Err){}
+		            try{formatter.format(data, 2);}catch(Err){}
+		            
+		            visualization.draw(data, {legend : {position: 'bottom'
+		                                             ,textStyle: {color: 'Gray', fontSize: 8}}
+		                                             ,is3D:false
+		                                             //, title:'YTD Sales Plan By Period'
+		                                             //, titlePosition: 'out'
+		                                             //, titleTextStyle: { fontSize: 11 }
+		                                             , width:350
+		                                             ,vAxis:{textStyle:{fontSize: 10}, format: '$###,###,###'}
+		                                             ,hAxis:{textStyle:{fontSize: 10},showTextEvery:1,slantedText:false}
+		                                             ,height:220
+		                                             ,min:0
+		                                             ,colors: ['blue','green']
+		                                             ,chartArea: {width: '80%', height: '70%', left:55, top:20}
+		                                             ,height:290
+		                                             ,bar: {groupWidth:'90%'}
+		                                             ,backgroundColor:{stroke:'LightGrey', strokeWidth: 1}
+		                                             ,hAxis: {title:'Period Month'}
+		                                             });
+			                      
+			    }
+		        
+		        
+		    </script> 
+		    <!-- Sales Vs. Plan Numbers --> <br />
+			<div class="chartHeader">
+				<h1>Sales Vs. Plan Numbers</h1>
+			</div>
+			<apex:dataTable style="border:1px solid lightgrey;"
+				value="{!SalesVsPlanNumbers}" var="s" id="SalesVsPlanNumbers"
+				rowClasses="odd,even" width="100%" footerClass="tableFooter">
+
+				<apex:facet name="footer">Current Trade Sales Only. Excludes displays and samples.	</apex:facet>
+
+				<apex:column >
+
+					<apex:facet name="header">Sales Date</apex:facet>
+
+					<apex:outputtext value="{!s.DateDisplay}" />
+
+				</apex:column>
+
+				<apex:column >
+
+					<apex:facet name="header">Net Sales</apex:facet>
+
+					<apex:outputtext value="{0,number,$###,###,###.00}">
+						<apex:param value="{!s.Net_Sales}" />
+					</apex:outputtext>
+
+				</apex:column>
+
+				<apex:column >
+
+					<apex:facet name="header">Plan</apex:facet>
+
+					<apex:outputtext value="{0,number,$###,###,###.00}">
+						<apex:param value="{!s.Plan_Nbrs}" />
+					</apex:outputtext>
+
+				</apex:column>
+
+				<apex:column >
+
+					<apex:facet name="header">Difference</apex:facet>
+
+					<apex:outputtext value="{0,number,$###,###,###.00}"
+						>
+						<apex:param value="{!s.Difference}" />
+					</apex:outputtext>
+
+				</apex:column>
+
+			</apex:dataTable> <br />
+			<!-- Display, Sample & Board Sales --> 
+			<div class="chartHeader">
+				<h1>Display, Sample &amp; Board Sales</h1>
+			</div>
+			<apex:dataTable style="border:1px solid lightgrey;" value="{!DisplaySampleBoardSales}"
+				var="s" id="DisplaySampleBoardSales" rowClasses="odd,even"
+				width="100%" footerClass="tableFooter">
+
+				
+				<apex:column >
+
+					<apex:facet name="header">Product</apex:facet>
+
+					<apex:outputtext value="{!s.Product_Name}" />
+
+				</apex:column>
+
+				<apex:column >
+
+					<apex:facet name="header">NT Sales</apex:facet>
+
+					<apex:outputtext value="{0,number,$###,###,###.00}"
+						>
+						<apex:param value="{!s.Net_Sales}" />
+					</apex:outputtext>
+
+				</apex:column>
+
+			</apex:dataTable> <br />
+			<!-- % of Total Sales --> 
+			<div class="chartHeader">
+				<h1>% of Total Sales</h1>
+			</div>
+			<apex:dataTable style="border:1px solid lightgrey;" value="{!PcntOfTotalSales}" var="s"
+				id="PcntOfTotalSales" rowClasses="odd,even" width="100%"
+				footerClass="tableFooter">
+
+				<apex:column >
+
+					<apex:facet name="header">Sales Type</apex:facet>
+
+					<apex:outputtext value="{!s.Sales_Type}" />
+
+				</apex:column>
+
+				<apex:column >
+
+					<apex:facet name="header">Sales</apex:facet>
+
+					<apex:outputtext value="{0,number,$###,###,###.00}"
+						>
+						<apex:param value="{!s.Net_Sales}" />
+					</apex:outputtext>
+
+				</apex:column>
+
+				<apex:column >
+
+					<apex:facet name="header">% of Total</apex:facet>
+
+					<apex:outputtext value="{0,number,###%}" >
+						<apex:param value="{!s.Pcnt_Of_Total}" />
+					</apex:outputtext>
+
+				</apex:column>
+
+			</apex:dataTable></td>
+			<td valign="top" width="33%"><!-- Sales by Year by Period -->
+			<div class="chartHeader">
+			<h1>Sales by Year by Period</h1>
+			</div>
+			<div id="syp"></div>
+			<script type="text/javascript">
+			    google.load('visualization', '1.0', {'packages':['corechart']});
+		       
+		        // Set a callback to run when the Google Visualization API is loaded.
+		        google.setOnLoadCallback(initSypChart);
+		   
+		        function initSypChart() { 
+		            
+		            var visualization = new google.visualization.ColumnChart(document.getElementById('syp'));
+		            // Prepare table model for chart with columns
+		            var  data = google.visualization.arrayToDataTable({!SalesByYearByPeriod});
+		            var formatter = new google.visualization.NumberFormat({
+										  pattern: '$###,###,###.##' 
+									   }); 
+					try{formatter.format(data, 1);}catch(Err){}
+		            try{formatter.format(data, 2);}catch(Err){} 
+		            try{formatter.format(data, 3);}catch(Err){}
+		            try{formatter.format(data, 4);}catch(Err){}
+		            try{formatter.format(data, 5);}catch(Err){} 
+		            try{
+		            visualization.draw(data, {legend : {position: 'bottom',textStyle: {color: 'Gray', fontSize: 8}}
+                                             ,is3D:false
+                                             ,width:350
+                                             ,vAxis:{textStyle:{fontSize: 10}, format: '$###,###,###'}
+                                             ,hAxis:{textStyle:{fontSize: 10},showTextEvery:1,slantedText:false}
+                                             ,height:220
+                                             ,min:0
+                                             ,colors: ['blue','green', 'orangered']
+                                             ,chartArea: {width: '80%', height: '80%', left:55, top:5}
+                                             ,height:290
+                                             ,bar: {groupWidth:'90%'}
+                                             ,backgroundColor:{stroke:'LightGrey', strokeWidth: 1}
+                                             ,hAxis: {title:'Period Month'}
+                                             });
+			       }
+			       catch(err){alert('ERROR: '+err.message);  }           
+			    }
+		        
+		        
+		    </script> <br />
+			<!-- YTD Sales By Team -->
+			<div class="chartHeader">
+			<h1>YTD Sales By Team</h1>
+			</div>
+			<div id="YtdSalesByTeam" width="100%"></div>
+			<script type="text/javascript">
+			    google.load('visualization', '1.0', {'packages':['corechart']});
+		       
+		        // Set a callback to run when the Google Visualization API is loaded.
+		        google.setOnLoadCallback(initSbTChart);
+		   
+		        function initSbTChart() { 
+		            
+		            var visualization = new google.visualization.PieChart(document.getElementById('YtdSalesByTeam'));
+		            // Prepare table model for chart with columns
+		            var  data = google.visualization.arrayToDataTable({!YtdSalesByTeam});
+		            var formatter = new google.visualization.NumberFormat({
+										  pattern: '$###,###,###.##' 
+									   }); 
+		            formatter.format(data, 1); 
+		            //formatter.format(data, 2);
+		            try{
+		            visualization.draw(data, {legend : {position: 'right', alignment:'center' ,textStyle: {color: 'Gray', fontSize: 8}}
+                                             ,is3D:true
+                                             ,colors: ['Orange','YellowGreen','DodgerBlue','BlueViolet','DARKBLUE','SlateBlue','VIOLET','LIGHTBLUE','GREEN','ORANGERED']
+                                             ,chartArea: {width: '95%', height: '95%',left:'5'}
+                                             //,height:290
+                                             //,backgroundColor:{stroke:'LightGrey', strokeWidth: 1}
+                                             });
+			       }
+			       catch(err){alert('ERROR: '+err.message);  }           
+			    }
+		        
+		        
+		    </script> <br />
+			<!-- Full Period Sales --> 
+			<div class="chartHeader">
+			<h1>Full Period Sales</h1>
+			</div>
+			<apex:dataTable style="border:1px solid lightgrey;" value="{!FullPeriodSales}" var="s"
+				id="FullPeriodSales" rowClasses="odd,even" width="100%"
+				footerClass="tableFooter">
+
+				<apex:column >
+
+					<apex:facet name="header">Short Name</apex:facet>
+
+					<apex:outputtext value="{!s.Short_Name}" />
+
+				</apex:column>
+
+				<apex:column >
+
+					<apex:facet name="header">Prior YTD Sales</apex:facet>
+
+					<apex:outputtext value="{0,number,$###,###,###.00}">
+						<apex:param value="{!s.Prior_YTD_Sales}" />
+					</apex:outputtext>
+
+				</apex:column>
+
+				<apex:column >
+
+					<apex:facet name="header">YTD Period Sales</apex:facet>
+
+					<apex:outputtext value="{0,number,$###,###,###.00}">
+						<apex:param value="{!s.YTD_Period_Sales}" />
+					</apex:outputtext>
+
+				</apex:column>
+
+			</apex:dataTable></td>
+			<td width="33%" valign="top">
+			<!-- New Product / Promo Sales -->
+			<div class="chartHeader">
+			<h1>New Product / Promo Sales</h1>
+			</div>
+			<apex:dataTable style="border:1px solid lightgray;"
+				value="{!NewProductPromoSales}" var="s" id="NewProductPromoSales"
+				rowClasses="odd,even" width="100%" footerClass="tableFooter">
+
+				<!--<apex:facet name="caption">New Product / Promo Sales</apex:facet> -->
+
+				<apex:column >
+
+					<apex:facet name="header">Product</apex:facet>
+
+					<apex:outputtext value="{!s.Short_Name}" />
+
+				</apex:column>
+
+
+				<apex:column >
+
+					<apex:facet name="header">Net Sales</apex:facet>
+
+					<apex:outputtext value="{0,number,$###,###,###.00}">
+						<apex:param value="{!s.YTD_Period_Sales}" />
+					</apex:outputtext>
+
+				</apex:column>
+
+			</apex:dataTable> 
+			
+			<br/>
+			<!-- Top 15 Product Lines -->
+			
+			<div class="chartHeader">
+			<h1>Top 15 Product Lines</h1>
+			</div>
+			<div id="Top15ProductLines"></div>
+			<!--script type="text/javascript">
+			    google.load('visualization', '1.0', {'packages':['corechart']});
+		       
+		        // Set a callback to run when the Google Visualization API is loaded.
+		        google.setOnLoadCallback(initSypChart);
+		   
+		        function initSypChart() { 
+		            
+		            var visualization = new google.visualization.BarChart(document.getElementById('Top15ProductLines'));
+		            // Prepare table model for chart with columns
+		            var  data = google.visualization.arrayToDataTable({!Top15ProductLines});
+		            var formatter = new google.visualization.NumberFormat({
+										  pattern: '$###,###,###.##' 
+									   }); 
+		            formatter.format(data, 1); 
+		            //formatter.format(data, 2);
+		            try{
+		            visualization.draw(data, {legend : 'none'
+                                             ,is3D:false
+                                             ,width:350
+                                             ,height:250
+                                             ,min:0
+                                             ,colors: ['blue','green', 'orangered']
+                                             ,chartArea: {width: '60%', height: '80%', left:150, top:5}
+                                             ,height:290
+                                             ,bar: {groupWidth:'90%'}
+                                             ,backgroundColor:{stroke:'LightGrey', strokeWidth: 1}
+                                             ,hAxis: {title:'Net Sales',textStyle:{fontSize: 10}, format: '$###,###,###', minValue: 0}
+                                             ,vAxis: {title:'Product',textStyle:{fontSize: 10}}
+                                             });
+			       }
+			       catch(err){alert('ERROR: '+err.message);  }           
+			    }
+		        
+		        
+		    </script--> 
+		    <apex:dataTable style="border:1px solid lightgray;"
+				value="{!Top15ProductLinesTable}" var="s" id="Top15ProductLinesTable"
+				rowClasses="odd,even" width="100%" footerClass="tableFooter">
+
+				<!--<apex:facet name="caption">New Product / Promo Sales</apex:facet> -->
+
+				<apex:column >
+
+					<apex:facet name="header">Product</apex:facet>
+
+					<apex:outputtext value="{!s.Short_Name}" />
+
+				</apex:column>
+
+
+				<apex:column >
+
+					<apex:facet name="header">Net Sales ($)</apex:facet> 
+
+					<apex:outputtext value="{0,number,$###,###,###.00}">
+						<apex:param value="{!s.YTD_Period_Sales}" />
+					</apex:outputtext>
+
+				</apex:column>
+				
+
+			</apex:dataTable> 
+		    <br />
+			<div class="chartHeader">
+			<h1>YTD Sales w/Face-to-Face Calls</h1>
+			</div>
+			<apex:dataTable style="border:1px solid lightgray;"
+				value="{!YTDSalesFaceToFace}" var="s" id="YTDSalesFaceToFace"
+				 width="300" footerClass="tableFooter">
+
+				<!--<apex:facet name="caption">New Product / Promo Sales</apex:facet> -->
+
+				<apex:column >
+
+					<apex:facet name="header">Short Name</apex:facet>
+
+					<apex:outputtext value="{!s.Short_Name}" />
+
+				</apex:column>
+
+
+				<apex:column >
+
+					<apex:facet name="header">YTD Sales ($)</apex:facet> 
+
+					<apex:outputtext value="{0,number,$###,###,###.00}">
+						<apex:param value="{!s.YTD_Period_Sales}" />
+					</apex:outputtext>
+
+				</apex:column>
+				
+				<apex:column >
+
+					<apex:facet name="header">Face 2 Face</apex:facet>
+
+					<apex:outputtext value="{0,number,###,###,###}">
+						<apex:param value="{!s.Prior_YTD_Sales}" />
+					</apex:outputtext>
+
+				</apex:column>
+
+			</apex:dataTable> 
+			</td>
+		</tr>
+
+	</table>
+
+</apex:page>

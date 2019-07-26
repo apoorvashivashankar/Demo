@@ -1,0 +1,60 @@
+<!--
+ - Created by 7Summits on 2/19/18.
+ -->
+<aura:component description="Dal_InfoPanelItem">
+    <aura:attribute name="icon" type="String"
+                    default="utility:questions_and_answers" />
+    <aura:attribute name="iconBG" type="String"
+                    default="" />
+    <aura:attribute name="subText" type="String"
+                    default="" />
+    <aura:attribute name="mainText" type="String"
+                    default="" />
+    <aura:attribute name="panelURL" type="String"
+                    default=""  />
+    <aura:attribute name="isLink" type="String"
+                    default="false"  />
+    <aura:attribute name="size" type="String"
+                    default=""  />
+    <aura:attribute name="OpenInNewTab" type="Boolean"
+                    default="false" />
+    <aura:attribute name="rightLink" type="String"
+                    default=""  />
+    <aura:attribute name="rightLinkLabel" type="String"
+                    default=""  />
+    <aura:attribute name="className" type="String"  />
+    <aura:attribute name="noPadding" type="Boolean" default="false"  />
+
+    <div class="{!'slds-text-align--center ' + ((v.noPadding == false) ? 'slds-p-around_xxx-small ' : '') + v.className}">
+        <aura:if isTrue="{!v.panelURL != ''}">
+            <a href="{!v.panelURL}"  target="{!v.OpenInNewTab  ? '_blank' : ''}">
+                <div class="{!'slds-card slds-grid ' + v.size}">
+                    <div class="infoPanelIcon slds-size_3-of-12" style="{!'background-color:' + v.iconBG }">
+                        <lightning:icon iconName="{!v.icon}" />
+                    </div>
+                    <div class="slds-size_9-of-12 slds-p-around_xx-small">
+                        <p>{!v.subText}</p>
+                        <h2 class="bold">{!v.mainText}</h2>
+                    </div>
+                </div>
+            </a>
+            <aura:set attribute="else">
+                <div class="{!'slds-card slds-grid ' + v.size}">
+                    <div class="{!'infoPanelIcon ' + (v.rightLink != '' ? 'slds-size_2-of-12' : 'slds-size_3-of-12')}" style="{!'background-color:' + v.iconBG }">
+                        <lightning:icon iconName="{!v.icon}" />
+                    </div>
+                    <div class="{!v.rightLink != '' ? 'slds-size_8-of-12  slds-p-around_xx-small' : 'slds-size_9-of-12  slds-p-around_xx-small'}">
+                        <p>{!v.subText}</p>
+                        <h2 class="bold">{!v.mainText}</h2>
+                    </div>
+                    <aura:if isTrue="{!v.rightLink != ''}">
+                        <div class="slds-size_2-of-12 rightLink">
+                            <a href="{!v.rightLink}">{!v.rightLinkLabel}</a>
+                        </div>
+                    </aura:if>
+                </div>
+            </aura:set>
+        </aura:if>
+    </div>
+
+</aura:component>

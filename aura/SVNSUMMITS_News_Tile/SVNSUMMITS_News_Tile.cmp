@@ -1,0 +1,124 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component access="global"
+                controller="SVNSUMMITS_NewsController">
+
+	<ltng:require scripts="{!join(',',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/fullcalendar-2.6.1/moment.min.js'
+			)}"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.setSitePrefix}"/>
+
+	<aura:attribute name="wrapperNewsObj" type="SVNSUMMITS_WrapperNews" access="global"/>
+	<aura:attribute name="numberOfNewsPerPage" type="Integer" access="global"/>
+	<aura:attribute name="totalNews" type="Integer" access="global"/>
+	<aura:attribute name="debugMode" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="isOdd" type="Boolean" default="False" access="global"/>
+	<aura:attribute name="isTotalOdd" type="Boolean" default="False" access="global"/>
+	<aura:attribute name="isAddCol" type="Boolean" default="False" access="global"/>
+	<aura:attribute name="displayMode" type="String" access="global"/>
+	<aura:attribute name="profileURL" type="String" access="global"/>
+	<aura:attribute name="newsURL" type="String" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="sitePrefix" type="String" access="global"/>
+	<aura:attribute name="isFeatured14" type="boolean" access="global"/>
+	<aura:attribute name="isFeatured" type="boolean" default="false" access="global"/>
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" access="global"/>
+	<aura:attribute name="showImages" type="Boolean" access="global" default="true"/>
+	<aura:attribute name="filterOn" type="String" default="None" access="global"/>
+	<aura:attribute name="limitToSpecificGroups" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="groupName" type="String" default="" access="global"/>
+
+	<aura:attribute name="labelGroupName" type="String" default="{!$Label.c.ss_nws_label_groupName}" access="global"/>
+	<aura:attribute name="labelAuthorBy" type="String" default="{!$Label.c.ss_nws_label_authorBy}" access="global"/>
+
+	<div class="slds-grid slds-wrap slds-grid--vertical-stretch">
+		<aura:iteration items="{!v.wrapperNewsObj.newsList}" var="news">
+
+			<!--Section For Featured News Start-->
+			<div class="{!v.displayMode == 'Tile'
+					? 'slds-col--padded slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-3 newsContainer tileView'
+					: v.displayMode == 'List'
+					? 'slds-col--padded slds-size--1-of-1 listView newsContainer'
+					: 'slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-1 newsContainer compact'}">
+				<div class="featuredNews">
+					<aura:renderIf isTrue="{!v.displayMode != 'Compact'}">
+						<aura:renderIf isTrue="{!v.showImages}">
+							<a href="{!v.sitePath+v.newsURL+news.Id}" label="{!news.Name}">
+								<aura:if isTrue="{!news.Attachments.length > 0}">
+									<div class="featuredImage">
+										<div class="image"
+										     style="{!'background-image:url(' + v.sitePrefix + '/servlet/servlet.FileDownload?file='+news.Attachments[0].Id + ')'}">
+										</div>
+									</div>
+									<aura:set attribute="else">
+										<div class="featuredImage">
+											<div class="image"
+											     style="{!'background-image:url(' + $Resource.SVNSUMMITS_News_Custom + '/NewsCustom/images/default-news.png)'}"></div>
+										</div>
+									</aura:set>
+								</aura:if>
+							</a>
+						</aura:renderIf>
+					</aura:renderIf>
+
+					<div class="content">
+						<aura:if isTrue="{!news.topics.length > 0}">
+							<div class="topics slds-truncate slds-p-bottom--small">
+								<aura:iteration var="topics" items="{!news.topics}">
+									<div class="slds-text-heading--label topic">
+										<c:SVNSUMMITS_News_TopicURL topicName="{!topics.Topic.Name}"
+										                            topicNameToId="{!v.wrapperNewsObj.topicNameToId}"
+										                            debugMode="{!v.debugMode}"/>
+									</div>
+								</aura:iteration>
+								<span class="ellipses">...</span>
+							</div>
+						</aura:if>
+						<aura:if isTrue="{!v.limitToSpecificGroups}">
+							<div class="slds-text-heading--label slds-p-bottom--small group-name">
+								<aura:if isTrue="{!news.groupName}">
+								{!v.labelGroupName}
+									<a href="javascript:void(0);"
+									   onclick="{!c.goToRecord}"
+									   data-id="{!news.GroupId__c}">
+											{!news.groupName}
+									</a>
+									<aura:set attribute="else">
+										<br/>
+									</aura:set>
+								</aura:if>
+							</div>
+						</aura:if>
+						<div class="slds-text-heading--small slds-p-bottom--small newsName">
+							<a href="{!v.sitePath+v.newsURL+news.Id}">{!news.Name}</a>
+						</div>
+
+						<div class="slds-text-heading--label-normal date">
+						{!news.strTime}
+							<aura:if isTrue="{!news.Show_Author__c}">
+								&nbsp;{!v.labelAuthorBy}&nbsp;
+								<span>
+                                    <a class="userName"
+                                       href="{!v.sitePath+v.profileURL+news.Author__c}">
+		                                    {!if(v.isNicknameDisplayEnabled, news.Author__r.CommunityNickname, news.Author__r.Name)}
+                                    </a>
+                                </span>
+							</aura:if>
+						</div>
+
+						<!--<div class="slds-text-heading&#45;&#45;label-normal slds-text-color_weak commentCount">-->
+							<!--<lightning:icon iconName="utility:comments"-->
+							                <!--size="x-small"-->
+							                <!--class="slds-input__icon slds-icon-text-default slds-m-top&#45;&#45;n-x-large slds-p-right&#45;&#45;xx-small"/>-->
+								<!--{!news.commentCount}-->
+						<!--</div>-->
+
+						<br style="clear:both;"/>
+					</div>
+				</div>
+			</div>
+		</aura:iteration>
+		<!--Section For Featured News End-->
+	</div>
+</aura:component>

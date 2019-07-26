@@ -1,0 +1,65 @@
+<!--
+ - Created by ranja on 07-08-2018.
+ -->
+
+<aura:component description="Dal_Dist_SampleOrderBase" extensible="true" extends="c:Dal_Base" controller="Dal_OrderSampleManager"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes">
+
+
+    <aura:attribute name="isSampleOrderBaseLoading" type="Boolean" default="true"/>
+    <aura:attribute name="errorSampleOrderInit" type="Boolean" default="false"/>
+    <aura:attribute name="errorSampleOrderInitMsg" type="String" default="There was a problem initializing the sample order form."/>
+    <aura:attribute name="view" type="Object" description="Get data of everything" />
+    <aura:attribute name="isLoadedInit" type="boolean" default="true" />
+    <aura:attribute name="listOfSeries" type="Object" description="List of series for products" />
+    <aura:attribute name="listOfProducts" type="Object" description="List of series for products" />
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:attribute name="baseModal" type="Map" />
+    <aura:attribute name="isSearching" type="boolean" default="false" />
+    <aura:attribute name="selectedProduct" type="String" description="" />
+    <aura:attribute name="selectedSeries" type="String" description="" />
+    <aura:attribute name="today" type="Date" default="" description="Today's date"/>
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="isMore" type="boolean" default="false" />
+    <aura:attribute name="cumulativeOrderWeight" type="Decimal" default="0.00"/>
+    <aura:attribute name="selectedAddress" type="Object" description="Selected address from modal" />
+    <aura:attribute name="productOrderLines" type="Object" description="Added products from modal" />
+    <aura:attribute name="currentPosition" type="Integer" default="1"/>
+    <aura:attribute name="freightTerms" type="String" default="1A1"/>
+    <aura:attribute name="carrier" type="String" default="UPS Ground"/>
+    <aura:attribute name="poNumber" type="String" default=""/>
+    <aura:attribute name="jobName" type="String" default=""/>
+    <aura:attribute name="isShipComplete" type="String" />
+    <aura:attribute name="isSmallPackage" type="String" default="" />
+    <aura:attribute name="listOfIdsOfOrderLine" type="List" />
+    <aura:attribute name="isDetailView" type="Boolean" default="false" />
+    <aura:attribute name="wrapperData" type="Map"  default="{}"/>
+
+
+    <aura:if isTrue="{!v.isSampleOrderBaseLoading == false}">
+
+        <aura:if isTrue="{!v.errorSampleOrderInit == false}">
+            {!v.body}
+            <aura:set attribute="else">
+                <ui:message title="Error" severity="error" closable="false">{!v.errorSampleOrderInitMsg}</ui:message>
+            </aura:set>
+        </aura:if>
+
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.isSearching == false}">
+                <div class="slds-is-relative slds-p-around_medium">
+                    <lightning:spinner variant="brand"/>
+                </div>
+                <aura:set attribute="else" >
+                    <lightning:layoutItem size="12" class="">
+                        <lightning:layout class="slds-is-relative">
+                            <lightning:spinner class="spinner-fixed" variant="brand" />
+                        </lightning:layout>
+                    </lightning:layoutItem>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+
+    </aura:if>
+
+</aura:component>

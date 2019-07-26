@@ -1,0 +1,8 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S Ideas Filters">
+    <design:attribute name="showTopicFilter"    label="Show Topic Filter"       description="Show Topic Filter" />
+	<design:attribute name="showCategoryFilter" label="Show Category Filter"    description="Show Category Filter" />
+    <design:attribute name="showStatusFilter"   label="Show Status Filter"      description="Show Status Filter" />
+    <design:attribute name="showThemesFilter"   label="Show Themes Filter"      description="Show Themes Filter" />
+    <design:attribute name="showSortByFilter"   label="Show SortBy Filter"      description="Show SortBy Filter" />
+</design:component>

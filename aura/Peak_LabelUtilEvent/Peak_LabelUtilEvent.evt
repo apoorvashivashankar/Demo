@@ -1,0 +1,7 @@
+<!--
+ - Created by joecallin on 7/24/17.
+ -->
+<aura:event type="COMPONENT" description="Peak_LabelUtilEvent">
+    <aura:attribute name="labelText" type="String"/>
+    <aura:attribute name="attribute" type="String"/>
+</aura:event>

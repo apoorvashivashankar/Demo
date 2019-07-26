@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 2/13/18.
+ -->
+<aura:component description="Dal_Base" extensible="true" extends="c:Peak_Base" controller="Dal_BaseController">
+    <!-- body of child component that implements this -->
+    {!v.body}
+</aura:component>

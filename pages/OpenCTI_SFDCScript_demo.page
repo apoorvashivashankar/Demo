@@ -1,0 +1,105 @@
+<apex:page sidebar="false" docType="html-5.0" showheader="false">
+    
+  <!-- JavaScript Libraries -->
+  <apex:includeScript value="/support/console/22.0/integration.js"/>
+  <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+  <apex:includeScript value="{!URLFOR($Resource.jQueryMask)}"/>
+  <apex:includeScript value="{!URLFOR($Resource.svg4everybody)}"/>
+
+  <!-- Import the Design System style sheet -->
+  <apex:slds />
+  
+  <!-- REQUIRED SLDS WRAPPER -->
+  <div class="slds-scope" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" style="background-color:#98A3AD;">
+    
+    <div class="slds-grid slds-grid--frame slds-grid--vertical-align-center slds-grid--align-center ">
+        <!-- form wrapper -->
+        <div>
+            <article class="slds-card">
+              <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                  <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-contact" title="description of icon when needed">
+                      <svg class="slds-icon slds-icon--small" aria-hidden="true">
+                        <use xlink:href="{!URLFOR($Resource.SLDS, '/assets/icons/standard-sprite/svg/symbols.svg#contact')}"></use>
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="slds-media__body">
+                    <h2>
+                        <span class="slds-text-heading--small">Caller Information</span>
+                    </h2>
+                  </div>
+                </header>
+              </div>
+              <!-- form content -->
+              <div class="slds-card__body">
+                <div style="width: 650px;">
+                    <table style="background-color:#fff;" width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="15%" height="150">&nbsp;</td>
+                            <td>
+                                <div class="slds-form--horizontal">
+                                  <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="inputANI">ANI</label>
+                                    <div class="slds-form-element__control">
+                                      <input type="text" id="inputANI" class="slds-input" placeholder="Please enter ANI..." />
+                                    </div>
+                                  </div>
+                                  <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="inputDNIS">DNIS</label>
+                                    <div class="slds-form-element__control">
+                                      <input type="text" id="inputDNIS" class="slds-input" placeholder="Please enter DNIS..." />
+                                    </div>
+                                  </div>
+                                </div>  
+                            </td>
+                            <td width="25%">&nbsp;</td>
+                        </tr>
+                    </table>
+                    </div>
+              </div>
+              <!-- /form content -->
+              
+              <div class="slds-card__footer">
+                <button class="slds-button slds-button--brand btn-continue" onclick="testOpenPrimaryTab()">Start Script!</button>
+              </div>
+            </article>
+        </div>
+        <!-- /form wrapper -->
+    </div>  
+    
+  </div>
+  <!-- / REQUIRED SLDS WRAPPER -->
+ 
+   <script>
+        function testOpenPrimaryTab() {
+            //Open a new primary tab with the salesforce.com home page in it
+            var ANI = $("#inputANI").val();
+            var DNIS = $("#inputDNIS").val();
+            if( ANI && DNIS ){
+                sforce.console.openPrimaryTab(null, '/apex/OpenCTI_SFDCScript?ANI='+ ANI +'&DNIS='+ DNIS, true,  'Ph:'+ANI );
+            }
+            else{
+                alert('All values on this form are required.');
+            }
+        }
+        
+        var openSuccess = function openSuccess(result) {
+            //Report whether opening the new tab was successful
+            if (result.success == true) {
+                alert('Primary tab successfully opened');
+            } else {
+                alert('Primary tab cannot be opened');
+            }
+        };
+        
+        (function(){
+            $("#inputANI").mask('(000) 000-0000');
+        
+            svg4everybody();
+        })();
+        
+   </script>
+   
+</apex:page>

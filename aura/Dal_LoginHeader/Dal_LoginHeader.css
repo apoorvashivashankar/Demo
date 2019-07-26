@@ -1,0 +1,238 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  border-bottom: 10px solid #d4d4d4;
+}
+.THIS .slds-button--brand,
+.THIS .slds-button--neutral,
+.THIS .slds-button--inverse {
+  /*
+	slds-button--neutral
+	slds-button--brand
+	slds-button--inverse
+	*/
+  font-size: 100%;
+  padding: .375rem 2.25rem;
+  transition: all .25s;
+  border-radius: token(borderRadiusMedium);
+}
+.THIS .slds-button--brand {
+  border: none;
+}
+.THIS .slds-button--inverse:link,
+.THIS .slds-button--inverse:visited {
+  color: token(colorTextInverse);
+}
+.THIS .slds-button--inverse:hover,
+.THIS .slds-button--inverse:active {
+  color: token(colorTextInverse);
+}
+.THIS .CCEVENTSLCSVNSUMMITS_Events_Header .slds-button,
+.THIS .CCEVENTSLCSVNSUMMITS_Event_Filter .slds-button,
+.THIS .CCNEWSLCSVNSUMMITS_News_DisplayMode .slds-button {
+  line-height: 2rem;
+  padding: 4px 16px;
+}
+.THIS h1 {
+  font-size: 2rem;
+}
+.THIS h2 {
+  font-size: 1.875rem;
+}
+.THIS h3 {
+  font-family: 'Gotham Bold', sans-serif;
+  font-size: 1.25rem;
+}
+.THIS h4 {
+  font-family: 'Gotham Bold', sans-serif;
+  font-size: 1.125rem;
+}
+.THIS h5 {
+  font-family: 'Gotham Bold', sans-serif;
+  font-size: 0.875rem;
+}
+.THIS h6 {
+  font-family: 'Gotham Bold', sans-serif;
+  font-size: 0.625rem;
+}
+.THIS h1,
+.THIS h2,
+.THIS h3,
+.THIS h4,
+.THIS h5,
+.THIS h6 {
+  font-weight: normal;
+  color: token(colorTextBrand);
+}
+.THIS a:link,
+.THIS a:visited {
+  transition: all .33s;
+}
+.THIS a:link svg,
+.THIS a:visited svg {
+  fill: token(colorTextLink);
+}
+.THIS .newsContainer .featuredNews {
+  border: 1px solid #f1f2f3;
+  border-radius: 4px;
+  background-color: #f1f2f3;
+}
+.THIS .newsContainer .featuredNews .featuredImage {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.THIS .newsContainer .featuredNews .content .topic a {
+  font-weight: 200;
+  color: #606060;
+}
+.THIS .newsContainer .featuredNews .content .topic a:hover {
+  text-decoration: none;
+}
+.THIS .newsContainer .featuredNews .content .newsName a {
+  font-family: 'Gotham bold', sans-serif;
+  color: #231f20;
+}
+.THIS .newsContainer .featuredNews .content .newsName a:hover {
+  text-decoration: none;
+}
+.THIS .listView .featuredImage {
+  height: 100% !important;
+  border-radius: 4px 4px 0 0;
+}
+.THIS .CCEVENTSLCSVNSUMMITS_Event_Filter,
+.THIS .CCNEWSLCSVNSUMMITS_News_Filter {
+  margin-top: 0;
+}
+.THIS .slds-button {
+  border-radius: 4px;
+}
+.THIS .uiTabset--default .tabs__item > a {
+  border-bottom: 4px solid transparent;
+}
+.THIS .uiTabset--default .tabs__item > a:hover {
+  color: token(colorTextBrand);
+  border-color: #555759;
+}
+.THIS .uiTabset--default .tabs__item.active > a {
+  color: token(colorTextDefault);
+  border-color: #555759;
+}
+.THIS .slds-dropdown {
+  border: none;
+  border-radius: 0;
+  box-shadow: rgba(0, 0, 0, 0.16) 0 2px 3px 0;
+}
+.THIS .forceCommunityTopArticleList .title {
+  font-size: 1.875rem;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .topicHeader {
+  margin-bottom: 0;
+  padding-bottom: token(spacingXSmall);
+  border-bottom: 2px solid #fafafa;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .topicHeader .topicHeaderLink {
+  font-family: 'Gotham Bold', sans-serif;
+  font-size: 1.125rem !important;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .topicHeader .topicHeaderLink:hover {
+  text-decoration: none;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .forceCommunityTopArticleItem {
+  padding: .25rem 0 !important;
+  border-bottom: 2px solid #fafafa;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .forceCommunityTopArticleItem .article-title {
+  font-size: .85rem;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .forceCommunityTopArticleItem .article-title-link:focus {
+  box-shadow: none;
+}
+.THIS .forceCommunityTopArticleList .forceCommunityTopArticleListForTopic .forceCommunityTopArticleItem .article-title-link:hover {
+  text-decoration: none;
+}
+.THIS .uiMessage {
+  margin-right: 0;
+  margin-left: 0;
+  padding: token(spacingMedium);
+}
+.THIS .forceTopicFeaturedTopics .topicContent {
+  background-color: rgba(241, 242, 243, 0.69);
+}
+.THIS .forceTopicFeaturedTopics .topicContent:hover {
+  background-color: rgba(241, 242, 243, 0.88);
+}
+.THIS .forceTopicFeaturedTopics .topicLabel {
+  font-size: 1.25rem;
+  color: #231f20;
+}
+.THIS .topicHierarchy-topBox .topicHierarchy-child {
+  font-size: 1.125rem;
+  color: token(colorTextBrand);
+}
+.THIS .comm-topic-trending-articles li a span {
+  font-size: 0.875rem;
+}
+.THIS .comm-topic-trending-articles li a:focus {
+  box-shadow: none;
+}
+.THIS .bold {
+  font-family: 'Gotham Bold', sans-serif;
+  font-weight: normal;
+}
+.THIS .icon-daltile {
+  display: inline-block;
+  width: 125px;
+  height: 37px;
+  background-image: url('/distributors/sfsites/c/resource/dal_daltile_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-daltile {
+    background-image: url('/distributors/sfsites/c/resource/dal_daltile_logo_2x');
+    background-size: 125px 37px;
+  }
+}
+.THIS .icon-marazzi {
+  display: inline-block;
+  width: 156px;
+  height: 37px;
+  background-image: url('/distributors/sfsites/c/resource/dal_marazzi_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-marazzi {
+    background-image: url('/distributors/sfsites/c/resource/dal_marazzi_logo_2x');
+    background-size: 156px 37px;
+  }
+}
+.THIS .icon-ao {
+  display: inline-block;
+  width: 200px;
+  height: 38px;
+  background-image: url('/distributors/sfsites/c/resource/dal_ao_logo');
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-ao {
+    background-image: url('/distributors/sfsites/c/resource/dal_ao_logo_2x');
+    background-size: 200px 38px;
+  }
+}
+.THIS .icon-ragno {
+  display: inline-block;
+  width: 154px;
+  height: 37px;
+  background-image: url('/distributors/sfsites/c/resource/dal_ragno_logo');
+}
+.THIS .icon-proexchange {
+  display: inline-block;
+  width: 300px;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .THIS .icon-ragno {
+    background-image: url('/distributors/sfsites/c/resource/dal_ragno_logo_2x');
+    background-size: 154px 37px;
+  }
+}

@@ -1,0 +1,7 @@
+<!--
+ - Created by ranja on 08-01-2019.
+ -->
+
+<design:component>
+    <design:attribute name="isCartProduct" label="IS My Cart Page" />
+</design:component>

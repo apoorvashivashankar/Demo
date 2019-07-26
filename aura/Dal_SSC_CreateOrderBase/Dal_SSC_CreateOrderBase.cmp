@@ -1,0 +1,102 @@
+<!--
+ - Created by ranja on 26-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderBase" extensible="true" access="global" extends="c:Dal_Base"
+                controller="Dal_InventorySearchController">
+
+    <!-- Base class loading -->
+    <aura:attribute name="errorCreateOrderInit" type="Boolean" default="false"/>
+    <aura:attribute name="errorCreateOrderInitMsg" type="String"
+                    default="There was a problem initializing Browse Product page."/>
+    <aura:attribute name="isCreateOrderBaseLoading" type="Boolean" description="Create Order Loading Spinner"
+                    default="false"/>
+    <aura:attribute name="isPageLoading" type="boolean" default="false"/>
+
+    <!--Internal Attributes-->
+    <aura:attribute name="divisionCode" type="String" />
+    <aura:attribute name="profileName" type="String" />
+    <aura:attribute name="selectedBrand" type="String" />
+    <aura:attribute name="createOrderWrapper" type="Map" />
+    <aura:attribute name="responseFromSearchResult" type="Map" default="{}"/>
+    <aura:attribute name="displayProdList" type="Map" />
+    <aura:attribute name="listOfSelectedProducts" type="List" />
+    <aura:attribute name="count" type="Integer" default="0" />
+    <aura:attribute name="finalResponseWrapper" type="Map" />
+    <aura:attribute name="selectedSkuResponseWrapper" type="List" />
+    <aura:attribute name="myCartResponse" type="Map" />
+    <aura:attribute name="myCartOrderOne" type="Map" />
+    <aura:attribute name="myCartOrderTwo" type="Map" />
+    <aura:attribute name="disableNext" type="Boolean" default="false"/>
+    <aura:attribute name="isAccountOnHold" type="Boolean" default="false" />
+    <aura:attribute name="liftGateL1" type="boolean" default="false" />
+    <aura:attribute name="liftGateL2" type="boolean" default="false" />
+    <aura:attribute name="myCartResponsePageTwo" type="Map" default="{}" />
+    <aura:attribute name="energySurchargeTotal" type="Decimal" default="0" />
+    <aura:attribute name="orderSubTotalTotal" type="Decimal" default="0" />
+    <aura:attribute name="estimatedTotal" type="Decimal" default="0" />
+    <aura:attribute name="lineTotal" type="Decimal" default="0" />
+    <aura:attribute name="myCartResponseAll" type="Map" />
+    <aura:attribute name="selectedTax" type="Object" />
+    <aura:attribute name="isPickUpOne" type="Boolean" default="false" />
+    <aura:attribute name="isDeliveryOne" type="Boolean" default="true" />
+    <aura:attribute name="isPickUpTwo" type="Boolean" default="false" />
+    <aura:attribute name="isDeliveryTwo" type="Boolean" default="true" />
+    <aura:attribute name="recordTypeIdForNational" type="String" />
+    <aura:attribute name="isPOEmpty" type="Boolean" default="false" />
+    <aura:attribute name="showPOError" type="Boolean" default="false" />
+    <aura:attribute name="isJobNameEmpty" type="Boolean" default="false" />
+    <aura:attribute name="showJobNameError" type="Boolean" default="false" />
+
+    <aura:attribute name="isPriceError" type="Boolean" default="false" />
+
+    <aura:attribute name="isPoRequired" type="Boolean" default="false" />
+    <aura:attribute name="isJobNameRequired" type="Boolean" default="false" />
+
+    <!-- Pagination -->
+    <aura:attribute name="totalPages" type="Integer"/>
+    <aura:attribute name="pageNumber" type="Integer" default="1"/>
+    <aura:attribute name="perPageCount" type="Integer" default="10" />
+
+    <!--Events-->
+    <aura:registerEvent name="pageChangeEvent" type="c:Dal_SSC_CreateOrderProductPageChange"/>
+    <aura:registerEvent name="pageMyCartEvent" type="c:Dal_SSC_CreateOrderMyCartEvent"/>
+    <aura:registerevent name="createOrderGlobalSearch" type="c:Dal_SSC_CreateOrderGlobalSearchDoVisible"/>
+    <aura:registerEvent name="myProductQuantityList" type="c:Dal_SSC_CreateOrderProdListCaptureEvt"/>
+    <aura:registerevent name="mycartProductTotal" type="c:Dal_SSC_MyCartQuantityUpdateEvent"/>
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+
+
+    <!-- Body -->
+    <aura:if isTrue="{!v.isCreateOrderBaseLoading == false}">
+
+        <aura:if isTrue="{!v.errorCreateOrderInit == false}">
+            {!v.body}
+            <aura:set attribute="else">
+                <ui:message title="Error" severity="error" closable="false">{!v.errorCreateOrderInitMsg}</ui:message>
+            </aura:set>
+        </aura:if>
+
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.isPageLoading == false}">
+                <div class="slds-is-relative slds-p-around_medium dal-spinner-body-parent">
+                    <lightning:spinner variant="brand" class="spinner-fixed"/>
+                </div>
+                <aura:set attribute="else">
+                    <div class="dal-spinner-body-parent">
+                        {!v.body}
+                        <lightning:spinner class="spinner-fixed" variant="brand"/>
+                    </div>
+                </aura:set>
+            </aura:if>
+
+        </aura:set>
+
+    </aura:if>
+
+
+</aura:component>

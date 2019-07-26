@@ -1,0 +1,39 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId" 
+                controller="Dal_MyProfileUpdate"
+                access="global" >   
+    
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="user" type="Object"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <button class="slds-button slds-button_neutral slds-float_right" onclick="{!c.openModel}">Edit</button> 
+        
+    <aura:if isTrue="{!v.isOpen}">
+        <div role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.clickClose}">
+                        X
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading--medium">User Edit</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium">
+                    <form class="slds-form--stacked">          
+                        <lightning:input aura:id="userform" label="Phone"
+                                         name="Title"
+                                         value="{!v.user.Phone}"
+                                         required="true"/> 
+                        <lightning:textarea aura:id="userform" label="About Me"
+                                 			name="name"
+                                 			value="{!v.user.AboutMe}"/> 
+                    </form>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button--neutral" onclick="{!c.clickClose}" >Cancel</button>
+                    <button class="slds-button slds-button--brand" onclick="{!c.updateclick}">Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>               
+    </aura:if>
+</aura:component>

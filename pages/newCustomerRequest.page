@@ -1,0 +1,17 @@
+<apex:page >
+
+<apex:includeScript value="/soap/ajax/10.0/connection.js"/>
+<apex:includeScript value="/soap/ajax/10.0/apex.js"/>
+
+
+    <script>   
+{
+    sforce.connection.sessionId = "{!$Api.Session_ID}";
+    sforce.one.navigateToList('00BA0000001friqMAA','All Accounts','Account');
+    sforce.one.createRecord("Change_Request__c","012F0000000mu50IAA");
+}
+    
+    </script> 
+    
+
+</apex:page>

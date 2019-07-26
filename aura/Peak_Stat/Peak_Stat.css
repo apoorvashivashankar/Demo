@@ -1,0 +1,15 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+    /* Common CSS here */
+}
+@media (max-width: 47.9375em) {
+    .THIS {
+        text-align: center;
+    }
+}

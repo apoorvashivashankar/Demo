@@ -1,0 +1,30 @@
+<aura:component controller="TaskCreator" implements ="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction">
+    <aura:attribute name="record" type="Object"
+                    description="The record object to be displayed"/>
+    <aura:attribute name="TaskCreatorRecord" type="Object"
+                    description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String"
+                    description="An error message bound to force:recordData"/>
+
+    <force:recordData aura:id="record"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.record}"
+                      targetFields="{!v.TaskCreatorRecord }"
+                      mode="VIEW"/>
+    
+        <div>
+            <center>  
+                <aura:renderIf isTrue="{!v.TaskCreatorRecord.Status__c == 'Creating Tasks'}">
+                    You are about to create and assign tasks.
+                    <br></br>
+                    <br></br>     
+                    <lightning:button variant="brand" label="Create Tasks" onclick="{! c.doInit }" /> 
+                <aura:set attribute="else">
+                  Tasks have already been created for this record.
+                </aura:set>
+              </aura:renderIf> 
+            </center>
+    </div>
+</aura:component>

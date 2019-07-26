@@ -1,0 +1,7 @@
+<apex:page standardController="Account">
+<apex:pageblock >
+<apex:detail />
+</apex:pageblock>
+<apex:relatedList list="ProcessSteps" ></apex:relatedList>
+
+</apex:page>

@@ -1,0 +1,24 @@
+<aura:component description="Peak_TopicsFollowed" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" controller="Peak_TopicsFollowedController">
+    <aura:handler name="init" action="{!c.doInit}" value="this"/>
+
+    <aura:attribute name="followedTopics" type="List"/>
+    <aura:attribute name="recordsToShow" type="String" default="10"/>
+
+    <div>
+        <h3>TOPICS I FOLLOW</h3>
+        <lightning:layout >
+            <aura:if isTrue="{!v.followedTopics.length > 0}">
+                <aura:iteration items="{!v.followedTopics}" var="topic">
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        <lightning:button variant="base" label="{!topic.Name}" value="{!topic.Id}" onclick="{!c.navigateToTopic}" />
+                    </lightning:layoutItem>
+                </aura:iteration>
+                <aura:set attribute="else">
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        <span>You aren't following any topics! Go follow some topics and you'll see them here.</span>
+                    </lightning:layoutItem>
+                </aura:set>
+            </aura:if>
+        </lightning:layout>
+    </div>
+</aura:component>

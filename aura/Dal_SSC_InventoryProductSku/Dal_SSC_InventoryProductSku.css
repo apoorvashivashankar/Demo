@@ -1,0 +1,67 @@
+/**
+ * Created by Yadav on 10/30/2018.
+ */
+
+.THIS .custom-box {
+    background-color: #F3F3F3;
+    padding: 12px;
+    padding-right : 0px !important;
+    border: 1px solid #F3F3F3;
+}
+
+.THIS.baseCard{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16) !important;
+    border-color: #e6e6e6 !important;
+    padding: 1rem !important;
+}
+
+.THIS .button-box .slds-button{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16) !important;
+    border-color: #e6e6e6 !important;
+}
+
+.THIS .slds-form-element__label{
+    font-weight: bold;
+}
+
+.THIS .custom-box .slds-input{
+    border-color : #e6e6e6;
+}
+
+.THIS .middle-OR{
+    color: #ad1e1e;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.THIS .slds-form-element{
+    width : 90%;
+}
+
+.THIS .search-button-custom {
+    padding-right : 20px;
+    padding-left : 20px ;
+}
+
+.THIS .search-button-onclick {
+    background-color : rgb(207, 10, 44)/*t(colorTextLink) !important*/;
+    color: white !important;
+    padding-right : 20px ;
+    padding-left : 20px ;
+}
+
+.THIS .size-box .size-box-custom {
+    max-width : 120px !important;
+}
+
+.THIS .field-required{
+    color : red;
+}
+
+.THIS .dal-clear-button {
+    margin-top: 30px;
+}
+
+.THIS .dal-box {
+    max-width: 180px;
+}

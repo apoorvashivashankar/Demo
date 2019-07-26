@@ -1,0 +1,90 @@
+<aura:component description="Peak_StatProgressBar"  implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+    <aura:attribute name="isVertical" type="Boolean" default="false" access="global" />
+    <aura:attribute name="header" type="string" default="This stat name" access="global"/>
+    <aura:attribute name="headerAtTop" type="Boolean" default="true"/>
+    <aura:attribute name="message" type="String" default="" access="global"/>
+    <aura:attribute name="title" type="String" default="" access="global"/>
+    <aura:attribute name="figure1" type="Integer" access="global"/>
+    <aura:attribute name="figure2" type="Integer" access="global"/>
+    <aura:attribute name="figure1IsCurrency" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="figure2IsCurrency" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="moreLink" type="string" access="global"/>
+    <aura:attribute name="moreText" type="string" access="global"/>
+    <aura:attribute name="cssPosition" type="String" default="absolute; top: 0; right: 0;"/>
+    <aura:attribute name="separatorText" type="String" default="/"/>
+
+    <aura:attribute name="stat" type="Peak_Stat" default=""/>
+
+    <aura:attribute name="percentComplete" type="Integer" default="50"/>
+    <aura:attribute name="progressMarkerPosition" type="Integer" default="0"/>
+    <aura:attribute name="isExceeded" type="Boolean" default="false"/>
+
+    <aura:attribute name="CustomClassName" type="String" default=""/>
+    <aura:attribute name="CustomIdName" type="String" default=""/>
+
+    <aura:handler name="init" action="{!c.initPeakStatProgressBar}" value="{!this}"/>
+    <aura:method name="statReturned" action="{!c.statReturned}">
+        <aura:attribute name="result1" type="String"/>
+        <aura:attribute name="result2" type="String"/>
+    </aura:method>
+
+
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <aura:if isTrue="{!v.message != ''}">
+            <c:Peak_Tooltip title="{!v.title}" message="{!v.message}" cssPosition="{!v.cssPosition}" />
+        </aura:if>
+
+        <aura:if isTrue="{!v.headerAtTop == true}">
+            <div class="header-at-top medium slds-p-around_small clearFloats slds-align_absolute-center"><c:Peak_Base labelText="{!v.header}"/></div>
+        </aura:if>
+
+
+            <div class="progress-count medium slds-p-around_small clearFloats slds-align_absolute-center">
+                <span class="count"><aura:if isTrue="{!v.figure1IsCurrency}">$</aura:if>
+                        <aura:if isTrue="{!and (v.figure1 != '', v.figure1 != null)}">{!v.figure1}
+                            <aura:set attribute="else">
+                                {!v.stat.figure1}
+                            </aura:set>
+                        </aura:if>
+                </span>
+                &nbsp;{!v.separatorText}&nbsp;
+                <span class="total"><aura:if isTrue="{!v.figure2IsCurrency}">$</aura:if>
+                      <aura:if isTrue="{!and (v.figure2 != '', v.figure2 != null)}">{!v.figure2}
+                          <aura:set attribute="else">
+                                  {!v.stat.figure2}
+                          </aura:set>
+                      </aura:if>
+                </span>
+            </div>
+        <aura:if isTrue="{!v.isVertical == false}">
+            <div class="progress-outer slds-m-vertical_x-small">
+                <div class="progress-inner" style="{!'width: ' + v.progressMarkerPosition + '%'}"></div>
+                <div class="progress-marker" style="{!'left: ' + v.progressMarkerPosition + '%'}"><span class="carat"></span>{!v.percentComplete}%</div>
+
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.isVertical == true}">
+            <div class="progress-outer slds-m-vertical_x-small">
+                <div class="progress-inner" style="{!'height: ' + v.progressMarkerPosition + '%'}"></div>
+                <div class="progress-marker" style="{!'bottom: ' + v.progressMarkerPosition + '%'}"><span class="carat"></span>{!v.percentComplete}%</div>
+
+            </div>
+        </aura:if>
+
+
+        <aura:if isTrue="{!v.headerAtTop == false}">
+            <div class="header-beneath"><c:Peak_Base labelText="{!v.header}"/></div>
+        </aura:if>
+        <div class="slds-p-around_xxx-small slds-grid_vertical-align-end slds-text-align_center slds-size_1-of-1 slds-medium-size_1-of-1 ">
+            <aura:if isTrue="{!v.moreLink != ''}">
+                <a href="{!v.moreLink}" class="slds-text-link"><c:Peak_Base labelText="{!v.moreText}"/></a>
+            </aura:if>
+            <aura:if isTrue="{!and(v.moreLink == '', !v.moreText != '')}">
+                <c:Peak_Base labelText="{!v.moreText}"/>
+            </aura:if>
+        </div>
+    </section>
+
+
+</aura:component>

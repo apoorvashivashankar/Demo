@@ -1,0 +1,38 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaViewController"
+                implements="force:hasRecordId,force:hasSObjectName"
+                extends="c:SVNSUMMITS_Ideas_Base"
+                access="public">
+
+    <aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="recordId" type="String" default="{!recordId}" access="global"/>
+    <aura:attribute name="sObjectName" type="String" access="global"/> <!-- doesn't work :/ -->
+    <aura:attribute name="zoneId" type="String" default="" access="global"/>
+    <aura:attribute name="zoneName" default="" type="String" required="true" access="global"/>
+    <aura:attribute name="title" type="String" default="{!$Label.c.ss_idea_label_SimilarIdeas}" access="global"/>
+    <aura:attribute name="listSize" type="Integer" default="6" access="global"/>
+    <aura:attribute name="ideaDetailURL" type="String" default="/idea/" access="global"/>
+    <aura:attribute name="ideasListURL" type="String" default="/ideas/" access="global"/>
+    <aura:attribute name="currentURL" type="String" access="global"/>
+
+    <aura:attribute name="idea" type="Idea" access="global"/>
+    <aura:attribute name="sitePath" type="String" access="global"/>
+    <aura:attribute name="sitePrefix" type="String" access="global"/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_BaseReady" action="{!c.doInit}" />
+
+    <aura:if isTrue="{!and(v.idea.Id, v.idea.Categories, v.zoneId != '')}">
+
+        <c:SVNSUMMITS_Ideas_List displayMode="Compact"
+                                 zoneName="{!v.zoneName}"
+                                 debugMode="{!v.debugMode}"
+                                 listSize="{!v.listSize}"
+                                 ideaDetailURL="{!v.ideaDetailURL}"
+                                 allowVoting="false"
+                                 showCategoryFilter="false"
+                                 filterOn="None"
+                                 categories="{!v.idea.Categories}"
+                                 ideasListURL="{!v.ideasListURL}"/>
+    </aura:if>
+</aura:component>

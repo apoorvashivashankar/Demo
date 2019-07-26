@@ -1,0 +1,25 @@
+<!--
+ - Created by abdoundure on 3/5/18.
+ -->
+
+<design:component label="Dal Breadcrumbs">
+    <design:attribute name="link1URL" label="Link 1 URL" />
+    <design:attribute name="link1Label" label="Link 1 Label" />
+    <design:attribute name="link1IsLink" label="Is a Link" />
+
+    <design:attribute name="link2URL" label="Link 2 URL" />
+    <design:attribute name="link2Label" label="Link 2 Label" />
+    <design:attribute name="link2IsLink" label="Is a Link" />
+
+    <design:attribute name="link3URL" label="Link 3 URL" />
+    <design:attribute name="link3Label" label="Link 3 Label" />
+    <design:attribute name="link3IsLink" label="Is a Link" />
+
+    <design:attribute name="link4URL" label="Link 4 URL" />
+    <design:attribute name="link4Label" label="Link 4 Label" />
+    <design:attribute name="link4IsLink" label="Is a Link" />
+
+    <design:attribute name="link5URL" label="Link 5 URL" />
+    <design:attribute name="link5Label" label="Link 5 Label" />
+    <design:attribute name="link5IsLink" label="Is a Link" />
+</design:component>

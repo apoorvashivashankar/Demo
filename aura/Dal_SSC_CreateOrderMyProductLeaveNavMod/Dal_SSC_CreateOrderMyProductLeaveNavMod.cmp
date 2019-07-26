@@ -1,0 +1,82 @@
+<!--
+ - Created by ranja on 25-01-2019.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderMyProductLeaveNavMod" extends="forceCommunity:navigationMenuBase">
+
+    <!--Label Attributes-->
+    <aura:attribute name="itemMessage" type="String" default="Items in 'My Product List' will not be saved. To keep these items,
+                   select 'Add to Cart' at"/>
+    <aura:attribute name="itemMessagePart" type="String" default="the bottom of the page."/>
+
+    <!--Close Modal Attributes-->
+    <aura:attribute name="showModal" type="Boolean" default="false"/>
+    <aura:attribute name="idToNavigate" type="String" />
+
+    <!--Events-->
+    <aura:registerevent name="createOrderGlobalSearch" type="c:Dal_SSC_CreateOrderHideGSearchEvent"/>
+
+
+    <!--BODY-->
+    <aura:if isTrue="{!v.showModal}">
+        <div class="dal-my-products">
+            <section role="dialog" tabindex="-1" aria-labelledby="Leave Modal" aria-modal="true"
+                     aria-describedby="Leave Modal"
+                     class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div>
+                            <a onclick="{!c.closeModal}">
+                                <lightning:icon class="slds-float_right" iconName="utility:close"
+                                                alternativeText="Close"/>
+                            </a><br/>
+
+                            <lightning:layout class="dal-form dal-form-order slds-p-around_small slds-m-bottom_large"
+                                              multipleRows="true">
+                                <div class="slds-grid slds-size_12-of-12">
+
+                                    <div class="slds-size_10-of-12 slds-align_absolute-center">
+                                        <div>
+                                            <div class="slds-size_12-of-12 slds-text-heading_medium heading slds-m-bottom_medium slds-m-around_small ">
+                                                <div class="slds-size_1-of-1 slds-align_absolute-center">
+                                                    <div class="dal-message-font-color">Are you sure you want to leave
+                                                        this page?
+                                                    </div>
+                                                </div>
+
+                                                <div class="slds-size_10-of-12 slds-align_absolute-center  slds-m-top_xx-large">
+                                                    <div class="dal-message">
+                                                        {!v.itemMessage}<br/>
+                                                        <center>{!v.itemMessagePart}</center>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class=" slds-p-horizontal_x-small slds-m-top_xx-large">
+                                                <div class="slds-align_absolute-center slds-m-bottom_medium">
+                                                    <lightning:button label="YES, LEAVE THIS PAGE"
+                                                                      class="background-color"
+                                                                      title="YES, LEAVE THIS PAGE"
+                                                                      onclick="{!c.handleLeavePage}"/>
+                                                </div>
+                                                <div class="slds-align_absolute-center">
+                                                    <a class="font-color-return-message" onclick="{!c.closeModal}">
+                                                        <u>No, return to "My Product List"</u>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </lightning:layout>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+
+</aura:component>

@@ -1,0 +1,23 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" >
+	<aura:attribute name="title" type="String" default="" />
+	<aura:attribute name="userIdsInput" type="String" default="" />
+	<aura:attribute name="isNarrow" type="Boolean" default="false" />
+
+	<aura:attribute name="userIds" type="String[]" default="" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+	<aura:handler name="init" action="{!c.initFeaturedUserList}" value="{!this}"/>
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <aura:if isTrue="{!v.title != ''}"><h3><c:Peak_Base labelText="{!v.title}"/></h3></aura:if>
+        <div class="slds-grid slds-wrap slds-grid_pull-padded">
+            <aura:iteration items="{!v.userIds}" var="userId">
+                <div class="{!v.isNarrow ? 'slds-p-around_small slds-size_6-of-12' : 'slds-p-around_small slds-size_6-of-12 slds-medium-size_1-of-3 slds-large-size_3-of-12'}">
+                    <c:Peak_FeaturedUser title="" userId="{!userId}" ctaText="" ctaLink="" />
+                </div>
+            </aura:iteration>
+        </div>
+    </section>
+</aura:component>

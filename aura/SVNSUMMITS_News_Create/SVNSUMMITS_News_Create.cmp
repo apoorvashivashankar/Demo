@@ -1,0 +1,379 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_NewsController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+                extends="c:SVNSUMMITS_News_Base"
+                access="global">
+
+	<!--Static Resources -->
+	<ltng:require styles="{!join(',',
+					$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/dropdown.min.css?v=2.1.7',
+					$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/transition.min.css?v=2.1.7',
+					$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/form.min.css?v=2.1.7'
+					)}"
+			scripts="{!join(',',
+					$Resource.SVNSUMMITS_News_Custom     + '/NewsCustom/moment-timezone-with-data.min.js',
+					$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js',
+					$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/form.min.js?v=2.1.7',
+					$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/dropdown.min.js?v=2.1.7',
+					$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/transition.min.js?v=2.1.7',
+					$Resource.SVNSUMMITS_Forcetk
+					)}"/>
+
+	<!-- Base model -->
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_News_BaseReady" action="{!c.doInit}"/>
+	<aura:attribute name="nameSpace" type="String" default="" access="global"/>
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+
+
+	<!--Attributes Section -->
+	<aura:attribute name="newsObj" type="News__c"
+	                default="{ 'sobjectType': 'News__c',
+                               'Name': '',
+                             }" access="global"/>
+
+	<aura:attribute name="newsName" type="String" access="global" default=""/>
+	<aura:attribute name="newsDetails" type="String" access="global" default=""/>
+	<aura:attribute name="newsShowAuthor" type="Boolean" access="global" default="false"/>
+	<aura:attribute name="newsAuthor" type="String" access="global" default=""/>
+	<aura:attribute name="newsGroup" type="String" default="" access="global"/>
+	<aura:attribute name="newsPrivate" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="newsPublishDate" type="Datetime" access="global"/>
+	<aura:attribute name="newsArchiveDate" type="Datetime" access="global"/>
+
+	<aura:attribute name="detailValid" type="Boolean" default="true" access="public"/>
+	<aura:attribute name="detailError" type="String" default="Please fill out the Article field." access="public"/>
+	<aura:attribute name="detailPlaceholder" type="String" default="Enter news article" access="public"/>
+
+	<aura:attribute name="topicValues" type="Map" access="global"/>
+	<aura:attribute name="groupValues" type="Map" access="global"/>
+	<aura:attribute name="isFileSelected" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="authorValues" type="Map" access="global"/>
+	<aura:attribute name="strError" type="String[]" access="global"/>
+	<aura:attribute name="isBrowseError" type="Boolean" access="global"/>
+	<aura:attribute name="pathToDetail" default="/news/" type="String" required="true" access="global"/>
+	<aura:attribute name="allNewsUrl" type="String" default="/news/" access="global"/>
+	<aura:attribute name="detailPageUrl" type="String" default="/news/" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="sitePrefix" type="String" access="global"/>
+	<aura:attribute name="useTopics" default="false" type="Boolean" access="global"/>
+	<aura:attribute name="spinnerImageUrl"
+	                default="{!$Resource.SVNSUMMITS_News_SLDS +'/SLDS00122/assets/images/spinners/slds_spinner.gif'}"
+	                type="String" required="false" access="global"/>
+	<aura:attribute name="strAttachmentError" type="String[]" access="global"/>
+	<aura:attribute name="sessionId" type="String" access="global"/>
+	<aura:attribute name="sfInstanceUrl" type="String" access="global"/>
+
+	<aura:attribute name="isEdit" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="sObjectId" type="String" access="global"/>
+	<aura:attribute name="selectedTopics" type="String" default="" access="global"/>
+	<aura:attribute name="isFileDelete" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="isAttachment" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="disableButton" type="Boolean" access="global" default="true"/>
+	<aura:attribute name="attachmentName" type="String" access="global"/>
+
+	<aura:attribute name="labelNewsTitle" type="String" default="News Title" access="global"/>
+	<aura:attribute name="labelNewsDescription" type="String"
+	                default="Please enter descriptive news title up to 80 characters." access="global"/>
+	<aura:attribute name="labelNewsBody" type="String" default="Body copy of your news item." access="global"/>
+	<aura:attribute name="labelFullArticle" type="String" default="Full Article" access="global"/>
+	<aura:attribute name="labelSelectTopics" type="String" default="Select Topics:" access="global"/>
+	<aura:attribute name="labelUploadPhoto" type="String" default="Upload a Featured Photo" access="global"/>
+	<aura:attribute name="labelArticleAuthor" type="String" default="Article author" access="global"/>
+	<aura:attribute name="labelShowAuthor" type="String" default="Show article author" access="global"/>
+	<aura:attribute name="labelSelectAuthor" type="String" default="Select an author to post on behalf of"
+	                access="global"/>
+	<aura:attribute name="labelSchedulePublication" type="String" default="Schedule Publication" access="global"/>
+	<aura:attribute name="labelLimitToSpecificGroups" type="String" default="Limit this News to Specific Groups "
+	                access="global"/>
+	<aura:attribute name="labelInvalidInput" type="String" access="global"
+	                default="Input required form fields"/>
+
+	<!-- Groups -->
+	<aura:attribute name="limitToSpecificGroups" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="canPostToAll" type="Boolean" default="false" access="global"/>
+
+	<!-- Author search -->
+	<aura:attribute name="authorPlaceHolder" type="String" default="Search author" access="global"/>
+	<aura:attribute name="searchString" type="String" default="" access="global"/>
+	<aura:attribute name="searchFlag" type="Boolean" default="false" access="private"/>
+
+	<!--Handlers Section -->
+
+	<!--<aura:handler name="change" value="{!v.newsName}" action="{!c.setSubmitButtonState}" access="global"/>-->
+	<!--<aura:handler name="change" value="{!v.newsDetails}" action="{!c.setSubmitButtonState}" access="global"/>-->
+	<aura:handler name="change" value="{!v.newsPublishDate}" action="{!c.setSubmitButtonState}" access="global"/>
+
+	<div class="createNewsBox">
+		<div class="slds-grid slds-wrap slds-grid--pull-padded">
+
+			<!--Title Section -->
+			<div class="slds-col--padded slds-size--1-of-1">
+				<div class="slds-text-heading--small slds-m-bottom--small">
+				{!v.labelNewsTitle}<span class="required">*</span>
+				</div>
+				<div class="slds-form-element__control inputDiv">
+					<div class="descriptiveText">{!v.labelNewsDescription}</div>
+					<ui:inputText aura:id="newsName"
+					              class="slds-input requiredField"
+					              labelClass="slds-form-element__label"
+					              value="{!v.newsName}"
+					              change="{!c.setSubmitButtonState}"
+					              required="true"/>
+				</div>
+			</div>
+
+			<!--Details Section -->
+			<div class="slds-col--padded slds-size--1-of-1">
+				<div class="slds-text-heading--small slds-m-bottom--small">
+				{!v.labelFullArticle}<span class="required">*</span>
+				</div>
+				<div class="slds-form-element__control inputDiv">
+					<lightning:inputRichText aura:id="newsDetail"
+					                         value="{!v.newsDetails}"
+					                         placeholder="{!v.detailPlaceholder}"
+					                         valid="{!v.detailValid}"
+					                         onblur="{!c.setSubmitButtonState}"/>
+				</div>
+			</div>
+
+			<!-- Image -->
+			<div class="slds-col--padded slds-size--1-of-1">
+				<div class="slds-text-heading--small slds-m-bottom--small">
+						{!v.labelUploadPhoto}
+				</div>
+				<aura:if isTrue="{!v.isEdit}">
+					<div class="slds-form-element__control inputDiv">
+						<div class="descriptiveText">
+							Featured image will appear if the article is featured. You can add more images in the body
+							of the article below.<br/>
+							Recommended image size: 767 x 362 px. File types supported: JPG, PNG, or GIF.
+						</div>
+						<input type="file" aura:id="image" id="upload" title="" class="slds-input attachEdit"
+						       onchange="{!c.notifyFileSelected}"/>
+						<label id="fileLabel" class="attachmentLabel">{!v.attachmentName}</label>
+						<aura:if isTrue="{!v.isBrowseError}">
+							<ui:inputDefaultError value="{!v.strError}"></ui:inputDefaultError>
+						</aura:if>
+					</div>
+					<aura:set attribute="else">
+						<div class="slds-form-element__control inputDiv">
+							<div class="descriptiveText">
+								Featured image will appear if the article is featured. You can add more images in the
+								body of the article below.<br/>
+								Recommended image size: 767 x 362 px. File types supported: JPG, PNG, or GIF.
+							</div>
+							<input type="file" aura:id="image" class="slds-input"/>
+							<label id="fileLabel">{!v.attachmentName}</label>
+							<aura:if isTrue="{!v.isBrowseError}">
+								<ui:inputDefaultError value="{!v.strError}"></ui:inputDefaultError>
+							</aura:if>
+						</div>
+					</aura:set>
+				</aura:if>
+
+			</div>
+
+			<!-- Topics -->
+			<div class="slds-col--padded slds-size--1-of-1">
+				<div class="slds-text-heading--small slds-m-bottom--small">
+				{!v.labelSelectTopics}<span class="required">*</span>
+				</div>
+				<div class="slds-form-element__control inputDiv">
+					<div class="slds-select_container">
+						<div class="slds-form-element__control" id="topicItem">
+							<ui:inputSelect aura:id="filterByTopic"
+							                multiple="true"
+							                aura:disabled="false"
+							                class="slds-input-select-multi fluid dropdown topic requiredField"
+							                change="{!c.setSubmitButtonState}">
+								<aura:iteration items="{!v.topicValues}" indexVar="key" var="item">
+									<ui:inputSelectOption text="{!item.key}" label="{!item.value}"/>
+								</aura:iteration>
+							</ui:inputSelect>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--  Limit to Specific Groups  -->
+			<aura:if isTrue="{!v.limitToSpecificGroups}">
+				<div class="slds-col--padded slds-size--1-of-1 ">
+					<div class="slds-text-heading--small slds-m-bottom--small">
+							{!v.labelLimitToSpecificGroups}
+					</div>
+					<div class="slds-form-element__control inputDiv">
+						<div class="descriptiveText">
+								{!$Label.c.ss_nws_labelGroupDesc}
+						</div>
+						<div class="slds-select_container">
+							<div class="slds-form-element__control" id="groupItem">
+								<ui:inputSelect aura:id="filterByGroup"
+								                multiple="false"
+								                aura:disabled="false"
+								                value="{!v.newsGroup}"
+								                class="slds-input-select ui fluid dropdown groups">
+
+									<!-- Only authorised users can post to all -->
+									<aura:if isTrue="{!v.canPostToAll}">
+										<ui:inputSelectOption label="All"/>
+									</aura:if>
+
+									<aura:iteration items="{!v.groupValues}" indexVar="key" var="groupItem">
+										<ui:inputSelectOption text="{!groupItem.key}" label="{!groupItem.value}"/>
+									</aura:iteration>
+								</ui:inputSelect>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slds-col--padded slds-size--1-of-1 ">
+					<lightning:input type="checkbox"
+					                 class="slds-p-left--medium"
+					                 label="{!$Label.c.ss_nws_label_privateGroup}"
+					                 title="{!$Label.c.ss_nws_tooltip_privateGroup}"
+					                 checked="{!v.newsPrivate}"
+					                 name="privateItem"/>
+				</div>
+			</aura:if>
+
+			<!-- Author -->
+			<div class="slds-col--padded slds-size--1-of-1">
+				<div class="slds-text-heading--small slds-m-bottom--small">
+						{!v.labelArticleAuthor}
+				</div>
+				<div class="authorSelection">
+					<ui:inputCheckbox label="" value="{!v.newsShowAuthor}"
+					                  class="checkboxCss"
+					                  click="{!c.showAuthorDropdown}"
+					                  aura:id="checkbox"/>
+					<div class="showlabel">{!v.labelShowAuthor}</div>
+					<div class="slds-form-element__control hideDropdown" aura:id="authorSelection">
+						<div class="authorDropdown">
+								{!v.labelSelectAuthor}
+						</div>
+						<lightning:input type="search"
+						                 placeholder="{!v.authorPlaceHolder}"
+						                 name="searchAuthor"
+						                 label="Search"
+						                 onchange="{!c.handleSearch}"
+						                 value="{!v.searchString}"/>
+
+						<!--<ui:inputText value="{!v.searchString}"-->
+						<!--placeholder="{!v.authorPlaceHolder}"-->
+						<!--keyup="{!c.clickSearchButton}"/>-->
+						<!--<img class="displayIconImage"-->
+						<!--src="{!$Resource.SVNSUMMITS_News_SLDS + '/SLDS00122/assets/icons/utility/search_60.png'}"-->
+						<!--onclick="{!c.handleSearch}"/>-->
+
+						<div class="slds-select_container slds-p-top--x-small">
+							<ui:inputSelect aura:id="filterByAuthor" aura:disabled="false"
+							                class="slds-input-select-multi fluid dropdown author"
+							                value="{!v.newsAuthor}">
+								<aura:iteration items="{!v.authorValues}" indexVar="key" var="item">
+									<ui:inputSelectOption text="{!item.key}" label="{!item.value}"/>
+								</aura:iteration>
+							</ui:inputSelect>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Publish -->
+			<div class="slds-col--padded slds-size--1-of-1">
+				<div class="slds-text-heading--small slds-m-bottom--small">
+						{!$Label.c.ss_nws_label_schedulePublication}
+				</div>
+				<div class="slds-form-element__control inputDiv">
+					<div class="dateText">{!$Label.c.ss_nws_label_publishDate}<span class="required">*</span></div>
+					<div class="descriptiveText">{!$Label.c.ss_nws_label_publishDateDesc}</div>
+					<div class="slds-form-element slds-size--1-of-1 slds-small-size--1-of-2 slds-medium-size--3-of-6 dtInput modalWidth"
+					     id="pbDt">
+						<!-- Had to add an change event handler to fire the validation for Summer 17 (6/29/2017)
+							change just threw a locale error and did not call the validation function -->
+
+						<ui:inputDateTime aura:id="publishDate"
+						                  label=""
+						                  class="slds-input requiredField"
+						                  labelClass="slds-form-element__label"
+						                  value="{!v.newsPublishDate}"
+						                  displayDatePicker="true"/>
+
+					</div>
+				</div>
+
+				<!-- Archive -->
+				<div class="slds-form-element__control inputDiv">
+					<div class="dateText">{!$Label.c.ss_nws_labelArchiveDate}</div>
+					<div class="descriptiveText">{!$Label.c.ss_nws_labelArchiveDateDesc}</div>
+					<div class="slds-form-element slds-size--1-of-1 slds-small-size--1-of-2 slds-medium-size--3-of-6 dtInput modalWidth"
+					     id="arDt">
+
+						<ui:inputDateTime aura:id="archiveDate" label=""
+						                  class="slds-input"
+						                  labelClass="slds-form-element__label"
+						                  value="{!v.newsArchiveDate}"
+						                  displayDatePicker="true"/>
+					</div>
+				</div>
+			</div>
+
+			<!-- Notifications -->
+			<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-large-size--2-of-12 buttoncss"
+			     id="FillHeader">
+				<div class="slds-text-heading--small slds-notify slds-notify--toast slds-theme--warning fontFix"
+				     role="alert">
+						{!$Label.c.ss_nws_label_NewInvalidInput}
+				</div>
+			</div>
+
+			<aura:if isTrue="{!v.strError.length > 0 }">
+				<div class="w100">
+					<div class="slds-text-heading--small slds-notify slds-notify--toast slds-theme--error errorDiv errorAttachment">
+						<ui:inputDefaultError value="{!v.strError}"></ui:inputDefaultError>
+					</div>
+				</div>
+			</aura:if>
+
+			<aura:if isTrue="{!v.strAttachmentError.length > 0 }">
+				<div class="w100">
+					<div class="slds-text-heading--small slds-notify slds-notify--toast slds-theme--error errorDiv errorAttachment">
+						<ui:inputDefaultError value="{!v.strAttachmentError}"></ui:inputDefaultError>
+					</div>
+				</div>
+			</aura:if>
+
+			<!--Button Section -->
+			<div class="slds-col--padded slds-size--1-of-1 ">
+				<div class="slds-grid slds-grid--pull-padded">
+					<div class="slds-col">
+						<ui:button class="slds-button slds-button slds-button--brand btn-primary targetButton"
+						           label="SAVE" press="{!c.submitNews}" disabled="{!v.disableButton}"/>
+						<aura:if isTrue="{!v.isEdit}">
+							<ui:outputURL class="slds-button slds-button--neutral btn btn-link"
+							              value="{!v.sitePath + v.detailPageUrl+ v.sObjectId}" label="CANCEL"/>
+							<aura:set attribute="else">
+								<ui:outputURL class="slds-button slds-button--neutral btn btn-link"
+								              value="{!v.sitePath + v.allNewsUrl}" label="CANCEL"/>
+							</aura:set>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+
+			<!--Loading Section Start-->
+			<!--<div class="loadingCon global siteforceLoadingBalls"> -->
+			<div aura:id="spinnerSubmit">
+				<div class="salesforceSource_blurybackground">
+					<div class="waitingHolder">
+						<div class="slds-spinner--large">
+							<img src="{!v.spinnerImageUrl}" alt="Loading..."/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</aura:component>

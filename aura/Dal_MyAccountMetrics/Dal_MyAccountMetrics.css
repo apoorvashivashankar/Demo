@@ -1,0 +1,21 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS .title,
+.THIS .title-cta {
+  text-align: center;
+}
+@media (min-width: 48em) {
+  .THIS .title {
+    text-align: left;
+  }
+}
+@media (min-width: 48em) {
+  .THIS .title-cta {
+    text-align: right;
+  }
+}

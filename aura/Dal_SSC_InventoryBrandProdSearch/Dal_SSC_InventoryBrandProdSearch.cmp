@@ -1,0 +1,239 @@
+<!--
+ - Created by ranja on 13-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_InventoryBrandProdSearch" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" extends="c:Dal_SSC_InventoryBase" controller="Dal_InventorySearchController">
+
+    <!-- Init Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!-- Internal Functional Atributes -->
+    <aura:attribute name="count" type="Integer" default="0"/>
+    <aura:attribute name="listOfSeries" type="Object" description="List of series for products" />
+    <aura:attribute name="listOfColors" type="Object" description="List of Color for selected series." />
+
+
+    <!-- Calculate Position -->
+    <aura:attribute name="pos" type="Integer" default="1" />
+
+    <!-- Events -->
+    <aura:registerEvent name="positionEvent" type="c:Dal_SSC_InventorySearchCurrentPage"/>
+
+    <!-- Labels -->
+    <aura:attribute name="labelCheckInventory" type="String" default="Check Inventory" />
+    <aura:attribute name="labelSeries" type="String" default="Series" />
+    <aura:attribute name="labelProduct_Color" type="String" default="Product/Color"/>
+    <aura:attribute name="labelSize" type="String" default="Size" />
+    <aura:attribute name="clearAllFields" type="String" default="Clear all fields" />
+
+    <!-- Attributes on selection -->
+    <aura:attribute name="selectedSeries" type="String" />
+    <aura:attribute name="selectedSize" type="String" />
+    <aura:attribute name="selectedProduct" type="String"/>
+    <aura:attribute name="selectedBrand" type="String" />
+    <aura:attribute name="selectedColor" type="String" />
+
+    <!-- Boolean Attributes -->
+    <aura:attribute name="isSeriesNotSelected" type="Boolean" default="false" />
+    <aura:attribute name="isColorNotSelected" type="Boolean" default="false" />
+
+    <!-- Body Starts Here -->
+    <div class="slds-grid slds-grid align-spread slds-size_12-of-12 slds-small-size_1-of-1 slds-medium-size_6-of-12
+                slds-m-bottom_large slds-wrap slds-large-size_10-of-12">
+
+        <!-- Brand -->
+        <lightning:select class="slds-col dal-custom-width slds-m-right_medium" name="Brand" required="false" value="{!v.selectedBrand}" label="Brand" >
+            <option value="">Daltile</option>
+        </lightning:select>
+
+        <!-- Series -->
+        <lightning:select class="{! v.isSeriesNotSelected == true ? 'dal-custom-width slds-has-error slds-col slds-m-right_medium' :
+                        'dal-custom-width slds-col slds-m-right_medium'}"
+                          name="Series"  required="false" onblur="{!c.checkSeriesSelected}"
+                          value="{!v.selectedSeries}" aura:id="series" label="{!v.labelSeries}"
+                          onchange="{!c.getColors}" >
+            <aura:if isTrue="{!empty(v.selectedSeries)}">
+                <option value="">Select Series</option>
+            </aura:if>
+            <aura:iteration items="{!v.listOfSeries}" var="ser" >
+                <option value="{!ser.Series__r.Id}">{!ser.Series__r.Name}</option>
+            </aura:iteration>
+        </lightning:select>
+
+        <!-- Product/Color -->
+        <lightning:select class="{!v.isColorNotSelected == true ? 'dal-custom-width slds-has-error slds-col slds-m-right_medium' :
+                                'dal-custom-width slds-col slds-m-right_medium'}"
+                          name="Product/Color" value="{!v.selectedColor}" onchange="{!c.searchProductsByFilters}"
+                          label="{!v.labelProduct_Color}" required="false" aura:id="products" onblur="{!c.checkProductSelected}" >
+
+            <aura:if isTrue="{!v.listOfColors.length > 0}">
+                <option value="All">ALL</option>
+                <aura:iteration items="{!v.listOfColors}" var="pro">
+                    <option value="{!pro.colorCode}">{!pro.colorName}</option>
+                </aura:iteration>
+            </aura:if>
+
+        </lightning:select>
+
+        <!-- Size -->
+        <lightning:select label="{!v.labelSize}" class="slds-col dal-custom-width dal-size-custom slds-m-right_medium" name="Size" required="false"
+                          value="{!v.selectedSize}">
+            <option value=""> 4 X 24</option>
+        </lightning:select>
+
+        <!-- Clear all Fields -->
+        <a href="" class="slds-col dal-clear-button" onclick="{!c.clearAllFields}" >
+            <u>Clear all Fields</u>
+        </a>
+
+    </div>
+
+    <div class="baseCard slds-size_12-of-12">
+
+        <!-- Header with count of selected sku with button to navigate to next page -->
+        <lightning:layout class="">
+
+            <lightning:layoutItem size="6" alignmentBump="left" class="for-button">
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="6" alignmentBump="right" class="for-button">
+                <b class="slds-text-title_caps ">
+                    <lightning:formattedNumber value="{!v.count}"/>
+                    SELECTED</b>
+
+                <!-- Button to navigate to next component -->
+                <lightning:button class="top-search-button slds-m-bottom_medium slds-text-title_caps" label="{!v.labelCheckInventory}"
+                                  title="{!v.labelCheckInventory}" variant="destructive" onclick="{!c.navigateToNextPage}"/>
+            </lightning:layoutItem>
+
+        </lightning:layout>
+
+
+        <!-- Displaying the product list -->
+        <lightning:layout class="section-top-custom">
+
+            <lightning:layoutItem size="12" class="dal-searchResultsContainer ">
+                <aura:if isTrue="{!v.responseWrapperData.length > 0}">
+
+                    <lightning:layoutItem size="12" class="default-skulist">
+
+                        <!-- Details for productList -->
+                        <div class="slds-grid slds-size_12-of-12 slds-wrap slds-p-top_medium ">
+
+                            <!-- Sku Details -->
+                            <div class="search-result-custom slds-size_12-of-12
+                                            searchResult slds-p-bottom_small">
+
+                                <div class="slds-size_12-of-12 slds-grid outputDataContainer">
+
+                                    <lightning:input class="slds-p-left_large" type="checkbox" value="Select All" aura:id="checkAllCheckboxes"
+                                                     label="" onchange="{!c.onCheckAll}" name="Select All"/>
+
+                                    <div class="slds-m-left_small slds-fix slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-small-size_12-of-12 slds-size_12-of-12">
+                                        <span>Product/SKU #</span>
+                                    </div>
+
+                                    <div class="slds-fix slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-small-size_12-of-12 slds-size_12-of-12">
+                                        <span>BRAND</span>
+                                    </div>
+
+                                    <div class="slds-fix slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-small-size_12-of-12 slds-size_12-of-12">
+                                        <span>SERIES</span>
+                                    </div>
+
+                                    <div class="slds-fix slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-small-size_12-of-12 slds-size_12-of-12">
+                                        <span>PRODUCT/COLOR</span>
+                                    </div>
+
+                                    <div class="slds-fix slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-small-size_12-of-12 slds-size_12-of-12">
+                                        <span>SIZE</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </lightning:layoutItem>
+
+                    <!-- Iteration of products -->
+                    <aura:iteration items="{!v.responseWrapperData}" var="result" indexVar="index">
+
+                        <lightning:layoutItem size="12" class="{! (result.isChecked == true) ? 'color-for-selected-sku' : 'default-skulist' }">
+
+                            <!-- Details for productList -->
+                            <div class="slds-grid slds-size_12-of-12 slds-wrap slds-p-top_medium ">
+
+                                <!-- Sku Details -->
+                                <div class="search-result-custom slds-size_11-of-12
+                                            searchResult slds-p-bottom_small margin-left">
+
+                                    <div class="slds-size_12-of-12 slds-grid outputDataContainer">
+
+                                        <lightning:input class="slds-p-left_large" type="checkbox" value="{!index}" aura:id="checkCheckboxes"
+                                                         label="" onchange="{!c.onCheck}" name="{!index}"/>
+
+                                        <div class="slds-m-left_small slds-fix slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-small-size_12-of-12 slds-size_12-of-12">
+                                            <span>{!result.Description}</span>
+                                        </div>
+
+                                        <div class="slds-fix slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-small-size_12-of-12 slds-size_12-of-12">
+                                            <span>DalTile</span>
+                                        </div>
+
+                                        <div class="slds-fix slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-small-size_12-of-12 slds-size_12-of-12">
+                                            <span>Series</span>
+                                        </div>
+
+                                        <div class="slds-fix slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-small-size_12-of-12 slds-size_12-of-12">
+                                            <span>{!result.Product_Color__r.Name}</span>
+                                        </div>
+
+                                        <div class="slds-fix slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-small-size_12-of-12 slds-size_12-of-12">
+                                            <span>12 X 24</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </lightning:layoutItem>
+                    </aura:iteration>
+
+                </aura:if>
+            </lightning:layoutItem>
+
+        </lightning:layout>
+
+
+        <!-- Footer with count of selected sku with button to navigate to next page -->
+        <lightning:layout class="">
+
+            <lightning:layoutItem size="6" alignmentBump="left" class="for-top-button">
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="6" alignmentBump="right" class="for-top-button">
+
+                <!-- Count for selected products -->
+                <b class="slds-text-title_caps ">
+                    <aura:if isTrue="{!v.responseWrapperData.length > 0}" >
+                        <lightning:formattedNumber value="{!v.count}"/>
+                        <aura:set attribute="else">
+                            <lightning:formattedNumber value="0"/>
+                        </aura:set>
+                    </aura:if>
+                    SELECTED</b>
+
+                <!-- Button to navigate to next component -->
+                <lightning:button class="top-search-button slds-m-bottom_medium slds-text-title_caps" onclick="{!c.navigateToNextPage}"
+                                  label="{!v.labelCheckInventory}"
+                                  title="{!v.labelCheckInventory}" variant="destructive"/>
+            </lightning:layoutItem>
+
+        </lightning:layout>
+
+    </div>
+
+</aura:component>

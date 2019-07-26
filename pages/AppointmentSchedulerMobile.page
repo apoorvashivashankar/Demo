@@ -1,0 +1,162 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="true" Controller="VisitorCheckinController" applyHTmlTag="false" docType="html-5.0" >
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+        <apex:includeScript value="{!$Resource.cleave}"/>
+        <apex:includeScript value="{!$Resource.phoneFormatter}"/>
+
+        <script src="cleave.min.js"></script>
+        <script src="cleave-phone.{country}.js"></script>
+
+        <style>
+            div#header {
+                background-image: url(http://www.daltile.com/Content/images/navigation/header_background.png);
+                background-repeat: repeat-y;
+                padding: 0px;
+                height: 137px;
+                width: 100%;
+                position: relative;
+            }  
+            div#headercontainer {
+                background-image: url(http://www.daltile.com/Content/images/navigation/header-container_background.png);
+                background-repeat: repeat-x;
+                height: 146px;
+                position: static;
+                z-index: 200;
+                min-width: 980px;
+                width: 100%;            
+            }
+            a.logo {
+                width: 530px;
+                height: 46px;
+                background-position: -137px -100px;
+                text-indent: -10000px;
+                float: left;
+                background-image: url(http://www.daltile.com/Content/images/sprites.png);
+                background-repeat: no-repeat;
+                display: inline-block;
+                margin-top: 29px;
+                margin-left: 16px;
+            }
+            .dateFormat {
+                visibility:hidden;
+            }
+            .center-div {
+                position: absolute;
+                margin: auto;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                width: 100px;
+                height: 100px;
+                background-color: #ccc;
+                border-radius: 3px;
+            }   
+        </style>
+        <script>
+        function HideMsg(istrue) {
+            var checkval = document.getElementById("msg")
+            if(istrue.checked ) {   
+                var checkval = document.getElementById("date").style.display='block';
+                var checkval = document.getElementById("time").style.display='block';
+            } else {
+                var checkval = document.getElementById("date").style.display='none';
+                var checkval = document.getElementById("time").style.display='none';
+            }
+        }
+        </script>            		
+		<script type='text/javascript'>
+			function noenter(ev)  {
+			   	if (window.event && window.event.keyCode == 13 || ev.which == 13) {
+			   		doSearchAF();
+			       	return false;
+			     } else {
+			          return true;
+			     }
+			 }
+		</script>
+        <head>
+            <apex:slds />
+        </head>
+        <apex:form >
+            <body class="slds-scope" >
+            
+                <input type="hidden" name="currentvfpage" value="{!$CurrentPage.Name}"/>
+                <div class="slds-grid slds-grid_align-center" style="position: width: 300px; height: 300px; position: absolute; top:0; bottom: 0; left: 0;right: 0;margin: auto;">                
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-p-horizontal--small slds-size--1-of-1">
+                            <div class="slds-container--center slds-container--large" >
+                                <div class="slds-col" style="position: relative;  margin: auto;  width: 100%;">                      
+                                    <br></br>
+														<div class="slds-grid slds-wrap">
+															<div class="slds-size_2-of-5" style="min-width: 200px;">
+																<apex:outputLabel value="Gallery Consultant" for="newGalleryConsultant"/>
+																<apex:selectList id="newGalleryConsultant" size="1" value="{!galleryContact}" readonly="false" styleClass="slds-select" > 
+																	<apex:selectOptions value="{!galleryContacts}"/>
+																</apex:selectList>  
+															</div> 
+															<div class="slds-size_1-of-5" style="position: relative;  margin: auto;  top: 0;  right: 0;  bottom: 0;  left: 0;  width: 100px;  height: 100px;" >
+																<apex:outputLabel value="Preschedule?" for="appointmentScheduled"/> 
+																<div class="slds-form-element">
+																	<label class="slds-checkbox_toggle slds-grid">
+																		<input type="checkbox" id="appointmentScheduled" name="checkbox" aria-describedby="toggle-desc" value="{!appointment.Prescheduled__c}" onchange="HideMsg(this);"/> 
+																		<span id="toggle-desc" class="slds-checkbox_faux_container" aria-live="assertive">
+																			<span class="slds-checkbox_faux"></span>
+																			<span class="slds-checkbox_on">Select a Date/Time</span>
+																			<span class="slds-checkbox_off"></span>
+																		</span>
+																	</label>
+																</div>
+															</div>  
+															<div class="slds-size_1-of-5" style="display: none" id="date">
+																<apex:outputLabel value="Date" for="appointmentDate"/>
+																<apex:inputField styleClass="slds-input" id="appointmentDateMobile" html-placeholder="Enter A Date"  type="date" showDatePicker="false" value="{!appointment.Appointment_Date__c}"  rendered="{! $User.UIThemeDisplayed == 'Theme4t' }"/>
+																<apex:inputField styleClass="slds-input" id="appointmentDateDesktop" html-placeholder="Enter A Date"  type="date" showDatePicker="false" value="{!appointment.Appointment_Date__c}" rendered="{! $User.UIThemeDisplayed != 'Theme4t' }"/>
+															</div>  
+															<div class="slds-size_1-of-5" style="display: none" id="time">
+																<apex:outputLabel value="Time" for="appointmentTime"/>
+																<apex:inputField styleClass="slds-input" id="appointmentTime" html-placeholder="And Time" value="{!appointment.Appointment_TimeOnly__c}" />
+															</div>                                          
+														</div>      
+														<br></br>
+														<span class="slds-text-heading_small">Lookup Visitor by Phone</span>
+														<div class="slds-col">                      
+															<br></br>
+						                    				<apex:actionFunction name="doSearchAF" action="{!checkin}" />
+															<div class="slds-form-element__control">
+																<div class="slds-form-element slds-hint-parent">
+																	<div class="slds-form-element slds-hint-parent">
+																		<apex:inputField type="tel" styleClass="slds-input input-custom" id="welcomePhoneNumber" value="{!appointment.Visitor_Phone_Number__c}" onkeypress="return noenter(event);" required="false" html-placeholder="Enter Phone Number"/>
+																	</div>
+																</div>
+															</div>
+															<br></br>
+														</div>                                            
+                                </div>
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element slds-hint-parent">
+                                            <apex:commandButton styleClass="slds-button slds-button-space-left slds-button--neutral" value="Cancel" action="{!backToScheduler}" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element slds-hint-parent">
+                                            <apex:commandButton styleClass="slds-button slds-button-space-right slds-button--brand" value="Schedule Visit" action="{!checkin}" />
+                                        </div>
+                                    </div>  
+                                </div>                               
+                            </div>   
+                        </div>
+                    </div>      
+                </div>                      
+            </body>
+        </apex:form>
+    </html>
+    <script>
+        var cleavePhone = new Cleave('.input-custom', {
+            numericOnly: true,
+            delimiters: ['(',')','-','-'],
+            blocks: [0,3, 3, 4]            
+        });
+    </script> 
+</apex:page>

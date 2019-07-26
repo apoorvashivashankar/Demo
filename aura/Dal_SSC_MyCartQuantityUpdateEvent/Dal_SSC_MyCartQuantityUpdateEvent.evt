@@ -1,0 +1,8 @@
+<!--
+ - Created by ranja on 21-01-2019.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_MyCartQuantityUpdateEvent">
+    <aura:attribute name="cartTotal" type="Integer" default="0"/>
+    <aura:attribute name="action" type="String" default="add" />
+</aura:event>

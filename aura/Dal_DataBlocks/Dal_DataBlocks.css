@@ -1,0 +1,95 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+@media (min-width: 48em) {
+  .THIS.dal-dataBlocks-5 .dal-dataBlockWrapper {
+    width: 50%!important;
+  }
+}
+@media (min-width: 64.0625em) {
+  .THIS.dal-dataBlocks-5 .dal-dataBlockWrapper {
+    width: 20%!important;
+  }
+}
+@media (min-width: 48em) {
+  .THIS.dal-dataBlocks-4 .dal-dataBlockWrapper {
+    width: 50%!important;
+  }
+}
+@media (min-width: 64.0625em) {
+  .THIS.dal-dataBlocks-4 .dal-dataBlockWrapper {
+    width: 25%!important;
+  }
+}
+@media (min-width: 48em) {
+  .THIS.dal-dataBlocks-3 .dal-dataBlockWrapper,
+  .THIS.dal-dataBlocks-6 .dal-dataBlockWrapper {
+    width: 33.33%!important;
+  }
+}
+.THIS .dal-dataBlock-comp {
+  position: relative;
+}
+.THIS .dal-dataBlock-comp .dal-dataBlock-compWrapper {
+  background-color: #ffffff;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.19);
+}
+.THIS .dal-dataBlock-comp .dal-dataBlock-compWrapper .dal-dataBlock-compContent {
+  position: relative;
+  top: -6px;
+  min-height: 200px;
+  background-color: #ffffff;
+}
+.THIS .dal-dataBlock-comp .slds-tabs_default ul li {
+  padding: 0;
+}
+.THIS .dal-dataBlock-comp .slds-tabs_default ul li a {
+  font-size: .9375rem;
+}
+.THIS .dal-dataBlock-comp .slds-tabs_default ul li:hover a,
+.THIS .dal-dataBlock-comp .slds-tabs_default ul li:focus a {
+  color: #231f20;
+}
+.THIS .dal-dataBlock-comp .slds-tabs_default ul li:hover:after,
+.THIS .dal-dataBlock-comp .slds-tabs_default ul li:focus:after {
+  background-color: #231f20;
+}
+.THIS .dal-dataBlock-comp .slds-tabs_default ul li:not(:first-child) {
+  margin-left: 1rem;
+}
+.THIS .dal-dataBlock-comp .slds-tabs_default ul li.slds-active a {
+  font-weight: 700;
+  color: #231f20;
+}
+.THIS .dal-dataBlock-comp .slds-tabs_default ul li.slds-active:after {
+  background-color: #231f20;
+}
+@media (max-width: 30em){
+  .THIS .slds-tabs__nav-scroller slds-has-overflow{
+    padding: 0;
+  }
+  .THIS ul.slds-tabs_default__nav{
+    display: block;
+  }
+  .THIS .dal-dataBlock-comp .slds-tabs_default ul li{
+    max-width: 100%;
+    min-width: 80px;
+    margin: 0 .15rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(221, 221, 221, 0.29);
+  }
+  .THIS .dal-dataBlock-comp .slds-tabs_default ul li a{
+    font-size: .725rem !important;
+    display: block;
+  }
+  .THIS .slds-tab__scroll-controls{
+    display: none;
+  }
+  .THIS .dal-dataBlock-comp .slds-tabs_default ul li:not(:first-child){
+    margin-left: 0;
+  }
+}

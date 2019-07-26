@@ -1,0 +1,48 @@
+/**
+ * Created by ranja on 26-11-2018.
+ */
+.THIS {
+} 
+
+.THIS .slds-card{
+     height: 20rem;
+}
+
+.THIS .slds-card__body p{
+     text-align: -webkit-center;
+     font-size: -webkit-xxx-large;
+     color: #CF0A2C;
+     margin-top: 3rem;
+}
+
+.THIS canvas{
+
+    padding-top : 5 rem;
+
+}
+
+.THIS .slds-select_container{
+    width : fit-content;
+    padding-left: 1rem;
+}
+
+.THIS .dal-lead-dashboard-openLeads {
+   margin-top: 2.2rem;
+}
+
+.THIS .dal-lead-dashboard-piecharts {
+
+}
+.THIS .piechart {
+    margin-top: 1rem;
+    height: 10.5rem!important;
+}
+
+.THIS .dal-lead-dashboard-lead-Count {
+   font-size: 6rem !important;
+   margin-top: 0px !important;
+}
+
+.THIS .lead-report-fixed {
+    position : static;
+}

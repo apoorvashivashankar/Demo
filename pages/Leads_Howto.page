@@ -1,0 +1,19 @@
+<apex:page standardStylesheets="false"
+    sidebar="TRUE"
+    showHeader="TRUE"
+    contentType="text/html" cache="true"><apex:outputText escape="false" value="{!"<!DOCTYPE html>"}"/>
+    <html>
+        <body>
+            <b><u><font size="5">How to Update Leads</font></u></b>
+            <li><span style="font-size: small; "> 1) Click on the Leads Tab</span></li>
+            <br><table width="1024" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><a href="https://ns10.salesforce.com/500/o">
+            <img src="/servlet/servlet.ImageServer?id=015F0000001dkGh&amp;oid=00DA0000000IxJY"></img></a></td></tr></tbody></table></br>
+            <br><li><span style="font-size: small; "> 2) From the View dropdown list, select the Leads you want to see (All Leads, Unread Leads...) and click the Go! button.</span></li></br>
+            <br><table width="1024" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><a href="https://ns10.salesforce.com/500/o"><img src="/servlet/servlet.ImageServer?id=015F0000001dkGm&amp;oid=00DA0000000IxJY"></img></a></td></tr></tbody></table></br>
+            <br><li><span style="font-size: small; "> 3) Find the Lead you want to update, click the Edit link to the left of the lead.</span></li></br>
+            <br><table width="1024" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><a href="https://ns10.salesforce.com/500/o"><img src="/servlet/servlet.ImageServer?id=015F0000001dkGr&amp;oid=00DA0000000IxJY"></img></a></td></tr></tbody></table></br>
+            <br><li><font size="2"> 4) Update the Lead by clicking on the Lead Status dropdown and select apporpriate status, then click the Save button.</font></li></br>
+            <br><table width="1024" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><a href="https://ns10.salesforce.com/500/o"><img src="/servlet/servlet.ImageServer?id=015F0000001dkGw&amp;oid=00DA0000000IxJY"></img></a></td></tr></tbody></table></br>
+        </body>
+    </html>
+</apex:page>

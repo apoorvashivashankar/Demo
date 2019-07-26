@@ -1,0 +1,31 @@
+<!--
+ - Created by brianpoulsen on 3/20/17.
+ -->
+
+<aura:component description="Peak_HTML_Blockquote" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="blockquoteText" type="string"/>
+    <aura:attribute name="blockquoteAuthor" type="string"/>
+    <aura:attribute name="blockquoteAttribution" type="string"/>
+    <aura:attribute name="blockquote" type="string"/>
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <aura:unescapedHtml value="{!v.blockquote}" />
+        <figure>
+            <blockquote>
+                <c:Peak_Base labelText="{!v.blockquoteText}"/>
+            </blockquote>
+            <figcaption>
+                <span>
+                    <c:Peak_Base labelText="{!v.blockquoteAuthor}"/>
+                </span>
+                <cite>
+                    <c:Peak_Base labelText="{!v.blockquoteAttribution}"/>
+                </cite>
+            </figcaption>
+        </figure>
+    </section>
+</aura:component>

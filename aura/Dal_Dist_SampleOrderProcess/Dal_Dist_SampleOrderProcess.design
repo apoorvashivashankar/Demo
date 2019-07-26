@@ -1,0 +1,12 @@
+<!--
+ - Created by ranja on 24-08-2018.
+ -->
+
+<design:component label="Dal Dist Sample Order Process Details">
+
+    <design:attribute name="sampleOrderHeaderInstructionalTextPageOne" label="Sample Order Header Instructional Text Page 1"/>
+
+    <design:attribute name="sampleOrderHeaderTextPageTwo" label="Sample Order Header Page 2"  />
+    <design:attribute name="sampleOrderHeaderInstructionalTextPageTwo" label="Sample Order Header Page 2 Instructional Text"/>
+
+</design:component>

@@ -1,0 +1,16 @@
+<design:component label="Peak Image Gallery">
+    <design:attribute name="GalleryID" label="Image Gallery ID" />
+
+    <design:attribute name="optionAutoplay" label="Enable Autoplay" />
+    <design:attribute name="optionShowArrows" label="Show Arrows" />
+    <design:attribute name="optionShowDots" label="Show Dots" />
+    <design:attribute name="optionShowDescription" label="Show Image Descriptions" />
+    <design:attribute name="optionInvertArrowColor" label="Invert Arrow Color" description="Toggle between white and brand color" />
+    <design:attribute name="optionInvertDotColor" label="Invert Dot Color" description="Toggle between brand color and white" />
+    <design:attribute name="optionInvertDescription" label="Invert Image Description Color" description="Toggle between white and black description background" />
+    <design:attribute name="optionAutoplaySpeed" label="Autoplay Speed" description="Speed in milliseconds (ex. 4000)" />
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+
+</design:component>

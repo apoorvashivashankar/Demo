@@ -1,0 +1,11 @@
+<!--
+ - Created by ranja on 26-12-2018.
+ -->
+
+<aura:documentation>
+    <aura:description>Documentation for Dal_SSC_CreateOrderProductSearchFilter</aura:description>
+    <aura:example name="Dal_SSC_CreateOrderProductSearchFilter" ref="Dal_SSC_CreateOrderProductSearchFilter"
+                  label="Dal_SSC_CreateOrderProductSearchFilter">
+        Example for Dal_SSC_CreateOrderProductSearchFilter
+    </aura:example>
+</aura:documentation>

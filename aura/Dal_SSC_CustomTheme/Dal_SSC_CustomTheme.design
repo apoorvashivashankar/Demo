@@ -1,0 +1,13 @@
+<!--
+ - Created by 7Summits on 2/14/18.
+ -->
+
+<design:component label="DalTile SSC Theme">
+    <design:attribute name="communityName" label="Community Name" description="Community Name displayed next to Logo" />
+    <design:attribute name="decorLogoLink" label="Decor Logo Link" />
+    <design:attribute name="liveChatIcon" label="Live Agent icon" description="Slds Icon" />
+    <design:attribute name="trainingText" label="Training Button Label" description="Text" />
+    <design:attribute name="trainingIcon" label="Training icon" description="Slds Icon" />
+    <design:attribute name="trainingLink" label="Training Page Link" description="url" />
+    <design:attribute name="showCopyright" label="Show Copyright" description="Show / Hide Copyright area" />
+</design:component>

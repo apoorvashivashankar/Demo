@@ -1,0 +1,25 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component description="SVNSUMMITS_News_DisplayMode"
+                access="global">
+
+	<aura:handler event="c:SVNSUMMITS_News_DisplayMode_Event" action="{!c.setDisplayMode}"/>
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+	<aura:attribute name="listViewMode" type="String" default="Tile" access="global"/>
+
+	<lightning:layout multipleRows="false"
+	                  horizontalAlign="end"
+	                  verticalAlign="center">
+		<lightning:layoutItem size="12">
+			<lightning:buttonGroup >
+				<lightning:button iconName="utility:list"
+				                  onclick="{!c.setListView}"
+				                  variant="neutral"/>
+				<lightning:button iconName="utility:apps"
+				                  onclick="{!c.setTileView}"
+				                  variant="neutral"/>
+			</lightning:buttonGroup>
+		</lightning:layoutItem>
+	</lightning:layout>
+
+</aura:component>

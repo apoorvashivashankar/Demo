@@ -1,0 +1,7 @@
+<!--
+ - Created by 7Summits on 5/14/18.
+ -->
+
+<aura:component description="Dal_Dist_ShipmentDetail" extends="c:Dal_Base" controller="Dal_ShipmentManager" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <c:Dal_ShipmentDetail />
+</aura:component>

@@ -1,0 +1,42 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS a:hover {
+  text-decoration: none;
+  color: token(colorTextDefault);
+}
+.THIS .slds-card {
+  border: none;
+  border-radius: 0;
+  box-shadow: 1px 2px 2px 1px #ccc;
+}
+.THIS .slds-card svg {
+  fill: white !important;
+}
+.THIS .slds-card h2,
+.THIS .slds-card p {
+  padding: 0 token(spacingSmall);
+  text-align: left;
+  color: token(colorTextDefault);
+}
+.THIS .small {
+  max-width: 220px;
+}
+.THIS .small h2 {
+  font-size: 1rem;
+}
+.THIS .small .slds-icon_container {
+  padding: .25rem;
+}
+.THIS .big {
+  width: 100%;
+  min-width: 310px;
+  max-width: 360px;
+}
+.THIS .big .slds-icon_container {
+  padding: 1rem;
+}

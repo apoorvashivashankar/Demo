@@ -1,0 +1,22 @@
+<aura:component description="Peak_FormLoadingAndMessages">
+    <aura:attribute name="peakResponse" type="Peak_Response" default="" access="global"/>
+    <aura:attribute name="isLoading" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="hasErrors" type="Boolean" default="false" access="global"/>
+
+    <aura:if isTrue="{!v.isLoading}">
+        <c:Peak_LoadingGif />
+    </aura:if>
+    <!-- Error message -->
+    <aura:if isTrue="{!v.hasErrors}">
+        <div class="slds-notify_container">
+            <div class="slds-notify slds-p-around_medium slds-theme_error" role="alert">
+                <div class="slds-container_cen  ter slds-container_small">
+                    <aura:iteration items="{!v.peakResponse.messages}" var="message">
+                        &bull; {!message} <br />
+                    </aura:iteration>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+
+</aura:component>

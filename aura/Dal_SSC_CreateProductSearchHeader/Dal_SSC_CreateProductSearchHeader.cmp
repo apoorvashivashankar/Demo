@@ -1,0 +1,37 @@
+<!--
+ - Created by ranja on 26-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateProductSearchHeader"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" extends="c:Dal_SSC_CreateOrderBase">
+
+    <aura:attribute name="labelProductSearch" type="String" default="Products"/>
+    <aura:attribute name="isLabelChange" type="Boolean" default="false"/>
+    <aura:attribute name="labelProductList" type="String" default="My Product List"/>
+    <aura:attribute name="isCreateOrderHeader" type="Boolean" default="false" />
+    <aura:attribute name="productSkuName" type="String" />
+
+    <!--EVENT-->
+    <aura:handler event="c:Dal_SSC_CreateOrderProductPageChange" action="{!c.handleCreateOrderMyProductList}"/>
+    <aura:handler event="c:Dal_SSC_CreateOrderMyCartEvent" action="{!c.handleMyCart}"/>
+
+
+    <!--Header-->
+    <lightning:layout verticalAlign="center">
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="10" largeDeviceSize="10">
+            <c:Peak_HTML_Headings headingTag="H2 - Section Heading"
+                                  CustomClassName = "{! or (v.labelProductSearch == 'Products' , v.labelProductSearch == 'My Product List') ? '' : 'ssc_Heading_Black'}"
+                                  headingText="{!v.labelProductSearch}"/>
+            <aura:if isTrue="{!and(not(v.labelProductSearch == 'My Product List'),v.isCreateOrderHeader)}">
+                <div class="create-order-header-sku-name">
+                    SKU : {!v.productSkuName}
+                </div>
+            </aura:if>
+
+        </lightning:layoutItem>
+    </lightning:layout>
+
+
+
+</aura:component>

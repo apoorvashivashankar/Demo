@@ -1,0 +1,80 @@
+<!--
+ - Created by ranja on 25-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_ConvertLeadCustomLookup" controller="Dal_LeadManager" extends="c:Dal_SSC_LeadManagementBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+    <aura:attribute name="objectType" type="String"/>
+    <aura:attribute name="listOfSearchRecords" type="Object" />
+    <aura:attribute name="searchKeyWord" type="String" default="" />
+    <aura:attribute name="selectedRecord" type="String" />
+    <aura:attribute name="showDropdown" type="Boolean" default="false" />
+    <aura:attribute name="selectedAccount" type="String" />
+    <aura:attribute name="selectedOwner" type="String" />
+    <aura:attribute name="selectedContact" type="String" />
+    <aura:attribute name="isAccountNew" type="boolean" default="false" />
+    <aura:attribute name="isContactNew" type="boolean" default="false" />
+    <aura:attribute name="selectedAccountName" type="String" />
+    <aura:attribute name="selectedOwnerName" type="String" />
+    <aura:attribute name="selectedContactName" type="String" />
+
+    <!-- Declare events hendlers -->
+    <aura:handler name="oSelectedRecordEvent" event="c:Dal_SSC_LM_SelectedValue" action="{!c.handleComponentEvent}"/>
+
+    <!-- Init handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+
+
+    <!-- Custom lookup Field -->
+    <div onmouseleave="{!c.onblur}" aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close"
+         data-select="single">
+
+        <!-- This part is for display search bar for lookup -->
+        <div class="slds-form-element__control">
+
+            <div class="slds-input-has-icon slds-input-has-icon--right">
+                <lightning:icon class="slds-input__icon slds-show" iconName="utility:search" size="xx-small"
+                                alternativeText="search"/>
+
+                <!-- This markup is for when an record is selected -->
+
+                <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                    <aura:if isTrue="{!v.objectType == 'User'}" >
+                        <lightning:pill class="pillSize" label="{!v.selectedOwnerName}" name="{!v.selectedOwnerName}"
+                                        onremove="{!c.clear}" />
+                    </aura:if>
+
+                    <aura:if isTrue="{!v.objectType == 'Account'}" >
+                        <lightning:pill class="pillSize" label="{!v.selectedAccountName}" name="{!v.selectedAccountName}"
+                                        onremove="{!c.clear}" />
+                    </aura:if>
+
+                    <aura:if isTrue="{!v.objectType == 'Contact'}" >
+                        <lightning:pill class="pillSize" label="{!v.selectedContactName}" name="{!v.selectedContactName}"
+                                        onremove="{!c.clear}" />
+                    </aura:if>
+                </div>
+                <div aura:id="lookupField" class="slds-show">
+                    <ui:inputText click="{!c.onfocus}" updateOn="keyup" keyup="{!c.onfocus}"
+                                  class="slds-input leftPaddingClass"
+                                  value="{!v.searchKeyWord}" placeholder="Search.."/>
+                </div>
+            </div>
+        </div>
+
+        <!--This part is for Display typehead lookup result List-->
+        <ul style="min-height:40px;margin-top:0px !important" class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid
+                      slds-lookup__menu slds" role="listbox">
+            <lightning:spinner class="slds-hide" variant="brand" size="small" aura:id="mySpinner"/>
+            <!--<aura:if isTrue="{!v.showDropdown}">
+                <div class="dropdown-overlay" onclick="{!c.doDropdownClose}"/>
+            </aura:if>-->
+            <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
+                <c:Dal_SSC_ConvertLeadDrowdownList oRecord="{!singleRec}" objectType="{!v.objectType}" />
+            </aura:iteration>
+        </ul>
+    </div>
+
+</aura:component>

@@ -1,0 +1,31 @@
+<!--
+ - Created by 7Summits on 3/6/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderHeader" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <!-- internal attribute -->
+    <aura:attribute name="currentPos" type="Integer" default="1"/>
+    <aura:attribute name="quickOrder" type="String" default="Create a Quick Order" />
+    <aura:attribute name="sampleOrder" type="String" default="Create a Sample Order" />
+    <aura:attribute name="selectOrderType" type="String"  description="Tells which order type tab is selected"/>
+
+    <!-- events -->
+    <aura:handler event="c:Dal_Dist_OrderProcessStepEvt" action="{!c.handleChangeStepEvent}"/>
+
+    <lightning:layout verticalAlign="center">
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+            <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.selectOrderType}" />
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+
+            <div class="slds-grid slds-grid_align-end orderProgress">
+                <div class="{!'orderProgress_item slds-p-horizontal_small' + ((v.currentPos == 1) ? ' active' : '') + ((or(v.currentPos == 2, v.currentPos == 3)) ? ' complete' : '')}"><span class="circle slds-m-right_xx-small">1</span>SKUs</div>
+                <div class="{!'orderProgress_item slds-p-horizontal_small' + ((v.currentPos == 2) ? ' active' : '') + ((v.currentPos == 3) ? ' complete' : '')}"><span class="line"></span><span class="circle slds-m-right_xx-small">2</span>Details</div>
+                <div class="{!'orderProgress_item slds-p-horizontal_small' + ((v.currentPos == 3) ? ' active' : '')}"><span class="line"></span><span class="circle slds-m-right_xx-small">3</span>Confirm</div>
+            </div>
+
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

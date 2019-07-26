@@ -1,0 +1,7 @@
+<!--
+ - Created by ranja on 04-01-2019.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_CreateOrderMyCartEvent">
+    <aura:attribute name="headerText" type="String" default="My Cart" />
+</aura:event>

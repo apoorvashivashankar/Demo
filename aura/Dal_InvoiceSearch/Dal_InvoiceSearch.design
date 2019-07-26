@@ -1,0 +1,10 @@
+<!--
+ - Created by 7Summits on 5/17/18.
+ -->
+<design:component label="Dal Invoice Search">
+    <design:attribute name="listType" label="List Type" datasource="Search Invoices,All Invoices"/>
+    <design:attribute name="communityType" label="Community Type" datasource="Distributor, SSC"/>
+    <design:attribute name="hasPagination" label="Enable Pagination" />
+    <design:attribute name="paginationItemsPerPage" label="Number of Items Per Page" />
+    <design:attribute name="listMaximum" label="Maximum number of records retrieved" />
+</design:component>

@@ -1,0 +1,37 @@
+<!--Copyright © 2016-2018 7Summits, Inc. All rights reserved.-->
+
+<aura:component controller="Peak_WelcomeMessageController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="currentAccount" type="User"/>
+    <aura:attribute name="currentUser" type="User"/>
+    <aura:attribute name="accountAge" type="Integer" required="true" default="0"/>
+    <aura:attribute name="welcomeText" type="String" default="Welcome message here."/>
+    <aura:attribute name="greeting" type="String" default="Hi"/>
+    <aura:attribute name="punctuation" type="String" default="!"/>
+    <aura:attribute name="showAccount" type="Boolean" default="false"/>
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <h1 class="slds-text-heading_medium">{!v.greeting}&nbsp;{!v.currentUser.FirstName}{!v.punctuation}
+
+            <aura:if isTrue="{!v.showAccount}">
+                <aura:if isTrue="{!v.currentAccount.account.Name eq null}">
+                        {!v.currentUser.CompanyName}
+                    <aura:set attribute="else">
+                            {!v.currentAccount.account.Name}
+                    </aura:set>
+                </aura:if>
+            </aura:if>
+        </h1>
+
+            <p>{!v.welcomeText}</p>
+
+
+
+    </section>
+</aura:component>

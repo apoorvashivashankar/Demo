@@ -1,0 +1,7 @@
+<!--
+ - Created by abdoundure on 3/19/18.
+ -->
+
+<design:component label="Dal RequestUser">
+    <design:attribute name="formHeading" label="Form Header" />
+</design:component>

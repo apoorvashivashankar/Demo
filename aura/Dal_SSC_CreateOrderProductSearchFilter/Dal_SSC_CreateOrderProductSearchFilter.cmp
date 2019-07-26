@@ -1,0 +1,141 @@
+<!--
+ - Created by ranja on 26-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderProductSearchFilter" extends="c:Dal_SSC_CreateOrderBase">
+
+    <!--Selected Attributes-->
+    <aura:attribute name="selectedCategory" type="String"/>
+    <aura:attribute name="selectedBrand" type="String"/>
+    <aura:attribute name="selectedProductType" type="String"/>
+    <aura:attribute name="selectedSeries" type="String"/>
+    <aura:attribute name="selectedProductColor" type="String"/>
+    <aura:attribute name="selectedFinish" type="String"/>
+    <aura:attribute name="selectedSize" type="String"/>
+
+    <!-- List Attributes -->
+    <aura:attribute name="productList" type="List"/>
+    <aura:attribute name="listOfSeries" type="Object" description="List of series for products"/>
+    <aura:attribute name="listOfColors" type="Object" description="List of Color for selected series."/>
+    <aura:attribute name="count" type="Integer" default="0"/>
+
+    <!-- Label Attributes -->
+    <aura:attribute name="title" type="String" default="Keyboard (SKU, Collection, Product Name)"/>
+    <aura:attribute name="labelBrand" type="String" default="Brand"/>
+    <aura:attribute name="labelCollection" type="String" default="Series"/>
+    <aura:attribute name="labelProduct_Color" type="String" default="Product / Color"/>
+    <aura:attribute name="labelSize" type="String" default="Size"/>
+    <aura:attribute name="labelVendor" type="String" default="Vendor"/>
+
+
+    <!--Body-->
+    <div class="slds-size_10-of-12 dal-filters">
+
+        <!--Filters Start-->
+        <div>
+
+            <!--Category-->
+            <div class="dal-filters-filter">
+                <lightning:select class="" name="Category" required="false" onchange="{!c.handleCategoryChange}"
+                                  value="{!v.createOrderWrapper.selectedCategory}" label="Category" >
+                    <option value="Branded Product">Branded Product</option>
+                    <option value="Installation Product">Installation Product</option>
+                </lightning:select>
+            </div>
+
+
+            <aura:if isTrue="{!v.createOrderWrapper.selectedCategory == 'Branded Product'}">
+
+                <!--Brand-->
+                <div class="dal-filters-filter">
+                    <lightning:select class="" name="Brand" required="false" label="Brand"
+                                      value="{!v.createOrderWrapper.selectedBrand}" onchange="{!c.handleBrandChange}">
+                        <aura:if isTrue="{!v.divisionCode == '40'}">
+                            <option value="DB">Daltile</option>
+                        </aura:if>
+                        <aura:if isTrue="{!v.divisionCode == '41'}">
+                            <option value="AO">American Olean</option>
+                            <option value="MZ">Marazzi</option>
+                        </aura:if>
+                    </lightning:select>
+                </div>
+
+                <!--Series-->
+                <div class="dal-filters-filter">
+                    <lightning:select class="" name="Series" required="false"
+                                      value="{!v.createOrderWrapper.selectedSeries}" aura:id="series"
+                                      label="{!v.labelCollection}"  onchange="{!c.getColors}">
+                        <option value="select">Select Series</option>
+                        <aura:iteration items="{!v.createOrderWrapper.listOfSeries}" var="ser">
+                            <option value="{!ser.Id}">{!ser.Name}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+
+                <!--Product/Color-->
+                <div class="dal-filters-filter">
+                    <lightning:select class="" name="Product/Color" value="{!v.createOrderWrapper.selectedColor}"
+                                      onchange="{!c.handleProductSearch}" label="Color" required="false"
+                                      disabled="{!or(empty(v.createOrderWrapper.selectedSeries),(v.createOrderWrapper.selectedSeries == 'select'))}">
+                        <option value="all">ALL</option>
+                         <!-- Added "pro.colorCode" by Daltile on 04/16/2019 (Defect# : 697) -->
+                        <aura:iteration items="{!v.createOrderWrapper.listOfProducts}" var="pro">
+                            <option value="{!pro.colorCode}">{!pro.colorCode} - {!pro.colorName}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+
+                <!--Size-->
+                <div class="dal-filters-filter">
+                    <lightning:select class="size-box-custom" name="Size" value="{!v.createOrderWrapper.selectedSize}" aura:id="size"
+                                      label="{!v.labelSize}" required="false" onchange="{!c.getResultBySizeFilter}"
+                                      disabled="{!or(empty(v.createOrderWrapper.selectedSeries),(v.createOrderWrapper.selectedSeries == 'select'))}">
+                        <option value="all">ALL</option>
+                        <aura:iteration items="{!v.createOrderWrapper.listOfSizes}" var="sz">
+                            <option value="{!sz}">{!sz}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+
+                <!--Vendor-->
+                <aura:set attribute="else">
+                    <div class="dal-filters-filter">
+                        <div class="dal-box slds-m-bottom_medium">
+                            <lightning:select class="" name="Vendor" required="false" label="{!v.labelVendor}"
+                                              value="{!v.createOrderWrapper.selectedVendor}" aura:id="vendor"
+                                              onchange="{!c.getVendorsResult}">
+                                <option value="all">ALL</option>
+                                <aura:iteration items="{!v.createOrderWrapper.listOfVendors}" var="ven">
+                                    <option value="{!ven}">{!ven}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+
+                        <!-- Clear all Fields-->
+                        <div class="button-box slds-size_12-of-12 slds-m-bottom_medium ">
+                            <a href="" onclick="{!c.clearAllFields}">
+                                <lightning:icon iconName="utility:close" size="xx-small" alternativeText="Clear" class="dal-clear" />
+                                <strong><u>Clear all</u></strong>
+                            </a>
+                        </div>
+
+                    </div>
+                </aura:set>
+
+                <!-- Clear all Fields-->
+                <div class="button-box slds-size_12-of-12 slds-m-bottom_medium ">
+                    <a href="" onclick="{!c.clearAllFields}">
+                        <lightning:icon iconName="utility:close" size="xx-small" alternativeText="Clear" class="dal-clear" />
+                        <strong><u>Clear all</u></strong>
+                    </a>
+                </div>
+
+            </aura:if>
+
+        </div>
+
+    </div>
+    <!--Filter stop-->
+
+
+</aura:component>

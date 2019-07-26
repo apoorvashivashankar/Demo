@@ -1,0 +1,46 @@
+<apex:page standardcontroller="Account" extensions="LatestInvoicesAndOrdersController" action="{!getInvoicesAndOrders}"> 
+	<apex:form > 
+		<apex:sectionHeader title="{!Account.Name}" subtitle="Invoices and Orders"/> 
+		<apex:pagemessages />
+		<apex:pageBlock >    
+			 <apex:pageBlockButtons location="top">                
+                <apex:commandButton value="Return to Account" action="{!cancel}"/>                  
+             </apex:pageBlockButtons>
+             <apex:pageBlockSection id="pagesectionInvoices" title="Last 5 Invoices" columns="1" collapsible="false">  
+			    <apex:pageBlockTable value="{!invoices}" var="invoice" id="invoiceTable" align="right">		       
+				     <apex:column headerValue="Invoice Date">&nbsp;{!invoice.invoiceDate}</apex:column>  
+				     <apex:column headerValue="Invoice Number">&nbsp;{!invoice.invoiceNumber}</apex:column> 
+				     <apex:column headerValue="Sales Slip Number">&nbsp;{!invoice.salesSlipNumber}</apex:column> 
+				     <apex:column headerValue="Job Name">&nbsp;{!invoice.jobName}</apex:column> 
+				     <apex:column headerValue="Total Amount">&nbsp;
+					     <apex:outputText value="(" rendered="{!invoice.IsNegative}"/>
+					     $				     
+					     <apex:outputText value="{0, number, ###,##0.00}">
+	       				 	<apex:param value="{!invoice.FormattedTotal}"/>
+	 					 </apex:outputText>	
+	 					 <apex:outputText value=")" rendered="{!invoice.IsNegative}"/> 					  			     
+				     </apex:column>		
+				          			                                 
+			    </apex:pageBlockTable> 
+			    <apex:outputtext value="No Invoices available" rendered="{!NOT(HasInvoices)}"/> 
+		     </apex:pageBlockSection>   
+             <apex:pageBlockSection id="pagesectionOrders" title="Last 5 Orders" columns="1" collapsible="false">                  
+			     <apex:pageBlockTable value="{!orders}" var="order" id="orderTable">		       
+				     <apex:column headerValue="Order Date">&nbsp;{!order.orderDate}</apex:column>                
+				     <apex:column headerValue="Order Number">&nbsp;{!order.orderNumber}</apex:column>  
+				     <apex:column headerValue="Location Name">&nbsp;{!order.locationName}</apex:column>              
+				     <apex:column headerValue="Job Name">&nbsp;{!order.jobName}</apex:column> 
+				     <apex:column headerValue="Total Amount">&nbsp;
+				     	<apex:outputText value="(" rendered="{!order.IsNegative}"/>
+					     $	
+					     <apex:outputText value="{0, number, ###,##0.00}">
+	       				 	<apex:param value="{!order.FormattedTotal}"/>
+	 					 </apex:outputText>				     	
+				     	<apex:outputText value=")" rendered="{!order.IsNegative}"/> 
+				     </apex:column> 			                                 
+			    </apex:pageBlockTable> 
+			    <apex:outputtext value="No Orders available" rendered="{!NOT(HasOrders)}"/>
+		    </apex:pageBlockSection>		          
+	    </apex:pageBlock>	    	    
+	</apex:form>
+</apex:page>

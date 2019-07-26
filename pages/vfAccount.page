@@ -1,0 +1,16 @@
+<apex:page standardcontroller="Account" tabstyle="Account">
+
+    <apex:form >
+                
+                <apex:commandButton action="{!URLFOR($Action.Account.New_Customer_Request, Id)}" id="NewCustomerRequest" value="New Customer Request"/>      
+                &nbsp;&nbsp;&nbsp;&nbsp;       
+                <apex:commandButton action="{!URLFOR($Action.Account.New)}" id="NewPersonAccount" value="New Person Account"/>
+    </apex:form>
+    <br></br>
+            <apex:pageMessage summary="If you need information on a Customer Request, contact Lansdale Data Management.  For SPN isues, email SPN Help" 
+            severity="INFO" strength="3" />
+        <apex:pageMessages />
+    <br></br>
+    <apex:enhancedList type="Account" height="500" customizable="true"/> 
+
+</apex:page>

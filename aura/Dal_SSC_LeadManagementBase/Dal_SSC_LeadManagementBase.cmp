@@ -1,0 +1,10 @@
+<!--
+ - Created by ranja on 26-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_LeadManagementBase" extensible="true" extends="c:Dal_Base" controller="Dal_LeadManager">
+
+
+
+    {!v.body}
+</aura:component>

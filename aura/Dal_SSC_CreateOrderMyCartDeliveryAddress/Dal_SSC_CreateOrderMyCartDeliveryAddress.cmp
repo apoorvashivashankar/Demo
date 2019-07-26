@@ -1,0 +1,89 @@
+<aura:component description="Dal_SSC_CreateOrderMyCartDeliveryAddress" extends="c:Dal_ModalBase" controller="Dal_InventorySearchController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global">
+
+
+    <!-- Opening and Closing modal -->
+    <aura:attribute name="isOpen" type="boolean" default="true"/>
+
+    <!-- Spinner attributes -->
+    <aura:attribute name="isInventoryBaseLoading" type="Boolean" description="Inventory Loading Spinner"
+                    default="false"/>
+    <aura:attribute name="isPageLoading" type="boolean" default="false"/>
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <aura:attribute name="deliveryAddress" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!-- events -->
+    <aura:registerEvent name="chooseShippingAddressEvt" type="c:Dal_ChooseShippingAddressEvt"/>
+
+    <!-- Labels -->
+    <aura:attribute name="searchProductModalTitle" type="String" default="Delivery Address"
+                    description="Delivery Address"/>
+
+
+    <!-- Body starts here -->
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium delivery-modal-header">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.searchProductModalTitle}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+
+
+    <aura:if isTrue="{!not(v.showSpinner)}">
+        <lightning:layout class="dal-form dal-form-order slds-p-around_small slds-m-bottom_large" multipleRows="true">
+            <div class="slds-grid slds-size_12-of-12 ">
+                <div class="dal-delivery-modal slds-size_8-of-12">
+                    <div class="dal-delivery-address">
+
+                        <lightning:input aura:id ="companyName" class="slds-m-bottom_large" name="companyName" label="Company Name (Optional)" value=""/>
+                        <lightning:input aura:id ="street" class="slds-m-bottom_large" name ="streetAddress" label="Street Address" value=""/>
+                        <lightning:input aura:id ="city" class="slds-m-bottom_large" name="city" label="City" value=""/>
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_5-of-12">
+                                    <span>
+                                        <lightning:select aura:id ="state" name="state" label="State" value="{!v.selectedUOM}" class="">
+                                            <option value="NY">NY</option>
+                                            <aura:iteration items="{!v.listOfUOM}" var="uom">
+                                                <option value="{!uom}">{!uom}</option>
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </span>
+                            </div>
+                            <div class="slds-col slds-size_2-of-12">
+                            </div>
+                            <div class="slds-col slds-size_5-of-12">
+                                    <span>
+                                        <lightning:input aura:id ="zipCode" class="" name="zipCode" label="Zip Code" value=""/>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dal-delivery-address-footer">
+                        <lightning:button label="CHANGE ADDRESS" class="dal-delivery-address-button-change"
+                                          title="CHANGE ADDRESS" variant="destructive"
+                                          onclick="{!c.handleChangeAddress}" />
+                        <br/>
+                        <lightning:button class="dal-delivery-address-button-cancel" variant="base" label="Cancel"
+                                          title="Cancel" onclick="{! c.handleCancel }"/>
+                    </div>
+
+                </div>
+            </div>
+        </lightning:layout>
+    </aura:if>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:layoutItem size="12" class="slds-is-relative slds-p-around_xx-large">
+            <lightning:spinner class="bkg-transparent" variant="brand"/>
+        </lightning:layoutItem>
+    </aura:if>
+
+
+</aura:component>

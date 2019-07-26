@@ -1,0 +1,188 @@
+<apex:page standardController="Account" extensions="DistributorSnapshotCtl" standardStylesheets="true" lightningStylesheets="true" id="thePage" showHeader="False" sidebar="False">
+
+    <head>
+        <!-- sidebar="false" header="false" -->
+        <script type='text/javascript' src='https://www.google.com/jsapi' />
+        <script src="/soap/ajax/45.0/connection.js" type="text/javascript" />
+        <script type='text/javascript' src='/canvas/sdk/js/42.0/publisher.js'></script>
+        <script> 
+            // enable the publisher window save and cancel buttons
+            Sfdc.canvas.publisher.subscribe({name: "publisher.showPanel",
+                                             onData:function(e) {
+                                                 console.log('enable the publisher window save and cancel buttons')
+                                                 Sfdc.canvas.publisher.publish({name:"publisher.setValidForSubmit", payload:"true"});
+                                             }});
+            
+            // close the window
+            Sfdc.canvas.publisher.subscribe({ name: "publisher.post",
+                                             onData: function(e) {               
+                                                 printAndClose();                    
+                                             }});          
+                                     
+            function printAndClose() {
+                window.print();
+                window.close();
+            }
+            
+
+        </script>
+
+
+    </head>
+
+    <style>
+        html{
+            line-height: 1;
+            }
+            
+        .logo{
+            width: 10rem;
+            text-align: right;
+        }            
+        
+        .centerChart {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 40%;
+        }       
+        .bPageBlock .pbBody {
+            max-width: 1000px;
+            display: block;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+
+        .bg-image {
+            margin : 0px;
+            background-image: url(https://i.imgur.com/40jNzOy.png);
+            background-position : center 0;
+            width:1024px;
+            height:875px;
+            background-size : auto auto;
+            background-attachment : scroll;
+            background-repeat : no-repeat;
+            overflow :hidden; 
+        }        
+
+        .errorMessage {
+            position: relative;
+            display: -ms-inline-flexbox;
+            display: inline-flex;
+            -ms-flex-align: center;
+            align-items: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            border: 0 !important;
+            width: relative;
+            font-size: .9rem !important;
+            font-weight: 500;
+            text-align: center;
+            background-color: #c23934 !important;       
+            border-radius: 10px;
+            color: white;
+            box-sizing: border-box;
+            padding: 10px;
+            /*margin-left: 5%;*/
+            /*margin-right: 5%;        */
+        }
+        
+        .errorMessage:empty {
+            padding:0;
+        }            
+        
+    </style>
+
+    <apex:pageBlock id="theBlockHeader" >
+        <apex:form >
+        <apex:pageBlockSection >
+            <apex:commandButton value="Print" style="width: 50%;" styleClass="slds-button slds-button_brand" onclick="window.print()" rendered="{! $User.UIThemeDisplayed == 'Theme3' }"/>     
+            <apex:pageBlockSectionItem rendered="{!If(thisAccount.Division__c ='42', true, false)}" >
+                <apex:image styleClass="logo" value="{!$Resource.logoAO}" style="text-align: right;"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem rendered="{!If(thisAccount.Division__c ='43', true, false)}" >
+                <apex:image styleClass="logo" value="{!$Resource.logoMZ}" style="text-align: right;"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem rendered="{!If(thisAccount.Division__c ='44', true, false)}" >
+                <apex:image styleClass="logo" value="{!$Resource.logoRG}" style="text-align: right;"/>
+            </apex:pageBlockSectionItem>          
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection columns="2" id="accountHeaderSection" title="Snapshot: {!Account.Name}">
+            <!--<apex:outputField id="accountName" value="{!Account.Name}" />-->
+            <apex:pageBlockSectionitem >
+                <apex:outputLabel value="Group Key" for="GroupKey" />
+                <apex:outputField id="GroupKey" value="{!Account.GroupKey__c}" />
+            </apex:pageBlockSectionitem>        
+            <apex:pageBlockSectionitem id="accounOwnertNameItem">
+                <apex:outputLabel value="Rep Name" for="accounOwnertName" />
+                <apex:outputField id="accounOwnertName" value="{!Account.Owner.Name}" />
+            </apex:pageBlockSectionitem>
+            <apex:pageBlockSectionitem >
+                <apex:outputLabel value="Division" for="Division" />
+                <apex:outputField id="Division" value="{!Account.Division__c}" />
+            </apex:pageBlockSectionitem> 
+            <apex:pageBlockSectionitem >
+                <apex:outputLabel value="Sales Dates" for="selectDateList" />
+                <apex:selectList id="selectDateList" value="{!selectedDateVal}" size="1" > 
+                    <apex:actionSupport event="onchange" rerender="thePanelReport" action="{!updateSales}" status="status" />
+                    <apex:selectOptions id="selectDateValue" value="{!dateOptions}" /> 
+                </apex:selectList>        
+            </apex:pageBlockSectionitem>      
+        </apex:pageBlockSection>
+        
+        <hr/>
+        </apex:form>
+    </apex:pageBlock>
+    
+    <apex:outputPanel layout="none" id="thePanelReport">
+        <apex:actionStatus id="status">
+            <apex:facet name="start">
+            <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 1000; background-color: black;">
+                &nbsp;
+            </div>
+            <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+                <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+                    <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+                    <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                </div>
+            </div>
+            </apex:facet>
+        </apex:actionStatus>          
+        <apex:pageBlock id="theBlockReport" >
+            <apex:outputPanel style="font-weight:bold;width: 100%;" id="panelWarning" rendered="{!flagPreviousYears}" layout="block">   
+                <apex:outputText id="Warning" styleClass="errorMessage" style="font-weight:bold;width: 100%;" value="Warning: All sales reflected on the report are from the years {!searchPreviousYear} and {!searchYear}. Toggle to the current pay period using the Sales Date drop down." />
+            </apex:outputPanel>       
+            <apex:form >        
+            <apex:pageBlockSection columns="2" Id="salesByProduct">
+                <apex:outputText escape="false" value="{!YtdSalesGrid}" />
+                <apex:pageBlockSectionItem >
+                    <!--<div id="chart_div" style="centerChart"/>--> 
+                    <!--<table border="0" cellspacing="3" width="400" ><tr><td colspan="4" style="font-weight:bold; color:white; background-color:#8a9ebe; !important;-webkit-print-color-adjust: exact;font-size: .875rem; ">Percent of Product Team Purchases</td></tr></table>-->
+                    <apex:chart height="200" width="100%" data="{!salesByProductPie}" resizable="true" name="YTD Sales Product Mix" >
+                        <apex:pieSeries dataField="data" labelField="name" donut="25">
+                            <apex:chartLabel display="none"/>
+                            <apex:chartTips height="40" width="120" valueField="percent"/>
+                        </apex:pieSeries>
+                        <apex:legend position="left"/>
+                    </apex:chart>                    
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="2" Id="SalesByProduct2">          
+                <apex:outputText escape="false" value="{!TopFiveGlazeFloor}"/>
+                <apex:outputText escape="false" value="{!TopFivePorcelainTile}"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection >
+                <apex:outputText escape="false" value="{!CumulativeSales}"/>
+                <apex:outputText escape="false" value="{!NewProductPurchases}"/>
+            </apex:pageBlockSection>
+    
+            <apex:pageMessages />
+            </apex:form>
+        </apex:pageBlock>
+    </apex:outputPanel>
+
+</apex:page>

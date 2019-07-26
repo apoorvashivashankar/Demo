@@ -1,0 +1,62 @@
+<!--
+ - Created by 7Summits on 3/30/18.
+ -->
+
+<aura:component description="Dal_AccountOpenItemsDetail" extends="c:Dal_ModalBase">
+    <aura:attribute name="data" type="Map" default="{}"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="emptyValue" type="String" default="--" access="private" />
+
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="Open Item Detail" />
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+
+    <lightning:layout class="dal-form-order slds-p-around_small" multipleRows="true" pullToBoundary="small">
+        <aura:iteration items="{!v.data.columns}" var="column" indexVar="index">
+
+            <lightning:layoutItem class="slds-p-vertical_small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                <aura:if isTrue="{!column.type != 'modal'}" >
+                    <div class="{!'orderOutputData orderOutputData-stacked' + ((index > 1) ? ' slds-p-top_small' : '')}">
+                        <label>{!column.label}</label>
+                        <span>
+
+                            <!-- value output -->
+                            <aura:if isTrue="{!column.value != ''}">
+                                <!-- date column -->
+                                <aura:if isTrue="{!column.type == 'date'}">
+                                    <lightning:formattedDateTime value="{!column.value}" month="2-digit" day="2-digit" year="numeric" timeZone="UTC" />
+                                </aura:if>
+
+                                <!-- text column -->
+                                 <aura:if isTrue="{!column.type == 'text'}">
+                                     {!column.value}
+                                 </aura:if>
+
+                                <!-- currency column -->
+                                <aura:if isTrue="{!column.type == 'currency'}">
+                                    <lightning:formattedNumber value="{!column.value}" style="currency" currencyCode="USD" />
+                                </aura:if>
+
+                                <!-- empty value column -->
+                                <aura:set attribute="else">
+                                    {!v.emptyValue}
+                                </aura:set>
+                                <!-- end empty value column -->
+                            </aura:if>
+                            <!-- end value output -->
+
+                        </span>
+                    </div>
+                </aura:if>
+            </lightning:layoutItem>
+
+        </aura:iteration>
+
+    </lightning:layout>
+
+</aura:component>

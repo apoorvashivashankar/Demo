@@ -1,0 +1,52 @@
+<!--
+ - Created by emaleesoddy on 8/8/17.
+ -->
+
+<aura:component controller="Peak_AnnouncementsController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global">
+
+    <!-- TODO: In Winter '18, update ui:message to lightning:notifications -->
+    <!-- TODO: In Future, update slickCarousel to lightning:carousel -->
+    <ltng:require styles="{!join(',', $Resource.slickCarousel + '/slickCarousel/slick.css', $Resource.slickCarousel + '/slickCarousel/slick-theme.css')}"
+                  scripts="{!join(',', $Resource.jquery224 + '/jquery.2.2.4.min.js', $Resource.slickCarousel + '/slickCarousel/slick.min.js')}"
+                  afterScriptsLoaded="{!c.doInit}" />
+
+    <aura:attribute name="isInit" type="Boolean" default="false" />
+    <aura:attribute name="numberOfResults" type="String" default="5" access="global" />
+    <aura:attribute name="peakResponse" type="Peak_Response" default="" />
+
+    <aura:attribute name="displayChannel" type="String" default="Default" access="global" />
+    <aura:attribute name="displayType" type="String" default="All" access="global" />
+    <aura:attribute name="showAuthor" type="Boolean" default="false" access="global" />
+    <aura:attribute name="showDate" type="Boolean" default="false" access="global" />
+
+    <aura:attribute name="hiddenAnnouncements" type="String" />
+    <aura:attribute name="networkId" type="String" default="0" />
+    <aura:attribute name="userId" type="String" default="0" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" access="global" />
+    <aura:attribute name="CustomIdName" type="String" default="" access="global" />
+
+
+    <aura:if isTrue="{!v.isInit}">
+
+        <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}" aura:id="carousel">
+
+            <aura:iteration items="{!v.peakResponse.results}" var="announcement">
+                <div id="{!announcement.Id}" onclick="{!c.handleClick}" class="peak-announcement">
+                    <ui:message title="{!announcement.Name}" severity="{!announcement.Announcement_Type__c}" closable="{!announcement.Announcement_Dismissible__c}">
+                        {!announcement.Announcement_Body__c}
+                        <aura:if isTrue="{!and(announcement.Announcement_URL__c, announcement.Announcement_Call_to_Action__c)}">&nbsp;
+                            <lightning:button variant="base" value="{!announcement.Announcement_URL__c}" label="{!announcement.Announcement_Call_to_Action__c}" onclick="{!c.navigate}" />
+                        </aura:if>
+                        
+                    </ui:message>
+                </div>
+
+            </aura:iteration>
+
+        </section>
+
+
+
+    </aura:if>
+</aura:component>

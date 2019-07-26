@@ -1,0 +1,136 @@
+<!--
+ - Created by ranja on 17-01-2019.
+ -->
+
+<aura:component description="Dal_SSC_MyCartTaxExemptModal" extends="c:Dal_ModalBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" controller="Dal_InventorySearchController">
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!--Internal Attributes-->
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="listOfTaxes" type="Map" />
+    <aura:attribute name="selectedTax" type="Object" />
+    <aura:attribute name="myCartResponsePageTwo" type="Map" />
+	<aura:attribute name="showJobNameError" type="Boolean" />
+    <aura:attribute name="isJobNameEmpty" type="Boolean" />
+    
+    <!--INIT-->
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+
+    <!--HEADER-->
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium header-margin-right">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="6">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="JOB EXEMPTIONS"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6" class="slds-float_right">
+                <a onclick="{!c.handleCloseModal}">
+                    <lightning:icon class="slds-float_right" iconName="utility:close" alternativeText="Close"/>
+                </a>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+
+
+    <aura:if isTrue="{!not(v.showSpinner)}">
+        <lightning:layout class="dal-form dal-form-order slds-p-around_large slds-m-bottom_large" multipleRows="true">
+            <div class="slds-grid slds-size_12-of-12">
+
+                <center>
+
+                    <!--DATA-->
+                    <div class="slds-size_12-of-12">
+                        <table class="slds-table slds-table_cell-buffer">
+                            <thead>
+                            <tr class="slds-line-height_reset dal-cart-header">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate slds-text-title_bold slds-text-title_caps dal-table-name" title="Name">Name</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate slds-text-title_bold slds-text-title_caps dal-table-name" title="State">
+                                        STATE
+                                    </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate slds-text-title_bold slds-text-title_caps dal-table-fields" title="State">
+                                        CERTIFICATE ID
+                                    </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate slds-text-title_bold slds-text-title_caps dal-table-fields" title="Effective Date">
+                                        Effective Date
+                                    </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate slds-text-title_bold slds-text-title_caps dal-table-fields" title="EXPIRATION DATE">
+                                        EXPIRATION DATE
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <aura:if isTrue="{!v.listOfTaxes.length > 0}"> 
+                                <aura:iteration items="{!v.listOfTaxes}" var="tax" indexVar="index">
+                                    <tr class="slds-hint-parent dal-tax-select" id="{!index}" onclick="{!c.chooseSelectedTax}">
+                                        <td data-label="Name" value="{!v.myCartResponsePageTwo.taxExempt}" class="slds-col">
+                                            <div class="slds-truncate dal-table-name" title="Name">{!tax.taxExemptionDesc}</div>
+                                        </td>
+                                        <td data-label="State" value="{!v.myCartResponsePageTwo.taxExemptionState}" class="slds-col">
+                                            <div class="slds-truncate dal-table-name" title="Name">{!tax.taxExemptionState}</div>
+                                        </td>
+                                        <td data-label="Certificate" value="{!v.myCartResponsePageTwo.taxExempt}" class="slds-col">
+                                            <div class="slds-truncate dal-table-name" title="Name">{!tax.taxExemption}</div>
+                                        </td>
+                                        <td data-label="Effective Date" class="slds-col">
+                                            <div class="slds-truncate dal-table-fields" title="Effective Date">{!tax.effectiveDate}</div>
+                                        </td>
+                                        <td data-label="Expiry Date" class="slds-col">
+                                            <div class="slds-truncate dal-table-fields" title="Expiry Date">{!tax.expDate}</div>
+                                        </td>
+                                    </tr>
+                                </aura:iteration>
+                            </aura:if>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </center>
+            </div>
+        </lightning:layout>
+    </aura:if>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:layoutItem size="12" class="slds-is-relative slds-p-around_xx-large">
+            <lightning:spinner class="bkg-transparent" variant="brand"/>
+        </lightning:layoutItem>
+    </aura:if>
+
+
+    <!--FOOTER-->
+    <lightning:layout class="footer-action-bar slds-m-top_small slds-border_top slds-p-top_small" multipleRows="true">
+
+        <lightning:layoutItem class="button-bold slds-p-around_small"
+                              size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="4">
+        </lightning:layoutItem>
+
+        <lightning:layoutItem class="button-bold dal-small-inputFull slds-p-around_small" size="12"
+                              smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="8">
+            <lightning:layout horizontalAlign="end">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="3">
+                    <lightning:button variant="neutral" class="modal-footer-close" label="CLOSE"
+                                      onclick="{!c.handleCloseModal}"/>
+                    
+                    
+                               </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+</aura:component>

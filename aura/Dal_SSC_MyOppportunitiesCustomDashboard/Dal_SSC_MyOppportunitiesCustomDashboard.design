@@ -1,0 +1,10 @@
+<!--
+ - Created by presh on 03-12-2018.
+ -->
+
+<design:component>
+    <design:attribute name="openId" label="Open Opportunity Id" />
+    <design:attribute name="conversionId" label="Conversion Report Id" />
+    <design:attribute name="statusId" label="Status Report Id" />
+
+</design:component>

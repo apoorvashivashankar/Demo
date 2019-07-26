@@ -1,0 +1,5 @@
+<aura:component description="Peak_Spacer" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" >
+
+    <aura:attribute name="size" type="String" default="medium" />
+    <div class="{!'slds-m-around--'+v.size}">&nbsp;</div>
+</aura:component>

@@ -1,0 +1,66 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS .orderDate > div {
+  display: flex;
+}
+.THIS .dateSeparator {
+  margin-top: 10px;
+  padding: 0 5px;
+}
+.THIS .uiLabel,
+.THIS .slds-form-element__label {
+  line-height: 1.5;
+  display: block;
+  margin-bottom: .25rem;
+}
+.THIS .uiLabel span,
+.THIS .slds-form-element__label span {
+  font-size: .8125rem;
+}
+.THIS .orderStatus .slds-select_container {
+  line-height: 2.5rem;
+}
+.THIS .orderStatus .slds-select_container .slds-select {
+  height: 36px;
+}
+.THIS .orderStatus .slds-select_container:before {
+  display: none;
+}
+.THIS .orderStatus .slds-select_container:after {
+  bottom: 1.2rem;
+  border-top: 8px solid #545b64;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+}
+.THIS .slds-button--neutral {
+  width: 240px;
+  margin-top: 1rem;
+  padding: .25rem 2.25rem;
+}
+.THIS .uiInputSelect .select {
+  padding: 17px 14px;
+}
+@media (min-width: 64.0625em) {
+  .THIS .slds-large-size--2-of-12 {
+    width: 15%;
+  }
+  .THIS .slds-large-size--2-of-12.orderDate {
+    width: 25%;
+  }
+  .THIS .searchButton .slds-button {
+    line-height: 1.75rem;
+    width: 100%;
+    margin-top: 1rem;
+    padding: .25rem 2.25rem;
+  }
+}
+@media (max-width: 64.0625em) {
+  .THIS {
+    padding: 0 token(spacingLarge);
+  }
+}

@@ -1,0 +1,91 @@
+<!--
+ - Created by ranja on 23-01-2019.
+ -->
+
+<aura:component description="Dal_SSC_MyCartPlaceOrderConfirmModal" extends="c:Dal_ModalBase">
+    
+    <aura:attribute name="isSuccess" type="Boolean" default="true" />
+    <aura:attribute name="modalHeading" type="String" default="Placing Order"/>
+    <aura:attribute name="successMessage" type="String" default="Your order has been successfully placed." />
+    <aura:attribute name="failureMessage" type="String" default="There was an error placing your order. Please try again later." />
+    <aura:attribute name="orderNumber" type="String" default="" />
+    <aura:attribute name="redirectMessage" type="String" default="To schedule an appointment click on the order number below."/>
+    <aura:attribute name="listOfOrders" type="List" />
+    
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    
+    
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.modalHeading}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </header>
+    
+    
+    <lightning:layout class="dal-form dal-form-order slds-p-vertical_large" multipleRows="true">
+        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12">
+            
+            <aura:if isTrue="{!v.isSuccess}">
+                <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="confirm"
+                            closable="false">
+                    {!v.successMessage}
+                </ui:message>
+                
+                
+                <div class="dal-order-number slds-m-top_large">
+                    {!v.redirectMessage}
+                </div>
+                
+                <aura:if isTrue="{!v.listOfOrders.length > 0}">
+                    <aura:iteration items="{!v.listOfOrders}" var="order" >
+                        <div class="dal-order-number-order slds-grid slds-wrap">
+                            <p class="order-number-text"> ORDER NUMBER: &nbsp;</p>
+                            <p class="order-number-number">
+                                <aura:if isTrue="{!order.isSuccess}">    
+                                    <a name="{!order.messg}" onclick="{!c.navigateToOrderDetailPage}">
+                                        {!order.messg}
+                                    </a>
+                                    <aura:set attribute="else">
+                                        {!order.messg}
+                                    </aura:set>
+                                </aura:if>
+                            </p>
+                        </div>
+                    </aura:iteration>
+                </aura:if>
+                
+                <aura:set attribute="else" >
+                    <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="error"
+                                closable="false">
+                        {!v.failureMessage}
+                    </ui:message>
+                </aura:set>
+            </aura:if>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+    
+    <lightning:layout class="footer-action-bar slds-m-top_small slds-border_top slds-p-top_small" multipleRows="true">
+        
+        <lightning:layoutItem class="button-bold slds-p-around_small"
+                              size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="4">
+        </lightning:layoutItem>
+        
+        <lightning:layoutItem class="button-bold dal-small-inputFull slds-p-around_small" size="12"
+                              smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="8">
+            <lightning:layout horizontalAlign="end">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="3">
+                    <lightning:button variant="neutral" class="modal-footer-close" label="CLOSE" onclick="{!c.handleCloseModal}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+        
+    </lightning:layout>
+    
+    
+</aura:component>

@@ -1,0 +1,13 @@
+<aura:component description="Dal_Feedback_Button" controller="ProExchangeUtility" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:attribute name="userInfo" type="user"/>  
+    <aura:attribute name="theContactId" access="global" type="String" default="{!v.userInfo.ContactId}" />
+    
+    <lightning:button class="slds-button slds-button_destructive feedbackButton" name="modal" label="Feedback" onclick="{!c.handleShowSurvey}" />
+    <ui_modal:modal aura:id="modelFeedback" title="ProExchange by Dal-Tile ~ We appreciate your feedback!" isDirectional="true" isLarge="true" hasCloseIcon="true" >
+
+        <iframe src="{!'https://daltile.co1.qualtrics.com/jfe/form/SV_djmsRSzIedMosCh?ContactID='+ v.userInfo.ContactId}" style="height: 100%;width: 100%;" frameborder="0" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen"></iframe>
+        
+    </ui_modal:modal>   
+    
+</aura:component>

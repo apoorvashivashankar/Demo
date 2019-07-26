@@ -1,0 +1,87 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  background: token(colorBorder);
+}
+.THIS .facepile {
+  position: relative;
+}
+.THIS .facepile .face {
+  position: absolute !important;
+  z-index: 1;
+  position: relative;
+  width: 100%;
+}
+.THIS .facepile .face:after {
+  display: block;
+  padding-bottom: 100%;
+  content: '';
+}
+.THIS .facepile .face .inner {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.THIS .facepile .face .inner.flex {
+  display: flex;
+}
+.THIS .facepile .face .inner {
+  border-radius: 50%;
+  background-color: #fff;
+  background-size: cover;
+}
+.THIS .facepile .face:nth-child(even) {
+  z-index: 2;
+}
+.THIS .facepile .face:nth-child(even) .inner {
+  background-color: #eee;
+}
+.THIS .facepile .face .inner h1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -1rem;
+  margin-left: -0.5rem;
+}
+.THIS .facepile .face:nth-child(1) {
+  top: 3rem;
+  left: 0;
+  width: 8%;
+}
+.THIS .facepile .face:nth-child(2) {
+  top: 3.5rem;
+  left: 6%;
+  width: 13%;
+}
+.THIS .facepile .face:nth-child(3) {
+  position: relative !important;
+  width: 20%;
+  margin: token(spacingSmall) 0;
+  margin-left: 18%;
+}
+.THIS .facepile .face:nth-child(4) {
+  top: 3rem;
+  left: 37%;
+  width: 18%;
+}
+.THIS .facepile .face:nth-child(5) {
+  top: 0rem;
+  left: 54%;
+  width: 24%;
+}
+.THIS .facepile .face:nth-child(6) {
+  top: 3.5rem;
+  left: 77%;
+  width: 15%;
+}
+.THIS .facepile .face:nth-child(7) {
+  top: 3rem;
+  left: 90%;
+  width: 10%;
+}

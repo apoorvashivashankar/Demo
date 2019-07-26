@@ -1,0 +1,134 @@
+<aura:component description="Dal_Dist_CustomTheme" implements="forceCommunity:themeLayout" access="global" extends="c:Dal_Base">
+    <!-- custom styles for elements outside the theme ie. Modals -->
+    <ltng:require styles="{!$Resource.dalTileLightning + '/styles/overridesStatic.css'}" />
+
+    <!-- Including Font Awesome -->
+    <ltng:require styles="{!$Resource.fontawesome4 + '/font-awesome-4.7.0/css/font-awesome.css'}" />
+
+    <!-- Theme Regions -->
+    <aura:attribute name="templateHeaderTop" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="templateHeaderBottom" type="Aura.Component[]" required="false"/>
+
+    <aura:attribute name="templateFooterLeft" type="Aura.Component[]" required="false" />
+    <aura:attribute name="templateFooterMid" type="Aura.Component[]" required="false" />
+    <aura:attribute name="templateFooterRight" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="templateFooterBottom" type="Aura.Component[]" required="false"/>
+
+    <!-- components -->
+    <aura:attribute name="navBar" type="Aura.Component[]" />
+    <aura:attribute name="search" type="Aura.Component[]" />
+    <aura:attribute name="profileMenu" type="Aura.Component[]" />
+    <aura:attribute name="liveChat" type="Aura.Component[]" />
+
+    <!-- Theme Attributes -->
+    <aura:attribute name="showCopyright" type="Boolean" default="false" />
+    <aura:attribute name="communityName" type="String" default="Distributor Portal" />
+    <aura:attribute name="decorLogoLink" type="String" default="/" />
+    <aura:attribute name="trainingIcon" type="String" default="fa fa-graduation-cap" />
+    <aura:attribute name="trainingText" type="String" default="  Training" />
+    <aura:attribute name="trainingLink" type="String" default="/" />
+    <aura:attribute name="liveChatIcon" type="String" default="utility:questions_and_answers" />
+
+    <div id="dal_theme" class="dal_theme">
+        <div class="siteforceServiceBody">
+            <header id="header" class="dal_theme_header cHeaderPanel">
+            {!v.templateHeaderTop}
+                <!-- Top Header Area -->
+                <div id="header-overlay" class="cHeaderLine">
+                    <div class="dal_theme_headerTop">
+
+                        <div class="headerTop_wrapper slds-container_x-large slds-container_center">
+                            <div class="headerTop_wrapperCol left">
+                                <c:Dal_LocationSwitcher communityType="Distributor" />
+                            </div>
+                            <div class="headerTop_wrapperCol right">
+                                <aura:if isTrue="{!v.trainingText != ''}">
+                                    <div class="dalTraining">
+                                        <a href="javascript:void(0)" data-url="{!v.trainingLink}" onclick="{!c.gotoURL}">
+                                            <span class="icon"> <i class="{!v.trainingIcon}"></i></span>
+                                            <span class="text slds-p-left_x-small">&nbsp;{!v.trainingText}</span>
+                                        </a>
+                                    </div>
+                                </aura:if>
+                                <div class="dalProfileMenu">{!v.profileMenu}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Header -->
+                    <div class="dal_theme_header headerBottom_wrapper">
+                        <div class="dal_theme_header_content slds-container_x-large slds-container_center slds-grid">
+                            <div class="slds-size_10-of-12 slds-medium-size_5-of-12">
+                                <div class="cBrandingProfile">
+                                    <a class="cBrandingLogo" href="javascript:void(0)" title="DalTile Distributor Portal" data-url="/" onclick="{!c.gotoURL}">
+                                        <span class="assistiveText">DalTile Distributor Portal</span>
+                                    </a>
+                                    <span class="separator"> | </span>
+                                    <!-- <a class="decorLogo" href="{!v.decorLogoLink}">-->
+                                    <a class="decorLogo" href="javascript:void(0)">  
+                                        <img src="{!$Resource.proexchangeLogo}" alt="ProExchange" />
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="slds-size_2-of-12 slds-medium-size_7-of-12 search">
+                                {!v.search}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Header Nav-->
+                <div class="dal_theme_headerNav">
+                    <div class="slds-container_x-large slds-container_center slds-grid">
+                        <lightning:layout pullToBoundary="medium" class="slds-col">
+                            <lightning:layoutItem class="slds-grid_pull-padded-xx-small" size="12">
+                                <c:Dal_NavigationMenu />
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body -->
+            <section>
+                    {!v.body}
+            </section>
+
+            <!-- Footer -->
+            <footer>
+                <div class="footerWrapper">
+                    <div class="slds-container_x-large slds-grid--pull-padded">
+                        <lightning:layout class="slds-grid_vertical-stretch slds-p-vertical_xx-large" verticalAlign="center" horizontalAlign="center" multipleRows="true">
+                            <lightning:layoutItem class="footerLogo slds-p-vertical_large slds-text-align_left" size="12"  mediumDeviceSize="3" >
+                                <img src="{!$Resource.proexchangeLogo}" alt="ProExchange" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem class="slds-p-vertical_large slds-text-align_center slds-p-horizontal_xx-large" size="12"  mediumDeviceSize="3">
+                                    {!v.templateFooterLeft}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem class="slds-p-vertical_large slds-text-align_center slds-p-horizontal--x-small" size="12"  mediumDeviceSize="3">
+                                    {!v.templateFooterMid}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem class="slds-p-vertical_large slds-text-align_center slds-p-horizontal--x-small" size="12"  mediumDeviceSize="3">
+                                    {!v.templateFooterRight}
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </div>
+
+                <aura:if isTrue="{!v.showCopyright}">
+                    <div class="footerBottom">
+                        <div class="slds-container_x-large">
+                            <lightning:layout class="slds-p-horizontal_small slds-grid--pull-padded" verticalAlign="center" horizontalAlign="center">
+                                <lightning:layoutItem size="12">
+                                        {!v.templateFooterBottom}
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+                    </div>
+                </aura:if>
+            </footer>
+        </div>
+
+    </div>
+
+</aura:component>

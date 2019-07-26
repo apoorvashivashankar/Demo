@@ -1,0 +1,6 @@
+<!--
+ - Created by francoiskorb on 10/9/17.
+ -->
+
+<aura:event type="APPLICATION" description="SVNSUMMITS_Groups_Load_Event">
+</aura:event>

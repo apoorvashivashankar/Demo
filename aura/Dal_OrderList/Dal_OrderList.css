@@ -1,0 +1,48 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS .orderDate > div {
+  display: flex;
+}
+.THIS .dateSeparator {
+  margin-top: 10px;
+  padding: 0 5px;
+}
+@media (min-width: 64.0625em) {
+  .THIS .slds-large-size--2-of-12 {
+    width: 15%;
+  }
+  .THIS .slds-large-size--2-of-12.orderDate {
+    width: 25%;
+  }
+  .THIS .searchButton .slds-button {
+    margin-top: 1rem;
+    padding: .25rem 2.25rem;
+  }
+}
+.THIS .scheduleButton {
+   color: rgb(207, 10, 44)!important;
+   font-weight: bold;
+}
+
+.THIS .dal-relate-to-order {
+    margin-bottom : 1rem;
+}
+
+.THIS .dal-relate-to-order-button {
+    color: rgb(207, 10, 44)!important;
+    font-weight: bold;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.THIS .dal-multiple-button {
+    padding-left : 22px;
+    padding-right : 22px;
+}

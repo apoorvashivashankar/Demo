@@ -1,0 +1,532 @@
+<!--
+ - Created by ranja on 28-12-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateOrderMyCartDetailPage" controller="Dal_InventorySearchController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" extends="c:Dal_SSC_CreateOrderBase">
+
+    <!--Internal Attributes-->
+    <aura:attribute name="toggleCheck" type="Boolean" default="true"/>
+    <aura:attribute name="myCartPageNumber" type="Integer" default="1"/>
+    <aura:attribute name="selectedDeliveryAddress" type="String"/>
+    <aura:attribute name="orderNumber" type="String" default="order1" />
+    <aura:attribute name="changeDeliveryAddressLocation" type="String" default="Change Delivery Address" />
+    <aura:attribute name="isPageLoad" type="boolean" default="true"/>
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!--INIT-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!--EVENT-->
+    <aura:registerevent name="mycartProductTotal" type="c:Dal_SSC_MyCartQuantityUpdateEvent"/>
+    <aura:handler event="c:Dal_SSC_CreateOrderSaveShippingAddress" action="{!c.handleDeliveryAddressChangeEvent}"/>
+
+    <!--BODY-->
+    <!-- Order 1 -->
+    <aura:if isTrue="{!or(v.myCartOrderOne.length > 0, v.myCartOrderTwo.length > 0)}">
+        <lightning:layout
+                class="slds-m-bottom_large slds-border_bottom slds-border_top slds-border_left slds-border_right body-font-size"
+                multipleRows="true">
+
+
+            <div class="order-option slds-p-horizontal_x-large slds-size_1-of-1">
+                <div class="slds-border_bottom slds-m-top_large">
+                    <div class="slds-grid dal-header-order-prod slds-p-bottom_x-small">
+                        <div class="slds-col_bump-right create-order-order-number">
+                            <span>Order 1</span>
+                        </div>
+                        <div>
+                            <span><b>{!v.myCartOrderOne.length}</b> Products</span>
+                        </div>
+                    </div>
+                </div>
+
+                <aura:iteration var="cartOne" items="{!v.myCartOrderOne}" indexVar="index">
+                    <div class="{!index == 0 ? '' : 'slds-hide'}">
+                        <div class="slds-grid slds-wrap slds-m-bottom_small slds-p-around_small ">
+                            <div class="slds-col slds-p-around_small slds-large-size_3-of-12 slds-size_1-of-1 slds-m-top_large dal-my-cart-radio-button">
+                                <!--<lightning:input type="radio" label="Delivery" name="deliveryOption" value="delivery" checked="true"-->
+                                <!--class="dal-radio-button"/>-->
+                                <div class="slds-grid slds-m-bottom_x-small">
+                                    <aura:if isTrue="{!cartOne.isDelivery}" >
+                                        <ui:inputRadio text="Delivery" label="" name="" value="true"
+                                                       change="{!c.changeModeOrderOne}" class="dal-radio-button"/> &nbsp;
+
+                                        <aura:set attribute="else">
+                                            <ui:inputRadio text="Delivery" label="" name="" value="false"
+                                                           change="{!c.changeModeOrderOne}" class="dal-radio-button"/> &nbsp;
+                                        </aura:set>
+                                    </aura:if>
+
+                                    <p class="create-order-mode-name">Delivery</p>
+                                </div>
+                                <!--<lightning:input type="radio" label="Pick Up" name="deliveryOption" value="pickup" checked="false"-->
+                                <!--class="dal-radio-button" onchange="{!c.handleModeChange}"/>-->
+                                <div class="slds-grid">
+                                    <aura:if isTrue="{!cartOne.isPickUp}" >
+                                        <ui:inputRadio text="Pick Up" label="" name="" value="true"
+                                                       change="{!c.changeModeOrderOne}" class="dal-radio-button"/> &nbsp;
+
+                                        <aura:set attribute="else">
+                                            <ui:inputRadio text="Pick Up" label="" name="" value="false"
+                                                           change="{!c.changeModeOrderOne}" class="dal-radio-button"/> &nbsp;
+                                        </aura:set>
+                                    </aura:if>
+                                    <p class="create-order-mode-name">Pick Up</p>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-large-size_5-of-12 slds-size_1-of-1 slds-p-horizontal_large slds-p-vertical_small">
+                                <div class="slds-large-size_12-of-12">
+                                    <aura:if isTrue="{!cartOne.fulfillmentType == 'Delivery'}">
+                                        <span class="create-order-titles">Delivery Location:</span><br/>
+                                        <div class="create-order-address">
+                                            <aura:if isTrue="{!not(empty(cartOne.shippingName))}" >
+                                                {!cartOne.shippingName} <br/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.shippingStreet))}" >
+                                                {!cartOne.shippingStreet} <br/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.shippingCity))}">
+                                                {!cartOne.shippingCity},
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.shippingState))}">
+                                                {!cartOne.shippingState}&nbsp;
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.shippingZIPCode))}">
+                                                {!cartOne.shippingZIPCode}
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.shippingCountry))}">
+                                                &nbsp;{!cartOne.shippingCountry}<br/>
+                                            </aura:if>
+
+
+                                        </div>
+                                    </aura:if>
+
+                                    <aura:if isTrue="{!cartOne.fulfillmentType == 'PickUp'}">
+                                        <span class="create-order-titles">PickUp Location:</span><br/>
+                                        <div class="create-order-address">
+                                            <aura:if isTrue="{!not(empty(cartOne.supplyPlantName))}">
+                                                {!cartOne.supplyPlantName} <br/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.supplyPlantStreet_Address))}">
+                                                {!cartOne.supplyPlantStreet_Address}<br/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.supplyPlantCity))}">
+                                                {!cartOne.supplyPlantCity},
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.supplyPlantState))}">
+                                                &nbsp;{!cartOne.supplyPlantState}
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.supplyPlantZip_Code))}">
+                                                &nbsp; {!cartOne.supplyPlantZip_Code}
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.supplyPlantCountry))}">
+                                                &nbsp;{!cartOne.supplyPlantCountry} <br/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(cartOne.supplyPlantPhone))}">
+                                                {!cartOne.supplyPlantPhone}
+                                            </aura:if>
+
+                                        </div>
+                                    </aura:if>
+
+                                </div>
+                                <div class="slds-large-size_1-of-1">
+                                    <aura:if isTrue="{!cartOne.fulfillmentType == 'Delivery'}">
+                                        <lightning:button class="dal-my-cart-change-button" label="{!v.changeDeliveryAddressLocation}"
+                                                          title="{!v.changeDeliveryAddressLocation}" name="order1"
+                                                          onclick="{!c.handleDeliveryAddressChange}"/>
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-large-size_4-of-12 slds-size_1-of-1 slds-p-horizontal_x-large slds-p-vertical_small">
+                                <!--<span>Delivery Options:</span><br/>
+                                <div class="slds-checkbox">
+                                    <input type="checkbox" name="Lift Gate" id="liftGate" value="order1"
+                                           checked="{!cartOne.liftGate}" onchange="{!c.handleLiftGateChange}" />
+                                    <label class="slds-checkbox__label" for="liftGate">
+                                        <span class="slds-checkbox_faux slds-m-right_small"></span>
+                                        <span class="create-order-address">Lift-gate Required?</span>
+                                    </label>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </aura:iteration>
+            </div>
+
+
+            <aura:iteration items="{!v.myCartOrderOne}" var="resp" indexVar="index">
+                <lightning:layoutItem flexibility="auto"
+                                      class="dal-sku-detail slds-p-horizontal_medium slds-p-vertical_small slds-col"
+                                      size="12">
+                    <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_1-of-1 slds-m-vertical_medium dal-sku-border">
+                        <div class="slds-text-body_regular ">{!resp.productSKU}</div>
+                        <div class="slds-text-heading_medium heading slds-m-vertical_small slds-grid">
+                            <div class="slds-col slds-size_9-of-12 slds-wrap">
+                            {!resp.productName}
+                        </div>
+                            <div class="slds-col slds-align_absolute-center create-order-format-number slds-size_3-of-12 slds-wrap">
+                                <lightning:formattedNumber value="{!resp.totalSingleLineQuantity}" style="currency"
+                                                           maximumFractionDigits="2" minimumFractionDigits="2" currencyCode="USD"/>
+                            </div>
+                        </div>
+                        <div class="slds-text-body_regular unit-label slds-m-vertical_small">
+                            <b><lightning:formattedNumber value="{!resp.unit}" style="currency"
+                                                          maximumFractionDigits="2" minimumFractionDigits="2" currencyCode="USD"/></b> / {!resp.baseUOM}
+                        </div>
+
+                        <div class="slds-grid slds-size_12-of-12 slds-m-bottom_small slds-m-top_large">
+                            <label class="slds-form-element__label slds-m-right_small font-label">Qty:</label>
+
+                            <lightning:input aura:id ="quantity" type="number" class="input-qty slds-m-right_large slds-large-size_2-of-12 slds-medium-size_2-of-12
+                                         slds-small-size_1-of-1" value="{!resp.updatedQuantity}" label="" id = "order1" min="1"
+                                              variant="label-hidden" name="{!index +' order1'}" messageWhenPatternMismatch="Wrong Input"
+                                             onfocusout="{!c.handleQuantityChange}"/>
+
+                            <lightning:select name="{!index +' order1'}" label="" value="{!resp.UOM}" variant="label-hidden"
+                                              class="input-uom" onchange="{!c.handleQuantityChange}">
+                                <aura:iteration items="{!resp.listOfUOM}" var="uom">
+                                    <option value="{!uom}">{!uom}</option>
+                                </aura:iteration>
+                            </lightning:select>
+
+                            <a href="" onclick="{!c.openCalculator}" class="slds-m-left_large cal-margin" name="{!index}" id="order1">
+                                <i class="fa fa-calculator fa-2x icon-color-custom" aria-hidden="true"></i>
+                            </a>
+                        </div>
+
+
+
+                        <div class="slds-large-size_10-of-12 slds-m-vertical_small slds-medium-size_12-of-12 slds-small-size_1-of-1">
+                            <aura:if isTrue="{!resp.isChanged}">
+                                <lightning:icon iconName="utility:warning" alternativeText="Warning!" variant="warning" size="x-small"/>
+                                <span class="date-to-orange"><b>Quantity has been rounded to nearest {!resp.UOM} for ordering.</b></span>
+                            </aura:if>
+                        </div>
+
+
+
+                        <div class="slds-grid slds-size_3-of-12  slds-grid_align-center">
+                            <div><u><a class="a-color" name="{!index}" id="order1"
+                                       onclick="{!c.handleRemove}">Remove</a></u></div>
+                        </div>
+
+                        <div class="slds-large-size_10-of-12 slds-medium-size_12-of-12 slds-small-size_1-of-1 slds-m-vertical_large">
+
+                            <div class="slds-grid slds-gutters">
+
+                                <div class="slds-col slds-size_6-of-12 slds-m-right_large">
+                                    <div class="dal-bottom-heading slds-p-bottom_xx-small">
+                                        <b class="slds-text-body_regular">Store Inventory:</b>
+                                    </div>
+                                    <table>
+                                        <tr class="slds-border_top slds-grid slds-p-around_x-small">
+                                            <td class="slds-size_8-of-12"><b>{!resp.UOM}</b></td>
+                                            <td class="slds-size_4-of-12">
+                                                <lightning:formattedNumber value="{!resp.availableQuantity}" maximumFractionDigits="2" minimumFractionDigits="2"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="slds-border_top slds-border_bottom slds-grid slds-p-around_x-small">
+                                            <td class="slds-size_8-of-12"><b>Total # Of Cartons</b></td>
+                                            <td class="slds-size_4-of-12">
+                                                <lightning:formattedNumber value="{!resp.totalCarton}" maximumFractionDigits="2" minimumFractionDigits="2"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="slds-col slds-size_6-of-12">
+                                    <div class="dal-bottom-heading slds-p-bottom_xx-small">
+                                        <b class="slds-text-body_regular">Store Location:</b>
+                                    </div>
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-size_12-of-12">
+                                            {!resp.supplyPlantName} <br/>
+                                            <aura:if isTrue="{!not(empty(resp.supplyPlantStreet_Address))}">
+                                                {!resp.supplyPlantStreet_Address} <br/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(resp.supplyPlantCity))}">
+                                                {!resp.supplyPlantCity},
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(resp.supplyPlantState))}">
+                                                &nbsp;{!resp.supplyPlantState}
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(resp.supplyPlantZip_Code))}">
+                                                &nbsp; {!resp.supplyPlantZip_Code}
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(resp.supplyPlantCountry))}">
+                                                &nbsp;{!resp.supplyPlantCountry} <br/>
+                                            </aura:if>
+                                            <aura:if isTrue="{!not(empty(resp.supplyPlantPhone))}">
+                                                {!resp.supplyPlantPhone}
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </lightning:layoutItem>
+            </aura:iteration>
+        </lightning:layout>
+
+
+        <!-- ORDER 2-->
+        <aura:if isTrue="{!v.myCartOrderTwo.length > 0}">
+            <lightning:layout
+                    class="slds-m-bottom_large slds-border_bottom slds-border_top slds-border_left slds-border_right body-font-size"
+                    multipleRows="true">
+
+
+                <lightning:layoutItem class="order-option slds-p-horizontal_x-large" flexibility="auto" size="12">
+
+                    <div class="slds-border_bottom slds-m-top_large">
+                        <div class="slds-grid dal-header-order-prod slds-p-bottom_x-small">
+                            <div class="slds-col_bump-right create-order-order-number">
+                                <span>Order 2</span>
+                            </div>
+                            <div>
+                                <span><b>{!v.myCartOrderTwo.length}</b> Products</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aura:iteration var="cartTwo" items="{!v.myCartOrderTwo}" indexVar="index">
+                        <div class="{!index == 0 ? '' : 'slds-hide'}">
+                            <div class="slds-grid slds-wrap slds-m-bottom_small slds-p-around_small ">
+                                <div class="slds-col slds-p-around_small slds-large-size_3-of-12 slds-size_1-of-1 slds-m-top_large dal-my-cart-radio-button">
+
+                                    <div class="slds-grid">
+                                        <aura:if isTrue="{!cartTwo.isDelivery}" >
+                                            <ui:inputRadio text="Delivery" label="" name="" value="true"
+                                                           change="{!c.changeModeOrderTwo}" class="dal-radio-button"/> &nbsp;
+
+                                            <aura:set attribute="else">
+                                                <ui:inputRadio text="Delivery" label="" name="" value="false"
+                                                               change="{!c.changeModeOrderTwo}" class="dal-radio-button"/> &nbsp;
+                                            </aura:set>
+                                        </aura:if>
+                                        <p class="create-order-mode-name">Delivery</p>
+                                    </div>
+                                    <br/>
+
+                                    <div class="slds-grid">
+                                        <aura:if isTrue="{!cartTwo.isPickUp}" >
+                                            <ui:inputRadio text="Pick Up" label="" name="" value="true"
+                                                           change="{!c.changeModeOrderTwo}" class="dal-radio-button"/> &nbsp;
+
+                                            <aura:set attribute="else">
+                                                <ui:inputRadio text="Pick Up" label="" name="" value="false"
+                                                               change="{!c.changeModeOrderTwo}" class="dal-radio-button"/> &nbsp;
+                                            </aura:set>
+                                        </aura:if>
+                                        <p class="create-order-mode-name">Pick Up</p>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-large-size_5-of-12 slds-size_1-of-1 slds-p-horizontal_large slds-p-vertical_small">
+                                    <div class="slds-large-size_12-of-12">
+                                        <aura:if isTrue="{!cartTwo.fulfillmentType == 'Delivery'}">
+                                            <span class="create-order-titles">Delivery Location:</span><br/>
+                                            <div class="create-order-address">
+                                                <aura:if isTrue="{!not(empty(cartTwo.shippingName))}" >
+                                                    {!cartTwo.shippingName} <br/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.shippingName))}" >
+                                                    {!cartTwo.shippingStreet} <br/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.shippingCity))}">
+                                                    {!cartTwo.shippingCity},
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.shippingState))}">
+                                                    &nbsp;{!cartTwo.shippingState}
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.shippingZIPCode))}">
+                                                    &nbsp;{!cartTwo.shippingZIPCode}
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.shippingCountry))}">
+                                                    &nbsp;{!cartTwo.shippingCountry} <br/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.phone))}">
+                                                    {!cartTwo.phone}
+                                                </aura:if>
+
+                                            </div>
+                                        </aura:if>
+
+                                        <aura:if isTrue="{!cartTwo.fulfillmentType == 'PickUp'}">
+                                            <span class="create-order-titles">PickUp Location:</span><br/>
+                                            <div class="create-order-address">
+                                                <aura:if isTrue="{!not(empty(cartTwo.supplyPlantName))}">
+                                                    {!cartTwo.supplyPlantName} <br/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.supplyPlantStreet_Address))}">
+                                                    {!cartTwo.supplyPlantStreet_Address}<br/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.supplyPlantCity))}">
+                                                    {!cartTwo.supplyPlantCity},
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.supplyPlantState))}">
+                                                    &nbsp;{!cartTwo.supplyPlantState}
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.supplyPlantZip_Code))}">
+                                                    &nbsp; {!cartTwo.supplyPlantZip_Code}
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.supplyPlantCountry))}">
+                                                    &nbsp;{!cartTwo.supplyPlantCountry} <br/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(cartTwo.supplyPlantPhone))}">
+                                                    {!cartTwo.supplyPlantPhone}
+                                                </aura:if>
+
+                                            </div>
+                                        </aura:if>
+                                    </div>
+                                    <div class="slds-large-size_1-of-1">
+                                        <aura:if isTrue="{!cartTwo.fulfillmentType == 'Delivery'}">
+                                            <lightning:button class="dal-my-cart-change-button" label="{!v.changeDeliveryAddressLocation}"
+                                                              title="{!v.changeDeliveryAddressLocation}" name="order2"
+                                                              onclick="{!c.handleDeliveryAddressChange}"/>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-large-size_4-of-12 slds-size_1-of-1 slds-p-horizontal_x-large slds-p-vertical_small">
+                                    <!--<span>Delivery Options:</span><br/>
+                                    <div class="slds-checkbox">
+                                        <input type="checkbox" name="options" id="lftGate" value="order2"
+                                               checked="{!cartTwo.liftGate}" onchange="{!c.handleLiftGateChange}"/>
+                                        <label class="slds-checkbox__label" for="lftGate">
+                                            <span class="slds-checkbox_faux slds-m-right_small"></span>
+                                            <span class="create-order-address">Lift-gate Required?</span>
+                                        </label>
+                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </aura:iteration>
+                </lightning:layoutItem>
+
+
+                <aura:iteration items="{!v.myCartOrderTwo}" var="resp" indexVar="index">
+                    <lightning:layoutItem flexibility="auto"
+                                          class="dal-sku-detail slds-p-horizontal_medium slds-p-vertical_small slds-col"
+                                          size="12">
+                        <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_1-of-1 slds-m-vertical_medium dal-sku-border">
+                            <div class="slds-text-body_regular ">{!resp.productSKU}</div>
+                            <div class="slds-text-heading_medium heading slds-m-vertical_small slds-grid">
+                                <div class="slds-col slds-size_9-of-12 slds-wrap">
+                                    {!resp.productName}
+                                </div>
+                                <div class="slds-col slds-align_absolute-center create-order-format-number slds-size_3-of-12 slds-wrap">
+                                    <lightning:formattedNumber value="{!resp.totalSingleLineQuantity}" style="currency"
+                                                               maximumFractionDigits="2" minimumFractionDigits="2" currencyCode="USD"/>
+                                </div>
+                            </div>
+                            <div class="slds-text-body_regular unit-label slds-m-vertical_small">
+                                <b><lightning:formattedNumber value="{!resp.unit}" style="currency"
+                                                              maximumFractionDigits="2" minimumFractionDigits="2" currencyCode="USD"/></b> / {!resp.baseUOM}
+                            </div>
+
+                            <div class="slds-grid slds-size_12-of-12 slds-m-bottom_small slds-m-top_large">
+                                <label class="slds-form-element__label slds-m-right_small font-label">Qty:</label>
+                                <lightning:input class="input-qty slds-m-right_large slds-large-size_2-of-12 slds-medium-size_2-of-12
+                                         slds-small-size_1-of-1" value="{!resp.updatedQuantity}" label="" type="number" id = "{!index}"
+                                                 variant="label-hidden" name="{!index +' order2'}" min="0"
+                                                 onfocusout="{!c.handleQuantityChange}"/>
+
+                                <lightning:select name="{!index +' order2'}" label="" value="{!resp.UOM}" variant="label-hidden"
+                                                  class="input-uom" onchange="{!c.handleQuantityChange}">
+                                    <aura:iteration items="{!resp.listOfUOM}" var="uom">
+                                        <option value="{!uom}">{!uom}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+
+                                <a href="" onclick="{!c.openCalculator}" class="slds-m-left_large cal-margin" name="{!index}" id="order2">
+                                    <i class="fa fa-calculator fa-2x icon-color-custom" aria-hidden="true"></i>
+                                </a>
+                            </div>
+
+
+                            <div class="slds-grid slds-size_3-of-12  slds-grid_align-center">
+                                <div><u><a class="a-color" name="{!index}" id="order2"
+                                           onclick="{!c.handleRemove}">Remove</a></u></div>
+                            </div>
+
+                            <div class="slds-large-size_10-of-12 slds-medium-size_12-of-12 slds-small-size_1-of-1 slds-m-vertical_large">
+
+                                <div class="slds-grid slds-gutters">
+
+                                    <div class="slds-col slds-size_6-of-12 slds-m-right_large">
+                                        <div class="dal-bottom-heading slds-p-bottom_xx-small">
+                                            <b class="slds-text-body_regular">Store Inventory:</b>
+                                        </div>
+                                        <table>
+                                            <tr class="slds-border_top slds-grid slds-p-around_x-small">
+                                                <td class="slds-size_8-of-12"><b>{!resp.UOM}</b></td>
+                                                <td class="slds-size_4-of-12 slds-align_absolute-center">
+                                                    <lightning:formattedNumber value="{!resp.availableQuantity}" maximumFractionDigits="2" minimumFractionDigits="2"/>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-border_top slds-border_bottom slds-grid slds-p-around_x-small">
+                                                <td class="slds-size_8-of-12"><b>Total # Of Cartons</b></td>
+                                                <td class="slds-size_4-of-12 slds-align_absolute-center">
+                                                    <lightning:formattedNumber value="{!resp.totalCarton}" maximumFractionDigits="2" minimumFractionDigits="2"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <div class="slds-col slds-size_6-of-12">
+                                        <div class="dal-bottom-heading slds-p-bottom_xx-small">
+                                            <b class="slds-text-body_regular">Store Location:</b>
+                                        </div>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-size_12-of-12">
+                                                {!resp.supplyPlantName}<br/>
+                                                <aura:if isTrue="{!not(empty(resp.supplyPlantStreet_Address))}">
+                                                    {!resp.supplyPlantStreet_Address}<br/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(resp.supplyPlantCity))}">
+                                                    {!resp.supplyPlantCity},
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(resp.supplyPlantState))}">
+                                                    &nbsp;{!resp.supplyPlantState}
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(resp.supplyPlantZip_Code))}">
+                                                    &nbsp; {!resp.supplyPlantZip_Code}
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(resp.supplyPlantCountry))}">
+                                                    &nbsp;{!resp.supplyPlantCountry} <br/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!not(empty(resp.supplyPlantPhone))}">
+                                                    {!resp.supplyPlantPhone}
+                                                </aura:if>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </lightning:layoutItem>
+                </aura:iteration>
+            </lightning:layout>
+        </aura:if>
+
+        <aura:set attribute="else">
+            <lightning:layoutItem size="12" class="slds-p-left_xx-large slds-m-bottom_xx-large">
+                <center>
+                    <ui:message severity="info" closable="false" class="empty-cart-text slds-p-around_small"><b>CART EMPTY</b></ui:message>
+                </center>
+            </lightning:layoutItem>
+        </aura:set>
+    </aura:if>
+
+</aura:component>

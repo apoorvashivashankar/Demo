@@ -1,0 +1,23 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francoiskorb on 9/21/16.
+ -->
+
+<aura:component controller="SVNSUMMITS_IdeaFiltersController" access="global">
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+	<aura:handler name="init" value="{!this}" action="{!c.initializeFilters}"/>
+
+	<div class="ideas-views">
+		<div class="view-button">
+			<a href="" onclick="{!c.setListView}" label="List" aura:id="listBTN">
+				<lightning:icon iconName="utility:list" size="medium" alternativeText="List View"/>
+			</a>
+		</div>
+		<div class="view-button">
+			<a href="" onclick="{!c.setGridView}" label="{!$Label.c.ss_idea_label_Grid}" aura:id="gridBTN">
+				<lightning:icon iconName="utility:apps" size="medium" alternativeText="Tile View"/>
+			</a>
+		</div>
+	</div>
+</aura:component>

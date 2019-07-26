@@ -1,0 +1,5 @@
+<design:component >
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+    <design:attribute name="nubbinLocation" Label="Location of icon relative to tooltip" dataSource="bottom-left, top-left, bottom-right, top-right, left, right" />
+</design:component>

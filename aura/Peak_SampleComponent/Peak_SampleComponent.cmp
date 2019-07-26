@@ -1,0 +1,3 @@
+<aura:component >
+	Well hello there! I'm another component automatically included into the banner! I'm simple, put you could put something like a Groups list or a featured user here!
+</aura:component>

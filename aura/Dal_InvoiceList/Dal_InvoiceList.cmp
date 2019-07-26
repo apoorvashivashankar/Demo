@@ -1,0 +1,32 @@
+<!--
+ - Created by 7Summits on 5/17/18.
+ -->
+
+<aura:component description="Dal_InvoiceList" extends="c:Dal_ListBase" controller="Dal_InvoiceController" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <aura:attribute name="userType" type="String" default="Distributor"/>
+    <aura:attribute name="allDataChecked" type="Boolean"/>
+    <aura:attribute name="fullData" type="List"/>
+    <aura:attribute name="invoiceDateStarts" type="Date" />
+    <aura:attribute name="invoiceDateEnds" type="Date" />
+    <aura:attribute name="brandlist" type="List" default="[]" /> 
+    <aura:attribute name="listType" type="String" default=""/>
+    <aura:method name="searchInvoiceList" action="{!c.searchInvoiceList}" access="PUBLIC">
+        <aura:attribute name="userType" type="String" />
+        <aura:attribute name="invoiceNumber" type="String" />
+        <aura:attribute name="purchaseOrder" type="String" />
+        <aura:attribute name="divisionName" type="String" />
+        <aura:attribute name="invoiceDateStart" type="Date" />
+        <aura:attribute name="invoiceDateEnd" type="Date" />
+        <aura:attribute name="jobName" type="String" />
+    </aura:method>
+	<aura:if isTrue="{!v.fullData.length>0}">
+        <lightning:layout class="slds-p-top_small" multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem class="slds-p-horizontal_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="12">
+                <input type="checkbox" class="slds-m-vertical_x-small" name="showAll" onclick="{!c.handleSelectAllInvoices}" checked="{!v.allDataChecked}" /><span class="dal-list-showAll slds-p-horizontal_medium">Select all invoices</span>
+                <button type="button" class="slds-button slds-button_neutral slds-m-vertical_x-small" name="scheduleSelectedOrders" onclick="{!c.handleSelectedInvoices}">Print Selected Invoices</button>
+                <button type="button" class="slds-button slds-button_neutral slds-m-vertical_x-small" name="downLoadExcel" onclick="{!c.handleDownloadAsExcel}">Download as Excel</button>
+            </lightning:layoutItem>
+        </lightning:layout>
+	</aura:if>
+</aura:component>

@@ -1,0 +1,4 @@
+<apex:component controller="AccountSnapshotController"  allowDML="true">
+    <b class="PrintFont">YTD Sales by Quarter</b>
+    <apex:outputText escape="false" value="{!SalesStatus}"/>
+</apex:component>

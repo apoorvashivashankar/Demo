@@ -1,0 +1,50 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .hide {
+	display:none;
+}
+
+.THIS .slds-form-element__label small {
+	text-transform:none;
+}
+.THIS .slds-input-select {
+	background:#fff;
+	min-width:300px;
+}
+.THIS .slds-truncate {
+	max-width:500px;
+	white-space: nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	display:inline-block;
+	vertical-align: bottom;
+}
+
+.THIS .the-upload {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.THIS .upload-trigger {
+	cursor:pointer;
+}
+
+.THIS.createIdeaBox {
+    box-shadow: 0 0 5px #807d7d!important;
+    border-radius: 5px!important;
+    padding-left: 3%!important;
+    padding-right: 3%!important;
+    padding-top: 5%!important;
+    padding-bottom: 5%!important;
+}
+
+/* IE10+ CSS styles go here */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    /*IE11 all fields are getting cut from right side*/
+    .THIS .createEventBox {
+        overflow-x: auto!important
+    }
+}

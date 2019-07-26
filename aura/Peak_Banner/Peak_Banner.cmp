@@ -1,0 +1,98 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <aura:attribute name="columns" type="String" default="1" />
+    <aura:attribute name="backgroundImage" type="String" default="" />
+    <aura:attribute name="backgroundColor" type="String" default="#333333" />
+    <aura:attribute name="fixed" type="boolean" default="false" />
+    <aura:attribute name="fixedProperty" type="String" default="" />
+
+    <aura:attribute name="overlayColor" type="String" default="#333333" />
+    <aura:attribute name="overlayOpacity" type="String" default=".7" />
+
+    <aura:attribute name="darkText" type="Boolean" default="false" />
+    <aura:attribute name="centered" type="Boolean" default="false" />
+    <aura:attribute name="alignItems" type="String" default="Start" />
+
+
+    <aura:attribute name="Headline" type="String" default="7Summits" />
+    <aura:attribute name="SubHeadline" type="String" default="Community Specialists" />
+    <aura:attribute name="Paragraph" type="String" default="Welcome to the Community." />
+    <aura:attribute name="ButtonText" type="String" default="Learn More" />
+    <aura:attribute name="ButtonURL" type="String" default="http://7summitsinc.com/" />
+    <aura:attribute name="Button2Text" type="String" default="Learn More" />
+    <aura:attribute name="Button2URL" type="String" default="http://7summitsinc.com/" />
+
+    <aura:attribute name="Headline2" type="String" default="7Summits" />
+    <aura:attribute name="SubHeadline2" type="String" default="Community Specialists" />
+    <aura:attribute name="Paragraph2" type="String" default="Welcome to the Community." />
+    <aura:attribute name="ButtonText2" type="String" default="Learn More" />
+    <aura:attribute name="ButtonURL2" type="String" default="http://7summitsinc.com/" />
+    <aura:attribute name="Button2Text2" type="String" default="Learn More" />
+    <aura:attribute name="Button2URL2" type="String" default="http://7summitsinc.com/" />
+
+    <aura:attribute name="Headline3" type="String" default="7Summits" />
+    <aura:attribute name="SubHeadline3" type="String" default="Community Specialists" />
+    <aura:attribute name="Paragraph3" type="String" default="Welcome to the Community." />
+    <aura:attribute name="ButtonText3" type="String" default="Learn More" />
+    <aura:attribute name="ButtonURL3" type="String" default="http://7summitsinc.com/" />
+    <aura:attribute name="Button2Text3" type="String" default="Learn More" />
+    <aura:attribute name="Button2URL3" type="String" default="http://7summitsinc.com/" />
+
+    <aura:attribute name="rightComponent" type="String" default="None" required="false" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+
+    <aura:handler name="init" action="{!c.initPeakBanner}" value="{!this}"/>
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <!-- Why so many inline styles? So that they can be set in .design when adding to page. Background size and fixed must be added here because the particular orde of these properties matter! -->
+        <div class="peak-banner  slds-p-vertical_large" style="{!'background: '+v.fixedProperty+ ';background-color:' + v.backgroundColor + ';background-image:url(' + v.backgroundImage + ');background-size: cover;'}">
+            <div class="peak-banner-overlay" style="{!'background: '+v.overlayColor+'; opacity: '+v.overlayOpacity}"></div>
+            <div class="slds-container_x-large  slds-container_center slds-grid slds-wrap slds-grid_pull-padded slds-p-vertical_large" style="{!'align-items:'+v.alignItems}">
+                <!-- 1 column -->
+                <aura:if isTrue="{!v.columns == '1'}">
+                    <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_2-of-1 slds-p-vertical_large">
+                        <c:Peak_ContentTile Headline="{!v.Headline}"  SubHeadline="{!v.SubHeadline}"  Paragraph="{!v.Paragraph}"  ButtonText="{!v.ButtonText}"  ButtonURL="{!v.ButtonURL}" Button2Text="{!v.Button2Text}"  Button2URL="{!v.Button2URL}" darkText="{!v.darkText}" centered="{!v.centered}"/>
+                    </div>
+                </aura:if>
+
+                <!-- 2 column -->
+                <aura:if isTrue="{!v.columns == '2'}">
+                    <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_2-of-3 slds-p-vertical_large">
+                        <c:Peak_ContentTile Headline="{!v.Headline}"  SubHeadline="{!v.SubHeadline}"  Paragraph="{!v.Paragraph}"  ButtonText="{!v.ButtonText}"  ButtonURL="{!v.ButtonURL}" Button2Text="{!v.Button2Text}"  Button2URL="{!v.Button2URL}" darkText="{!v.darkText}" centered="{!v.centered}"/>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-vertical_large">
+                        <aura:if isTrue="{!v.rightComponent != 'None'}">
+                            <c:Peak_BannerComponentInclude component="{!v.rightComponent}" />
+                            <aura:set attribute="else">
+                                <c:Peak_ContentTile Headline="{!v.Headline2}"  SubHeadline="{!v.SubHeadline2}"  Paragraph="{!v.Paragraph2}"  ButtonText="{!v.ButtonText2}"  ButtonURL="{!v.ButtonURL2}" Button2Text="{!v.Button2Text2}"  Button2URL="{!v.Button2URL2}" darkText="{!v.darkText}" centered="{!v.centered}"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </aura:if>
+
+                <!-- 3 column -->
+                <aura:if isTrue="{!v.columns == '3'}">
+                    <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-vertical_large">
+                        <c:Peak_ContentTile Headline="{!v.Headline}"  SubHeadline="{!v.SubHeadline}"  Paragraph="{!v.Paragraph}"  ButtonText="{!v.ButtonText}"  ButtonURL="{!v.ButtonURL}" Button2Text="{!v.Button2Text}"  Button2URL="{!v.Button2URL}" darkText="{!v.darkText}" centered="{!v.centered}"/>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-vertical_large">
+                        <c:Peak_ContentTile Headline="{!v.Headline2}"  SubHeadline="{!v.SubHeadline2}"  Paragraph="{!v.Paragraph2}"  ButtonText="{!v.ButtonText2}"  ButtonURL="{!v.ButtonURL2}" Button2Text="{!v.Button2Text2}"  Button2URL="{!v.Button2URL2}" darkText="{!v.darkText}" centered="{!v.centered}"/>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-vertical_large">
+                        <aura:if isTrue="{!v.rightComponent != 'None'}">
+                            <c:Peak_BannerComponentInclude component="{!v.rightComponent}" />
+                            <aura:set attribute="else">
+                                <c:Peak_ContentTile Headline="{!v.Headline3}"  SubHeadline="{!v.SubHeadline3}"  Paragraph="{!v.Paragraph3}"  ButtonText="{!v.ButtonText3}"  ButtonURL="{!v.ButtonURL3}" Button2Text="{!v.Button2Text3}"  Button2URL="{!v.Button2URL3}" darkText="{!v.darkText}" centered="{!v.centered}"/>
+                            </aura:set>
+                        </aura:if>
+
+                    </div>
+                </aura:if>
+
+            </div>
+        </div>
+    </section>
+</aura:component>

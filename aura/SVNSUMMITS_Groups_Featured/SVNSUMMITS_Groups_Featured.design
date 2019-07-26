@@ -1,0 +1,56 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S Groups Featured">
+	<design:attribute name="featuredTitle"
+	                  label="Featured Groups Title (confused? hover over info icon)"
+	                  description="Title of Featured Groups.  This text is set up to be translated by referencing ss_label_grp_Explore_Relevant_Groups.  If you change it to regular text it will display fine but NOT be translatable. Clearing out ANY text will restore default.  To display nothing set text to 'none'(no quotes)."/>
+	<design:attribute name="featuredDescription"
+	                  label="Featured Groups Description"
+	                  description="Description of Featured Groups."/>
+	<design:attribute name="displayPublicPrivateGrp"
+	                  label="Display Public or Private Group"
+	                  description="Enabling Display Public or Private Group will display public private Groups."/>
+	<design:attribute name="showAuthor"
+	                  label="Display Group Owner"
+	                  description="Enabling Group Owner will display Owner Name else not."/>
+	<design:attribute name="showJoinButton"
+	                  label="Show the Join button"
+	                  description="Add the join button to enable members to join or leave public groups"/>
+	<design:attribute name="showAllGroups"
+	                  label="Show All Groups button"
+	                  description="Enable to show the All Groups button to redirect to the list page"/>
+	<design:attribute name="showLastActive"
+	                  label="Show last activity"
+	                  description="Show last activity in the group"/>
+	<design:attribute name="descriptionLines"
+	                  label="Number of description lines to show"
+	                  description="Limit the description to this number of lines"/>
+
+	<design:attribute name="showBackgroundImage"
+	                  label="Show background image"
+	                  description="Show group image as a blurred background"/>
+
+	<design:attribute name="recordId1" label="RecordId 1" description="Enter Record Id of First Group"/>
+	<design:attribute name="recordId2" label="RecordId 2" description="Enter Record Id of Second Group"/>
+	<design:attribute name="recordId3" label="RecordId 3" description="Enter Record Id of Third Group"/>
+	<design:attribute name="recordId4" label="RecordId 4" description="Enter Record Id of Fourth Group"/>
+	<design:attribute name="recordId5" label="RecordId 5" description="Enter Record Id of Fifth Group"/>
+	<design:attribute name="recordId6" label="RecordId 6" description="Enter Record Id of Sixth Group"/>
+	<design:attribute name="recordId7" label="RecordId 7" description="Enter Record Id of Seventh Group"/>
+	<design:attribute name="recordId8" label="RecordId 8" description="Enter Record Id of Eighth Group"/>
+
+	<design:attribute name="allGroupsButtonText"
+	                  label="Text for All Groups Button. (confused? hover over info icon)"
+	                  description="Text for button used to display all groups. This text is set up to be translated by referencing ss_label_grp_All_Groups.  If you change it to regular text it will display fine but not be translatable. Clearing out ANY text will restore default.  "/>
+	<design:attribute name="allGroupsUrl"
+	                  label="Link to All Groups"
+	                  description=""/>
+	<design:attribute name="groupsURL"
+	                  label="Link to Group Detail"
+	                  description=""/>
+	<design:attribute name="profileURL"
+	                  label="Link to User Profile Page"
+	                  description=""/>
+	<design:attribute name="debugMode"
+	                  label="Debug Mode"
+	                  description="Enabling debug mode will write messages to the browser console for debugging errors"/>
+</design:component>

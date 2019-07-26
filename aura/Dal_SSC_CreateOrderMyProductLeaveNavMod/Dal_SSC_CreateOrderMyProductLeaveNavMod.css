@@ -1,0 +1,30 @@
+/**
+ * Created by ranja on 25-01-2019.
+ */
+.THIS {
+}
+
+.THIS .dal-my-products {
+    height: 640px;
+}
+
+.THIS .background-color{
+    background-color: #cf0a2c;
+    color: white !important;
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+.THIS .dal-message-font-color {
+    color: #cf0a2c;
+    font-size: 1.5rem;
+}
+
+.THIS .font-color-return-message {
+    color: #cf0a2c;
+    font-size: 1rem;
+}
+
+.THIS .dal-message {
+    font-size: 1.2rem;
+}

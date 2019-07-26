@@ -1,0 +1,12 @@
+<design:component label="7S Verify to Proceed">
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+    <design:attribute name="overlayColor" label="Overlay Color"   description="Enter a hex code"/>
+    <design:attribute name="overlayOpacity" label="Overlay Opacity"   description="0 is transparent, .9 is almost solid" datasource="0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1"/>
+    <design:attribute name="darkText" label="Dark Text"   description="Use Dark Text?"/>
+
+    <design:attribute name="contentTitle" label="Content Title"   description="Enter text or a label like $Label.c.Your_Label"/>
+    <design:attribute name="contentText" label="Content Text"   description="Enter text or a label like $Label.c.Your_Label"/>
+    <design:attribute name="contentButtonText" label="Button Text"   description="Enter text or a label like $Label.c.Your_Label"/>
+
+</design:component>

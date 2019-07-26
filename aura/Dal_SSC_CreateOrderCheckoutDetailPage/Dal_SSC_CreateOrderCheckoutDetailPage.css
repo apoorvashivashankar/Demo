@@ -1,0 +1,75 @@
+/**
+ * Created by presh on 02-01-2019.
+ */
+ @media only screen and (min-width: 800px){
+.THIS .input-width {
+    width: 15rem;
+}
+}
+@media only screen and (min-width: 800px){
+.THIS .textarea-width {
+    height: 6rem !important;
+    width: 25rem;
+}
+}
+.THIS .background-color{
+    background-color: gray;
+    color: white;
+}
+
+.THIS.c-container {
+    border: 1px solid #d8dde6;
+    margin: 10px 0 20px 0;
+}
+
+.THIS .color{
+    color: #EDEDED;
+}
+.THIS .label-hidden .slds-form-element__label {
+    display : none;
+}
+
+.THIS .font-label .slds-form-element__label{
+     font-size: 0.7rem;
+}
+.THIS .size .slds-checkbox_faux{
+     width: 0.8rem;
+     height: 0.8rem;
+}
+@media only screen and (min-width: 800px){
+.THIS .left-margin{
+     margin-left: 3rem;
+}
+}
+
+.THIS .my-cart-checkout-color {
+    font-size: 1.2rem;
+}
+
+.THIS .row label {
+    font-size: 0.9rem;
+}
+
+.THIS .label-hidden .slds-form-element__label {
+    display : none;
+}
+
+.THIS .label-hidden div {
+    max-width: 15rem; 
+}
+
+.THIS .bkg-transparent {
+    position : fixed;
+}
+
+.THIS .field-required {
+    color : rgb(194, 57, 52);
+}
+
+.THIS .dal-field-custom-error input {
+    box-shadow:rgb(194, 57, 52) 0 0 0 1px inset
+}
+/* This update for the winter 19 release.*/
+.THIS .slds-form-element__control {
+    padding-left: 0% !important;
+}

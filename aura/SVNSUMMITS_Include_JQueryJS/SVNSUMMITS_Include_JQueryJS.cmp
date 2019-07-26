@@ -1,0 +1,8 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francoiskorb on 9/21/16.
+ -->
+
+<aura:component description="SVNSUMMITS_Include_JQueryJS">
+    <ltng:require scripts="{!$Resource.jquery_2_2_4}"/>
+</aura:component>

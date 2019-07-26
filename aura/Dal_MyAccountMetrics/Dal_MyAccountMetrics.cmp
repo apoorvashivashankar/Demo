@@ -1,0 +1,70 @@
+<!--
+ - Created by 7Summits on 2/19/18.
+ controller="Dal_MyAccountMetricsController"
+ -->
+<aura:component description="Dal_MyAccountMetrics" extends="c:Dal_Base" controller="Dal_MyAccountMetricsController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <!-- design attributes -->
+    <aura:attribute name="title" type="String" default="My Account"/>
+
+    <aura:attribute name="ctaLabel" type="String" default="Make a payment"/>
+    <aura:attribute name="ctaUrl" type="String" default=""/>
+
+    <aura:attribute name="totalDueLabel" type="String" default="Total Due"/>
+    <aura:attribute name="totalDueCtaLabel" type="String" default="Details"/>
+    <aura:attribute name="totalDueCtaUrl" type="String" default="/account-payments"/>
+
+    <aura:attribute name="pastDueLabel" type="String" default="Past Due"/>
+    <aura:attribute name="pastDueCtaLabel" type="String" default="Details"/>
+    <aura:attribute name="pastDueCtaUrl" type="String" default="/account-payments"/>
+
+    <aura:attribute name="currentDueLabel" type="String" default="Current Due"/>
+    <aura:attribute name="currentDueCtaLabel" type="String" default="Details"/>
+    <aura:attribute name="currentDueCtaUrl" type="String" default="/account-payments"/>
+
+    <aura:attribute name="creditsLabel" type="String" default="Returns and Credits"/>
+    <aura:attribute name="creditsCtaLabel" type="String" default="Details"/>
+    <aura:attribute name="creditsCtaUrl" type="String" default="/account-payments"/>
+
+    <aura:attribute name="lastPaymentLabel" type="String" default="Last Payment"/>
+    <aura:attribute name="lastPaymentCtaLabel" type="String" default="Details"/>
+    <aura:attribute name="lastPaymentCtaUrl" type="String" default="/account-payments"/>
+    
+    <!-- internal attributes -->
+    <aura:attribute name="isLoading" type="Boolean" default="true" />
+    <aura:attribute name="dataBlock" type="Object[]" default="[]" />
+    <aura:attribute name="dataBlockError" type="Boolean" default="false" />
+    <aura:attribute name="dataBlockErrorMsg" type="String" default="Unable to load account information." />
+
+    <lightning:layout multipleRows="true" class="slds-p-around_small" horizontalAlign="center" verticalAlign="center">
+
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" class="slds-p-vertical_small title">
+            <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!v.title}" />
+        </lightning:layoutItem>
+
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4"  class="slds-p-vertical_small slds-text-align_center title-cta">
+            <lightning:button label="{!v.ctaLabel}" variant="brand" onclick="{!c.ctaClicked}" />
+        </lightning:layoutItem>
+
+        <aura:if isTrue="{!v.isLoading == false}">
+
+            <lightning:layoutItem size="12">
+                <aura:if isTrue="{!v.dataBlockError != true}">
+                    <c:Dal_DataBlocks blocks="{!v.dataBlock}" hasHeader="true" />
+                    <aura:set attribute="else">
+                        <ui:message title="" severity="warning" closable="false">{!v.dataBlockErrorMsg}</ui:message>
+                    </aura:set>
+                </aura:if>
+            </lightning:layoutItem>
+
+            <aura:set attribute="else">
+                <lightning:layoutItem size="12" class="slds-is-relative slds-p-vertical_xx-large">
+                    <lightning:spinner variant="brand" size="medium" class="bkg-transparent" />
+                </lightning:layoutItem>
+            </aura:set>
+        </aura:if>
+
+    </lightning:layout>
+
+</aura:component>

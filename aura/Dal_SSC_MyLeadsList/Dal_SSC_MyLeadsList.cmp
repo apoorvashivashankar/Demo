@@ -1,0 +1,29 @@
+<!--
+ - Created by presh on 21-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_MyLeadsList" extends="c:Dal_ListBase" controller="Dal_LeadManager" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <aura:attribute name="allDataChecked" type="Boolean"/>
+    <aura:attribute name="leadDateStarts" type="Date" />
+    <aura:attribute name="leadDateEnds" type="Date" />
+
+    <aura:method name="searchLeadList" action="{!c.searchLeadList}" access="PUBLIC">
+        <aura:attribute name="firstname" type="String" />
+        <aura:attribute name="lastname" type="String" />
+        <aura:attribute name="leadSource" type="String" />
+        <aura:attribute name="leadScore" type="String" />
+        <aura:attribute name="leadDateStart" type="Date" />
+        <aura:attribute name="leadDateEnd" type="Date" />
+        <aura:attribute name="leadStatus" type="String" />
+    </aura:method>
+
+       <!-- <lightning:layout class="slds-p-top_small" multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem class="slds-p-horizontal_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                <input type="checkbox" class="slds-m-vertical_x-small" name="showAll" onclick="{!c.handleSelectAllLeads}" checked="{!v.allDataChecked}" /><span class="dal-list-showAll slds-p-horizontal_medium">Select all leads</span>
+                <button type="button" class="slds-button slds-button_neutral slds-m-vertical_x-small scheduleButton" name="scheduleSelectedOrders" onclick="{!c.handleScheduleSelectedLeads}">SCHEDULE SELECTED LEADS</button>
+            </lightning:layoutItem>
+        </lightning:layout>-->
+
+</aura:component>

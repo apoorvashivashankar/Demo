@@ -1,0 +1,8 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component extensible="true" abstract="true" controller="SVNSUMMITS_IdeaBaseController">
+  <aura:registerEvent name="baseReady" type="c:SVNSUMMITS_BaseReady"/>
+    <ltng:require scripts="{!$Resource.svg4everybodyMod}"
+                  afterScriptsLoaded="{!c.doInit}"/>
+
+{!v.body}
+</aura:component>

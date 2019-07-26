@@ -1,0 +1,8 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francoiskorb on 9/23/16.
+ -->
+
+<aura:component description="SVNSUMMITS_Include_ForceTK">
+    <ltng:require scripts="{!$Resource.forcetk}" />
+</aura:component>

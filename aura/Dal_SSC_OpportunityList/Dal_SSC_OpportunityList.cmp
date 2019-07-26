@@ -1,0 +1,33 @@
+<!--
+ - Created by presh on 22-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_OpportunityList" extends="c:Dal_ListBase" controller="Dal_OpportunityManager"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <aura:attribute name="allDataChecked" type="Boolean"/>
+    <aura:attribute name="oppDateStarts" type="Date" />
+    <aura:attribute name="oppDateEnds" type="Date" />
+    <aura:attribute name="isButton" type="Boolean" default="false"/>
+    <aura:attribute name="responseList" type="List" default="[]" />
+
+    <aura:method name="searchOpportunityList" action="{!c.searchOpportunityList}" access="PUBLIC">
+        <aura:attribute name="name" type="String" />
+        <aura:attribute name="account" type="String" />
+        <aura:attribute name="oppDateStart" type="Date" />
+        <aura:attribute name="oppDateEnd" type="Date" />
+        <aura:attribute name="oppStage" type="String" />
+    </aura:method>
+
+    <aura:if isTrue="{!v.isButton}">
+        <lightning:layout class="slds-p-top_small" multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem class="slds-p-horizontal_x-small dal-relate-to-order" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="8">
+                <button type="button" class="slds-button slds-button_neutral slds-m-vertical_x-small dal-relate-to-order-button" name="scheduleSelectedOrders"
+                        onclick="{!c.handleRelateToOrder}">
+                    RELATE TO ORDERS
+                </button>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+</aura:component>

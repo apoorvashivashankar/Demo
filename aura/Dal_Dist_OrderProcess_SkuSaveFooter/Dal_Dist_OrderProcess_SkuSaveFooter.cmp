@@ -1,0 +1,76 @@
+<!--
+ - Created by 7Summits on 3/7/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderProcess_SkuSaveFooter">
+    <aura:attribute name="checkAvailability" type="Boolean" default="false"/>
+    <aura:attribute name="priceBySku" type="Boolean" default="false"/>
+    <aura:attribute name="handleSave" type="Object" />
+    <aura:attribute name="handleSaveContinue" type="Object" />
+    <aura:attribute name="handleAddToOrder" type="Object" />
+    <aura:attribute name="handleCheckPricing" type="Object" />
+    <aura:attribute name="isSSC" type="Boolean" default="false" />
+
+    <aura:attribute name="disabledData1" type="Boolean" default="false"/>
+    <aura:attribute name="disabledData2" type="Boolean" default="false"/>
+
+    <aura:attribute name="data1Label" type="String" default="" />
+    <aura:attribute name="data1Value" type="String" default="" />
+    <aura:attribute name="data2Label" type="String" default="" />
+    <aura:attribute name="data2Value" type="String" default="" />
+
+    <aura:attribute name="labelSaveOrder" type="String" default="" />
+    <aura:attribute name="labelSaveContinueOrder" type="String" default="" />
+    <aura:attribute name="labelAddToOrder" type="String" default="" />
+    <aura:attribute name="labelCheckPricing" type="String" default="" />
+    <aura:attribute name="addAllOrder" type="Boolean"/>
+    <aura:attribute name="addAllOrderAtProductAvaialibilty" type="Boolean"/>
+
+    <lightning:layout class="saveFooter slds-p-vertical_large slds-p-horizontal_small" multipleRows="true" horizontalAlign="center" verticalAlign="center">
+
+        <lightning:layoutItem class="slds-grid slds-p-around_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="6">
+            <aura:if isTrue="{!and(v.checkAvailability == false, v.priceBySku == false)}">
+                <div class="orderStats orderStats-medium orderStats-textLeftLarge dal-medium-inputFull dal-small-inputFull">
+                    <dl>
+                        <dt>{!v.data1Label}</dt>
+                        <dd>{!v.data1Value}</dd>
+                    </dl>
+                    <dl>
+                        <dt>{!v.data2Label}</dt>
+                        <dd>{!v.data2Value}</dd>
+                    </dl>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!and(v.priceBySku, v.isSSC == false)}">
+                <aura:if isTrue="{!v.addAllOrder}">
+                    <lightning:button variant="neutral" label="{!v.labelAddToOrder}" class="dal-small-fullWidth dal-medium-fullWidth" disabled="{!v.disabledData2}" onclick="{!v.handleAddToOrder}" />
+                </aura:if>
+            </aura:if>
+        </lightning:layoutItem>
+
+        <lightning:layoutItem class="slds-p-around_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="6">
+            <div class="btnSaveContinue slds-grid slds-wrap slds-grid_align-center">
+                <!-- normal order flow -->
+                <aura:if isTrue="{!and(v.checkAvailability == false, v.priceBySku == false)}">
+                    <lightning:button variant="neutral" label="{!v.labelSaveOrder}" class="dal-small-fullWidth dal-medium-fullWidth" disabled="{!v.disabledData1}" onclick="{!v.handleSave}" />
+                    <lightning:button variant="brand" label="{!v.labelSaveContinueOrder}" class="dal-small-fullWidth dal-medium-fullWidth" disabled="{!v.disabledData2}" onclick="{!v.handleSaveContinue}" />
+                </aura:if>
+
+                <!-- check availability flow -->
+
+                <aura:if isTrue="{!and(v.checkAvailability == true, v.isSSC == false)}">
+                    <aura:if isTrue="{!v.addAllOrderAtProductAvaialibilty}">
+                        <lightning:button variant="brand" label="{!v.labelAddToOrder}" class="dal-small-fullWidth dal-medium-fullWidth" disabled="{!v.disabledData2}" onclick="{!v.handleAddToOrder}" />
+                    </aura:if>
+                </aura:if>
+
+                <!-- Price by sku flow -->
+                <aura:if isTrue="{!v.priceBySku == true}">
+                    <lightning:button variant="brand" label="{!v.labelCheckPricing}" class="dal-small-fullWidth dal-medium-fullWidth" disabled="{!v.disabledData2}" onclick="{!v.handleCheckPricing}" />
+                </aura:if>
+
+            </div>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+</aura:component>

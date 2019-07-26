@@ -1,0 +1,7 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<design:component label="7S News Detail">
+    <design:attribute name="debugMode" label="Debug Mode" description="Enable or disable debug mode, enabling debug mode will write messages to the browser console for debugging errors" />
+    <design:attribute name="recordId" default="{!recordId}" label="Record Id" description="Set to {!recordId} to pass the page's record Id." required="true"/>
+	<design:attribute name="ImageSize" datasource="Full,Half,None" label="Featured Image Size" default="Full"/>
+    <design:attribute name="limitToSpecificGroups" label="Enable Limit to Specific Groups?" description="Check to limit to specified groups only"/>
+</design:component>

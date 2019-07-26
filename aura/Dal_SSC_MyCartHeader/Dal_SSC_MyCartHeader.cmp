@@ -1,0 +1,18 @@
+<!--
+ - Created by ranja on 06-01-2019.
+ -->
+
+<aura:component description="Dal_SSC_MyCartHeader" extends="c:Dal_SSC_CreateOrderBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+
+    <lightning:layout verticalAlign="center" >
+
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8">
+            <c:Peak_HTML_Headings headingTag="H1 - Section Heading"
+                                  headingText="My Cart" />
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+</aura:component>

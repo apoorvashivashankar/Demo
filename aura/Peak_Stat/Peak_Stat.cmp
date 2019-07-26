@@ -1,0 +1,77 @@
+<!--
+ - Created by michaelsullivan on 6/7/17.
+ -->
+
+<aura:component description="Peak_Stat">
+    <aura:attribute name="header" type="string"/>
+    <aura:attribute name="headerAtTop" type="Boolean" default="false"/>
+    <aura:attribute name="message" type="String" default="Message here"/>
+    <aura:attribute name="title" type="String" default=""/>
+    <aura:attribute name="nubbinLocation" type="String" default="top-right"/>
+    <aura:attribute name="count" type="Integer"/>
+    <aura:attribute name="total" type="Integer"/>
+    <aura:attribute name="separatorText" type="String" default="/"/>
+    <aura:attribute name="moreLink" type="string" default=""/>
+    <aura:attribute name="moreText" type="string" default=""/>
+    <aura:attribute name="isSingleStat" type="Boolean" default="false"/>
+    <aura:attribute name="cssPosition" type="String" default="absolute; top: 0; right: 0;"/>
+
+    <aura:attribute name="stat" type="Peak_Stat" default=""/>
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+
+        <div class="slds-grid slds-wrap slds-grid_vertical-align-start content-wrapper">
+            <aura:if isTrue="{!v.message != ''}">
+                <c:Peak_Tooltip title="{!v.title}" message="{!v.message}" cssPosition="{!v.cssPosition}" />
+            </aura:if>
+            <aura:if isTrue="{!v.headerAtTop}">
+                <div class="slds-p-around_small slds-size_1-of-1 slds-medium-size_1-of-1 stat-header">
+                    <c:Peak_Base labelText="{!v.header}"/>
+                </div>
+            </aura:if>
+
+            <div class="slds-p-around_small slds-size_1-of-1 slds-medium-size_1-of-1 slds-text-align_center ">
+                <!--  <span class="BigNumber"> <aura:unescapedHtml value="{!v.count}" /></span> /
+                <span class="smallNumber"> <aura:unescapedHtml value="{!v.total}" /></span>
+                 -->
+                <span class="BigNumber stat-count">
+                    <aura:if isTrue="{!v.count == ''}">
+                        {!v.stat.figure1}
+                        <aura:set attribute="else">
+                            {!v.count}
+                        </aura:set>
+                    </aura:if>
+                </span>
+                <aura:if isTrue="{!v.isSingleStat == false}">
+                    <span class="separator-text">&nbsp;{!v.separatorText}&nbsp;</span>
+                    <span class="smallNumber stat-total">
+                        <aura:if isTrue="{!v.total == ''}">
+                            {!v.stat.figure2}
+                            <aura:set attribute="else">
+                                {!v.total}
+                            </aura:set>
+                        </aura:if>
+                    </span>
+                </aura:if>
+            </div>
+            <aura:if isTrue="{!v.headerAtTop == false}">
+                <div class="slds-p-around_small slds-size_1-of-1 slds-medium-size_1-of-1 stat-header">
+                    <c:Peak_Base labelText="{!v.header}"/>
+
+                </div>
+            </aura:if>
+            <div class="slds-p-around_xxx-small slds-grid_vertical-align-end slds-text-align_center slds-size_1-of-1 slds-medium-size_1-of-1 ">
+                <aura:if isTrue="{!v.moreLink != ''}">
+                    <a href="{!v.moreLink}" class="slds-text-link"><c:Peak_Base labelText="{!v.moreText}"/></a>
+                </aura:if>
+                <aura:if isTrue="{!and(v.moreLink == '', !v.moreText != '')}">
+                    <c:Peak_Base labelText="{!v.moreText}"/>
+                </aura:if>
+            </div>
+        </div>
+
+    </section>
+</aura:component>

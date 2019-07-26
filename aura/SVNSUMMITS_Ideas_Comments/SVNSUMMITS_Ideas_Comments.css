@@ -1,0 +1,28 @@
+/* Copyright ©2016-2017 7Summits Inc. All rights reserved. */
+.THIS .slds-list--vertical.slds-has-dividers>.slds-list__item {
+    padding:1rem 0px;
+}
+
+.THIS .slds-list--vertical.slds-has-dividers>.slds-list__item:hover {
+    background:transparent;
+    cursor:default;
+}
+
+.THIS ul.slds-list--vertical.slds-has-dividers {
+    margin-bottom:20px;
+}
+
+.THIS .the-comment {
+    padding:5px 0px;
+}
+
+.THIS .uiOutputRichText ol {
+    list-style:decimal;
+    padding-left:20px;
+    margin:20px;
+}
+.THIS .uiOutputRichText ul {
+    list-style:disc;
+	padding-left:20px;
+    margin:20px;
+}

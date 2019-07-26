@@ -1,0 +1,53 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" controller="Peak_FeaturedUserController">
+    <aura:attribute name="title" type="String" default="Featured User" />
+    <aura:attribute name="userId" type="String" default="" />
+    <aura:attribute name="user" type="User" default="" />
+    <aura:attribute name="intro" type="String" default="" />
+    <aura:attribute name="ctaText" type="String" default="" />
+    <aura:attribute name="ctaLink" type="String" default="" />
+    <aura:attribute name="displayType" type="String" default="Plain" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <aura:handler name="init" action="{!c.initFeaturedUser}" value="{!this}"/>
+
+    <section class="{!'peak-component ' + v.displayType + v.CustomClassName}" id="{!v.CustomIdName}">
+
+        <aura:if isTrue="{!v.title != ''}">
+            <h5 class="slds-text-align_center"><strong><c:Peak_Base labelText="{!v.title}"/></strong></h5>
+        </aura:if>
+
+        <div class="user-tile slds-text-align_center">
+            <div class="img slds-p-vertical_medium">
+                <aura:if isTrue="{!v.displayType == 'Banner'}">
+                    <div class="banner-bg" >
+                        <div class="banner-bg-inner" style="{!'background-image: url('+v.user.MediumPhotoUrl+')'}"></div>
+                    </div>
+                </aura:if>
+                <a href="" onclick="{!c.profileClick}" data-id="{!v.user.Id}"><img src="{!v.user.MediumPhotoUrl}" class="profile-pic" /></a>
+
+            </div>
+
+            <div class="text">
+                <h2><strong><em>{!v.user.Name}</em></strong></h2>
+                <h2 class="font-specialty-title">{!v.user.Title}</h2>
+                <hr />
+
+                <aura:if isTrue="{!v.intro != ''}">
+                    <p class="slds-p-bottom_small">
+                        <c:Peak_Base labelText="{!v.intro}"/>
+                    </p>
+                </aura:if>
+                <aura:if isTrue="{!v.ctaText != ''}">
+                    <p class="slds-p-bottom_small">
+                        <a href="" onclick="{!c.ctaClick}" data-link="{!v.ctaLink}" class="slds-button slds-button_neutral"><c:Peak_Base labelText="{!v.ctaText}"/></a>
+                    </p>
+                </aura:if>
+                <p><a href="" onclick="{!c.profileClick}" data-id="{!v.user.Id}">{!$Label.c.X7S_View_Profile}</a></p>
+            </div>
+
+        </div>
+    </section>
+
+</aura:component>

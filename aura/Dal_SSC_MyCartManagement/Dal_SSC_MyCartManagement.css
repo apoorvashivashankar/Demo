@@ -1,0 +1,17 @@
+/**
+ * Created by Preshit on 25-04-2019.
+ */
+.THIS .alert-warning {
+  color: #cf0a2c;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+
+.THIS .alert {
+   width: 100%;
+   padding: 15px;
+   margin-bottom: 20px;
+   border: 1px solid transparent;
+   border-radius: 4px;
+   font-weight: bold;
+}

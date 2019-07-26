@@ -1,0 +1,23 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component access="global"
+                controller="SVNSUMMITS_NewsController">
+
+	<ltng:require styles="{!join(',',
+						$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/dropdown.min.css?v=2.1.7',
+						$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/transition.min.css?v=2.1.7',
+						$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/form.min.css?v=2.1.7')}"
+	              scripts="{!join(',',
+						$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js',
+						$Resource.SVNSUMMITS_News_SemanticUI + '/fullcalendar-2.6.1/moment.min.js',
+						$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/form.min.js?v=2.1.7',
+						$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/dropdown.min.js?v=2.1.7',
+						$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/transition.min.js?v=2.1.7')}"
+	              afterScriptsLoaded="{!c.doInit}"/>
+
+	<aura:attribute name="searchText" type="String"/>
+	<aura:attribute name="sitePrefix" type="String"/>
+	<aura:attribute name="placeholderText" type="String" default="SEARCH" access="global"/>
+
+	<ui:inputText value="{!v.searchText}" placeholder="{!v.placeholderText}" keyup="{!c.clickSearchButton}"/>
+
+</aura:component>

@@ -1,0 +1,128 @@
+<aura:component extends="forceCommunity:navigationMenuBase" controller="Dal_NavigationController" >
+    <aura:attribute name="mobileNavShown" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="showLeaveModal" type="Boolean" default="false" />
+    <aura:attribute name="sizeOfSelectedProducts" type="Integer" default="0" />
+    <aura:attribute name="idToNavigate" type="String" />
+
+    <aura:attribute name="profileName" type="String" default="" />
+
+    <!--Event-->
+    <aura:registerevent name="createOrderGlobalSearch" type="c:Dal_SSC_CreateOrderHideGSearchEvent"/>
+    <aura:handler event="c:Dal_SSC_CreateOrderProdListCaptureEvt" action="{!c.updateProductList}"/>
+
+
+    <!--Navigation Menu-->
+    <div>
+        <c:Dal_SSC_CreateOrderMyProductLeaveNavMod  showModal="{!v.showLeaveModal}" idToNavigate="{!v.idToNavigate}"/>
+        <div class="comm-navigation forceCommunityGlobalNavigation">
+            <div class="slds-grid slds-grid_vertical-align-center slds-p-horizontal_xxx-small">
+                <aura:if isTrue="{!$Browser.formFactor != 'PHONE'}">
+                    <nav role="navigation" class="slds-has-flexi-truncate">
+                        <ul class="comm-navigation__list slds-list_horizontal slds-has-flexi-truncate" onclick="{!c.onClick}">
+
+                            <aura:iteration items="{!v.menuItems}" var="item">
+                                <li is="community_navigation-global-navigation-list-item" class="{!'slds-is-relative slds-list__item '+(item.active ? 'slds-is-active' : '')}">
+                                    <aura:if isTrue="{!item.subMenu}">
+                                        <button aria-expanded="false" name="{!item.label}" class="dal-sub-menu-trigger slds-container_fluid slds-button slds-button--reset"
+                                                onclick="{!c.toggleSubmenu}">
+                                            {!item.label}
+                                            <lightning:icon iconName="utility:chevrondown" variant="bare" size="x-small" alternativeText="expand" class="slds-button__icon--right slds-icon_container"/>
+                                        </button>
+
+                                        <aura:if isTrue="{!item.label != 'Inventory Search'}">
+                                            <ul class="dal-sub-menu slds-list_vertical slds-is-nested slds-is-absolute">
+                                                <aura:iteration items="{!item.subMenu}" var="subItem">
+                                                    <li is="community_navigation-global-navigation-list-item"
+                                                        class="slds-list__item">
+                                                        <a href="javascript:void(0);" data-menu-item-id="{!subItem.id}" class="slds-container_fluid">
+                                                            {!subItem.label}
+                                                        </a>
+                                                    </li>
+                                                </aura:iteration>
+                                            </ul>
+                                            <aura:set attribute="else">
+                                                <div class="dal-sub-menu slds-list_vertical slds-is-nested slds-is-absolute">
+                                                    <div class="searchBy"> <b>Search By...</b> </div>
+                                                    <div class="slds-grid menu-block">
+                                                        <aura:iteration items="{!item.subMenu}" var="subItem">
+                                                            <div class="slds-size-1_of_2">
+                                                                <a class="item" href="javascript:void(0);" data-menu-item-id="{!subItem.id}" data-menu-label="{!subItem.label}">
+                                                                    <aura:if isTrue="{!subItem.label == 'Branded Product'}">
+                                                                        <img data-menu-item-id="{!subItem.id}" data-menu-label="{!subItem.label}" src="{!$Resource.Dal_InventorySearch + '/Dal_InventorySearch/branded.jpg'}"
+                                                                                 alt="Inventory Search"/>
+                                                                        <div  data-menu-item-id="{!subItem.id}" data-menu-label="{!subItem.label}"  class="dal-navigation-image-label">
+                                                                            {!subItem.label}
+                                                                        </div>
+                                                                    </aura:if>
+                                                                    <aura:if isTrue="{!subItem.label == 'Installation Product'}">
+                                                                        <img data-menu-item-id="{!subItem.id}" data-menu-label="{!subItem.label}" src="{!$Resource.Dal_InventorySearch + '/Dal_InventorySearch/installation.jpg'}"
+                                                                                alt="Inventory Search"/>
+                                                                        <div  data-menu-item-id="{!subItem.id}" data-menu-label="{!subItem.label}" class="dal-navigation-image-label">
+                                                                            {!subItem.label}
+                                                                        </div>
+                                                                    </aura:if>
+
+                                                                </a>
+                                                            </div>
+                                                        </aura:iteration>
+                                                    </div>
+                                                </div>
+                                            </aura:set>
+                                        </aura:if>
+
+                                        <aura:set attribute="else">
+                                            <a href="javascript:void(0);" name="{!item.label}" data-menu-item-id="{!item.id}" class="slds-navigation-list--vertical__action slds-text-link--reset">
+                                                {!item.label}
+                                            </a>
+                                        </aura:set>
+                                    </aura:if>
+                                </li>
+                            </aura:iteration>
+                        </ul>
+                    </nav>
+                    <aura:set attribute="else">
+                        <div class="slds-p-horizontal--small slds-grid">
+                            <button title="Toggle SideBar" type="button" class="dal-mobile-nav-btn slds-button slds-button_icon-bare" onclick="{!c.toggleMobileMenu}">
+                                <lightning:icon iconName="utility:rows" variant="bare" size="small" alternativeText="expand" class="slds-button__icon"/>
+                                <span class="slds-assistive-text">Toggle SideBar</span>
+                            </button>
+                        </div>
+                        <aura:if isTrue="{!v.mobileNavShown}">
+                            <nav role="navigation" class="slds-is-fixed">
+                                <ul class="comm-navigation__list slds-list_vertical" onclick="{!c.onClick}">
+                                    <aura:iteration items="{!v.menuItems}" var="item">
+                                        <li is="community_navigation-global-navigation-list-item" class="{!'slds-is-relative slds-list__item '+(item.active ? 'slds-is-active' : '')}">
+                                            <aura:if isTrue="{!item.subMenu}">
+                                                <button aria-expanded="false" class="dal-sub-menu-trigger slds-container_fluid slds-button slds-button--reset" onclick="{!c.toggleSubmenu}">
+                                                    <lightning:icon iconName="utility:chevrondown" variant="bare" size="x-small" alternativeText="expand" class="slds-button__icon--left slds-icon_container"/>
+                                                    {!item.label}
+                                                </button>
+                                                <ul class="dal-sub-menu slds-list_vertical slds-is-nested">
+                                                    <aura:iteration items="{!item.subMenu}" var="subItem">
+                                                        <li is="community_navigation-global-navigation-list-item" class="slds-list__item">
+                                                            <a href="javascript:void(0);" data-menu-item-id="{!subItem.id}" class="slds-is-relative slds-container_fluid slds-truncate mobileSubMenu">
+                                                                {!subItem.label}
+                                                            </a>
+                                                        </li>
+                                                    </aura:iteration>
+                                                </ul>
+                                                <aura:set attribute="else">
+                                                    <a href="javascript:void(0);" data-menu-item-id="{!item.id}" class="slds-container_fluid slds-truncate mobileSubMenu">
+                                                        {!item.label}
+                                                    </a>
+                                                </aura:set>
+                                            </aura:if>
+                                        </li>
+                                    </aura:iteration>
+                                </ul>
+                            </nav>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+            </div>
+        </div>
+    </div>
+
+
+</aura:component>

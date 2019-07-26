@@ -1,0 +1,57 @@
+<apex:component controller="AccountSnapshotController"  id="theComponent" allowDML="true">
+    &nbsp;&nbsp;<b class="PrintFont">Open Opportunities - max of 5 based on close date</b>
+    <br/>
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th scope="col" width="40%" class="PrintFont">
+                <div class="slds-truncate PrintFont" title="Opportunity Name" >Name</div>
+                </th>
+                <th class="PrintFont" scope="col" width="20%">
+                <div class="slds-truncate" title="Account Name">Close Date</div>
+                </th>
+                <th class="PrintFont" scope="col" width="20%">
+                <div class="slds-truncate" title="Close Date">Amount</div>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <apex:outputPanel rendered="{!OpportunitiesOpen.size > 0}">
+            <apex:repeat value="{!OpportunitiesOpen}" var="record" rows="10" rendered="{!OpportunitiesOpen.size > 0}">
+                <tr class="slds-hint-parent">
+                    <th data-label="Opportunity Name" scope="row" class="PrintFont">
+                        <div class="slds-truncate" title="Cloudhub">
+                            <apex:outputPanel rendered="{!NOT(bolPrintableView)}">
+                                <a href="/lightning/r/Opportunity/{!record.Id}/edit" tabindex="-1" target="_blank">
+                                    {!record.Name}
+                                </a>
+                            </apex:outputPanel> 
+                            <apex:outputPanel rendered="{!bolPrintableView}">
+                            
+                                    <apex:outputText value="{!LEFT(record.Name, 25)}"></apex:outputText>
+                                    
+                            </apex:outputPanel>
+                        </div>
+                    </th>
+                    <td data-label="Account Name" class="PrintFont">
+                    <div class="slds-truncate" title="Cloudhub">
+                    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                        <apex:param value="{!record.CloseDate}" /> 
+                    </apex:outputText>
+                    </div>
+                    </td>
+                    <td data-label="Close Date" class="PrintFont">
+                    <div class="slds-truncate" title="4/14/2015">
+                        <apex:outputText value="{0, number, currency}">
+                        <apex:param value="{!record.Amount}" />
+                        </apex:outputText>
+                    </div>
+                    </td>
+                </tr>
+            </apex:repeat>
+            </apex:outputPanel>
+        </tbody>
+    </table>
+
+</apex:component>

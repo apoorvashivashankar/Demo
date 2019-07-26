@@ -1,0 +1,57 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  /* Common CSS here */
+}
+.THIS .peak-banner {
+  position: relative;
+  color: token(colorTextInverse);
+  background-size: cover;
+}
+.THIS .peak-banner h1 {
+  font-size: 1.75rem;
+}
+@media (min-width: 48em) {
+  .THIS .peak-banner h1 {
+    font-size: 3.75rem;
+  }
+}
+.THIS .peak-banner h2 {
+  font-size: 1.2rem;
+}
+@media (min-width: 48em) {
+  .THIS .peak-banner h2 {
+    font-size: 2.75rem;
+  }
+}
+.THIS .peak-banner .peak-banner-overlay {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  content: ' ';
+}
+.THIS .peak-banner .slds-grid {
+  position: relative;
+  z-index: 1;
+}
+.THIS .peak-banner .slds-grid {
+  position: relative;
+  z-index: 1;
+}
+.THIS .peak-banner .centered {
+  text-align: center;
+}
+.THIS .peak-banner .darktext {
+  color: token(colorTextDefault);
+}
+.THIS .peak-banner .slds-button {
+  margin-right: token(spacingLarge);
+}

@@ -1,0 +1,50 @@
+<!--
+ - Created by ranja on 23-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_CreateNewOpportunityHeader" extends="c:Dal_SSC_LeadManagementBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="isOutput" type="String" default="true"/>
+    <aura:attribute name="isEdit" type="boolean" default="false"/>
+
+    <!-- Events -->
+    <aura:registerEvent name="leadIsEdit" type="c:Dal_SSC_CreateNewLeadEvent"/>
+    <aura:registerEvent name="changeBreadscrumbs" type="c:Dal_SSC_LeadMgmtOpp_BreadCrumbEvent"/>
+
+
+    <!--Body -->
+    <lightning:recordEditForm
+            onload="{!c.handleOnLoad}"
+            recordId="{!v.recordId}"
+            objectApiName="Opportunity">
+
+        <!-- The messages component is for error messages -->
+        <lightning:messages class="dal-form-show-error"/>
+
+        <div class="slds-grid slds-m-verical_x-large">
+            <div class="slds-size_9-of-12">
+                <div class="dal-header-name">
+                    <lightning:outputField fieldName="Name" variant="label-hidden" aura:id="nameOfOpp"/>
+                </div>
+            </div>
+            <div class="slds-grid slds-size_1-of-12 dal-header-button">
+                <div class="slds-m-right_medium">
+                    <lightning:button class="dal-header-editButton" name="EDIT" label="EDIT"
+                                      onclick="{!c.handleEditClick}"/>
+                </div>
+            </div>
+             <div class="slds-grid slds-size_3-of-12 dal-header-button">
+                <div class="slds-m-right_medium">
+                    <lightning:button class="dal-header-editButton" name="RELATE TO ORDERS" label="RELATE TO ORDERS"
+                                      onclick="{!c.handleRelateToOrder}"/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-hide">
+            <lightning:inputField fieldName="Name" aura:id="inputOppName"/>
+        </div>
+
+    </lightning:recordEditForm>
+</aura:component>

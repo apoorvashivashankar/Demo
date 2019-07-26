@@ -1,0 +1,189 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_NewsController"
+                access="global"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+                extends="c:SVNSUMMITS_News_Base">
+
+	<!-- Static Resources -->
+	<ltng:require scripts="{!join(',',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/fullcalendar-2.6.1/moment.min.js',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-ui.js')}"/>
+
+	<!-- Event Registration -->
+	<aura:registerEvent name="appEvent" type="c:SVNSUMMITS_News_Header_Event"/>
+
+	<!-- Handlers -->
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_News_BaseReady" action="{!c.doInit}"/>
+	<aura:attribute name="nameSpace" type="String" default="" access="global"/>
+
+	<aura:handler event="c:SVNSUMMITS_News_SortBy_Filter_Event" action="{!c.setSortBy}"/>
+	<aura:handler event="c:SVNSUMMITS_News_DisplayMode_Event" action="{!c.setDisplayMode}"/>
+	<aura:handler event="c:SVNSUMMITS_News_Date_Filter_Event" action="{!c.setDates}"/>
+	<aura:handler event="c:SVNSUMMITS_News_Topic_Filter_Event" action="{!c.setTopic}"/>
+	<aura:handler event="c:SVNSUMMITS_News_Author_Filter_Event" action="{!c.setAuthor}"/>
+	<aura:handler event="c:SVNSUMMITS_News_Text_Filter_Event" action="{!c.setSearchText}"/>
+
+	<!-- Attributes Section -->
+	<aura:attribute name="debugMode" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="currentURL" type="String" access="global"/>
+	<aura:attribute name="newsListWrapper" type="SVNSUMMITS_WrapperNews" access="global"/>
+	<aura:attribute name="displayMode" type="String" default="Tile" access="global"/>
+	<aura:attribute name="titletext" type="String" default="Recommended for you" access="global"/>
+	<aura:attribute name="profileURL" type="String" default="/profile/" access="global"/>
+	<aura:attribute name="newsURL" type="String" default="/news/" access="global"/>
+	<aura:attribute name="numberOfNews" type="Integer" access="global"/>
+	<aura:attribute name="totalNews" type="Integer" access="global"/>
+	<aura:attribute name="numberOfNewsPerPage" type="Integer" default="12" required="true" access="global"/>
+	<aura:attribute name="searchstr" type="String" access="global"/>
+	<aura:attribute name="recordId" type="String" access="global"/>
+	<aura:attribute name="sortBy" type="String" default="Most Recent" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="viewMoreLabel" type="String" default="All News" access="global"/>
+	<aura:attribute name="newsListURL" type="String" default="/news-list" access="global"/>
+	<aura:attribute name="filterId" type="String" access="global"/>
+	<aura:attribute name="sitePrefix" type="String" access="global"/>
+	<aura:attribute name="fromDate" type="String" access="global"/>
+	<aura:attribute name="toDate" type="String" access="global"/>
+	<aura:attribute name="filterByTopic" type="String" access="global"/>
+	<aura:attribute name="filterByAuthor" type="String" access="global"/>
+	<aura:attribute name="strError" type="String[]" access="global"/>
+	<aura:attribute name="topicName" type="String" access="global"/>
+	<aura:attribute name="filterOn" type="String" default="None" access="global"/>
+	<aura:attribute name="isNicknameDisplayEnabled" type="Boolean" access="global"/>
+	<aura:attribute name="showImages" type="Boolean" access="global" default="true"/>
+	<aura:attribute name="listViewMode" type="String" default="List" access="global"/>
+	<aura:attribute name="filterNewsListByTopic" type="String" access="global"/>
+	<aura:attribute name="groupID" type="String" access="global" default=""/>
+	<aura:attribute name="limitToSpecificGroups" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="pagePosition" type="String" default="Bottom" access="global"/>
+
+	<lightning:layout multipleRows="true"
+	                  verticalAlign="start">
+
+		<!-- PAGINATION -->
+		<aura:if isTrue="{! or(v.pagePosition == 'Top', v.pagePosition == 'Both')}">
+			<lightning:layoutItem size="12"
+			                      padding="around-small">
+
+				<aura:if isTrue="{!v.displayMode == 'Compact'}">
+					<lightning:layout multipleRows="false"
+					                  verticalAlign="center"
+					                  horizontalAlign="center">
+						<lightning:layoutItem padding="around-small">
+							<lightning:button label="{!v.viewMoreLabel}"
+							                  variant="neutral"
+							                  onclick="{!c.gotoList}"/>
+						</lightning:layoutItem>
+					</lightning:layout>
+
+					<aura:set attribute="else">
+						<lightning:layout multipleRows="false"
+						                  horizontalAlign="end"
+						                  verticalAlign="center">
+							<lightning:layoutItem padding="around-small"
+							                      class="slds-text-body_small slds-text-color--weak">
+							{!$Label.c.ss_nws_label_page}&nbsp;{!v.newsListWrapper.pageNumber}
+								/ {!v.newsListWrapper.totalPages}
+							</lightning:layoutItem>
+
+							<lightning:layoutItem >
+								<lightning:button label="{!$Label.c.ss_nws_button_previous}"
+								                  variant="neutral"
+								                  disabled="{! !v.newsListWrapper.hasPreviousSet}"
+								                  onclick="{!c.getPreviousPage}"/>
+							</lightning:layoutItem>
+
+							<lightning:layoutItem class="slds-p-left--xx-small">
+								<lightning:button label="{!$Label.c.ss_nws_button_next}"
+								                  variant="neutral"
+								                  disabled="{! !v.newsListWrapper.hasNextSet}"
+								                  onclick="{!c.getNextPage}"/>
+							</lightning:layoutItem>
+						</lightning:layout>
+					</aura:set>
+				</aura:if>
+			</lightning:layoutItem>
+		</aura:if>
+
+		<aura:if isTrue="{!v.strError.length > 0 }">
+			<lightning:layoutItem >
+				<div class="slds-col slds-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-1">
+					<div class="w100">
+						<div class="slds-text-heading--small slds-notify slds-notify--toast slds-theme--error errorDiv errorAttachment">
+							<ui:inputDefaultError value="{!v.strError}"></ui:inputDefaultError>
+						</div>
+					</div>
+				</div>
+			</lightning:layoutItem>
+		</aura:if>
+
+		<lightning:layoutItem size="12">
+				<aura:if isTrue="{!v.displayMode == 'Compact'}">
+					<span class="slds-text-heading--medium slds-text-heading--weighted slds-p-bottom--large">
+							{!v.titletext}
+					</span>
+				</aura:if>
+
+				<div>
+					<c:SVNSUMMITS_News_Tile debugMode="{!v.debugMode}"
+					                        displayMode="{!v.displayMode}"
+					                        wrapperNewsObj="{!v.newsListWrapper}"
+					                        totalNews="{!v.totalNews}"
+					                        profileURL="{!v.profileURL}"
+					                        newsURL="{!v.newsURL}"
+					                        showImages="{!v.showImages}"
+					                        limitToSpecificGroups="{!v.limitToSpecificGroups}"
+					                        isNicknameDisplayEnabled="{!v.isNicknameDisplayEnabled}"/>
+				</div>
+		</lightning:layoutItem>
+
+		<!-- PAGINATION -->
+		<aura:if isTrue="{! or(v.pagePosition == 'Bottom', v.pagePosition == 'Both')}">
+			<lightning:layoutItem size="12"
+			                      padding="around-small">
+
+				<aura:if isTrue="{!v.displayMode == 'Compact'}">
+					<lightning:layout multipleRows="false"
+					                  verticalAlign="center"
+					                  horizontalAlign="center">
+						<lightning:layoutItem padding="around-small">
+							<lightning:button label="{!v.viewMoreLabel}"
+							                  variant="neutral"
+							                  onclick="{!c.gotoList}"/>
+						</lightning:layoutItem>
+					</lightning:layout>
+
+					<aura:set attribute="else">
+						<lightning:layout multipleRows="false"
+						                  horizontalAlign="end"
+						                  verticalAlign="center">
+							<lightning:layoutItem padding="around-small"
+							                      class="slds-text-body_small slds-text-color--weak">
+							{!$Label.c.ss_nws_label_page}&nbsp;{!v.newsListWrapper.pageNumber}
+								/ {!v.newsListWrapper.totalPages}
+							</lightning:layoutItem>
+
+							<lightning:layoutItem >
+								<lightning:button label="{!$Label.c.ss_nws_button_previous}"
+								                  variant="neutral"
+								                  disabled="{! !v.newsListWrapper.hasPreviousSet}"
+								                  onclick="{!c.getPreviousPage}"/>
+							</lightning:layoutItem>
+
+							<lightning:layoutItem class="slds-p-left--xx-small">
+								<lightning:button label="{!$Label.c.ss_nws_button_next}"
+								                  variant="neutral"
+								                  disabled="{! !v.newsListWrapper.hasNextSet}"
+								                  onclick="{!c.getNextPage}"/>
+							</lightning:layoutItem>
+						</lightning:layout>
+					</aura:set>
+				</aura:if>
+			</lightning:layoutItem>
+
+		</aura:if>
+	</lightning:layout>
+
+</aura:component>

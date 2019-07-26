@@ -1,0 +1,11 @@
+<!--
+ - Created by 7Summits on 4/24/18.
+ -->
+
+<aura:component description="Dal_PricingByMaterial_List" extends="c:Dal_ListBase" controller="Dal_PricingListController" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    <aura:attribute name="sku" type="String" default="" />
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:method name="searchPriceRecordList" action="{!c.searchPriceRecordList}" access="PUBLIC">
+        <aura:attribute name="sku" type="String" />
+    </aura:method>
+</aura:component>

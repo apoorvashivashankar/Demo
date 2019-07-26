@@ -1,0 +1,6 @@
+<apex:component controller="AccountSnapshotController" allowDML="true">
+    &nbsp;&nbsp;<b class="PrintFont">YTD Product Mix</b>
+    <br/>
+     <apex:outputText escape="false" value="{!YtdSalesGrid}"/>
+
+</apex:component>

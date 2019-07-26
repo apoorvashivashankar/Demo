@@ -1,0 +1,7 @@
+<!--
+ - Created by ranja on 23-01-2019.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_CreateOrderHideGSearchEvent">
+        
+</aura:event>

@@ -1,0 +1,25 @@
+<!-- Displays a single group listing -->
+<aura:component description="Peak_GroupAvatarTile">
+
+    <aura:attribute name="inGroup" type="Boolean" default="false" />
+    <aura:attribute name="group" type="CollaborationGroup"  />
+
+    <div class="groupContainer slds-m-vertical_medium peak-component">
+        <lightning:layout horizontalAlign="spread">
+            <lightning:layoutItem flexibility="auto" padding="around-small">
+                <a href="" data-id="{!v.group.Id}" onclick="{!c.groupClick}"><img class="profile" src="{!v.group.SmallPhotoUrl}" /></a>
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="grow" padding="around-small">
+                <p class="slds-text-heading_small"><a href="" data-id="{!v.group.Id}" onclick="{!c.groupClick}">{!v.group.Name}</a></p>
+                <p>{!v.group.Description}</p>
+                <aura:if isTrue="{!!v.inGroup}">
+                <p>{!$Label.c.X7S_Join_this_group}</p>
+                </aura:if>
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="around-small">
+                <p class="slds-text-heading_small">{!v.group.MemberCount + ' ' + $Label.c.X7S_Members}</p>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+
+</aura:component>

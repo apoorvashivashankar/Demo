@@ -1,0 +1,7 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<!--
+ - Created by francoiskorb on 2/3/17.
+ -->
+
+<aura:event type="APPLICATION" description="SVNSUMMITS_News_BaseReady">
+</aura:event>

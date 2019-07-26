@@ -1,0 +1,43 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_GroupsController"
+                access="global"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+	<aura:registerEvent name="appEvent" type="c:SVNSUMMITS_Groups_Filters_Event"/>
+
+	<aura:attribute name="filterMyGroups" type="Boolean" default="false" access="global"/>
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+	<lightning:layout multipleRows="true"
+	                  verticalAlign="center"
+	                  horizontalAlign="spread">
+		<lightning:layoutItem size="12"
+		                      largeDeviceSize="6"
+		                      mediumDeviceSize="6"
+		                      smallDeviceSize="12">
+			<lightning:input type="checkbox"
+			                 name="checkMyGroups"
+			                 onchange="{!c.onFilterMyGroups}"
+			                 checked="{!v.filterMyGroups}"
+			                 label="{!$Label.c.ss_grp_label_My_Groups}"/>
+		</lightning:layoutItem>
+
+		<lightning:layoutItem size="12"
+		                      largeDeviceSize="6"
+		                      mediumDeviceSize="6"
+		                      smallDeviceSize="12">
+			<lightning:select aura:id="headerSort"
+			                  name="selectSort"
+			                  label="{!$Label.c.ss_grp_label_Sort_By}"
+			                  class="slds-input-select slds-float--right"
+			                  onchange="{!c.selectSortBy}">
+				<option value="Latest Group Activity">{!$Label.c.ss_grp_label_Latest_Group_Activity}</option>
+				<option value="Recently Viewed">{!$Label.c.ss_grp_label_Recently_Viewed}</option>
+				<option value="Number Of Members">{!$Label.c.ss_grp_label_Number_Of_Members}</option>
+				<option value="Date Created : Oldest">{!$Label.c.ss_grp_label_Date_Created_Oldest}</option>
+				<option value="Date Created : Newest">{!$Label.c.ss_grp_label_Date_Created_Newest}</option>
+			</lightning:select>
+
+		</lightning:layoutItem>
+	</lightning:layout>
+</aura:component>

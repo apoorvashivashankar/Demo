@@ -1,0 +1,36 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" controller="Peak_UtilityNavigationController">
+	<aura:attribute name="isLoading" type="Boolean" default="false" />
+
+	<h1 class="slds-p-vertical--medium">Peak Tester</h1>
+    <div class="slds-grid slds-wrap slds-grid--pull-padded">
+        <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-3">
+            <h3>SVG</h3>
+			<p class="slds-p-vertical--small">A component and resource bundle that allows developers to easily add custom SVG icons to the site. This example is just using SLDS icons though.</p>
+            <c:Peak_SVG svgPath="/resource/Peak_SVG/icons/action-sprite/svg/symbols.svg#announcement"  size="small"  class="slds-icon-text-default" />
+            &nbsp;
+			<span class="slds-icon_container" style="background: blue;"><!-- have to add custom bg colors -->
+				<c:Peak_SVG svgPath="/resource/Peak_SVG/icons/action-sprite/svg/symbols.svg#apex"  size="small"  class="" />
+			</span>
+        </div>
+        <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-3">
+            <h3>Tooltip</h3>
+			<p class="slds-p-vertical--small">SLDS provides us with tooltip styles but no hover functionality! What?!? We built that hover functionality and can invoke it easily from another component.</p>
+            <c:Peak_Tooltip title="Hello" message="Nubbin at top-left of tooltip" nubbinLocation="top-left" />
+            <c:Peak_Tooltip title="Hello" message="Nubbin at top-right of tooltip" nubbinLocation="top-right" />
+            <c:Peak_Tooltip title="Hello" message="Nubbin at bottom-left of tooltip" nubbinLocation="bottom-left" />
+            <c:Peak_Tooltip title="Hello" message="Nubbin at bottom-right of tooltip" nubbinLocation="bottom-right" />
+            <c:Peak_Tooltip title="Hello" message="Nubbin at left of tooltip" nubbinLocation="left" />
+            <c:Peak_Tooltip title="Hello" message="Nubbin at right of tooltip" nubbinLocation="right" />
+
+        </div>
+        <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-3">
+            <h3>Loading Gif</h3>
+			<p class="slds-p-vertical--small">SLDS provides full-screen loading gifs for us but usually you have to code it each time. Well, not anymore! A developer can include this loading gif in each of their server interactions to let the user know their data is being processed.</p>
+            <ui:button press="{!c.buttonClick}" label="Click Me" class="slds-button--brand"/>
+            <ui:button press="{!c.slowButtonQuick}" label="Slow it Down" class="slds-button--brand"/>
+            <aura:if isTrue="{!v.isLoading}">
+                <c:Peak_LoadingGif />
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

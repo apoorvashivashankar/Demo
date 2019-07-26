@@ -1,0 +1,10 @@
+<!--
+ - Created by Preshit on 17-01-2019.
+ -->
+
+<design:component label="Dal Account Open Item Search">
+    <design:attribute name="filterTabType" label="Filter Type" datasource="Total Due,Past Due,Current Due,Credits"/>
+    <design:attribute name="hasPagination" label="Enable Pagination" />
+    <design:attribute name="paginationItemsPerPage" label="Number of Items Per Page" />
+    <design:attribute name="listMaximum" label="Maximum number of records retrieved" />
+</design:component>

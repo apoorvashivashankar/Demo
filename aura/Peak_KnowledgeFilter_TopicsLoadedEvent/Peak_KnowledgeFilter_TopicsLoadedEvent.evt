@@ -1,0 +1,6 @@
+<!--
+ - Created by 7Summits on 10/18/17.
+ -->
+
+<aura:event type="COMPONENT" description="Peak_KnowledgeFilter_TopicsLoadedEvent">
+</aura:event>

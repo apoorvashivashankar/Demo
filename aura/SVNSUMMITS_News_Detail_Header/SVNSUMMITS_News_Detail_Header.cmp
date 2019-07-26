@@ -1,0 +1,117 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_NewsController"
+                access="global"
+                extends="c:SVNSUMMITS_News_Base"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+	<ltng:require scripts="{!join(',',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/fullcalendar-2.6.1/moment.min.js')}"/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_News_BaseReady" action="{!c.doInit}"/>
+	<aura:attribute name="nameSpace" type="String" default="" access="global"/>
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="newsListWrapper" type="SVNSUMMITS_WrapperNews" access="global"/>
+	<aura:attribute name="recordId" type="String" access="global"/>
+	<aura:attribute name="bannerText" type="String" default="Explore more" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="sitePrefix" type="String" access="global"/>
+	<aura:attribute name="profileURL" type="String" default="/profile/" access="global"/>
+	<aura:attribute name="newsListURL" type="String" default="/news-list-view" access="global"/>
+	<aura:attribute name="isObjectEditable" type="Boolean" access="global"/>
+	<aura:attribute name="isRecordEditable" type="Boolean" access="global"/>
+	<aura:attribute name="isRecordDeletable" type="Boolean" access="global"/>
+	<aura:attribute name="showFollowButton" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="showCategories" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="editNewsLabel" type="String" default="Edit" access="global"/>
+	<aura:attribute name="deleteNewsLabel" type="String" default="Delete" access="global"/>
+	<aura:attribute name="isEdit" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="showNickName" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="limitToSpecificGroups" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="news" type="News__c" default="{ 'sobjectType': 'News__c'}" access="global"/>
+
+	<div class="slds-grid slds-wrap">
+		<div class="slds-col--padded slds-size--2-of-3">
+			<aura:if isTrue="{!v.showCategories}">
+				<aura:if isTrue="{!v.newsListWrapper.newsList[0].topics.length > 0}">
+					<div class="topics">
+						<aura:iteration var="topicsAssignments" items="{!v.newsListWrapper.newsList[0].topics}">
+							<aura:iteration var="topics" items="{!topicsAssignments}">
+                                <span class="topic">
+                                    <c:SVNSUMMITS_News_TopicURL topicName="{!topics.Topic.Name}"
+                                                                topicNameToId="{!v.newsListWrapper.topicNameToId}"
+                                                                debugMode="{!v.debugMode}"/>
+                                </span>
+							</aura:iteration>
+						</aura:iteration>
+					</div>
+				</aura:if>
+			</aura:if>
+
+			<h1 class="slds-text-heading--medium title">
+					{!v.newsListWrapper.newsList[0].Name}
+			</h1>
+
+			<aura:if isTrue="{!v.newsListWrapper.newsList[0].Show_Author__c}">
+				<aura:if isTrue="{!v.newsListWrapper.newsList[0].Author__c.length > 0}">
+					<h4 class="slds-text-heading--label-normal author">
+						<aura:if isTrue="{!v.showNickName}">
+						{!v.newsListWrapper.newsList[0].strTime} by <a
+								href="{!v.sitePath+v.profileURL+v.newsListWrapper.newsList[0].Author__c}">{!v.newsListWrapper.newsList[0].Author__r.CommunityNickname}</a>
+							<aura:set attribute="else">
+							{!v.newsListWrapper.newsList[0].strTime} by <a
+									href="{!v.sitePath+v.profileURL+v.newsListWrapper.newsList[0].Author__c}">{!v.newsListWrapper.newsList[0].Author__r.Name}</a>
+							</aura:set>
+						</aura:if>
+					</h4>
+				</aura:if>
+			</aura:if>
+		</div>
+
+		<div class="slds-col--padded slds-size--1-of-3 slds-text-align--right">
+			<div class="slds-button-group controls"
+			     role="group">
+				<aura:if isTrue="{!v.showFollowButton}">
+					<c:SVNSUMMITS_News_Follow_Button recordId="{!v.recordId}"/>
+				</aura:if>
+
+				<aura:if isTrue="{!v.isRecordEditable}">
+					<lightning:button name="editButton"
+					                  label="{!v.editNewsLabel}"
+					                  onclick="{!c.setRecordId}"
+					                  variant="neutral"/>
+				</aura:if>
+
+				<aura:if isTrue="{!v.isRecordDeletable}">
+					<lightning:button name="deleteButton"
+					                  label="{!v.deleteNewsLabel}"
+					                  onclick="{!c.deleteNewsRecord}"
+					                  variant="neutral"/>
+				</aura:if>
+			</div>
+		</div>
+	</div>
+
+	<aura:renderIf isTrue="{!v.isEdit}">
+		<div class="slds-modal slds-fade-in-open" aria-hidden="false" role="dialog">
+			<div class="slds-modal__container">
+				<div class="slds-modal__header">
+					<button class="slds-button slds-button--icon-inverse slds-modal__close"
+					        onclick="{!c.closeEditPage}">
+						<lightning:icon iconName="utility:close" size="medium" alternativeText="close"
+						                title="close"/>
+						<span class="slds-assistive-text">CLOSE</span>
+					</button>
+					<h2 class="slds-text-heading--medium">Edit {!v.newsListWrapper.newsList[0].Name}</h2>
+				</div>
+				<div class="slds-modal__content createNewsBox">
+					<div aura:id="editView" class="slds-grid slds-wrap"></div>
+				</div>
+			</div>
+		</div>
+		<div class="slds-backdrop slds-backdrop--open"></div>
+	</aura:renderIf>
+
+</aura:component>

@@ -1,0 +1,212 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" controller="Peak_MyStatsController" description="Peak_MyStats">
+
+    <aura:attribute name="backgroundImage" type="String" default="" />
+    <aura:attribute name="backgroundColor" type="String" default="#EDEDED" />
+    <aura:attribute name="progressColor" type="String" default="#235561" />
+    <aura:attribute name="containerClasses" type="String" default="slds-size_1-of-1 slds-small-order_2  slds-medium-size_1-of-4 slds-m-around_xx-small slds-card_compact"/>
+    <aura:attribute name="containerClassesDW" type="String" default=""/>
+    <aura:attribute name="headerAtTop" type="Boolean" default="false"/>
+    <aura:attribute name="mainTitle" type="String" default=""/>
+
+    <aura:attribute name="showStat1" type="Boolean" default="true"/>
+    <aura:attribute name="header" type="string"/>
+    <aura:attribute name="message" type="String" default="Message here"/>
+    <aura:attribute name="title" type="String" default=""/>
+    <aura:attribute name="nubbinLocation" type="String" default="top-right"/>
+    <aura:attribute name="count" type="string"/>
+    <aura:attribute name="total" type="string"/>
+    <aura:attribute name="separatorText" type="String" default=" / "/>
+    <aura:attribute name="moreLink" type="string"/>
+    <aura:attribute name="moreText" type="string"/>
+    <aura:attribute name="statMode" type="String" default="Peak_Stat"/>
+    <aura:attribute name="statQuery" type="String" />
+    <aura:attribute name="stat1" type="Peak_Stat" default=""/>
+    <aura:attribute name="isSingleStat" type="Boolean" default="false"/>
+    <aura:attribute name="statDoubleWide1" type="Boolean" default="false" />
+
+    <aura:attribute name="showStat2" type="Boolean" default="false"/>
+    <aura:attribute name="header2" type="string"/>
+    <aura:attribute name="message2" type="String" default="Message here"/>
+    <aura:attribute name="title2" type="String" default=""/>
+    <aura:attribute name="count2" type="string" default=""/>
+    <aura:attribute name="total2" type="string"/>
+    <aura:attribute name="separatorText2" type="String" default=" / "/>
+    <aura:attribute name="moreLink2" type="string"/>
+    <aura:attribute name="moreText2" type="string"/>
+    <aura:attribute name="statMode2" type="String" default=""/>
+    <aura:attribute name="statQuery2" type="String" />
+    <aura:attribute name="stat2" type="Peak_Stat" default=""/>
+    <aura:attribute name="isSingleStat2" type="Boolean" default="false"/>
+    <aura:attribute name="statDoubleWide2" type="Boolean" default="false"/>
+
+    <aura:attribute name="showStat3" type="Boolean" default="false"/>
+    <aura:attribute name="header3" type="string"/>
+    <aura:attribute name="message3" type="String" default="Message here"/>
+    <aura:attribute name="title3" type="String" default=""/>
+    <aura:attribute name="count3" type="string" default=""/>
+    <aura:attribute name="total3" type="string"/>
+    <aura:attribute name="separatorText3" type="String" default=" / "/>
+    <aura:attribute name="moreLink3" type="string"/>
+    <aura:attribute name="moreText3" type="string"/>
+    <aura:attribute name="statMode3" type="String"/>
+    <aura:attribute name="statQuery3" type="String" />
+    <aura:attribute name="stat3" type="Peak_Stat" default=""/>
+    <aura:attribute name="isSingleStat3" type="Boolean" default="false"/>
+    <aura:attribute name="statDoubleWide3" type="Boolean" default="false"/>
+
+    <aura:attribute name="showStat4" type="Boolean" default="false"/>
+    <aura:attribute name="header4" type="string"/>
+    <aura:attribute name="message4" type="String" default="Message here"/>
+    <aura:attribute name="title4" type="String" default=""/>
+    <aura:attribute name="count4" type="string" default=""/>
+    <aura:attribute name="total4" type="string"/>
+    <aura:attribute name="separatorText4" type="String" default=" / "/>
+    <aura:attribute name="moreLink4" type="string"/>
+    <aura:attribute name="moreText4" type="string"/>
+    <aura:attribute name="statMode4" type="String" />
+    <aura:attribute name="statQuery4" type="String" />
+    <aura:attribute name="stat4" type="Peak_Stat" default=""/>
+    <aura:attribute name="isSingleStat4" type="Boolean" default="false"/>
+    <aura:attribute name="statDoubleWide4" type="Boolean" default="false"/>
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+    <aura:handler action="{!c.initPeakMyStats}" name="init" value="{!this}" />
+
+
+    <section class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <aura:if isTrue="{!v.mainTitle != ''}">
+            <h2><c:Peak_Base labelText="{!v.mainTitle}"/></h2>
+        </aura:if>
+        <div class="peak-keystats slds-p-around_medium" style="{!'background-color:' + v.backgroundColor + ';background-image:url(' + v.backgroundImage + ');background-size: cover;'}">
+            <div class="slds-container_center slds-grid slds-wrap slds-medium-nowrap slds-grid_pull-padded" style="{!'align-items:'+v.alignItems}">
+                <aura:if isTrue="{!v.showStat1}">
+                    <aura:if isTrue="{!v.statDoubleWide1 == false }">
+                        <div class="{! 'stat1 ' + v.containerClasses}" id="stat1">
+                            <aura:if isTrue="{!v.statMode == 'Peak_Stat'}">
+                                <c:Peak_Stat header="{!v.header}" headerAtTop="{!v.headerAtTop}" message="{!v.message}" title="{!v.title}" count="{!v.count}" total="{!v.total}" separatorText="{!v.separatorText}" stat="{!v.stat1}" moreLink="{!v.moreLink}" moreText="{!v.moreText}" isSingleStat="{!v.isSingleStat}" aura:id="slot1"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode == 'Peak_ProgressCircle'}">
+                                <c:Peak_ProgressCircle Legend="{!v.header}" headerAtTop="{!v.headerAtTop}" actualProgress="{!v.count}"  totalProgress="{!v.total}" message="{!v.message}" title="{!v.title}" themeBeforeThreshold="{!v.progressColor}" themeAfterThreshold="{!v.progressColor}" moreLink="{!v.moreLink}" moreText="{!v.moreText}" aura:id="slot1"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode == 'Peak_StatProgressBar'}">
+                                <c:Peak_StatProgressBar header="{!v.header}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count}" figure2="{!v.total}" stat="{!v.stat1}" message="{!v.message}" title="{!v.title}" separatorText="{!v.separatorText}" moreLink="{!v.moreLink}" moreText="{!v.moreText}" aura:id="slot1"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode == 'Peak_StatProgressBarVertical'}">
+                                <c:Peak_StatProgressBar isVertical="true" header="{!v.header}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count}" figure2="{!v.total}" stat="{!v.stat1}" message="{!v.message}" title="{!v.title}" separatorText="{!v.separatorText}" moreLink="{!v.moreLink}" moreText="{!v.moreText}" aura:id="slot1"/>
+                            </aura:if>
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="{! 'stat1 ' + v.containerClassesDW}" id="stat1">
+                                <aura:if isTrue="{!v.statMode == 'Peak_Stat'}">
+                                    <c:Peak_Stat header="{!v.header}" headerAtTop="{!v.headerAtTop}" message="{!v.message}" title="{!v.title}" count="{!v.count}" total="{!v.total}" separatorText="{!v.separatorText}" stat="{!v.stat1}" moreLink="{!v.moreLink}" moreText="{!v.moreText}" isSingleStat="{!v.isSingleStat}" aura:id="slot1" />
+                                </aura:if>
+                                <aura:if isTrue="{!v.statMode == 'Peak_ProgressCircle'}">
+                                    <c:Peak_ProgressCircle Legend="{!v.header}" headerAtTop="{!v.headerAtTop}" actualProgress="{!v.count}"  totalProgress="{!v.total}" message="{!v.message}" title="{!v.title}" themeBeforeThreshold="{!v.progressColor}" themeAfterThreshold="{!v.progressColor}" moreLink="{!v.moreLink}" moreText="{!v.moreText}" aura:id="slot1"  />
+                                </aura:if>
+                                <aura:if isTrue="{!v.statMode == 'Peak_StatProgressBar'}">
+                                    <c:Peak_StatProgressBar header="{!v.header}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count}" figure2="{!v.total}" stat="{!v.stat1}" message="{!v.message}" title="{!v.title}" separatorText="{!v.separatorText}" moreLink="{!v.moreLink}" moreText="{!v.moreText}" aura:id="slot1"/>
+                                </aura:if>
+                            </div>
+                        </aura:set>
+                    </aura:if>
+                </aura:if>
+                <aura:if isTrue="{!v.showStat2}">
+                    <aura:if isTrue="{!v.statDoubleWide2 == false}">
+                        <div class="{! 'stat2 ' + v.containerClasses}" id="stat2">
+                            <aura:if isTrue="{!v.statMode2 == 'Peak_ProgressCircle'}">
+                                <c:Peak_ProgressCircle Legend="{!v.header2}" headerAtTop="{!v.headerAtTop}" actualProgress="{!v.count2}"  totalProgress="{!v.total2}" message="{!v.message2}" title="{!v.title2}" themeBeforeThreshold="{!v.progressColor}" themeAfterThreshold="{!v.progressColor}" moreLink="{!v.moreLink2}" moreText="{!v.moreText2}"  aura:id="slot2"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode2 == 'Peak_Stat'}">
+                                <c:Peak_Stat header="{!v.header2}" headerAtTop="{!v.headerAtTop}" message="{!v.message2}" title="{!v.title2}" count="{!v.count2}" total="{!v.total2}" separatorText="{!v.separatorText2}"  stat="{!v.stat2}" moreLink="{!v.moreLink2}" moreText="{!v.moreText2}" isSingleStat="{!v.isSingleStat2}"  aura:id="slot2" />
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode2 == 'Peak_StatProgressBar'}">
+                                <c:Peak_StatProgressBar header="{!v.header2}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count2}" figure2="{!v.total2}" stat="{!v.stat2}" message="{!v.message2}" title="{!v.title2}" separatorText="{!v.separatorText2}" moreLink="{!v.moreLink2}" moreText="{!v.moreText2}" aura:id="slot2"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode2 == 'Peak_StatProgressBarVertical'}">
+                                <c:Peak_StatProgressBar isVertical="true" header="{!v.header2}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count2}" figure2="{!v.total2}" stat="{!v.stat2}" message="{!v.message2}" title="{!v.title2}" separatorText="{!v.separatorText2}" moreLink="{!v.moreLink2}" moreText="{!v.moreText2}" aura:id="slot2"/>
+                            </aura:if>
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="{! 'stat2 ' + v.containerClassesDW}" id="stat2">
+                                <aura:if isTrue="{!v.statMode2 == 'Peak_ProgressCircle'}">
+                                    <c:Peak_ProgressCircle Legend="{!v.header2}" headerAtTop="{!v.headerAtTop}" actualProgress="{!v.count2}"  totalProgress="{!v.total2}"  stat="{!v.stat2}" message="{!v.message2}" title="{!v.title2}" themeBeforeThreshold="{!v.progressColor}" themeAfterThreshold="{!v.progressColor}" moreLink="{!v.moreLink2}" moreText="{!v.moreText2}" aura:id="slot2" />
+                                </aura:if>
+                                <aura:if isTrue="{!v.statMode2 == 'Peak_Stat'}">
+                                    <c:Peak_Stat header="{!v.header2}" headerAtTop="{!v.headerAtTop}" message="{!v.message2}" title="{!v.title2}" count="{!v.count2}" total="{!v.total2}" separatorText="{!v.separatorText2}"  stat="{!v.stat2}" moreLink="{!v.moreLink2}" moreText="{!v.moreText2}" isSingleStat="{!v.isSingleStat2}"  aura:id="slot2" />
+                                </aura:if>
+                                <aura:if isTrue="{!v.statMode2 == 'Peak_StatProgressBar'}">
+                                    <c:Peak_StatProgressBar header="{!v.header2}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count2}" figure2="{!v.total2}" stat="{!v.stat2}" message="{!v.message2}" title="{!v.title2}" separatorText="{!v.separatorText2}" moreLink="{!v.moreLink2}" moreText="{!v.moreText2}" aura:id="slot2"/>
+                                </aura:if>
+                            </div>
+                        </aura:set>
+                    </aura:if>
+                </aura:if>
+                <aura:if isTrue="{!v.showStat3}">
+                    <aura:if isTrue="{!v.statDoubleWide3 == false}">
+                        <div class="{! 'stat3 ' + v.containerClasses}" id="stat3">
+                            <aura:if isTrue="{!v.statMode3 == 'Peak_ProgressCircle'}">
+                                <c:Peak_ProgressCircle Legend="{!v.header3}" headerAtTop="{!v.headerAtTop}" actualProgress="{!v.count3}"  totalProgress="{!v.total3}" message="{!v.message3}" title="{!v.title3}" themeBeforeThreshold="{!v.progressColor}" themeAfterThreshold="{!v.progressColor}" moreLink="{!v.moreLink3}" moreText="{!v.moreText3}"  aura:id="slot3"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode3 == 'Peak_Stat'}">
+                                <c:Peak_Stat header="{!v.header3}" headerAtTop="{!v.headerAtTop}" message="{!v.message3}" title="{!v.title3}" count="{!v.count3}" total="{!v.total3}" separatorText="{!v.separatorText3}"  stat="{!v.stat3}" moreLink="{!v.moreLink3}" moreText="{!v.moreText3}" isSingleStat="{!v.isSingleStat3}" aura:id="slot3" />
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode3 == 'Peak_StatProgressBar'}">
+                                <c:Peak_StatProgressBar header="{!v.header3}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count3}" figure2="{!v.total3}" stat="{!v.stat3}" message="{!v.message3}" title="{!v.title3}" separatorText="{!v.separatorText3}" moreLink="{!v.moreLink3}" moreText="{!v.moreText3}" aura:id="slot3"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode3 == 'Peak_StatProgressBarVertical'}">
+                                <c:Peak_StatProgressBar isVertical="true" header="{!v.header3}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count3}" figure2="{!v.total3}" stat="{!v.stat3}" message="{!v.message3}" title="{!v.title3}" separatorText="{!v.separatorText3}" moreLink="{!v.moreLink3}" moreText="{!v.moreText3}" aura:id="slot3"/>
+                            </aura:if>
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="{! 'stat3 ' + v.containerClassesDW}" id="stat3">
+                                <aura:if isTrue="{!v.statMode3 == 'Peak_ProgressCircle'}">
+                                    <c:Peak_ProgressCircle Legend="{!v.header3}" headerAtTop="{!v.headerAtTop}" actualProgress="{!v.count3}"  totalProgress="{!v.total3}" message="{!v.message3}" title="{!v.title3}" themeBeforeThreshold="{!v.progressColor}" themeAfterThreshold="{!v.progressColor}" moreLink="{!v.moreLink3}" moreText="{!v.moreText3}" aura:id="slot3" />
+                                </aura:if>
+                                <aura:if isTrue="{!v.statMode3 == 'Peak_Stat'}">
+                                    <c:Peak_Stat header="{!v.header3}" headerAtTop="{!v.headerAtTop}" message="{!v.message3}" title="{!v.title3}" count="{!v.count3}" total="{!v.total3}" separatorText="{!v.separatorText3}"  stat="{!v.stat3}" moreLink="{!v.moreLink3}" moreText="{!v.moreText3}" isSingleStat="{!v.isSingleStat3}" aura:id="slot3"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.statMode3 == 'Peak_StatProgressBar'}">
+                                    <c:Peak_StatProgressBar header="{!v.header3}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count3}" figure2="{!v.total3}" stat="{!v.stat3}" message="{!v.message3}" title="{!v.title3}" separatorText="{!v.separatorText3}" moreLink="{!v.moreLink3}" moreText="{!v.moreText3}" aura:id="slot3"/>
+                                </aura:if>
+                            </div>
+                        </aura:set>
+                    </aura:if>
+                </aura:if>
+                <aura:if isTrue="{!v.showStat4}">
+                    <aura:if isTrue="{!v.statDoubleWide4 == false}">
+                        <div class="{! 'stat4 ' + v.containerClasses}" id="stat4">
+                            <aura:if isTrue="{!v.statMode4 == 'Peak_ProgressCircle'}">
+                                <c:Peak_ProgressCircle Legend="{!v.header4}" headerAtTop="{!v.headerAtTop}" actualProgress="{!v.count4}"  totalProgress="{!v.total4}" message="{!v.message4}" title="{!v.title4}" themeBeforeThreshold="{!v.progressColor}" themeAfterThreshold="{!v.progressColor}" moreLink="{!v.moreLink4}" moreText="{!v.moreText4}" aura:id="slot4"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode4 == 'Peak_Stat'}">
+                                <c:Peak_Stat header="{!v.header4}" headerAtTop="{!v.headerAtTop}" message="{!v.message4}" title="{!v.title4}" count="{!v.count4}" total="{!v.total4}"  separatorText="{!v.separatorText4}" stat="{!v.stat4}" moreLink="{!v.moreLink4}" moreText="{!v.moreText4}" isSingleStat="{!v.isSingleStat4}" aura:id="slot4"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode4 == 'Peak_StatProgressBar'}">
+                                <c:Peak_StatProgressBar header="{!v.header4}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count4}" figure2="{!v.total4}" stat="{!v.stat4}" message="{!v.message4}" title="{!v.title4}" separatorText="{!v.separatorText4}" moreLink="{!v.moreLink4}" moreText="{!v.moreText4}" aura:id="slot4"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.statMode4 == 'Peak_StatProgressBarVertical'}">
+                                <c:Peak_StatProgressBar isVertical="true" header="{!v.header4}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count4}" figure2="{!v.total4}" stat="{!v.stat4}" message="{!v.message4}" title="{!v.title4}" separatorText="{!v.separatorText4}" moreLink="{!v.moreLink4}" moreText="{!v.moreText4}" aura:id="slot4"/>
+                            </aura:if>
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="{! 'stat4 ' + v.containerClassesDW}">
+                                <aura:if isTrue="{!v.statMode4 == 'Peak_ProgressCircle'}">
+                                    <c:Peak_ProgressCircle Legend="{!v.header4}" headerAtTop="{!v.headerAtTop}" actualProgress="{!v.count4}"  totalProgress="{!v.total4}" message="{!v.message4}" title="{!v.title4}" themeBeforeThreshold="{!v.progressColor}" themeAfterThreshold="{!v.progressColor}" moreLink="{!v.moreLink4}" moreText="{!v.moreText4}" aura:id="slot4"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.statMode4 == 'Peak_Stat'}">
+                                    <c:Peak_Stat header="{!v.header4}" headerAtTop="{!v.headerAtTop}" message="{!v.message4}" title="{!v.title4}" count="{!v.count4}" total="{!v.total4}"  separatorText="{!v.separatorText4}" stat="{!v.stat4}" moreLink="{!v.moreLink4}" moreText="{!v.moreText4}" isSingleStat="{!v.isSingleStat4}" aura:id="slot4"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.statMode4 == 'Peak_StatProgressBar'}">
+                                    <c:Peak_StatProgressBar header="{!v.header4}" headerAtTop="{!v.headerAtTop}" figure1="{!v.count4}" figure2="{!v.total4}" stat="{!v.stat4}" message="{!v.message4}" title="{!v.title4}" separatorText="{!v.separatorText4}" moreLink="{!v.moreLink4}" moreText="{!v.moreText4}" aura:id="slot4"/>
+                                </aura:if>
+                            </div>
+                        </aura:set>
+                    </aura:if>
+                </aura:if>
+            </div>
+        </div>
+    </section>
+
+</aura:component>

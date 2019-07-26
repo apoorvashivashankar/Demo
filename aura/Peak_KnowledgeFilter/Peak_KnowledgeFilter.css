@@ -1,0 +1,136 @@
+/**
+ * peak_knowledgefilter - Generates the assets used for Peak Knowledge Filter
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS .peak_knowledgeFilter__search .slds-form-element {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.THIS .peak_knowledgeFilter__search .slds-form-element > label {
+  display: none;
+}
+.THIS .peak_knowledgeFilter__search input {
+  font-size: 1.625rem;
+  line-height: 1.625rem;
+  padding: 1.125rem .625rem;
+}
+.THIS .peak_knowledgeFilter__search input::placeholder,
+.THIS .peak_knowledgeFilter__search input::-webkit-input-placeholder,
+.THIS .peak_knowledgeFilter__search input::-moz-placeholder {
+  font-size: 1.625rem !important;
+}
+.THIS .peak_knowledgeFilter__search .slds-icon_container {
+  right: 1.5rem;
+}
+.THIS .peak_knowledgeFilter__filter label {
+  display: none;
+}
+.THIS .peak_knowledgeFilter__filter select {
+  font-size: 1rem;
+  height: 2.5rem;
+}
+.THIS .peak_knowledgeFilter__pager button {
+  text-transform: uppercase;
+}
+.THIS .peak_knowledgeFilter__pager button.pager-left {
+  padding-right: 1.875rem;
+}
+.THIS .peak_knowledgeFilter__pager button.pager-right {
+  padding-left: 1.875rem;
+}
+.THIS .peak_knowledgeFilter__pager button .slds-icon_container {
+  position: relative;
+  top: -1px;
+}
+.THIS .peak_knowledgeFilter__pager button .slds-icon_container svg {
+  fill: #fff;
+}
+.THIS .peak_knowledgeFilter__results {
+  position: relative;
+  min-height: 150px;
+}
+.THIS .peak_knowledgeFilter__results table {
+  background: none;
+}
+@media (max-width: 48em) {
+  .THIS .peak_knowledgeFilter__results table {
+    border: 0;
+  }
+}
+.THIS .peak_knowledgeFilter__results table thead th {
+  font-size: .8125rem;
+  padding-top: .375rem;
+  padding-bottom: .375rem;
+}
+.THIS .peak_knowledgeFilter__results table thead th:first-child {
+  width: 65%;
+}
+@media (max-width: 48em) {
+  .THIS .peak_knowledgeFilter__results table thead {
+    display: none;
+  }
+}
+.THIS .peak_knowledgeFilter__results table tbody tr th {
+  font-weight: 700;
+}
+.THIS .peak_knowledgeFilter__results table tbody tr th,
+.THIS .peak_knowledgeFilter__results table tbody tr td {
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
+}
+.THIS .peak_knowledgeFilter__results table tbody tr th div ul,
+.THIS .peak_knowledgeFilter__results table tbody tr td div ul {
+  flex-wrap: wrap;
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS .peak_knowledgeFilter__results table tbody tr th div ul,
+  .THIS .peak_knowledgeFilter__results table tbody tr td div ul {
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+  }
+}
+@media (max-width: 48em) {
+  .THIS .peak_knowledgeFilter__results table tbody tr {
+    display: flex;
+    flex-direction: column;
+    margin: .625rem 0;
+    border-top: 2px solid;
+  }
+  .THIS .peak_knowledgeFilter__results table tbody tr th,
+  .THIS .peak_knowledgeFilter__results table tbody tr td {
+    display: flex;
+    width: 100%;
+    padding: .625rem 0;
+  }
+  .THIS .peak_knowledgeFilter__results table tbody tr th:first-child,
+  .THIS .peak_knowledgeFilter__results table tbody tr td:first-child {
+    border-top: 0;
+  }
+  .THIS .peak_knowledgeFilter__results table tbody tr th > div,
+  .THIS .peak_knowledgeFilter__results table tbody tr td > div {
+    font-size: .875rem;
+    padding-left: .25rem;
+    text-align: right;
+    flex: 4;
+  }
+  .THIS .peak_knowledgeFilter__results table tbody tr th:before,
+  .THIS .peak_knowledgeFilter__results table tbody tr td:before {
+    font-size: .75rem;
+    font-weight: 400;
+    padding-right: .25rem;
+    content: attr(data-label);
+    text-transform: uppercase;
+    flex: 2;
+  }
+}
+.THIS .peak_knowledgeFilter__results table.isSearching {
+  border-bottom: 0;
+}
+.THIS .peak_knowledgeFilter__results .peak_knowledgeFilter_topicsList a {
+  font-size: .75rem;
+}

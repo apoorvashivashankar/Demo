@@ -1,0 +1,4 @@
+<design:component label="7S Style &amp; Script Includes with Font Switcher">
+    <design:attribute name="specializedFont" label="Specialized Font" default="Galada"  description="" datasource="Galada,Georgia" />
+    <design:attribute name="specialTitleFont" label="Special Title Font" default="RalewayItalics"  description="" datasource="RalewayItalics,Josefin" />
+</design:component>

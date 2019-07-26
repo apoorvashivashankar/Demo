@@ -1,0 +1,9 @@
+<!--
+ - Created by 7Summits on 3/29/18.
+ -->
+
+<aura:component description="Dal_ModalBase" extensible="true" extends="c:Dal_Base">
+    <div class="dal-modalBase">
+        {!v.body}
+    </div>
+</aura:component>

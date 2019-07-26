@@ -1,0 +1,195 @@
+<!--
+ - Created by 7Summits on 5/14/18.
+ -->
+
+<aura:component description="Dal_ShipmentDetail" extends="c:Dal_Base" controller="Dal_ShipmentManager" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+   <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    <!-- labels -->
+    <aura:attribute name="labelShippingInfo" type="String" default="Shipment Info"/>
+    <aura:attribute name="labelShipDate" type="String" default="Shipped Date"/>
+    <aura:attribute name="labelBolNumber" type="String" default="BOL Number"/>
+    <aura:attribute name="labelCarrier" type="String" default="Carrier"/>
+    <aura:attribute name="labelTracking" type="String" default="Tracking Number"/>
+    <aura:attribute name="labelStatus" type="String" default="Status"/>
+    <aura:attribute name="labelShipFrom" type="String" default="Ship From"/>
+    <aura:attribute name="labelWeight" type="String" default="Weight"/>
+    <aura:attribute name="showLineDetail" type="Boolean" default="false" />
+
+    <aura:attribute name="shipmentHeader" type="Object" default="{}" />
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+
+    <aura:if isTrue="{!v.isLoading == false}">
+
+        <lightning:layout class="dal-form-order orderContainer slds-m-vertical_x-large" horizontalAlign="center" verticalAlign="center">
+            <lightning:layoutItem size="12">
+
+                <!-- ******************** -->
+                <!-- Shipment Info -->
+                <!-- ******************** -->
+                <lightning:layout class="slds-p-around_medium" multipleRows="true" horizontalAlign="center" verticalAlign="start">
+
+                    <lightning:layoutItem class="slds-p-vertical_medium slds-p-right_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2">
+                        <h4 class="bold">{!v.labelShippingInfo}</h4>
+                    </lightning:layoutItem>
+
+                    <lightning:layoutItem class="rowInfo slds-p-bottom_small shipHeader slds-grid slds-wrap slds-grid_align-spread" size="10">
+                        <div class="headerBlock slds-m-horizontal_large">
+                            <dl class="slds-p-horizontal_large">
+                                <dt class="bold">{!v.labelBolNumber}</dt>
+                                <dd>{!v.shipmentHeader.BolNumber}</dd>
+                            </dl>
+                            <dl class="slds-p-horizontal_large">
+                                <dt class="bold">{!v.labelShipDate}</dt>
+                                <dd><ui:outputDate value="{!v.shipmentHeader.ShipmentCreationDate}" format="MM/DD/YY" /></dd>
+                            </dl>
+                            <dl class="slds-p-horizontal_large">
+                                <dt class="bold">{!v.labelShipFrom}</dt>
+                                <dd>{!v.shipmentHeader.ShipFromLocDesc}</dd>
+                            </dl>
+                        </div>
+                        <div class="headerBlock slds-m-horizontal_large">
+                            <dl class="slds-p-horizontal_large">
+                                <dt class="bold">{!v.labelCarrier}</dt>
+                                <dd>{!v.shipmentHeader.CarrierName}</dd>
+                            </dl>
+                            <dl class="slds-p-horizontal_large">
+                                <dt class="bold">{!v.labelTracking}</dt>
+                                <dd>{!v.shipmentHeader.TrackingNbr}</dd>
+                            </dl>
+                        </div>
+                        <div class="headerBlock slds-m-horizontal_large">
+                            <dl class="slds-p-horizontal_large">
+                                <dt class="bold">{!v.labelStatus}</dt>
+                                <dd>{!v.shipmentHeader.StatusDesc}</dd>
+                            </dl>
+
+                            <dl class="slds-p-horizontal_large">
+                                <dt class="bold">{!v.labelWeight}</dt>
+                                <dd>{!v.shipmentHeader.Total_Weight}</dd>
+                            </dl>
+                        </div>
+                    </lightning:layoutItem>
+
+                </lightning:layout>
+                <!-- ******************** -->
+                <!-- End Shipment Info -->
+                <!-- ******************** -->
+
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout class="slds-p-bottom_small" multipleRows="true" verticalAlign="center">
+
+            <!--<lightning:layoutItem size="12">
+                <lightning:layout multipleRows="true" verticalAlign="center">
+                    <lightning:layoutItem class="slds-p-vertical_xx-small" size="12" smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="7">
+                        <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="slds-p-vertical_xx-small" size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="5">
+                        <lightning:input class="slds-col slds-medium-text-align_right slds-large-text-align_right" type="checkbox"
+                                         label="Show Line Item Details" name="showLineItemDetails" checked="{!v.showLineDetail}" onchange="{!v.handleLineItemDetailChange}" />
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>-->
+
+        </lightning:layout>
+        <lightning:layout class="dal-form-order orderContainer slds-p-around_medium" horizontalAlign="center" verticalAlign="center" multipleRows="true">
+
+            <!-- ******************** -->
+            <!-- Shipment Details    -->
+            <!-- ******************** -->
+
+                <lightning:layoutItem class="slds-p-bottom_small" size="12">
+
+                        <lightning:layout class="{!index > 0 ? 'slds-p-top_small slds-border_top' : ''}" multipleRows="true" verticalAlign="start">
+                            <aura:iteration items="{!v.shipmentHeader.lineWrapper}" var="lineWrapper">
+                                <lightning:layoutItem class="slds-show_medium" size="12" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2">
+                                    <div class="slds-p-bottom_small">
+                                        <label>Order #:</label>
+                                        <h3 class="bold">
+                                            <a href="javascript:void(0)" title="Order Link" data-url="{!'/order-detail?ordernumber='+lineWrapper.SalesOrder}" onclick="{!c.gotoURL}">
+                                                 {!lineWrapper.SalesOrder}
+                                            </a>
+                                        </h3>
+                                    </div>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="10" largeDeviceSize="10">
+                                    <lightning:layout multipleRows="true" verticalAlign="start">
+
+                                        <!-- ******************** -->
+                                        <!--  Basic product info -->
+                                        <!-- ******************** -->
+
+                                        <lightning:layoutItem class="rowInfo slds-p-bottom_small slds-p-left_x-large slds-grid slds-wrap slds-grid_align-spread" size="12">
+                                            <div class="slds-p-bottom_small dal-medium-inputFull dal-small-inputFull">
+                                                <h3 class="bold">
+                                                        <span class="slds-hide_medium">{!index + 1}</span> {!lineWrapper.MaterialDesc}
+                                                </h3>
+                                                <div class="orderOutputData slds-p-top_xx-small">
+                                                    <label>SKU:</label>
+                                                    <span class="bold">{!lineWrapper.Material}</span>
+                                                </div>
+                                            </div>
+                                            <dl class="slds-p-horizontal_x-large">
+                                                <dt>Shipped Qty:</dt>
+                                                <dd>{!lineWrapper.ShippedQuantity} &nbsp; {!lineWrapper.UOM}</dd>
+                                            </dl>
+                                            <dl class="slds-p-horizontal_x-large">
+
+                                                <dt>Order Qty:</dt>
+                                                <dd>{!lineWrapper.OrderQuantity} &nbsp; {!lineWrapper.UOM}</dd>
+                                            </dl>
+
+                                        </lightning:layoutItem>
+                                        <lightning:layoutItem class="rowInfo slds-grid slds-wrap slds-grid_align-spread" size="12" mediumDeviceSize="8" largeDeviceSize="6">
+                                               <div class="outputData slds-p-horizontal_x-large">
+                                                 <aura:if isTrue="{!lineWrapper.Invoice != null}" >
+                                                   <p>
+                                                     <label>Invoice #:</label>
+                                                     <span>{!lineWrapper.Invoice}</span>
+                                                 </p>
+                                                   </aura:if>
+                                                   <p>
+                                                       <label>PO #:</label>
+                                                       <span>{!lineWrapper.CustomerPONo}</span>
+                                                   </p>
+                                                   <p>
+                                                       <label>Shade:</label>
+                                                       <span>{!lineWrapper.Shade}</span>
+                                                   </p>
+                                               </div>
+                                               <div class="outputData slds-p-horizontal_x-large">
+
+                                                    <p>
+                                                        <label>Weight:</label>
+                                                        <span>{!lineWrapper.Weight}</span>
+                                                    </p>
+                                                   <p>
+                                                       <label>Carton Count:</label>
+                                                       <span>{!lineWrapper.CartonCount}</span>
+                                                   </p>
+                                                   <p>
+                                                       <label>Piece Count:</label>
+                                                       <span>{!lineWrapper.PieceCount}</span>
+                                                   </p>
+                                               </div>
+
+                                        </lightning:layoutItem>
+                                        <!-- ******************** -->
+                                        <!--  End basic product info -->
+                                        <!-- ******************** -->
+
+                                    </lightning:layout>
+                                </lightning:layoutItem>
+                            </aura:iteration>
+                        </lightning:layout>
+
+                </lightning:layoutItem>
+        </lightning:layout>
+        <aura:set attribute="else">
+            <div class="slds-is-relative slds-p-around_xx-large">
+                <lightning:spinner variant="brand" />
+            </div>
+        </aura:set>
+    </aura:if>
+
+</aura:component>

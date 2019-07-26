@@ -1,0 +1,129 @@
+/**
+ * DalTile_Lightning - Generates the assets used for DalTile Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS.dal-listBase .slds-table {
+  border-top: 0;
+}
+.THIS.dal-listBase .slds-table,
+.THIS.dal-listBase .slds-table thead tr th,
+.THIS.dal-listBase .slds-table tbody tr th,
+.THIS.dal-listBase .slds-table tbody tr td {
+  border-color: #f1f2f3;
+}
+.THIS.dal-listBase .slds-table thead th,
+.THIS.dal-listBase .slds-table thead button {
+  font-size: .75rem;
+  line-height: 1.5em;
+  text-transform: uppercase;
+  color: #5f5f5f;
+}
+.THIS.dal-listBase .slds-table thead th svg,
+.THIS.dal-listBase .slds-table thead button svg {
+  position: relative;
+  top: -1px;
+  width: 1em;
+  height: 1em;
+  fill: #5f5f5f;
+}
+.THIS.dal-listBase .slds-table thead th .slds-truncate,
+.THIS.dal-listBase .slds-table thead button .slds-truncate {
+  white-space: pre-wrap;
+}
+.THIS.dal-listBase .slds-table thead button {
+  position: relative;
+  text-align: left;
+  white-space: pre-wrap;
+}
+.THIS.dal-listBase .slds-table thead button:focus {
+  box-shadow: none;
+}
+.THIS.dal-listBase .slds-table thead button.slds-button_icon {
+  padding-right: 18px;
+}
+.THIS.dal-listBase .slds-table thead button.slds-button_icon .slds-icon_container {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  margin-top: -0.5em;
+}
+.THIS.dal-listBase .slds-table tbody td {
+  font-size: .8125rem;
+}
+.THIS.dal-listBase .slds-table tbody td.actionMenu {
+  text-align: center;
+}
+.THIS.dal-listBase .slds-table tbody td.actionMenu button {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.THIS.dal-listBase .slds-table tbody td.actionMenu button:focus {
+  box-shadow: none;
+}
+@media only screen and (max-width: 47.9375em) {
+  .THIS.dal-listBase .slds-table tbody td.actionMenu {
+    overflow: visible;
+    text-align: right;
+  }
+}
+.THIS.dal-listBase .slds-table tbody td.checkboxAction {
+  width: .625rem;
+}
+.THIS.dal-listBase input[type='checkbox'] {
+  font-size: 1rem;
+}
+.THIS.dal-listBase .dal-list-showAll {
+  font-size: .9375rem;
+}
+.THIS.dal-listBase .dal-list-ctaLink {
+  font-size: .75rem;
+  color: token(colorTextLabel);
+}
+.THIS.dal-listBase .dal-list-ctaLink svg {
+  width: 1em;
+  height: 1em;
+  padding-left: 2px;
+  fill: token(colorTextLabel);
+}
+.THIS.dal-listBase .dal-pagination .pager-pageCount {
+  font-size: .75rem;
+}
+.THIS.dal-listBase .dal-pagination .pager-current-activePage,
+.THIS.dal-listBase .dal-pagination .pager-current-totalCount {
+  font-weight: bold;
+}
+.THIS.dal-listBase .dal-pagination button {
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+
+}
+@media (max-width: 48.000em) {
+  .THIS.dal-listBase .dal-pagination button {
+    padding: .375rem 1.25rem;
+    font-size: .8125rem;
+  }
+}
+.THIS.dal-listBase .dal-pagination button > span {
+  position: relative;
+  top: -2px;
+}
+
+.THIS .warning-message{
+    background-color: #FCF7CD;
+    padding: 10px 20px;
+    text-align: center;
+    width:100%;
+}
+@media (max-width: 48.000em) {
+  .THIS.dal-listBase .slds-table tbody td.checkboxAction {
+    width: 2rem;
+  }
+  /*.THIS.dal-listBase input[type=checkbox]{
+    font-size: 2rem;
+    width: 2rem;
+  }*/
+}

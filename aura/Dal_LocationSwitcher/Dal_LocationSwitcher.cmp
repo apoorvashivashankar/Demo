@@ -1,0 +1,63 @@
+<!--
+ - Created by 7Summits on 2/16/18.
+ -->
+
+<aura:component description="Dal_LocationSwitcher" extends="c:Dal_Base" >
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+
+    <aura:attribute name="communityType" type="String" default="" required="true" />
+
+    <aura:attribute name="locationSwitcher" type="String" default="Location Switcher" />
+    <aura:attribute name="locationIcon" type="String" default="fa fa-map-marker" />
+
+    <!-- component internal attributes -->
+    <aura:attribute name="userLocations" type="List" default="[]" />
+    <aura:attribute name="selectedLocationId" type="String" />
+    <aura:attribute name="selectedLocationName" type="String" />
+    <aura:attribute name="showLocations" type="Boolean" default="false" access="private" />
+    <aura:attribute name="showLoading" type="Boolean" default="false"/>
+    <aura:attribute name="showNoLocations" type="Boolean" default="false"/>
+    <aura:attribute name="cartId" type="String" default=""/>
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+ 
+    <!-- Events -->
+    <aura:registerEvent name="LocationSwitcherCartEvent" type="c:Dal_SSC_LocationSwitcherCartEvent"/>
+    <aura:handler name="locationSelectedEvt" event="c:Dal_LocationSwitcherEvt" action="{!c.handleLocationSelected}"/>
+    <aura:handler event="c:Dal_SSC_LocationSwitcherCartEvent" action="{!c.handleLocationSwitched}"/>
+
+    <div class="locationToggle">
+
+        <aura:if isTrue="{!v.showNoLocations == false}">
+            <a href="javascript:void(0)" class="selectButton" onclick="{!c.toggleSelectLocation}">
+                <span class="icon"><i class="{!v.locationIcon}"></i></span>
+                <span class="text">{!v.selectedLocationName}</span>
+                <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+            </a>
+        <aura:set attribute="else">
+            <span>
+                <span class="icon"><i class="{!v.locationIcon}"></i></span>
+                <span class="text">No Locations</span>
+            </span>
+        </aura:set>
+        </aura:if>
+        
+        <div aura:id="locationList" id="locationListId" class="slds-dropdown dal-location-locator-header-custom slds-dropdown_left slds-dropdown_length-with-icon-5 slds-hide">
+            <ul class="slds-dropdown__list" role="menu">
+                <aura:iteration items="{!v.userLocations}" var="location">
+                    <c:Dal_LocationSwitcherItem name="{!location.displayName}" id="{!location.id}" selected="{!location.id == v.selectedLocationId}" />
+                </aura:iteration>
+            </ul>
+        </div>
+
+    </div>
+
+    <aura:if isTrue="{!v.showLoading == true}">
+        <div class="slds-is-absolute">
+            <lightning:spinner variant="brand" size="medium"/>
+         </div>
+    </aura:if>
+
+</aura:component>

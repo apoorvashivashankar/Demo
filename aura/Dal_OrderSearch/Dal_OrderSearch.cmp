@@ -1,0 +1,196 @@
+<!--
+ - Created by 7Summits on 4/9/18.
+ -->
+
+<aura:component description="Dal_OrderSearch" extends="c:Dal_Base" controller="Dal_OrderSearchController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="orderStatus" type="String" default=""/>
+    <aura:attribute name="orderNumber" type="String" default=""/>
+    <aura:attribute name="poNumber" type="String" default=""/>
+    <aura:attribute name="jobName" type="String" default=""/>
+    <aura:attribute name="orderDateStart" type="Date" default=""/>
+    <aura:attribute name="orderDateEnd" type="Date" default=""/>
+    <aura:attribute name="lineStatus" type="String" default=""/>
+    <aura:attribute name="lineStatusSelected" type="String"/>
+    <aura:attribute name="searchButton" type="String" default=""/>
+    <aura:attribute name="listType" type="String" default="Orders List"/>
+    <aura:attribute name="filteredRows" type="String"/>
+    <aura:attribute name="communityType" type="String" default="Distributor"/>
+    <aura:attribute name="lineStatuses" type="List" default="[]"/>
+    <aura:attribute name="multilpeLineStatus" type="List" default="[]"/>
+
+    <aura:attribute name="hasPagination" type="Boolean" default="false"/>
+    <aura:attribute name="paginationItemsPerPage" type="Integer" default="30"/>
+    <aura:attribute name="paginationStartPage" type="Integer" default="0"/>
+    <aura:attribute name="listMaximum" type="Integer" default="300"/>
+    <aura:attribute name="isChecked" type="Boolean" default="false"/>
+
+
+    <aura:attribute name="showDropdown" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{! c.init }"/>
+
+    <lightning:layout pullToBoundary="small" multipleRows="true">
+        <lightning:layoutItem size="12" class="slds-p-vertical--large">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem class="slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <ui:inputText aura:id="orderNumber" label="Order Number"
+                                  class="slds-p-around_small input-x-small"
+                                  value="{!v.orderNumber}"
+                                  required="false"
+                                  maxlength="11"
+                    />
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <ui:inputText aura:id="purchaseOrder" label="Purchase Order"
+                                  class="slds-p-around_small input-x-small"
+                                  value="{!v.poNumber}"
+                                  required="false"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-around_x-small" size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                    <ui:inputText aura:id="jobName" label="Job Name"
+                                  class="slds-p-around_small input-x-small"
+                                  value="{!v.jobName}"
+                                  required="false"/>
+                </lightning:layoutItem>
+                <aura:if isTrue="{!(v.listType != 'Search List')}">
+                <lightning:layoutItem class="orderDate slds-p-around_x-small" size="12" mediumDeviceSize="6"
+                                      largeDeviceSize="3">
+                    <label class="uiLabel">Order Date Between</label>
+                    <div>
+                        <ui:inputDate aura:id="orderStartDate" displayDatePicker="true"
+                                      value="{!v.orderDateStart}"
+                                      format="MM/DD/YYYY"
+                                      required="true"/>
+                        <span class="dateSeparator">-</span>
+                        <ui:inputDate aura:id="orderEndDate" displayDatePicker="true"
+                                      value="{!v.orderDateEnd}"
+                                      format="MM/DD/YYYY"
+                                      required="true"/>
+                    </div>
+                </lightning:layoutItem>
+				</aura:if>
+
+                <aura:if isTrue="{!or(v.listType == 'All Orders List',or(v.listType == 'History List',v.listType == 'Orders List'))}" >
+                <lightning:layoutItem class="orderStatus slds-p-around_x-small" size="12" mediumDeviceSize="6"
+                                          largeDeviceSize="2">
+
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="combobox-id-10">Line status</label>
+                            <div class="slds-form-element__control">
+                                <div class="slds-combobox_container">
+                                    <div aura:id="dropdownDiv"
+                                         class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click"
+                                         aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                                             role="none">
+                                            <input type="text" onclick="{!c.handleDropdownClick}"
+                                                   class="slds-input dal-line-status slds-combobox__input slds-combobox__input-value"
+                                                   id="dropdownIdLineStatus" aria-controls="listbox-id-7"
+                                                   autoComplete="off" role="textbox"
+                                                   placeholder="Select an Option" readonly=""
+                                                   value="{!v.multilpeLineStatus.length + ' Selected'}"/>
+                                            <span class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right ">
+                                                <lightning:icon iconName="utility:chevrondown" size="xx-small"/>
+                                            </span>
+                                        </div>
+                                        <aura:if isTrue="{!v.showDropdown}">
+                                            <div class="dropdown-overlay" onclick="{!c.doDropdownClose}"/>
+                                        </aura:if>
+                                        <div aura:id="dropdownBox" id="listbox-id-7"
+                                             class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid order-status-dropdown"
+                                             role="listbox" onmouseleave="{!c.doDropdownClose}">
+                                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                                <aura:iteration items="{!v.lineStatuses}" var="lineStatus"
+                                                                indexVar="index">
+
+                                                    <li role="presentation" class="slds-listbox__item">
+                                                        <div id="option"
+                                                             class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-is-selected "
+                                                             role="option">
+                                                            <a href="" name="{!lineStatus.value}"
+                                                               onclick="{!c.onLineStatusSelect}"
+                                                               data-row-index="{!index}">
+                                                                <span class="slds-media__figure slds-listbox__option-icon">
+                                                                    <span class="slds-icon_container slds-icon-utility-check slds-current-color slds-grid icon-check">
+                                                                        
+                                                                        <lightning:icon
+                                                                                class="{!lineStatus.isChecked ? '': 'slds-hide'}"
+                                                                                iconName="utility:check"
+                                                                                size="xx-small"/>
+                                                                        <option value="{!lineStatus.value}"
+                                                                                selected="{!lineStatus.selected}"></option>
+                                                                        {!lineStatus.label}
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                </aura:iteration>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!--<lightning:select name="orderStatus" label="Line status" aura:id="orderStatus" value="{!v.lineStatus}"-->
+                        <!--class="input-x-small" onchange="{!c.onLineStatusChange}">-->
+                        <!--<option value="" label="" selected="selected">-None-</option>-->
+                        <!--<aura:iteration items="{!v.lineStatuses}" var="lineStatus">-->
+                        <!--<option value="{!lineStatus.value}" selected="{!lineStatus.selected}" label="{!lineStatus.label}">{!lineStatus.label}</option>-->
+                        <!--</aura:iteration>-->
+                        <!--</lightning:select>-->
+
+                    </lightning:layoutItem>
+
+                    <!--<aura:set attribute="else">-->
+                        <!--<aura:if isTrue="{!and((v.listType == 'Orders List'),(v.communityType == 'SSC'))}">-->
+                            <!--<lightning:layoutItem class="orderStatus slds-p-around_x-small" size="12"-->
+                                                  <!--mediumDeviceSize="6"-->
+                                                  <!--largeDeviceSize="2">-->
+                                <!--<lightning:select name="orderStatus" label="Line status" aura:id="orderStatus"-->
+                                                  <!--value="{!v.lineStatus}"-->
+                                                  <!--class="input-x-small" onchange="{!c.onLineStatusChange}">-->
+                                    <!--<option value="" label="" selected="selected">-None-</option>-->
+                                    <!--<aura:iteration items="{!v.lineStatuses}" var="lineStatus">-->
+                                        <!--<option value="{!lineStatus.value}" selected="{!lineStatus.selected}"-->
+                                                <!--label="{!lineStatus.label}">{!lineStatus.label}</option>-->
+                                    <!--</aura:iteration>-->
+                                <!--</lightning:select>-->
+                            <!--</lightning:layoutItem>-->
+                        <!--</aura:if>-->
+                    <!--</aura:set>-->
+                </aura:if>
+
+                <aura:if
+                        isTrue="{!or(v.listType == 'All Orders List',or(v.listType == 'History List',v.listType == 'Orders List'))}">
+                    <lightning:layoutItem class="searchButton slds-align-content-center  slds-p-horizontal_x-small"
+                                          size="12" mediumDeviceSize="6" largeDeviceSize="1">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <lightning:button variant="neutral" label="Search" onclick="{!c.searchOrders}"/>
+                    </lightning:layoutItem>
+                    <aura:set attribute="else">
+
+                        <lightning:layoutItem class="searchButton slds-align-content-center  slds-p-horizontal_x-small"
+                                              size="12" mediumDeviceSize="6" largeDeviceSize="2">
+                            <label class="slds-form-element__label">&nbsp;</label>
+                            <lightning:button variant="neutral" label="Search" onclick="{!c.searchOrders}"/>
+                        </lightning:layoutItem>
+                    </aura:set>
+                </aura:if>
+
+            </lightning:layout>
+
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" class="dal-relate-to-order">
+            <c:Dal_OrderList aura:id="orderListComponent" userType="{!v.communityType}" orderListType="{!v.listType}"
+                             hasPagination="{!v.hasPagination}" paginationItemsPerPage="{!v.paginationItemsPerPage}"
+                             paginationStartPage="{!v.paginationStartPage}"
+                             listMaximum="{!v.listMaximum}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

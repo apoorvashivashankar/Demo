@@ -1,0 +1,16 @@
+<aura:component description="Peak_ImageGalleryEntry">
+
+    <aura:attribute name="image" type="object" default="" />
+    <aura:attribute name="showDescription" type="boolean" default="" />
+
+    <img src="{!v.image.Image_URL__c}" alt="" />
+    <aura:if isTrue="{!v.showDescription}">
+        <lightning:layout horizontalAlign="" verticalAlign="" multipleRows="" class="slide__caption">
+            <lightning:layoutItem flexibility="grow" padding="around-small">
+                <p>
+                    <c:Peak_Base labelText="{!v.image.Image_Description__c}"/>
+                </p>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+</aura:component>

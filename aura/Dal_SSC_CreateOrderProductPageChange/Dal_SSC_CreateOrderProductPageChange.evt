@@ -1,0 +1,8 @@
+<!--
+ - Created by ranja on 31-12-2018.
+ -->
+
+<aura:event type="APPLICATION" description="Dal_SSC_CreateOrderProductPageChange">
+    <aura:attribute name="pageName" type="String" />
+    <aura:attribute name="skuName" type="String" />
+</aura:event>

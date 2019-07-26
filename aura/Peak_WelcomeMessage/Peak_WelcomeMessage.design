@@ -1,0 +1,10 @@
+<design:component label="7S Welcome Message">
+    <design:attribute name="greeting" label="Greeting Text" description="Text entered here will display prior to the user's first name"/>
+    <design:attribute name="punctuation" label="Greeting Punctuation" description="Punctuation appears right after the user's first name"/>
+    <design:attribute name="welcomeText" label="Welcome Text" description="Text entered here will display on the second line"/>
+    <design:attribute name="showAccount" label="Display Account Name" description="Show or hide the user's account name in the welcome message"/>
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+
+</design:component>

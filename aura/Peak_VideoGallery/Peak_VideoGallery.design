@@ -1,0 +1,24 @@
+<!--Copyright © 2016-2018 7Summits, Inc. All rights reserved.-->
+<design:component label="7S Video Gallery">
+    <design:attribute name="Title" label="Component Title"/>
+    
+    <design:attribute name="videoType1" label="Video 1: Source" datasource="YouTube,Vimeo"/>
+	<design:attribute name="VideoURL1" label="Video 1: ID" description="The YouTube ID can be found in the URL of the video.  It is usually 11 characters. (e.g. https://www.youtube.com/watch?v=[VIDEO_ID] OR https://youtu.be/[VIDEO_ID]) | The Vimeo ID can be found in the URL of the video.  It is usually 9 characters. (e.g. https://vimeo.com/[VIDEO_ID])"/>
+    <design:attribute name="VideoTitle1" label="Video 1: Title"/>
+    <design:attribute name="VideoDescription1" label="Video 1: Description"/>
+    
+    <design:attribute name="videoType2" label="Video 2: Source" datasource="YouTube,Vimeo"/>
+    <design:attribute name="VideoURL2" label="Video 2: ID" description="The YouTube ID can be found in the URL of the video.  It is usually 11 characters. (e.g. https://www.youtube.com/watch?v=[VIDEO_ID] OR https://youtu.be/[VIDEO_ID]) | The Vimeo ID can be found in the URL of the video.  It is usually 9 characters. (e.g. https://vimeo.com/[VIDEO_ID])"/>
+    <design:attribute name="VideoTitle2" label="Video 2: Title"/>
+    <design:attribute name="VideoDescription2" label="Video 2: Description"/>
+    
+    <design:attribute name="videoType3" label="Video 3: Source" datasource="YouTube,Vimeo"/>
+    <design:attribute name="VideoURL3" label="Video 3: ID" description="The YouTube ID can be found in the URL of the video.  It is usually 11 characters. (e.g. https://www.youtube.com/watch?v=[VIDEO_ID] OR https://youtu.be/[VIDEO_ID]) | The Vimeo ID can be found in the URL of the video.  It is usually 9 characters. (e.g. https://vimeo.com/[VIDEO_ID])"/>
+    <design:attribute name="VideoTitle3" label="Video 3: Title"/>
+    <design:attribute name="VideoDescription3" label="Video 3: Description"/>
+    
+    <design:attribute name="hideDescriptions" label="Hide All Descriptions" description="Check this setting to hide all descriptions, even if the description fields are populated."/>
+    <design:attribute name="descriptionLineLength" label="Maximum Description Lines" description="The maximum number of lines of the description text to be displayed." />
+    <design:attribute name="hasBorder" label="Add Border"/>
+    <design:attribute name="align" label="Header Alignment" datasource="center,left,right"/>
+</design:component>

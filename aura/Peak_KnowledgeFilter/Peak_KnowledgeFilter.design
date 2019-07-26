@@ -1,0 +1,17 @@
+<!--
+ - Created by 7Summits on 7/3/17.
+ -->
+
+<design:component label="7S Knowledge Filter">
+    <design:attribute name="articleFilter1" datasource="apex://Peak_NavigationalTopicsList" label="Article Filter 1 By" />
+    <design:attribute name="articleFilterSubtopics1" label="Include Subtopics Results with Parent Topic" />
+
+    <design:attribute name="articleFilter2" datasource="apex://Peak_NavigationalTopicsList" label="Article Filter 2 By" />
+    <design:attribute name="articleFilterSubtopics2" label="Include Subtopics Results with Parent Topic" />
+
+    <design:attribute name="articleFilter3" datasource="apex://Peak_NavigationalTopicsList" label="Article Filter 3 By" />
+    <design:attribute name="articleFilterSubtopics3" label="Include Subtopics Results with Parent Topic" />
+
+    <design:attribute name="articleFilter4" datasource="apex://Peak_NavigationalTopicsList" label="Article Filter 4 By" />
+    <design:attribute name="articleFilterSubtopics4" label="Include Subtopics Results with Parent Topic" />
+</design:component>

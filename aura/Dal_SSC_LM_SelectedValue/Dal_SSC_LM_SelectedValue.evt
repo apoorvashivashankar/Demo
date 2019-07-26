@@ -1,0 +1,8 @@
+<!--
+ - Created by ranja on 25-11-2018.
+ -->
+
+<aura:event type="COMPONENT" description="Dal_SSC_LM_SelectedValue">
+    <aura:attribute name="selectedValue" type="String" />
+    <aura:attribute name="selectedName" type="String" />
+</aura:event>

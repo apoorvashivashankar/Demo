@@ -1,0 +1,63 @@
+<!--
+ - Created by Yadav on 2/8/2019.
+ -->
+
+<aura:component description="Dal_SSC_LocationSwitcherModal" extends="c:Dal_ModalBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" controller="Dal_BaseController">
+ 
+
+    <!-- Required Attributes for Modal -->
+    <aura:attribute name="baseModal" type="Map"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <!--Internal Attributes-->
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="loading" type="Boolean" default="true" />
+    <aura:attribute name="accountId" type="String" default="" />
+    <aura:attribute name="cartId" type="String" default="" />
+    <aura:attribute name="itemMessage" type="String" default="You currently have products in your cart, switching accounts will clear your cart."/>
+    <aura:attribute name="itemMessagePart" type="String" default="" />
+
+    <aura:registerEvent name="LocationSwitcherCartEvent" type="c:Dal_SSC_LocationSwitcherCartEvent"/>
+
+    <!--BODY-->
+    <div>
+        <a onclick="{!c.closeModal}">
+            <lightning:icon class="slds-float_right" iconName="utility:close" alternativeText="Close"/>
+        </a><br/>
+
+        <lightning:layout class="dal-form dal-form-order slds-p-around_small slds-m-bottom_large" multipleRows="true">
+            <div class="slds-grid slds-size_12-of-12">
+
+                <div class="slds-size_10-of-12 slds-align_absolute-center">
+                    <div>
+                        <div class="slds-size_12-of-12 slds-text-heading_medium heading slds-m-bottom_medium slds-m-around_small ">
+                            <div class="slds-size_1-of-1 slds-align_absolute-center">
+                                <div class="dal-message-font-color">Are you sure you want to switch accounts?</div>
+                            </div>
+
+                            <div class="slds-size_10-of-12 slds-align_absolute-center  slds-m-top_xx-large">
+                                <div class="dal-message">
+                                    {!v.itemMessage}<br/>
+                                    <center>{!v.itemMessagePart}</center>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=" slds-p-horizontal_x-small slds-m-top_xx-large">
+                            <div class="slds-align_absolute-center slds-m-bottom_medium">
+                                <lightning:button label="YES, MOVE TO ANOTHER ACCOUNT" class="background-color"
+                                                  title="YES, MOVE TO ANOTHER ACCOUNT" onclick="{!c.changeAccount}"/>
+                            </div>
+                            <div class="slds-align_absolute-center">
+                                <a class="font-color-return-message" onclick="{!c.closeModal}"><u>No, return to my cart</u></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </lightning:layout>
+    </div>
+
+</aura:component>

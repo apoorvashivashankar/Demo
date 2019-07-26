@@ -1,0 +1,44 @@
+<!--
+ - Created by 7Summits on 2/14/18.
+ -->
+
+<aura:component description="Dal_Dist_FormModalBase" extensible="true" extends="c:Dal_Base">
+    <aura:attribute name="title" type="String" default="" />
+    <aura:attribute name="subtitle" type="String" default="" />
+    <aura:attribute name="description" type="String" default="" />
+    
+    <lightning:layout >
+        <lightning:layoutItem class="dal-form" size="12">
+
+            <!-- Header section -->
+           <!-- <lightning:layout class="dal-form_header slds-p-bottom_medium" verticalAlign="center" horizontalAlign="center" multipleRows="true">
+                <lightning:layoutItem size="12">
+                    <lightning:layout class="slds-p-horizontal_xx-large" multipleRows="true" horizontalAlign="space" pullToBoundary="small">
+                        <lightning:layoutItem class="slds-p-around_small slds-text-align_center"><span class="icon-daltile"></span></lightning:layoutItem>
+                        <lightning:layoutItem class="slds-p-around_small slds-text-align_center"><span class="icon-marazzi"></span></lightning:layoutItem>
+                        <lightning:layoutItem class="slds-p-around_small slds-text-align_center"><span class="icon-ao"></span></lightning:layoutItem>
+                        <lightning:layoutItem class="slds-p-around_small slds-text-align_center"><span class="icon-ragno"></span></lightning:layoutItem>
+                    </lightning:layout>
+                </lightning:layoutItem>
+
+                <lightning:layoutItem class="slds-p-top_medium">
+                    <h2 class="bold">{!v.title}</h2>
+                </lightning:layoutItem>
+            </lightning:layout>-->
+            <!-- End header section -->
+
+            <lightning:layout class="slds-p-around_medium acctSubHeading" pullToBoundary="medium" verticalAlign="center" horizontalAlign="center">
+                <lightning:layoutItem size="12">
+                   <h2 class="slds-text-align_center">{!v.subtitle}</h2>
+                    <aura:if isTrue="{!v.description != ''}">
+                        <p class="slds-text-align_center slds-p-top_small">{!v.description}</p>
+                    </aura:if>
+                </lightning:layoutItem>
+            </lightning:layout>
+
+            {!v.body}
+
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

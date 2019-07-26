@@ -1,0 +1,8 @@
+<!--
+ - Created by 7Summits on 2/12/18.
+ -->
+    
+<design:component label="Dal Dist/SSC - My Sales Reps">
+    <design:attribute name="title" label="Title" />
+    <design:attribute name="type" label="Type" dataSource="Distributor,SSC" />
+</design:component>

@@ -1,0 +1,41 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_NewsController" access="global"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+	<ltng:require styles="{!join(',',$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/dropdown.min.css?v=2.1.7',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/transition.min.css?v=2.1.7',
+			$Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/form.min.css?v=2.1.7')}"
+	              scripts="{!join(',',
+			              $Resource.SVNSUMMITS_News_SemanticUI + '/jquery-2.1.1.min.js',
+			              $Resource.SVNSUMMITS_News_SemanticUI + '/fullcalendar-2.6.1/moment.min.js',
+			              $Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/form.min.js?v=2.1.7',
+			              $Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/dropdown.min.js?v=2.1.7',
+			              $Resource.SVNSUMMITS_News_SemanticUI + '/dist/components/transition.min.js?v=2.1.7'
+			              )}"
+	              afterScriptsLoaded="{!c.doInit}"/>
+
+	<aura:registerEvent name="appEvent" type="c:SVNSUMMITS_News_Topic_Filter_Event"/>
+
+	<aura:attribute name="debugMode" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="values" type="Map" access="global"/>
+	<aura:attribute name="selection" type="String" default="" access="public"/>
+
+	<aura:attribute name="placeholderTopic" type="String" default="{!$Label.c.ss_nws_placeholder_filterTopic}"/>
+
+	<lightning:layout multipleRows="true">
+		<lightning:layoutItem size="12">
+
+			<!-- TODO replace with new lighting:select once multi-select is supported -->
+			<ui:inputSelect aura:id="filterByTopic"
+			                multiple="true"
+			                class="slds-input-select-multi fluid dropdown topic topicPicklist"
+			                value="{!v.selection}"
+			                change="{!c.selectTopic}">
+				<aura:iteration items="{!v.values}" var="item">
+					<ui:inputSelectOption text="{!item.key}" label="{!item.value}"/>
+				</aura:iteration>
+			</ui:inputSelect>
+
+		</lightning:layoutItem>
+	</lightning:layout>
+</aura:component>

@@ -1,0 +1,108 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component access="global"
+                controller="SVNSUMMITS_GroupsController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+
+	<ltng:require scripts="{!$Resource.SVNSUMMITS_LightningSlider + '/light-slider/light-slider/js/jquery.min.js'}"
+			afterScriptsLoaded="{!c.onInit}"/>
+
+	<aura:handler event="c:SVNSUMMITS_Groups_Header_Event" action="{!c.setNoOfGroups}"/>
+	<aura:registerEvent name="appEvent" type="c:SVNSUMMITS_Groups_SortBy_Event"/>
+
+
+	<aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="numberOfGroups" type="Integer" access="global"/>
+	<aura:attribute name="groupTitle" type="String" default="" access="global"/>
+	<aura:attribute name="newGroupLabel" type="String" default="{!$Label.c.ss_grp_label_New_Group}" access="global"/>
+	<aura:attribute name="newGroupURL" type="String" default="/createrecord/NewGroup" access="global"/>
+	<aura:attribute name="iconPath"
+	                default="/resource/CCGROUPLC__SVNSUMMITS_Groups_SLDS/SLDS00105/assets/icons/standard-sprite/svg/symbols.svg#groups"
+	                type="String" access="global"/>
+	<aura:attribute name="iconCategory" default="standard" type="String" access="global"/>
+	<aura:attribute name="iconSize" default="large" type="String" access="global"/>
+	<aura:attribute name="iconName" default="groups" type="String" access="global"/>
+	<aura:attribute name="sortBy" type="String" default="" access="global"/>
+	<aura:attribute name="showNumberOfGroups" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="isObjectCreatable" type="Boolean" access="global"/>
+	<aura:attribute name="sitePath" type="String" access="global"/>
+	<aura:attribute name="sitePrefix" type="String" access="global"/>
+	<aura:attribute name="searchString" type="String" default="" access="global"/>
+	<aura:attribute name="filterMyGroups" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="isSearchText" type="Boolean" default="false" access="global"/>
+
+	<aura:attribute name="placeholderText" type="String" default="{!$Label.c.ss_grp_label_Search_Groups}"
+	                access="global"/>
+
+	<lightning:layout multipleRows="true"
+	                  verticalAlign="end"
+	                  horizontalAlign="spread"
+	                  class="slds-border--bottom slds-p-bottom--small">
+
+		<!-- ICON and TITLE -->
+		<lightning:layoutItem size="12"
+		                      largeDeviceSize="4"
+		                      mediumDeviceSize="6"
+		                      smallDeviceSize="12"
+		                      padding="around-small">
+			<lightning:layout multipleRows="false"
+			                  verticalAlign="center">
+				<lightning:layoutItem >
+					<lightning:icon iconName="standard:groups"
+					                size="large"
+					                alternativeText="Groups"
+					                variant="bare"/>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem class="slds-text-heading--large slds-p-around--x-small">
+					<aura:if isTrue="{!v.showNumberOfGroups}">
+					{!v.numberOfGroups || 0}&nbsp;
+					</aura:if>
+					<aura:if isTrue="{!v.groupTitle != ''}">
+						<c:SVNSUMMITS_Groups_SetLabelUtil text="{!v.groupTitle}"/>
+						<aura:set attribute="else">
+								{!$Label.c.ss_grp_label_Groups}
+						</aura:set>
+					</aura:if>
+				</lightning:layoutItem>
+
+			</lightning:layout>
+		</lightning:layoutItem>
+
+		<!-- SEARCH -->
+		<lightning:layoutItem size="12"
+		                      largeDeviceSize="6"
+		                      mediumDeviceSize="6"
+		                      smallDeviceSize="12"
+		                      padding="around-small">
+			<lightning:input type="search" label="{!$Label.c.ss_grp_label_Search}"
+			                 name="search"
+			                 onchange="{!c.getSearchString}"
+			                 value="{!v.searchString}"
+			                 placeholder="{!v.placeholderText}"/>
+		</lightning:layoutItem>
+
+		<!-- NEW BUTTON -->
+		<aura:if isTrue="{!v.isObjectCreatable}">
+			<lightning:layoutItem size="12"
+			                      largeDeviceSize="2"
+			                      mediumDeviceSize="6"
+			                      smallDeviceSize="12"
+			                      padding="around-small">
+				<lightning:button onclick="{!c.createNewGroup}"
+				                  title="{!$Label.c.ss_grp_label_New_Group}"
+				                  variant="brand"
+				                  class="slds-float_right">
+					<aura:if isTrue="{!v.newGroupLabel != ''}">
+						<c:SVNSUMMITS_Groups_SetLabelUtil text="{!v.newGroupLabel}"/>
+						<aura:set attribute="else">
+								{!$Label.c.ss_grp_label_New_Group}
+						</aura:set>
+					</aura:if>
+				</lightning:button>
+			</lightning:layoutItem>
+		</aura:if>
+
+	</lightning:layout>
+
+</aura:component>

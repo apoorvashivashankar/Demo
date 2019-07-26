@@ -1,0 +1,23 @@
+<!--
+ - Created by 7Summits on 3/01/18.
+ -->
+<aura:component description="Dal_2ColumnLayout" implements="forceCommunity:layout">
+    <aura:attribute name="headerinBG" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="content" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="rightCol" type="Aura.Component[]" required="false"/>
+    <section class="dal_lead-banner">
+        <section class="slds-container_x-large slds-container_center slds-p-top_large slds-p-bottom_medium dal_top">
+                {!v.headerinBG}
+        </section>
+    </section>
+    <section class="slds-container_x-large  slds-container_center slds-p-top_small slds-p-bottom--x-large  dal_middle">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-size_12-of-12 slds-large-size_8-of-12 slds-p-around_xx-small">
+                    {!v.content}
+            </div>
+            <div class="slds-size_12-of-12 slds-large-size_4-of-12 slds-p-around_xx-small">
+                    {!v.rightCol}
+            </div>
+        </div>
+    </section>
+</aura:component>

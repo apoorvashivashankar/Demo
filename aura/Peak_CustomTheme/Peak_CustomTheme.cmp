@@ -1,0 +1,142 @@
+<aura:component description="Peak_CustomTheme" implements="forceCommunity:themeLayout" access="global" >
+
+    <aura:attribute name="footer" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="wide" type="boolean" default="false" />
+    
+    <!-- custom styles for elements outside the theme ie. Modals -->
+  <!--  <ltng:require styles="{!$Resource.dalTileLightning + '/styles/overridesStatic.css'}" /> -->
+
+    <!-- Including Font Awesome -->
+    <ltng:require styles="{!$Resource.fontawesome4 + '/font-awesome-4.7.0/css/font-awesome.css'}" />
+
+    <!-- Theme Regions -->
+    <aura:attribute name="templateHeaderTop" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="templateHeaderBottom" type="Aura.Component[]" required="false"/>
+
+    <aura:attribute name="templateFooterLeft" type="Aura.Component[]" required="false" />
+    <aura:attribute name="templateFooterMid" type="Aura.Component[]" required="false" />
+    <aura:attribute name="templateFooterRight" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="templateFooterBottom" type="Aura.Component[]" required="false"/>
+
+    <!-- components -->
+    <aura:attribute name="navBar" type="Aura.Component[]" />
+    <aura:attribute name="search" type="Aura.Component[]" />
+    <aura:attribute name="profileMenu" type="Aura.Component[]" />
+    <aura:attribute name="liveChat" type="Aura.Component[]" />
+
+    <!-- Theme Attributes -->
+    <aura:attribute name="showCopyright" type="Boolean" default="false" />
+    <aura:attribute name="locationSwitcher" type="String" default="Location Switcher" />
+    <aura:attribute name="locationIcon" type="String" default="fa fa-map-marker" />
+    <aura:attribute name="communityName" type="String" default="Distributor Portal" />
+    <aura:attribute name="trainingIcon" type="String" default="fa fa-graduation-cap" />
+    <aura:attribute name="trainingText" type="String" default="  Training" />
+    <aura:attribute name="trainingLink" type="String" default="/" />
+    <aura:attribute name="liveChatIcon" type="String" default="utility:questions_and_answers" />
+
+    <div id="dal_theme" class="dal_theme">
+        <div class="siteforceServiceBody">
+            <header id="header" class="dal_theme_header cHeaderPanel">
+            {!v.templateHeaderTop}
+                <!-- Top Header Area -->
+                <div id="header-overlay" class="cHeaderLine">
+                    <div class="dal_theme_headerTop">
+                        <div class="slds-container_x-large slds-container_center slds-p-horizontal_x-small slds-grid">
+                            <div class="slds-size_7-of-12 utilityLeft">
+                                <div class="locationToggle">
+                                    <span class="icon"> <i class="{!v.locationIcon}"></i></span>
+                                    <span class="text">{!v.locationSwitcher}</span>
+                                </div>
+                            </div>
+                            <div class="slds-size_5-of-12 slds-grid utilityRight">
+                                <div class="slds-size_4-of-12 slds-medium-size_3-of-12">
+                                    <span class="icon"> <lightning:icon iconName="{!v.liveChatIcon}" /></span>
+                                    <span class="text">{!v.liveChat}</span>
+                                </div>
+                                <div class="slds-size_4-of-12 slds-medium-size_3-of-12 dalTraining">
+                                    <a href="{!v.trainingLink}" target="_blank">
+                                        <span class="icon"> <i class="{!v.trainingIcon}"></i></span>
+                                        <span class="text">{!v.trainingText}</span>
+                                    </a>
+                                </div>
+                                <div class="slds-size_4-of-12 slds-medium-size_6-of-12"> {!v.profileMenu} </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Header -->
+
+                    <div class="dal_theme_header">
+                        <div class="slds-container_x-large slds-container_center slds-p-around_large slds-grid">
+                            <div class="slds-size_9-of-12 slds-medium-size_4-of-12 dalLogos">
+                                <div class="cBrandingProfile">
+                                    <a class="cBrandingLogo" href="/" title="DalTile Distributor Portal">
+                                        <span class="assistiveText">DalTile Distributor Portal</span>
+                                    </a>
+                                    <span class="separator"> | </span>
+                                    <h4>{!v.communityName}</h4>
+                                </div>
+
+
+                            </div>
+                            <div class="slds-size_3-of-12 slds-medium-size_8-of-12">
+                                    {!v.search}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Main Header Nav-->
+                <div class="dal_theme_headerNav">
+                    <div class="slds-container_x-large slds-container_center slds-grid">
+                        <div class="slds-size_12-of-12">
+                                {!v.navBar}
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Body -->
+            <section>
+                    {!v.body}
+            </section>
+
+            <!-- Footer -->
+            <footer>
+                <div class="footerWrapper">
+                    <div class="slds-container_x-large slds-grid--pull-padded">
+                        <lightning:layout class="slds-grid_vertical-stretch slds-p-vertical_xx-large" verticalAlign="center" horizontalAlign="center" multipleRows="true">
+                            <lightning:layoutItem class="footerLogo slds-p-vertical_large slds-text-align_left" size="12"  mediumDeviceSize="3" >
+                                <img src="/resource/1518608596000/decorLogoRed" alt="DalTile" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem class="slds-p-vertical_large slds-text-align_center slds-p-horizontal_xx-large" size="12"  mediumDeviceSize="3">
+                                    {!v.templateFooterLeft}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem class="slds-p-vertical_large slds-text-align_center slds-p-horizontal--x-small" size="12"  mediumDeviceSize="3">
+                                    {!v.templateFooterMid}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem class="slds-p-vertical_large slds-text-align_center slds-p-horizontal--x-small" size="12"  mediumDeviceSize="3">
+                                    {!v.templateFooterRight}
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </div>
+
+                <aura:if isTrue="{!v.showCopyright}">
+                    <div class="footerBottom">
+                        <div class="slds-container_x-large">
+                            <lightning:layout class="slds-p-horizontal_small slds-grid--pull-padded" verticalAlign="center" horizontalAlign="center">
+                                <lightning:layoutItem size="12">
+                                        {!v.templateFooterBottom}
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+                    </div>
+                </aura:if>
+            </footer>
+        </div>
+
+    </div>
+
+</aura:component>

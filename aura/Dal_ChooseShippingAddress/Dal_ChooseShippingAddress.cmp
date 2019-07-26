@@ -1,0 +1,276 @@
+<!--
+ - Created by 7Summits on 3/28/18.
+ -->
+
+<aura:component description="Dal_ChooseShippingAddress" extends="c:Dal_ModalBase" controller="Dal_ShipToAddressOverrideManager">
+    <aura:handler name="init" action="{!c.init}" value="{!this}"/>
+    
+    <!-- internal attributes -->
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:attribute name="primaryAddress" type="Map" />
+    <aura:attribute name="addresses" type="List" default="[]"/>
+    <aura:attribute name="showNewAddress" type="boolean" default="false"/>
+    <aura:attribute name="states" type="List" default="[]"/>
+    <aura:attribute name="countries" type="List" default="[]"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="newAddressInvalid" type="Boolean" default="false"/>
+    <aura:attribute name="newAddressValidWithUpdate" type="Boolean" default="false"/>
+    <aura:attribute name="isEditingExistingAddress" type="Boolean" default="false"/>
+
+    <aura:attribute name="newAddressId" type="String" default=""/>
+    <aura:attribute name="newAddressName" type="String" default="" />
+    <aura:attribute name="newAddressName2" type="String" default="" />
+    <aura:attribute name="newAddressCareOf" type="String" default="" />
+    <aura:attribute name="newAddressStreet1" type="String" default="" />
+    <aura:attribute name="newAddressStreet2" type="String" default="" />
+    <aura:attribute name="newAddressCity" type="String" default="" />
+    <aura:attribute name="newAddressState" type="String" default="" />
+    <aura:attribute name="newAddressZipcode" type="String" default="" />
+	<aura:attribute name="newAddressCountry" type="String" default="" />
+
+    <aura:attribute name="newAddressAdjustedName" type="String" default=""/>
+    <aura:attribute name="newAddressAdjustedName2" type="String" default=""/>
+    <aura:attribute name="newAddressAdjustedCareOf" type="String" default=""/>
+    <aura:attribute name="newAddressAdjustedStreet1" type="String" default=""/>
+    <aura:attribute name="newAddressAdjustedStreet2" type="String" default=""/>
+    <aura:attribute name="newAddressAdjustedCity" type="String" default=""/>
+    <aura:attribute name="newAddressAdjustedState" type="String" default=""/>
+    <aura:attribute name="newAddressAdjustedZipcode" type="String" default=""/>
+	<aura:attribute name="newAddressAdjustedCountry" type="String" default=""/>
+    <aura:attribute name="searchAddText" type="String" default=""/>
+    <!-- events -->
+    <aura:registerEvent name="chooseShippingAddressEvt" type="c:Dal_ChooseShippingAddressEvt"/>
+    <!--aura:handler event="c:Dal_ChooseShippingAddressEvt" action="{!c.handleSSCDeliveryAddressEvent}"/-->
+
+    <header class="slds-p-horizontal_medium slds-p-bottom_medium">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="7">
+                <c:Peak_HTML_Headings headingTag="H2 - Section Heading" headingText="{!(v.showNewAddress == true) ? 'Add Address' : 'Choose an Address'}" />
+            </lightning:layoutItem>
+            <lightning:layoutItem class="slds-p-vertical_xx-small slds-large-text-align_right slds-medium-text-align_right" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="5">
+                <aura:if isTrue="{!v.showNewAddress == false}">
+                    <button class="addNew slds-button slds-text-title_caps" onclick="{!c.addAddress}"><lightning:icon iconName="utility:location" /> Add a new address</button>
+                </aura:if>
+            </lightning:layoutItem>
+            <aura:if isTrue="{!v.showNewAddress == false}">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="7">
+                    <lightning:input name="searchAdd" label="Search for an Address" value="{!v.searchAddText}" onchange="{!c.searchAddress}" placeholder="Search by keyword" class="addresslabel"/>
+                </lightning:layoutItem>
+            </aura:if>
+        </lightning:layout>
+    </header>
+
+    <lightning:layout class="slds-p-vertical_small" multipleRows="true" pullToBoundary="{!v.showNewAddress ? 'small' : ''}">
+
+        <!-- loading check -->
+        <aura:if isTrue="{!v.isLoading != true}">
+
+            <aura:if isTrue="{!v.showNewAddress != true}">
+
+                <!-- show addresses -->
+                <aura:iteration items="{!v.addresses}" var="address" indexVar="addressesIndex">
+                    <lightning:layoutItem class="slds-p-around_x-small" size="12" ><!--smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6"-->
+
+                        <lightning:layout class="{!'slds-tile' + ((address.isActive == true) ? ' active' : '')}" multipleRows="true">
+
+                            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="{!address.isPrimary == true ? '12' : '8'}">
+                                <aura:if isTrue="{!!empty(address.name)}"><h3 class="slds-tile__title">{!address.name}</h3></aura:if>
+                                <div class="slds-tile__detail">
+                                    <aura:if isTrue="{!!empty(address.careOf)}"><p>{!'c/o ' + address.careOf}</p></aura:if>
+                                    <aura:if isTrue="{!!empty(address.street1)}"><p>{!address.street1}</p></aura:if>
+                                    <aura:if isTrue="{!!empty(address.street2)}"><p>{!address.street2}</p></aura:if>
+                                    <p>{!address.city},&nbsp;{!address.state}&nbsp;{!address.zipcode}&nbsp;{!address.country}</p>
+                                </div>
+                                <button class="slds-button" onclick="{!c.changeAddress}" data-index="{!addressesIndex}">Use this address</button>
+                                <!--<lightning:icon class="bkg-map" iconName="utility:location" size="large"/>-->
+                                  
+
+                            <aura:if isTrue="{!address.isPrimary == false}">
+                                
+                                    <button class="slds-button" onclick="{!c.editAddress}" data-index="{!addressesIndex}">Edit</button>
+                                    <button class="slds-button" onclick="{!c.deleteAddress}" data-index="{!addressesIndex}">Delete</button>
+                                    
+                                
+                          </aura:if>
+                            </lightning:layoutItem>
+                            
+                         </lightning:layout>
+
+                    </lightning:layoutItem>
+                </aura:iteration>
+
+                <lightning:layoutItem class="slds-m-top_Medium" size="12">
+                    <lightning:layout class="footer-bar slds-border_top slds-p-top_small" horizontalAlign="end">
+                        <lightning:layoutItem class="slds-p-right_large">
+                            <lightning:button variant="neutral" label="Close" onclick="{!c.handleClose}" />
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </lightning:layoutItem>
+                <!-- end show addresses -->
+
+                <!-- show add new address form -->
+                <aura:set attribute="else">
+
+                    <!-- show enter new address container -->
+                    <aura:if isTrue="{!v.newAddressValidWithUpdate == false}">
+                        <!-- new address form -->
+                        <lightning:layoutItem class="dal-form-order" size="12">
+                            <lightning:layout multipleRows="true">
+
+                                <!-- invalid address  -->
+                                <aura:if isTrue="{!v.newAddressInvalid}">
+                                    <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12">
+                                        <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="warning" closable="false">Address validation failed. Please edit provided address.</ui:message>
+                                    </lightning:layoutItem>
+                                </aura:if>
+                                <!-- end invalid address -->
+
+                                <!-- address input -->
+                                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8">
+                                    <lightning:layout multipleRows="true">
+
+                                        <!-- add new address form -->
+                                        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12">
+                                            <lightning:input type="text" aura:id="name" name="name" label="Address Name" maxlength="40" required="true" value="{!v.newAddressName}" />
+                                        </lightning:layoutItem>
+
+                                        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12">
+                                            <lightning:input type="text" aura:id="careOf" name="careOf" label="Care Of" maxlength="40" value="{!v.newAddressCareOf}"  />
+                                        </lightning:layoutItem>
+
+                                        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12">
+                                            <lightning:input type="text" aura:id="street1" name="street1" label="Street Address" maxlength="75" required="true" value="{!v.newAddressStreet1}"  />
+                                        </lightning:layoutItem>
+
+                                        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12">
+                                            <lightning:input type="text" aura:id="street2" name="street2" label="Street Address 2" maxlength="75" value="{!v.newAddressStreet2}"  />
+                                        </lightning:layoutItem>
+
+                                        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12">
+                                            <lightning:input type="text" aura:id="city" name="city" label="City" maxlength="50" required="true" value="{!v.newAddressCity}" />
+                                        </lightning:layoutItem>
+
+                                        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                                            <lightning:select aura:id="state" name="state" label="State" required="true" value="{!v.newAddressState}">
+                                                <option value=""></option>
+                                                <aura:iteration items="{!v.states}" var="item">
+                                                    <option value="{!item.value}">{!item.label}</option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </lightning:layoutItem>
+
+                                        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                                            <lightning:input type="text" aura:id="zipcode" name="zipcode" label="ZIP Code" value="{!v.newAddressZipcode}"
+                                                 required="true" maxlength="10" messageWhenPatternMismatch="Enter valid zip code"/>
+                                        </lightning:layoutItem>
+                                        
+                                        <lightning:layoutItem class="slds-p-horizontal_small slds-p-vertical_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                                            <lightning:select aura:id="country" name="Country" label="Country" required="true" value="{!v.newAddressCountry}">
+                                                <option value=""></option>
+                                                <aura:iteration items="{!v.countries}" var="item">
+                                                    <option value="{!item.value}">{!item.label}</option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </lightning:layoutItem>
+
+                                    </lightning:layout>
+                                </lightning:layoutItem>
+                                <!-- end address input -->
+
+                            </lightning:layout>
+                        </lightning:layoutItem>
+                        <!-- end new address form -->
+
+                        <!-- new address ctas -->
+                        <lightning:layoutItem size="12">
+                            <lightning:layout class="footer-bar-newAddress slds-m-top_medium slds-border_top slds-p-top_small slds-p-horizontal_large" horizontalAlign="end">
+                                <lightning:layoutItem class="slds-p-right_small">
+                                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.handleCancel}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem >
+                                    <lightning:button variant="brand" label="Save Address" onclick="{!c.handleSaveAddress}" />
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </lightning:layoutItem>
+                        <!-- end new address ctas -->
+                    </aura:if>
+                    <!-- end show enter new address container -->
+
+                    <!-- new address is valid with update -->
+                    <aura:if isTrue="{!v.newAddressValidWithUpdate == true}">
+                        <lightning:layoutItem class="dal-form-order slds-p-horizontal_small" size="12">
+                            <lightning:layout multipleRows="true">
+
+                                <lightning:layoutItem class="slds-p-around_x-small slds-p-bottom_medium" size="12">
+                                    <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="warning" closable="false">Address validation failed. You can use the adjusted address, or edit the provided address.</ui:message>
+                                </lightning:layoutItem>
+
+                                <lightning:layoutItem class="slds-p-around_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                                    <h3 class="slds-p-bottom_x-small">Entered Address</h3>
+
+                                    <lightning:layout class="slds-tile" multipleRows="true">
+
+                                        <lightning:layoutItem size="12">
+                                            <aura:if isTrue="{!!empty(v.newAddressName)}"><h3 class="slds-tile__title">{!v.newAddressName}</h3></aura:if>
+                                            <div class="slds-tile__detail">
+                                                <aura:if isTrue="{!!empty(v.newAddressName2)}"><p>{!'c/o ' + v.newAddressName2}</p></aura:if>
+                                                <aura:if isTrue="{!!empty(v.newAddressCareOf)}"><p>{!'c/o ' + v.newAddressCareOf}</p></aura:if>
+                                                <aura:if isTrue="{!!empty(v.newAddressStreet1)}"><p>{!v.newAddressStreet1}</p></aura:if>
+                                                <aura:if isTrue="{!!empty(v.newAddressStreet2)}"><p>{!v.newAddressStreet2}</p></aura:if>
+                                                <p>{!v.newAddressCity},&nbsp;{!v.newAddressState}&nbsp;{!v.newAddressZipcode}&nbsp;{!v.newAddressCountry}</p>
+                                            </div>
+                                            <lightning:button variant="neutral" label="Edit this address" onclick="{!c.editValidationAddress}" />
+                                            <!--<lightning:icon class="bkg-map" iconName="utility:location" size="large"/>-->
+                                        </lightning:layoutItem>
+
+                                    </lightning:layout> 
+
+                                </lightning:layoutItem>
+
+                                <lightning:layoutItem class="slds-p-around_x-small" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                                    <h3 class="slds-p-bottom_x-small">Adjusted Address</h3>
+
+
+                                    <lightning:layout class="slds-tile" multipleRows="true">
+
+                                        <lightning:layoutItem size="12">
+                                            <aura:if isTrue="{!!empty(v.newAddressAdjustedName)}"><h3 class="slds-tile__title">{!v.newAddressAdjustedName}</h3></aura:if>
+                                            <div class="slds-tile__detail">
+                                                <aura:if isTrue="{!!empty(v.newAddressAdjustedName2)}"><p>{!'c/o ' + v.newAddressAdjustedName2}</p></aura:if>
+                                                <aura:if isTrue="{!!empty(v.newAddressAdjustedCareOf)}"><p>{!'c/o ' + v.newAddressAdjustedCareOf}</p></aura:if>
+                                                <aura:if isTrue="{!!empty(v.newAddressAdjustedStreet1)}"><p>{!v.newAddressAdjustedStreet1}</p></aura:if>
+                                                <aura:if isTrue="{!!empty(v.newAddressAdjustedStreet2)}"><p>{!v.newAddressAdjustedStreet2}</p></aura:if>
+                                                <p>{!v.newAddressAdjustedCity},&nbsp;{!v.newAddressAdjustedState}&nbsp;{!v.newAddressAdjustedZipcode}&nbsp;{!v.newAddressAdjustedCountry}</p>
+                                            </div>
+                                            <lightning:button variant="brand" label="Use this address" onclick="{!c.useUpdatedAddress}" />
+                                            <!--<lightning:icon class="bkg-map" iconName="utility:location" size="large"/>-->
+                                        </lightning:layoutItem>
+
+                                    </lightning:layout>
+
+                                </lightning:layoutItem> 
+
+                            </lightning:layout>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <!-- end new address is valid with update -->
+
+                </aura:set>
+                <!-- end show add new address form -->
+
+            </aura:if>
+
+            <!-- show loading -->
+        	<aura:set attribute="else">
+                <lightning:layoutItem class="slds-m-top_xx-large slds-m-bottom_large slds-is-relative" size="12">
+                    <lightning:spinner variant="brand" />
+                </lightning:layoutItem>
+        	</aura:set>
+            <!-- end show loading -->
+
+        </aura:if>
+        <!-- end loading check -->
+
+    </lightning:layout>
+
+</aura:component>

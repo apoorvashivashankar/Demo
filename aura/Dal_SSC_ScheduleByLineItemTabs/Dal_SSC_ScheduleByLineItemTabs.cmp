@@ -1,0 +1,70 @@
+<!--
+ - Created by 7Summits on 5/9/18.
+ -->
+
+<aura:component description="Dal_SSC_ScheduleByLineItemTabs">
+    <!-- passed in attributes -->
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="currentOrder" type="Map" default="{}"/>
+    <aura:attribute name="activeTab" type="String" default="selectItems"/>
+
+    <aura:attribute name="labelTabSelectItems" type="String" default="Select Items"/>
+    <aura:attribute name="labelTabSchedule" type="String" default="Schedule"/>
+    <aura:attribute name="showFirst" type="boolean" default="false" />
+
+	<aura:registerEvent name="positionEvent" type="c:Dal_SSC_OrderScheduleHandlerEvent"/>
+    <aura:handler event="c:Dal_SSC_HandleTabChangeEvent" action="{!c.handleComponentEvent}"/>
+
+ 
+    <!-- ******************** -->
+    <!-- tabs -->
+    <!-- ******************** -->
+    <lightning:tabset aura:id="tabs" class="dal-tabs-manual dal-tabs-manual-click" selectedTabId="{!v.activeTab}">
+
+        <!-- ******************** -->
+        <!-- Select Item -->
+        <!-- ******************** -->
+        <lightning:tab label="{!v.labelTabSelectItems}" onactive="{!c.handleActive}" id="selectItems">
+            <aura:if isTrue="{!!v.showFirst}">
+                <c:Dal_SSC_ScheduleByLineItemItems store="{!v.store}" currentOrder="{!v.currentOrder}" showFirst="{!v.showFirst}" />
+            </aura:if>
+        </lightning:tab>
+
+        <aura:if isTrue="{!v.showFirst}">
+            <div class="dal-scheduleLineItem-tabCont">
+                <c:Dal_SSC_ScheduleByLineItemItems store="{!v.store}" currentOrder="{!v.currentOrder}" showFirst="{!v.showFirst}"  />
+            </div>
+        </aura:if>
+
+        <!-- ******************** -->
+        <!-- end  Select Item-->
+        <!-- ******************** -->
+
+        <!-- ******************** -->
+        <!-- Schedule -->
+        <!-- ******************** -->
+        <lightning:tab label="{!v.labelTabSchedule}" onactive="{!c.handleActive}" id="schedule">
+            <!-- ******************** -->
+            <!-- pickup schedule type -->
+            <!-- ******************** -->
+            <aura:if isTrue="{!v.currentOrder.scheduleByItemType == 'pickup'}">
+                <c:Dal_SSC_ScheduleByLineItemSchedPick store="{!v.store}" currentOrder="{!v.currentOrder}" />
+            </aura:if>
+
+            <!-- ******************** -->
+            <!-- delivery schedule type -->
+            <!-- ******************** -->
+            <aura:if isTrue="{!v.currentOrder.scheduleByItemType == 'delivery'}">
+                <c:Dal_SSC_ScheduleByLineItemSchedDel store="{!v.store}" currentOrder="{!v.currentOrder}" />
+            </aura:if>
+        </lightning:tab>
+        <!-- ******************** -->
+        <!-- end Schedule -->
+        <!-- ******************** -->
+
+    </lightning:tabset>
+    <!-- ******************** -->
+    <!-- end tabs -->
+    <!-- ******************** -->
+
+</aura:component>

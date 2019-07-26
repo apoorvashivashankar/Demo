@@ -1,0 +1,31 @@
+<!--
+ - Created by 7Summits on 2/20/18.
+ -->
+
+<design:component label="Daltile - My Account Metrics">
+    <design:attribute name="title" label="Title" />
+
+    <design:attribute name="ctaLabel" label="Call to Action Label" />
+    <design:attribute name="ctaUrl" label="Call to Action URL" />
+
+    <design:attribute name="totalDueLabel" label="Total Due Label" />
+    <design:attribute name="totalDueCtaLabel" label="Total Due CTA Label" />
+    <design:attribute name="totalDueCtaUrl" label="Total Due CTA URL" />
+
+    <design:attribute name="pastDueLabel" label="Past Due Label" />
+    <design:attribute name="pastDueCtaLabel" label="Past Due CTA Label" />
+    <design:attribute name="pastDueCtaUrl" label="Past Due CTA URL" />
+
+    <design:attribute name="currentDueLabel" label="Current Due Label" />
+    <design:attribute name="currentDueCtaLabel" label="Current Due CTA Label" />
+    <design:attribute name="currentDueCtaUrl" label="Current Due CTA URL" />
+
+    <design:attribute name="creditsLabel" label="Credits Label" />
+    <design:attribute name="creditsCtaLabel" label="Credits CTA Label" />
+    <design:attribute name="creditsCtaUrl" label="Credits CTA URL" />
+
+    <design:attribute name="lastPaymentLabel" label="Last Payment Label" />
+    <design:attribute name="lastPaymentCtaLabel" label="Last Payment CTA Label" />
+    <design:attribute name="lastPaymentCtaUrl" label="Last Payment CTA URL" />
+
+</design:component>

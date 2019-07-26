@@ -1,0 +1,50 @@
+<!--
+ - Created by 7Summits on 2/13/18.
+ -->
+
+<aura:component description="Dal_Footer" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <aura:attribute name="footerLogo" type="String" default="{!$Resource.decorLogoRed}" />
+
+    <aura:attribute name="footerLeft" type="String" default="Footer Section One Footer Section One Footer Section One" />
+    <aura:attribute name="footerMid" type="String" default="Footer Section Two Footer Section One Footer Section One"/>
+    <aura:attribute name="footerRight" type="String" default="Footer Section Three Footer Section One Footer Section One"/>
+
+    <aura:attribute name="showCopyright" type="Boolean" default="false" />
+    <aura:attribute name="copyrightText" type="String" default="" />
+    <aura:attribute name="copyrightYear" type="String" default="" />
+
+    <aura:handler name="init" action="{!c.getCopyYear}" value="{!this}"/>
+
+    <div class="footerTop">
+        <div class="slds-container_x-large slds-grid--pull-padded">
+            <lightning:layout class="slds-grid_vertical-stretch slds-p-vertical_xx-large" verticalAlign="center" horizontalAlign="center" multipleRows="true">
+
+                <lightning:layoutItem class="footerLogo slds-p-vertical_large slds-text-align_left" size="12"  mediumDeviceSize="3" >
+                    <img src="{!v.footerLogo}" alt="DalTile" />
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-vertical_large slds-text-align_center slds-p-horizontal_xx-large" size="12"  mediumDeviceSize="3">
+                        {!v.footerLeft}
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-vertical_large slds-text-align_center" size="12"  mediumDeviceSize="3">
+                        {!v.footerMid}
+                </lightning:layoutItem>
+                <lightning:layoutItem class="slds-p-vertical_large slds-text-align_center" size="12"  mediumDeviceSize="3">
+                        {!v.footerRight}
+                </lightning:layoutItem>
+
+            </lightning:layout>
+        </div>
+    </div>
+    <aura:if isTrue="{!v.showCopyright}">
+        <div class="footerBottom">
+            <div class="slds-container_x-large">
+                <lightning:layout class="slds-p-horizontal_small slds-grid--pull-padded" verticalAlign="center" horizontalAlign="center">
+                    <lightning:layoutItem size="12" padding="around-large">
+                        <p>&copy; {!v.copyrightYear} {!v.copyrightText}</p>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

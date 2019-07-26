@@ -1,0 +1,11 @@
+.THIS {
+}
+
+.THIS .dal-scheduleLineItem-tabCont {
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-bottom: 14px;
+    border: 10px solid rgb(241, 242, 243);
+    border-top: none;
+    border-bottom : none;
+}

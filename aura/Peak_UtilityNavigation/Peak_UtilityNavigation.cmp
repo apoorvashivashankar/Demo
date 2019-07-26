@@ -1,0 +1,132 @@
+<!-- Utility Navitaion - collects logged in and logged out links, detects if user is logged in or out, then calls NavigationList with appropriate links -->
+<aura:component extends="c:Peak_Base" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" controller="Peak_UtilityNavigationController">
+
+    <!-- Show Mobile Hamburger -->
+    <aura:attribute name="MobileHamburger" type="Boolean" default="true" />
+
+    <!-- User Links -->
+    <aura:attribute name="UserLink1" type="String" default="" />
+    <aura:attribute name="UserLink1Text" type="String" default="" />
+    <aura:attribute name="UserLink1IsButton" type="Boolean" default="false" />
+    <aura:attribute name="UserLink1OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="UserLink2" type="String" default="" />
+    <aura:attribute name="UserLink2Text" type="String" default="" />
+    <aura:attribute name="UserLink2IsButton" type="Boolean" default="false" />
+    <aura:attribute name="UserLink2OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="UserLink3" type="String" default="" />
+    <aura:attribute name="UserLink3Text" type="String" default="" />
+    <aura:attribute name="UserLink3IsButton" type="Boolean" default="false" />
+    <aura:attribute name="UserLink3OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="UserLink4" type="String" default="" />
+    <aura:attribute name="UserLink4Text" type="String" default="" />
+    <aura:attribute name="UserLink4IsButton" type="Boolean" default="false" />
+    <aura:attribute name="UserLink4OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="UserLink5" type="String" default="" />
+    <aura:attribute name="UserLink5Text" type="String" default="" />
+    <aura:attribute name="UserLink5IsButton" type="Boolean" default="false" />
+    <aura:attribute name="UserLink5OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="UserLink6" type="String" default="" />
+    <aura:attribute name="UserLink6Text" type="String" default="" />
+    <aura:attribute name="UserLink6IsButton" type="Boolean" default="false" />
+    <aura:attribute name="UserLink6OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="UserLink7" type="String" default="" />
+    <aura:attribute name="UserLink7Text" type="String" default="" />
+    <aura:attribute name="UserLink7IsButton" type="Boolean" default="false" />
+    <aura:attribute name="UserLink7OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="UserLink8" type="String" default="" />
+    <aura:attribute name="UserLink8Text" type="String" default="" />
+    <aura:attribute name="UserLink8IsButton" type="Boolean" default="false" />
+    <aura:attribute name="UserLink8OpenInNewPage" type="Boolean" default="false" />
+
+
+    <!-- Guest Links -->
+    <aura:attribute name="GuestLink1" type="String" default="" />
+    <aura:attribute name="GuestLink1Text" type="String" default="" />
+    <aura:attribute name="GuestLink1IsButton" type="Boolean" default="false" />
+    <aura:attribute name="GuestLink1OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="GuestLink2" type="String" default="" />
+    <aura:attribute name="GuestLink2Text" type="String" default="" />
+    <aura:attribute name="GuestLink2IsButton" type="Boolean" default="false" />
+    <aura:attribute name="GuestLink2OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="GuestLink3" type="String" default="" />
+    <aura:attribute name="GuestLink3Text" type="String" default="" />
+    <aura:attribute name="GuestLink3IsButton" type="Boolean" default="false" />
+    <aura:attribute name="GuestLink3OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="GuestLink4" type="String" default="" />
+    <aura:attribute name="GuestLink4Text" type="String" default="" />
+    <aura:attribute name="GuestLink4IsButton" type="Boolean" default="false" />
+    <aura:attribute name="GuestLink4OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="GuestLink5" type="String" default="" />
+    <aura:attribute name="GuestLink5Text" type="String" default="" />
+    <aura:attribute name="GuestLink5IsButton" type="Boolean" default="false" />
+    <aura:attribute name="GuestLink5OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="GuestLink6" type="String" default="" />
+    <aura:attribute name="GuestLink6Text" type="String" default="" />
+    <aura:attribute name="GuestLink6IsButton" type="Boolean" default="false" />
+    <aura:attribute name="GuestLink6OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="GuestLink7" type="String" default="" />
+    <aura:attribute name="GuestLink7Text" type="String" default="" />
+    <aura:attribute name="GuestLink7IsButton" type="Boolean" default="false" />
+    <aura:attribute name="GuestLink7OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="GuestLink8" type="String" default="" />
+    <aura:attribute name="GuestLink8Text" type="String" default="" />
+    <aura:attribute name="GuestLink8IsButton" type="Boolean" default="false" />
+    <aura:attribute name="GuestLink8OpenInNewPage" type="Boolean" default="false" />
+
+    <aura:attribute name="CustomClassName" type="String" default="" />
+    <aura:attribute name="CustomIdName" type="String" default="" />
+
+
+    <aura:handler name="init" action="{!c.initUtilityNavigation}" value="{!this}"/>
+
+    <nav class="{!'peak-component ' + v.CustomClassName}" id="{!v.CustomIdName}">
+        <div aura:id="utilNavWrapper" class="slds-grid slds-wrap slds-container_x-large slds-container_center slds-grid_align-end">
+            <!-- Don't display anything until init-ed -->
+            <aura:if isTrue="{!v.isGuestInit}">
+                <aura:if isTrue="{!v.isGuest}">
+                    <!-- Guest Navigation -->
+                    <c:Peak_NavigationList MobileHamburger="{!v.MobileHamburger}" Link1Text="{!v.GuestLink1Text}" Link1="{!v.GuestLink1}" Link1IsButton="{!v.GuestLink1IsButton}" Link1OpenInNewPage="{!v.GuestLink1OpenInNewPage}"
+                                           Link2Text="{!v.GuestLink2Text}" Link2="{!v.GuestLink2}" Link2IsButton="{!v.GuestLink2IsButton}" Link2OpenInNewPage="{!v.GuestLink2OpenInNewPage}"
+                                           Link3Text="{!v.GuestLink3Text}" Link3="{!v.GuestLink3}" Link3IsButton="{!v.GuestLink3IsButton}" Link3OpenInNewPage="{!v.GuestLink3OpenInNewPage}"
+                                           Link4Text="{!v.GuestLink4Text}" Link4="{!v.GuestLink4}" Link4IsButton="{!v.GuestLink4IsButton}" Link4OpenInNewPage="{!v.GuestLink4OpenInNewPage}"
+                                           Link5Text="{!v.GuestLink5Text}" Link5="{!v.GuestLink5}" Link5IsButton="{!v.GuestLink5IsButton}" Link5OpenInNewPage="{!v.GuestLink5OpenInNewPage}"
+                                           Link6Text="{!v.GuestLink6Text}" Link6="{!v.GuestLink6}" Link6IsButton="{!v.GuestLink6IsButton}" Link6OpenInNewPage="{!v.GuestLink6OpenInNewPage}"
+                                           Link7Text="{!v.GuestLink7Text}" Link7="{!v.GuestLink7}" Link7IsButton="{!v.GuestLink7IsButton}" Link7OpenInNewPage="{!v.GuestLink7OpenInNewPage}"
+                                           Link8Text="{!v.GuestLink8Text}" Link8="{!v.GuestLink8}" Link8IsButton="{!v.GuestLink8IsButton}" Link8OpenInNewPage="{!v.GuestLink8OpenInNewPage}"
+                                           ButtonClass="slds-button slds-button_inverse"
+
+                    />
+
+                    <!-- User Navigation  -->
+                    <aura:set attribute="else">
+                        <c:Peak_NavigationList MobileHamburger="{!v.MobileHamburger}" Link1Text="{!v.UserLink1Text}" Link1="{!v.UserLink1}" Link1IsButton="{!v.UserLink1IsButton}" Link1OpenInNewPage="{!v.UserLink1OpenInNewPage}"
+                                               Link2Text="{!v.UserLink2Text}" Link2="{!v.UserLink2}" Link2IsButton="{!v.UserLink2IsButton}" Link2OpenInNewPage="{!v.UserLink2OpenInNewPage}"
+                                               Link3Text="{!v.UserLink3Text}" Link3="{!v.UserLink3}" Link3IsButton="{!v.UserLink3IsButton}" Link3OpenInNewPage="{!v.UserLink3OpenInNewPage}"
+                                               Link4Text="{!v.UserLink4Text}" Link4="{!v.UserLink4}" Link4IsButton="{!v.UserLink4IsButton}" Link4OpenInNewPage="{!v.UserLink4OpenInNewPage}"
+                                               Link5Text="{!v.UserLink5Text}" Link5="{!v.UserLink5}" Link5IsButton="{!v.UserLink5IsButton}" Link5OpenInNewPage="{!v.UserLink5OpenInNewPage}"
+                                               Link6Text="{!v.UserLink6Text}" Link6="{!v.UserLink6}" Link6IsButton="{!v.UserLink6IsButton}" Link6OpenInNewPage="{!v.UserLink6OpenInNewPage}"
+                                               Link7Text="{!v.UserLink7Text}" Link7="{!v.UserLink7}" Link7IsButton="{!v.UserLink7IsButton}" Link7OpenInNewPage="{!v.UserLink7OpenInNewPage}"
+                                               Link8Text="{!v.UserLink8Text}" Link8="{!v.UserLink8}" Link8IsButton="{!v.UserLink8IsButton}" Link8OpenInNewPage="{!v.UserLink8OpenInNewPage}"
+                                               ButtonClass="slds-button slds-button_inverse"
+                        />
+                    </aura:set>
+                </aura:if>
+            </aura:if>
+        </div>
+    </nav>
+
+</aura:component>

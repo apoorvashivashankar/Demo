@@ -1,0 +1,10 @@
+<!--
+ - Created by ranja on 28-11-2018.
+ -->
+
+<aura:component description="Dal_SSC_EditOpportunityHeader" extends="c:Dal_SSC_LeadManagementBase"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+
+
+    <c:Peak_HTML_Headings headingTag="H1 - Section Heading" headingText="Edit Opportunity" />
+</aura:component>

@@ -1,0 +1,28 @@
+/**
+ * peak_lightning - Generates the assets used for Peak Lightning
+ * @version 1.0.0
+ * @author 7Summits
+ *
+ * COMPILED FILE DO NOT DIRECTLY EDIT
+ */
+.THIS {
+  /* Common CSS here */
+}
+.THIS .peak-keystats .content-wrapper {
+  position: relative;
+}
+.THIS .peak-keystats .slds-card--compact {
+  border-radius: token(borderRadiusMedium);
+  background-color: #fff;
+}
+.THIS .peak-keystats .slds-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.THIS .peak-keystats .BigNumber {
+  font-size: 2.55rem;
+}
+.THIS .peak-keystats .stat-header {
+  font-weight: bold;
+  text-align: center;
+}

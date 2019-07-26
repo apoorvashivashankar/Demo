@@ -1,0 +1,19 @@
+<!--
+ - Created by 7Summits on 3/20/18.
+ -->
+
+<aura:component description="Dal_Dist_OrderSearchTabs" extends="c:Dal_Base" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+
+    <lightning:tabset selectedTabId="tabOne">
+        <lightning:tab label="OPEN ORDERS" id="tabOne">
+
+        </lightning:tab>
+        <lightning:tab label="ORDER HISTORY" id="tabTwo">
+
+        </lightning:tab>
+        <lightning:tab label="SHIPMENTS" id="tabThree">
+
+        </lightning:tab>
+    </lightning:tabset>
+
+</aura:component>

@@ -1,0 +1,18 @@
+<!--
+ - Created by emaleesoddy on 8/8/17.
+ -->
+
+<design:component label="7S Community Announcements">
+    <design:attribute name="numberOfResults" label="Maximum amount of community announcements to show. Default is 5."/>
+
+    <design:attribute name="showAuthor" label="Display author?" />
+    <design:attribute name="showDate" label="Display posted date?" />
+
+    <design:attribute name="displayChannel" datasource="apex://Peak_AnnouncementChannels" label="Announcement channel:" description="The channel to pull announcements from. Announcements marked as global will display in all channels." />
+    <design:attribute name="displayType" datasource="All, Notification, Alert, Critical" label="What announcement type should display?" />
+
+
+    <design:attribute name="CustomClassName" label="Custom Class Name" description="Custom CSS class name. Usually remains blank." />
+    <design:attribute name="CustomIdName" label="Custom ID Name" description="Custom, distinct CSS ID name. Usually remains blank." />
+
+</design:component>

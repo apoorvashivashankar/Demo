@@ -1,0 +1,49 @@
+<!-- Copyright ©2016-2017 7Summits Inc. All rights reserved. -->
+<aura:component controller="SVNSUMMITS_IdeaViewController"
+                implements="force:hasRecordId,force:hasSObjectName"
+                access="global">
+
+    <aura:attribute name="debugMode" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="recordId" type="String" default="{!recordId}" access="global"/>
+    <aura:attribute name="sObjectName" type="String" access="global"/> <!-- doesn't work :/ -->
+    <aura:attribute name="zoneId" type="String" default="" access="global"/>
+    <aura:attribute name="zoneName" default="" type="String" required="true" access="global"/>
+    <aura:attribute name="idea" type="Idea" access="global"/>
+    <aura:attribute name="currentURL" type="String" access="global"/>
+    <aura:attribute name="isNicknameDisplayEnabled" type="Boolean" default="true" access="global"/>
+    <aura:attribute name="userProfileURL" type="String" default="/profile/" access="global"/>
+    <aura:attribute name="sitePath" type="String" access="global"/>
+    <aura:attribute name="sitePrefix" type="String" access="global"/>
+
+	<aura:attribute name="baseModel" type="String" access="global"/>
+	<aura:handler name="baseReady" event="c:SVNSUMMITS_BaseReady" action="{!c.doInit}" />
+
+    <aura:if isTrue="{!and(v.idea.Id, v.zoneId != '')}">
+
+        <div class="slds">
+            <h3 class="slds-text-heading--small slds-text-heading--weighted">
+                {!$Label.c.ss_idea_label_Submitted}&nbsp;
+                <ui:outputDateTime value="{!v.idea.CreatedDate}" format="MMMM d, y"/>&nbsp;{!$Label.c.ss_idea_label_by}&nbsp;
+            </h3>
+
+            <div class="slds-m-vertical--medium slds-text-align--center">
+                <a href="{! v.sitePath + v.userProfileURL + v.idea.CreatedById}" title="{!v.idea.CreatedBy.Name}">
+                    <img class="slds-avatar--circle slds-avatar--large" src="{!v.idea.CreatorSmallPhotoUrl}" alt="{!v.idea.CreatedBy.Name}" />
+                </a>
+
+                <div class="">
+                    <h2 class="slds-text-heading--small">
+                        <ui:outputText value="{!if(v.isNicknameDisplayEnabled,v.idea.CreatedBy.CommunityNickname,v.idea.CreatedBy.Name)}"/>
+                    </h2>
+                    <br/>
+                    <div class="slds-text-heading--label">
+                        Community Member Since:
+                    </div>
+                    <div>
+                        <ui:outputDateTime value="{!v.idea.CreatedBy.CreatedDate}" format="MMMM d, y"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

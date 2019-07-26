@@ -1,0 +1,40 @@
+<!--
+ - Created by 7Summits on 4/26/18.
+ -->
+
+<aura:component description="Dal_SSC_SchedulePickupDeliveryBase" extends="c:Dal_Base" extensible="true" controller="Dal_ScheduleOrderController">
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="isPickupDeliveryBaseLoading" type="Boolean" default="true"/>
+    <aura:attribute name="errorPickupDeliveryInit" type="Boolean" default="false"/>
+    <aura:attribute name="errorPickupDeliveryInitMsg" type="String" default="There was a problem initializing the form."/>
+    <aura:attribute name="listOfOrdersTOSubmitInOne" type="List"/>
+    <aura:attribute name="listOfOrders" type="List" default="[]" />
+    <aura:attribute name="rescheduleSkuNumber" type="String" />
+
+
+    <aura:attribute name="isMultiple" type="Boolean" default="false" />
+    <aura:attribute name="isReschedule" type="boolean" default="false" />
+
+    <!-- Modal -->
+    <aura:attribute name="baseModal" type="Map" />
+    <lightning:overlayLibrary aura:id="overlayLib" />
+
+
+    <!-- For Reschedule Order -->
+    <aura:attribute name="listOfOrderNumber" type="List" default="[]" />
+
+    <div class="{!(and(v.isPickupDeliveryBaseLoading == false, v.errorPickupDeliveryInit == false)) ? '' : 'slds-hide'}">
+        {!v.body}
+    </div>
+
+    <aura:if isTrue="{!v.errorPickupDeliveryInit == true}">
+        <ui:message title="Error" severity="error" closable="false">{!v.errorPickupDeliveryInitMsg}</ui:message>
+    </aura:if>
+
+    <aura:if isTrue="{!v.isPickupDeliveryBaseLoading == true}">
+        <div class="slds-is-relative slds-p-around_xx-large">
+            <lightning:spinner variant="brand" />
+        </div>
+    </aura:if>
+
+</aura:component>

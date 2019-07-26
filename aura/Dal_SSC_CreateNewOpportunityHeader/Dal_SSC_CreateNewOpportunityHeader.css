@@ -1,0 +1,61 @@
+/**
+ * Created by ranja on 21-11-2018.
+ */
+.THIS {
+}
+
+.THIS .dal-header-name .slds-form-element__static{
+    font-size: xx-large;
+    color: rgb(207, 10, 44);
+}
+
+.THIS .dal-header-button {
+    margin-top: 0.6rem;
+}
+
+.THIS .dal-header-convertToOpp { 
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font-weight: bolder;
+    font-size: 12px;
+}
+
+.THIS .dal-header-editButton {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-weight: bolder;
+    font-size: 12px;
+}
+
+.THIS .slds-name-sub-header {
+    font-size : smaller;
+}
+
+.THIS .slds-name-data-sub-header .slds-form-element__static{
+    white-space : normal !important;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.THIS .dal-form-show-error h2 {
+    font-size: large;
+}
+
+.THIS .slds-button.slds-button_neutral {
+    color: rgb(105, 105, 105);
+}
+
+.THIS .slds-form-element__label {
+    color: #a6a6a6;
+}
+
+.THIS .header-subheader-detail-text {
+    color : #a6a6a6;
+}
+
+.THIS .slds-button {
+    font-weight: 800;
+    color: rgb(105, 105, 105) !important;
+}

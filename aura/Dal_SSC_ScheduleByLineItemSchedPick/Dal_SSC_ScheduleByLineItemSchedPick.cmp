@@ -1,0 +1,239 @@
+<!--
+ - Created by 7Summits on 5/10/18.
+ -->
+
+<aura:component description="Dal_SSC_ScheduleByLineItemSchedPick">
+
+    <!-- passed in attributes -->
+    <aura:attribute name="store" type="Map" default="{}"/>
+    <aura:attribute name="currentOrder" type="Map" default="{}"/>
+
+    <!-- internal attributes -->
+    <aura:attribute name="pickupId" type="String" default=""/>
+    <aura:attribute name="pickupPos" type="String" default=""/>
+    <aura:attribute name="skus" type="List" default="[]"/>
+    <aura:attribute name="skusSelected" type="List" default="[]"/>
+    <aura:attribute name="sscLocation" type="Map" default="{}"/>
+
+    <aura:attribute name="pickupDate" type="String" default="" />
+    <aura:attribute name="pickupDateFormatted" type="Object" default="" />
+    <aura:attribute name="pickupDateErrors" type="List" default="[]" />
+    <aura:attribute name="pickupTimesAvailable" type="List" default="[]" />
+    <aura:attribute name="pickupTimeSelected" type="String" default=""/>
+    <aura:attribute name="pickupTimeErrors" type="List" default="[]" />
+    <aura:attribute name="pickupWhoWillValue" type="String" default="me"/>
+    <aura:attribute name="pickupWhoWillOptions" type="List" default="[
+        {'label': 'I Will', 'value': 'me'},
+        {'label': 'Someone other than me', 'value': 'other'}
+    ]"/>
+    <aura:attribute name="pickupFirstName" type="String" default="" />
+    <aura:attribute name="pickupLastName" type="String" default=""/>
+    <aura:attribute name="pickupPhone" type="String" default=""/>
+    <aura:attribute name="pickupShouldSendTxt" type="Boolean" default=""/>
+
+    <aura:handler event="c:Dal_SSC_OrderScheduleHandlerEvent" action="{!c.handleUpdate}"/>
+    
+    <!-- labels -->
+    <aura:attribute name="labelSelectDay" type="String" default="1. Select a day for your pickup"/>
+    <aura:attribute name="labelPickupTime" type="String" default="2. Request a pickup time"/>
+    <aura:attribute name="labelPickupPerson" type="String" default="3. Who will be picking up the order"/>
+    <aura:attribute name="labelPickupPersonFirstName" type="String" default="First Name"/>
+    <aura:attribute name="labelPickupPersonLastName" type="String" default="Last Name"/>
+    <aura:attribute name="labelPickupPersonPhoneNumber" type="String" default="Phone #"/>
+    <aura:attribute name="labelReceiveText" type="String" default="Send this phone number SMS text messages about this order"/>
+    <aura:attribute name="labelNoPickupTimes" type="String" default="No Pickup times available for this date."/>
+    <aura:attribute name="msgReceiveText" type="String" default="We will send a text message to this phone number when the order is ready for pickup."/>
+
+    <!-- ******************** -->
+    <!-- pickup -->
+    <!-- ******************** -->
+    <lightning:layout multipleRows="true">
+
+        <!-- ******************** -->
+        <!-- header data -->
+        <!-- ******************** -->
+        <lightning:layoutItem class="slds-p-bottom_x-large" size="12">
+            <h4 class="bold">Pickup #{!v.pickupPos} <span>– {!v.skusSelected.length} items</span></h4>
+            <p class="slds-form-element__label slds-p-top_xx-small">SKU #s:
+                <aura:iteration items="{!v.skusSelected}" var="sku" indexVar="index">
+                    {!sku.sku}<aura:if isTrue="{!((v.skusSelected.length - 1) gt index)}">, </aura:if>
+                </aura:iteration>
+            </p>
+            <a href="javascript:void(0)" onclick="{!c.gotoSelectItems}">Select Items</a>
+            <h5 class="slds-p-top_small">Your order will be available for pickup from this SSC location:</h5>
+            <p class="slds-p-top_xx-small">
+                <aura:if isTrue="{!v.sscLocation.name}">{!v.sscLocation.name}&nbsp;-</aura:if>
+                <aura:if isTrue="{!v.sscLocation.streetAddress1}">&nbsp;{!v.sscLocation.streetAddress1}</aura:if>
+                <aura:if isTrue="{!v.sscLocation.streetAddress2}">&nbsp;{!v.sscLocation.streetAddress2}</aura:if>
+                <aura:if isTrue="{!v.sscLocation.streetAddress3}">&nbsp;{!v.sscLocation.streetAddress3}</aura:if>
+                <aura:if isTrue="{!and(v.sscLocation.city, v.sscLocation.state)}">&nbsp;{!v.sscLocation.city},&nbsp;{!v.sscLocation.state}&nbsp;{!v.sscLocation.zipCode}</aura:if>
+            </p>
+
+        </lightning:layoutItem>
+        <!-- ******************** -->
+        <!-- end header data -->
+        <!-- ******************** -->
+
+        <lightning:layoutItem class="dal-form dal-form-order" size="12">
+
+            <!-- ******************** -->
+            <!-- select date -->
+            <!-- ******************** -->
+            <lightning:layout >
+                <lightning:layoutItem size="12">
+                    <h4 class="bold">{!v.labelSelectDay}</h4>
+
+                    <lightning:layout class="dal-selectDate slds-m-top_small slds-m-left_small slds-p-around_medium" verticalAlign="center">
+                        <lightning:layoutItem size="12">
+                            <lightning:input class="dal-datePicker" label="Change" id="dal-pickerDate" aura:id="requestPickupDate" type="date" value="{!v.pickupDate}" onchange="{!c.handlePickDateChange}" />
+                            <h4 class="bold">{!v.pickupDateFormatted}</h4>
+                            <aura:if isTrue="{!v.pickupDateErrors.length > 0}">
+                                <div class="slds-has-error">
+                                    <div class="slds-form-element__help">{!v.pickupDateErrors[0].message}</div>
+                                </div>
+                            </aura:if>
+                            <!--     <ui:inputDate aura:id="requestPickupDate" label="" displayDatePicker="true" class="dal-date-picker"
+                                  value="{!v.pickupDate}" change="{!c.handlePickDateChange}" /> -->
+                        </lightning:layoutItem>
+                    </lightning:layout>
+
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- end select date -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- pickup time -->
+            <!-- ******************** -->
+            <lightning:layout class="slds-p-top_x-large">
+                <lightning:layoutItem size="12">
+                    <h4 class="bold">{!v.labelPickupTime}</h4>
+
+                    <div class="slds-p-around_x-small dal-timePicker dal-custom-timePicker">
+                        <aura:iteration items="{!v.pickupTimesAvailable}" var="time">
+                            <div><button class="{!'slds-button' + ((time.value == v.pickupTimeSelected) ? ' selected' : '') + ((time.disabled == true) ? ' disabled' : '')}"
+                                         data-value="{!time.value}" onclick="{!c.handlePickupTimeSelected}" disabled="{!time.disabled == true}">{!time.label}</button></div>
+                        </aura:iteration>
+                    </div>
+
+                    <aura:if isTrue="{!v.pickupTimesAvailable.length == 0}">
+                        <ui:message class="dal-uiMessage slds-p-horizontal_medium slds-p-vertical_small" severity="error" closable="false">
+                            {!v.labelNoPickupTimes}
+                        </ui:message>
+                    </aura:if>
+
+                    <aura:if isTrue="{!v.pickupTimeErrors.length > 0}">
+                        <div class="slds-has-error">
+                            <div class="slds-form-element__help">{!v.pickupTimeErrors[0].message}</div>
+                        </div>
+                    </aura:if>
+
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- end pickup time -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- pickup person -->
+            <!-- ******************** -->
+            <lightning:layout class="slds-p-top_x-large">
+                <lightning:layoutItem size="12">
+                    <h4 class="bold">{!v.labelPickupPerson}</h4>
+
+                    <!-- ******************** -->
+                    <!-- who is pickup person -->
+                    <!-- ******************** -->
+                    <div class="slds-p-around_x-small dal-radioGroup-inline">
+                        <lightning:radioGroup aura:id="pickupWhoWillValue" name="pickupWhoWillValue"
+                                              label=""
+                                              options="{!v.pickupWhoWillOptions}"
+                                              value="{!v.pickupWhoWillValue}"
+                                              onchange="{!c.handleWhoWillChange}"
+                                              messageWhenValueMissing="required"
+                        />
+                    </div>
+
+                    <!-- ******************** -->
+                    <!-- pickup person first name -->
+                    <!-- ******************** -->
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                            <lightning:input aura:id="pickupFirstName" name="pickupFirstName" class="slds-p-around_x-small block"
+                                             label="{!v.labelPickupPersonFirstName}"
+                                             value="{!v.pickupFirstName}"
+                                             maxlength="20"
+                                             required="true"
+                                             messageWhenValueMissing="Required"
+                            />
+                        </lightning:layoutItem>
+
+                        <!-- ******************** -->
+                        <!-- pickup person last name -->
+                        <!-- ******************** -->
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                            <lightning:input aura:id="pickupLastName" name="pickupLastName" class="slds-p-around_x-small block"
+                                             label="{!v.labelPickupPersonLastName}"
+                                             value="{!v.pickupLastName}"
+                                             maxlength="20"
+                                             required="true"
+                                             messageWhenValueMissing="Required"
+                            />
+                        </lightning:layoutItem>
+
+                        <!-- ******************** -->
+                        <!-- pickup person phone number -->
+                        <!-- ******************** -->
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+                            <lightning:input aura:id="pickupPhone" name="pickupPhone" class="slds-p-around_x-small block"
+                                             label="{!v.labelPickupPersonPhoneNumber}"
+                                             value="{!v.pickupPhone}"
+                                             pattern="[0-9]{10}"
+                                             messageWhenPatternMismatch="Enter 10 digit phone number, no special characters"
+                                             maxlength="10"
+                                             required="true"
+                                             messageWhenValueMissing="Required"
+                            />
+                        </lightning:layoutItem>
+
+                        <!-- ******************** -->
+                        <!-- text info -->
+                        <!-- ******************** -->
+                        <!--<lightning:layoutItem size="12" class="dal-checkbox-inline">
+                            <lightning:input aura:id="shouldSendText" type="checkbox" label="{!v.labelReceiveText}" name="textNotices" class="slds-p-around_x-small"
+                                     onchange="{!c.handleShouldTextChange}" value="{!v.pickupShouldSendTxt}"/>
+                            <p class="dal-checkbox-detail">{!v.msgReceiveText}</p>
+                        </lightning:layoutItem>-->
+
+                    </lightning:layout>
+
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- end pickup person -->
+            <!-- ******************** -->
+
+            <!-- ******************** -->
+            <!-- save/cancel -->
+            <!-- ******************** -->
+            <lightning:layout class="slds-m-top_x-large slds-p-top_medium slds-border_top" multipleRows="true">
+                <lightning:layoutItem size="12">
+                    <lightning:layout multipleRows="true" pullToBoundary="small" horizontalAlign="end" verticalAlign="center">
+                        <lightning:layoutItem class="slds-p-around_small dal-small-inputFull">
+                            <lightning:button label="Save Pickup" variant="brand" onclick="{!c.handleSavePickup}" />
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- ******************** -->
+            <!-- end save/cancel -->
+            <!-- ******************** -->
+
+        </lightning:layoutItem>
+
+    </lightning:layout>
+    <!-- ******************** -->
+    <!-- end pickup -->
+    <!-- ******************** -->
+</aura:component>
